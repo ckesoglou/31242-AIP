@@ -14,10 +14,10 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "start-react": "react-scripts start",
-    "build-react": "react-scripts build",
-    "test-react": "react-scripts test",
-    "eject-react": "react-scripts eject"
+    "start-react-only": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
