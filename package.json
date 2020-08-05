@@ -13,10 +13,10 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start-react": "react-scripts start",
+    "build-react": "react-scripts build",
+    "test-react": "react-scripts test",
+    "eject-react": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,7 +35,18 @@
   },
   "devDependencies": {
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "jest": "^26.2.2"
-  }
+    "enzyme-adapter-react-16": "^1.15.2"
+  },
+  "description": "An app for tracking IOUs",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckesoglou/31242-AIP.git"
+  },
+  "author": "See AUTHORS.md",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ckesoglou/31242-AIP/issues"
+  },
+  "homepage": "https://github.com/ckesoglou/31242-AIP#readme"
 }
