@@ -13,7 +13,7 @@ CREATE TABLE items (
 
 CREATE TABLE images (
 	id uniqueidentifier not null,
-	blob varbinary(max) not null CONSTRAINT Max_Image_Size CHECK (DATALENGTH(blob) <= 2000000),
+	blob varbinary(max) not null CONSTRAINT Max_Image_Size CHECK (DATALENGTH(blob) <= 2097152),
 	PRIMARY KEY (id)
 );
 
