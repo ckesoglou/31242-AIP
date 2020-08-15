@@ -21,7 +21,7 @@
       ],
       "@shared/*": [
         "src/shared/*"
-     public/src
+      ],
       "@server": [
         "src/Server"
       ]
@@ -38,6 +38,7 @@
     "spec/**/*.ts"
   ],
   "exclude": [
-    "src/public/"
+    "src/public/",
+    "react/"
   ]
 }

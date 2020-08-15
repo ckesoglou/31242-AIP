@@ -26,7 +26,6 @@
     "@server": "dist/Server"
   },
   "dependencies": {
-    "command-line-args": "^5.1.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -38,7 +37,6 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "@types/command-line-args": "^5.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.7",
     "@types/find": "^0.2.1",
