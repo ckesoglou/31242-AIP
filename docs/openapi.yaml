@@ -1,0 +1,65 @@
+openapi: 3.0.2
+info:
+  title: ioweyou.tech
+  version: 1.0.0
+paths:
+  /users/login:
+    summary: Endpoint to authenticate a user.
+    description: >-
+      Authenticates a user. If a password is supplied, it is used to attempt
+      authentication. Otherwise it will attempt to use the refresh JSON Web
+      Token (if stored in the client's cookies).
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username of the account attempting to login.
+                  example: jsmith
+                password:
+                  type: string
+                  description: >-
+                    Plaintext password of the user. If present, this will be used to
+                    attempt authentication, regardless of whether the "access_tokens"
+                    cookie is present.
+                  example: hunter2
+              required: 
+                - username
+      responses:
+        '200':
+          description: >-
+            Returned when the login was successful. This will set a JSON Web
+            Token as a httpOnly cookie (with access & refresh tokens).
+        '400':
+          description: >-
+            Returned when required query parameters were not provided, or
+            invalid.
+        '401':
+          description: >-
+            Returned when the password supplied is incorrect, or the refresh
+            token has expired.
+      tags: 
+        - Login
+    parameters:
+      - name: access_tokens
+        description: >-
+          If present and the password was not provided in request body, this JSON Web
+          Token will be decoded and the refresh_token used to attempt
+          authentication.
+        schema:
+          type: string
+        in: cookie
+components:
+  securitySchemes:
+    userAuthenticated:
+      type: apiKey
+      description: >-
+        Security scheme protecting endpoints that require a regular
+        authenticated user account.
+      name: access_tokens
+      in: cookie
