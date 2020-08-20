@@ -3,7 +3,7 @@ info:
   title: ioweyou.tech
   version: 1.0.0
 paths:
-  /users/login:
+  /login:
     summary: Endpoint to authenticate a user.
     get:
       description: >-
