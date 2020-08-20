@@ -113,3 +113,72 @@ Attempts authentication with the provided username and password in the requestBo
 This operation does not require authentication
 </aside>
 
+<h1 id="ioweyou-tech-login">Signup</h1>
+
+## post__users_signup
+
+> Code samples
+
+```javascript
+const inputBody = '{
+  "username": "jsmith",
+  "displayName": "joshsmith",
+  "password": "hunter2"
+}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/users/signup',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`POST /users/signup`
+
+Attempts to create a user with the provided username, display name, and password in the
+        requestBody. Sets the access_tokens cookie alongside a redirect request if
+        successful.
+
+> Body parameter
+
+```json
+{
+  "username": "jsmith",
+  "displayName": "joshsmith",
+  "password": "hunter2"
+}
+```
+
+<h3 id="post__users_signup-parameters">Signup Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» username|body|string|true|Desired username for the to-be-created account.|
+|» displayName|body|string|true|Desired display name for the to-be-created account.|
+|» password|body|string|true|Plaintext password for the to-be-created account.|
+
+<h3 id="post__users_signup-responses">Signup Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Returned when the user is successfully created. This will set a JSON Web Token as a httpOnly cookie (with access & refresh tokens) and redirect the user to the welcome page.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Returned when required requestBody was not provided, or invalid. Redirect back to the signup page.|None|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Returned when the username is already taken. Redirect back to the signup page.|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+
+
