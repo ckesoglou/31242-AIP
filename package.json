@@ -7,7 +7,12 @@
     "lint": "tslint --project \"tsconfig.json\"",
     "start": "node -r module-alias/register ./dist --env=production",
     "start:dev": "nodemon",
-    "test": "nodemon --config ./spec/nodemon.json"
+    "test": "jest --passWithNoTests"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "/react/"
+    ]
   },
   "nodemonConfig": {
     "watch": [
@@ -49,6 +54,7 @@
     "find": "^0.3.0",
     "fs-extra": "^9.0.1",
     "jasmine": "^3.6.1",
+    "jest": "^26.4.1",
     "jsonfile": "^6.0.1",
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2",
