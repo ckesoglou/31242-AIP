@@ -105,7 +105,7 @@ paths:
         '400':
           description: >-
             Returned when required requestBody was not provided, or invalid.
-        '401':
+        '422':
           description: >-
             Returned when the username is already taken.
       tags: 

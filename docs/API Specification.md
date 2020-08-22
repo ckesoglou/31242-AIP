@@ -172,7 +172,7 @@ Attempts to create a user with the provided username, display name, and password
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Returned when the user is successfully created. This will set a JSON Web Token as a httpOnly cookie (with access & refresh tokens).|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Returned when required requestBody was not provided, or invalid.|None|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Returned when the username is already taken.|None|
+|422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Returned when the username is already taken.|None|
 
 <aside class="success">
 This operation does not require authentication
