@@ -87,7 +87,7 @@ paths:
                   type: string
                   description: Desired display name for the to-be-created account.
                   maxLength: 50
-                  example: jsmith
+                  example: John Smith
                 password:
                   type: string
                   description: Plaintext password for the to-be-created account.
