@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login should render correctly 1`] = `
+<WithStyles(ForwardRef(Container))
+  component="main"
+  maxWidth="xs"
+>
+  <div>
+    <WithStyles(ForwardRef(Typography))
+      component="h1"
+      variant="h5"
+    >
+      Sign In
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(FormControl))>
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="username"
+        label="User Name"
+        margin="normal"
+        name="username"
+        onChange={[Function]}
+        required={true}
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="password"
+        label="Password"
+        margin="normal"
+        name="password"
+        onChange={[Function]}
+        required={true}
+        type="password"
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(Button))
+        color="primary"
+        fullWidth={true}
+        onClick={[Function]}
+        type="submit"
+        variant="contained"
+      >
+        Sign In
+      </WithStyles(ForwardRef(Button))>
+      <WithStyles(ForwardRef(Grid))
+        container={true}
+      >
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+          xs={true}
+        >
+          <WithStyles(ForwardRef(Link))
+            href="#"
+          >
+            Forgot password?
+          </WithStyles(ForwardRef(Link))>
+        </WithStyles(ForwardRef(Grid))>
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+        >
+          <WithStyles(ForwardRef(Link))
+            href="#"
+          >
+            Don't have an account? Sign Up
+          </WithStyles(ForwardRef(Link))>
+        </WithStyles(ForwardRef(Grid))>
+      </WithStyles(ForwardRef(Grid))>
+    </WithStyles(ForwardRef(FormControl))>
+  </div>
+</WithStyles(ForwardRef(Container))>
+`;
