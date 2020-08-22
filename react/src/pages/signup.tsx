@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link'; // Use react-router link instead?
 import TextField from '@material-ui/core/TextField';
 import { Container, Typography } from '@material-ui/core';
+import { testEndpoint, baseUrl } from '../api/endpoints';
 
 type SignUpProps = {
 
@@ -12,14 +13,14 @@ type SignUpProps = {
 
 type SignUpState = {
     username: string,
-    displayName: string,
+    display_name: string,
     password: string,
 }
 
 class SignUp extends React.Component<SignUpProps, SignUpState> {
     state: SignUpState = {
         username: '',
-        displayName: '',
+        display_name: '',
         password: '',
     };
 
@@ -30,10 +31,38 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
 
     // handle Sign Up button click
     handleClick(): ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined {
-        // throw new Error("Method not implemented.");
-        console.log(this.state.username, '\n', this.state.displayName, '\n', this.state.password);
-        return;
+        const inputBody = JSON.stringify({
+            "username": this.state.username,
+            "display_name": this.state.display_name,
+            "password": this.state.password,
+        });
+        const headers = {
+            'Content-Type': 'application/json'
+        };
 
+        fetch(`${baseUrl}/signup`, // TODO: fix endpoints after API implementation
+            {
+                method: 'POST',
+                body: inputBody,
+                headers: headers
+            })
+            .then(function (res) {
+                return res.json();
+            }).then(function (body) {
+                console.log(body);
+            });
+        // // test API fetch
+        // fetch(testEndpoint)
+        //     .then(res => res.json())
+        //     .then(
+        //         (result) => {
+        //             console.log('result: ', result);
+        //         },
+        //         (error) => {
+        //             console.log(error);
+        //         }
+        //     )
+        return;
     }
 
     render() {
@@ -59,10 +88,10 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
                             margin="normal"
                             required
                             fullWidth
-                            id="displayName"
+                            id="display_name"
                             label="Display Name"
-                            name="displayName"
-                            onChange={this.handleChange('displayName')}
+                            name="display_name"
+                            onChange={this.handleChange('display_name')}
                         />
                         <TextField
                             variant="outlined"
@@ -80,7 +109,7 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            onClick={this.handleClick()}
+                            onClick={() => this.handleClick()}
                         >
                             Sign Up
                         </Button>
