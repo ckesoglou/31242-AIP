@@ -1,11 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Login from './login';
+import SignUp from './signup';
 
-describe('Login', () => {
+describe('SignUp', () => {
     it('should render correctly', () => {
-        const component = shallow(<Login />);
+        const component = shallow(<SignUp />);
 
         expect(component).toMatchSnapshot();
     });
