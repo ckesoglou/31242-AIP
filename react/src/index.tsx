@@ -3,10 +3,18 @@ import ReactDOM from 'react-dom';
 import './assets/css/index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter as Router } from "react-router-dom";
+import { ThemeProvider, CssBaseline } from '@material-ui/core';
+import theme from './components/theme';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <App />
+      </Router>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
