@@ -101,8 +101,7 @@ paths:
         '201':
           description: >-
             Returned when the user is successfully created. This will set a JSON Web
-            Token as a httpOnly cookie (with access & refresh tokens) and redirect
-            the user to the welcome page.
+            Token as a httpOnly cookie (with access & refresh tokens).
         '400':
           description: >-
             Returned when required requestBody was not provided, or invalid. Redirect back to the signup page.
