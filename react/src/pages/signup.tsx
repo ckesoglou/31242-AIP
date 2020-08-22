@@ -11,13 +11,30 @@ type SignUpProps = {
 }
 
 type SignUpState = {
-
+    username: string,
+    displayName: string,
+    password: string,
 }
 
 class SignUp extends React.Component<SignUpProps, SignUpState> {
     state: SignUpState = {
-
+        username: '',
+        displayName: '',
+        password: '',
     };
+
+    // handle field changes
+    handleChange = (input: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ [input]: e.target.value } as Pick<SignUpState, keyof SignUpState>);
+    }
+
+    // handle Sign Up button click
+    handleClick(): ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined {
+        // throw new Error("Method not implemented.");
+        console.log(this.state.username, '\n', this.state.displayName, '\n', this.state.password);
+        return;
+
+    }
 
     render() {
         return (
@@ -35,6 +52,17 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
                             id="username"
                             label="User Name"
                             name="username"
+                            onChange={this.handleChange('username')}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="displayName"
+                            label="Display Name"
+                            name="displayName"
+                            onChange={this.handleChange('displayName')}
                         />
                         <TextField
                             variant="outlined"
@@ -45,12 +73,14 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
                             label="Password"
                             name="password"
                             type="password"
+                            onChange={this.handleChange('password')}
                         />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
+                            onClick={this.handleClick()}
                         >
                             Sign Up
                         </Button>
