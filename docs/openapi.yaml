@@ -83,7 +83,7 @@ paths:
                   description: Desired username for the to-be-created account.
                   maxLength: 16
                   example: jsmith
-                displayName:
+                display_name:
                   type: string
                   description: Desired display name for the to-be-created account.
                   maxLength: 50
