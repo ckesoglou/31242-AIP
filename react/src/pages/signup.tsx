@@ -4,18 +4,18 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link'; // Use react-router link instead?
 import TextField from '@material-ui/core/TextField';
-import { FormControlLabel, Checkbox, Container, Typography } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 
-type LoginProps = {
-
-}
-
-type LoginState = {
+type SignUpProps = {
 
 }
 
-class Login extends React.Component<LoginProps, LoginState> {
-    state: LoginState = {
+type SignUpState = {
+
+}
+
+class SignUp extends React.Component<SignUpProps, SignUpState> {
+    state: SignUpState = {
 
     };
 
@@ -24,7 +24,7 @@ class Login extends React.Component<LoginProps, LoginState> {
             <Container component="main" maxWidth='xs'>
                 <div>
                     <Typography component="h1" variant="h5">
-                        Sign In
+                        Sign Up
                     </Typography>
                     <form>
                         <TextField
@@ -46,27 +46,18 @@ class Login extends React.Component<LoginProps, LoginState> {
                             name="password"
                             type="password"
                         />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                         >
-                            Sign In
+                            Sign Up
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="/signup">
-                                    {"Don't have an account? Sign Up"}
+                                <Link href="/">
+                                    Sign in instead
                                 </Link>
                             </Grid>
                         </Grid>
@@ -77,4 +68,4 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 }
 
-export default Login;
+export default SignUp;
