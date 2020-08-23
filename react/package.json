@@ -28,7 +28,9 @@
     "eject": "react-scripts eject"
   },
   "jest": {
-    "snapshotSerializers": ["enzyme-to-json/serializer"]
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,6 +49,7 @@
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.5",
-    "@types/enzyme-adapter-react-16": "^1.0.6"
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "miragejs": "^0.1.40"
   }
 }
