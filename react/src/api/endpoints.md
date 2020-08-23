@@ -1,1 +1,0 @@
-// add endpoint urls here so we don't hardcode in the components + change this file format to tsx!
