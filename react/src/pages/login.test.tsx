@@ -1,27 +1,14 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { Server, Response } from "miragejs";
-import { baseUrl } from "../api/endpoints";
+import { Server } from "miragejs";
+import { makeServer } from "../components/server";
 
 import Login from "./login";
 
 let server: Server;
 
-// I'm thinking that we don't
-// need the server to start/stop on each test
-
 beforeEach(() => {
-  server = new Server({
-    routes() {
-      //   this.namespace = `${baseUrl}`;
-      this.namespace = "api";
-
-      this.post("/login", () => {
-        let headers = {}; // insert new cookie here
-        return new Response(200, headers);
-      });
-    },
-  });
+  server = makeServer({ environment: "test" });
 });
 
 afterEach(() => {
