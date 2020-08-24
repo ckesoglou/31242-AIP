@@ -6,6 +6,7 @@ import Link from "@material-ui/core/Link"; // Use react-router link instead?
 import TextField from "@material-ui/core/TextField";
 import { Container, Typography, FormControl } from "@material-ui/core";
 import { loginEndpoint } from "../api/endpoints";
+import { Redirect } from "react-router-dom";
 
 type LoginProps = {};
 
@@ -13,6 +14,7 @@ type LoginState = {
   username: string;
   password: string;
   error: string;
+  successfulLogin: boolean;
 };
 
 class Login extends React.Component<LoginProps, LoginState> {
@@ -20,6 +22,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     username: "",
     password: "",
     error: "",
+    successfulLogin: false,
   };
 
   handleLogin = (username: string, password: string) => {
@@ -40,12 +43,28 @@ class Login extends React.Component<LoginProps, LoginState> {
       .then((res) => {
         return res.json();
       })
-      .then((json) => {
+      .then((body) => {
+        console.log("Success:", body);
+        this.setState({ successfulLogin: true });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
         this.setState({ error: document.cookie });
       });
   };
 
   render() {
+    if (this.state.successfulLogin) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/home",
+            state: { username: this.state.username },
+          }}
+        />
+      );
+    }
+
     return (
       <Container component="main" maxWidth="xs">
         <Typography component="h1" variant="h5">
