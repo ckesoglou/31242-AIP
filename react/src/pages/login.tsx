@@ -4,11 +4,14 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link"; // Use react-router link instead?
 import TextField from "@material-ui/core/TextField";
-import { Container, Typography, FormControl } from "@material-ui/core";
+import {
+  Container,
+  Typography,
+  FormControl,
+  CircularProgress,
+} from "@material-ui/core";
 import { loginEndpoint } from "../api/endpoints";
-import { Redirect } from "react-router-dom";
-
-type LoginProps = {};
+import { Redirect, RouteComponentProps } from "react-router-dom";
 
 type LoginState = {
   username: string;
@@ -17,7 +20,7 @@ type LoginState = {
   successfulLogin: boolean;
 };
 
-class Login extends React.Component<LoginProps, LoginState> {
+class Login extends React.Component<RouteComponentProps, LoginState> {
   state: LoginState = {
     username: "",
     password: "",
@@ -25,7 +28,20 @@ class Login extends React.Component<LoginProps, LoginState> {
     successfulLogin: false,
   };
 
+  setLoading(): void {
+    let signInText = document.getElementById("signInText");
+    let loading = document.getElementById("loading");
+    if (loading) {
+      loading.style.display = "block";
+    }
+    if (signInText) {
+      signInText.innerText = "";
+    }
+  }
+
   handleLogin = (username: string, password: string) => {
+    this.setLoading();
+
     const inputBody = JSON.stringify({
       username: username,
       password: password,
@@ -47,9 +63,9 @@ class Login extends React.Component<LoginProps, LoginState> {
         console.log("Success:", body);
         this.setState({ successfulLogin: true });
       })
-      .catch((error) => {
-        console.error("Error:", error);
-        this.setState({ error: document.cookie });
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ error: exception });
       });
   };
 
@@ -67,61 +83,58 @@ class Login extends React.Component<LoginProps, LoginState> {
 
     return (
       <Container component="main" maxWidth="xs">
-        <Typography component="h1" variant="h5">
-          Sign In
-        </Typography>
-        <FormControl>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="User Name"
-            name="username"
-            value={this.state.username}
-            onChange={(e) => this.setState({ username: e.target.value })}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="password"
-            label="Password"
-            name="password"
-            type="password"
-            value={this.state.password}
-            onChange={(e) => this.setState({ password: e.target.value })}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              this.handleLogin(this.state.username, this.state.password)
-            }
-          >
+        <div className="paper">
+          <Typography component="h1" variant="h5">
             Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#">Forgot password?</Link>
+          </Typography>
+          <FormControl className="form">
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="User Name"
+              name="username"
+              value={this.state.username}
+              onChange={(e) => this.setState({ username: e.target.value })}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="password"
+              label="Password"
+              name="password"
+              type="password"
+              value={this.state.password}
+              onChange={(e) => this.setState({ password: e.target.value })}
+            />
+            <Button
+              id="submit"
+              type="submit"
+              fullWidth
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                this.handleLogin(this.state.username, this.state.password)
+              }
+            >
+              <CircularProgress size={35} color="inherit" id="loading" />
+              <label id="signInText">Sign In</label>
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#">Forgot password?</Link>
+              </Grid>
+              <Grid item>
+                <Link href="#">{"Don't have an account? Sign Up"}</Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="#">{"Don't have an account? Sign Up"}</Link>
-            </Grid>
-          </Grid>
-          <div
-            style={{
-              textOverflow: "ellipsis",
-              width: "10rem",
-            }}
-          >
-            The token is.....{this.state.error}
-          </div>
-        </FormControl>
+          </FormControl>
+        </div>
       </Container>
     );
   }

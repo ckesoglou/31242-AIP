@@ -1,5 +1,19 @@
-.login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.paper {
+  margin-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form {
+  width: 100%;
+  margin-top: 1rem;
+}
+#submit {
+  margin: 3rem 0rem 2rem;
+}
+#loading {
+  display: none;
+}
+#signInText {
+  padding: 0.275rem;
 }
