@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './assets/css/index.css';
-import App from './components/App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./assets/css/index.css";
+import App from "./components/App";
+import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router } from "react-router-dom";
-import { ThemeProvider, CssBaseline } from '@material-ui/core';
-import theme from './components/theme';
+import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import theme from "./components/theme";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,7 +16,7 @@ ReactDOM.render(
       </Router>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
