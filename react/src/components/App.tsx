@@ -1,12 +1,8 @@
-import React from 'react';
-import '../assets/css/App.css';
-import {
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import Login from '../pages/login';
-import SignUp from '../pages/signup';
+import React from "react";
+import "../assets/css/App.css";
+import { Switch, Route, Link } from "react-router-dom";
+import Login from "../pages/login";
+import SignUp from "../pages/signup";
 
 function App() {
   return (
