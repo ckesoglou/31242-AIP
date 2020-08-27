@@ -26,7 +26,7 @@ function App() {
   );
 }
 
-// mock auth
+// mock authentication - this should be an api call to check whether cookie exists
 const Authentication = {
   isAuthenticated: false,
   authenticate(cb: () => void) {
@@ -44,13 +44,11 @@ const ProtectedRoute: React.ComponentType<any> = ({
   component: Component,
   ...rest
 }) => {
-  // remove below
   Authentication.authenticate(() => {});
   return (
     <Route
       {...rest}
       render={(props) =>
-        // add api get check cookie
         Authentication.isAuthenticated ? (
           <Component {...props} />
         ) : (

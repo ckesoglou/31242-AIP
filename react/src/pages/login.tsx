@@ -20,7 +20,21 @@ type LoginState = {
   successfulLogin: boolean;
 };
 
-class Login extends React.Component<RouteComponentProps, LoginState> {
+interface LoginProps extends RouteComponentProps {
+  location: {
+    key: string;
+    pathname: string;
+    search: string;
+    hash: string;
+    state: {
+      next: {
+        pathname: string;
+      };
+    };
+  };
+}
+
+class Login extends React.Component<LoginProps, LoginState> {
   state: LoginState = {
     username: "",
     password: "",
@@ -70,15 +84,13 @@ class Login extends React.Component<RouteComponentProps, LoginState> {
   };
 
   render() {
+    // redirect to previous protected page if previously not authenticated
+    const { next } = this.props.location.state || {
+      next: { pathname: "/home" },
+    };
+
     if (this.state.successfulLogin) {
-      return (
-        <Redirect
-          to={{
-            pathname: "/home",
-            state: { username: this.state.username },
-          }}
-        />
-      );
+      return <Redirect to={next} />;
     }
 
     return (
