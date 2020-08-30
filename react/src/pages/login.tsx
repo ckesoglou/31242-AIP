@@ -20,7 +20,7 @@ type LoginState = {
   successfulLogin: boolean;
 };
 
-interface LoginProps extends RouteComponentProps {
+interface ILoginProps extends RouteComponentProps {
   location: {
     key: string;
     pathname: string;
@@ -34,7 +34,7 @@ interface LoginProps extends RouteComponentProps {
   };
 }
 
-class Login extends React.Component<LoginProps, LoginState> {
+class Login extends React.Component<ILoginProps, LoginState> {
   state: LoginState = {
     username: "",
     password: "",
@@ -53,7 +53,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
   }
 
-  handleLogin = (username: string, password: string) => {
+  handleLogin(username: string, password: string): void {
     this.setLoading();
 
     const inputBody = JSON.stringify({
@@ -81,7 +81,7 @@ class Login extends React.Component<LoginProps, LoginState> {
         console.error("Error:", exception);
         this.setState({ error: exception });
       });
-  };
+  }
 
   render() {
     // redirect to previous protected page if previously not authenticated

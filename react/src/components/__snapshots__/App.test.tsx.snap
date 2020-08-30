@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> should render correctly 1`] = `
+<BrowserRouter>
+  <Switch>
+    <ProtectedRoute
+      path="/users"
+    />
+    <ProtectedRoute
+      path="/home"
+    >
+      <h1>
+        You've reached the next page!
+      </h1>
+      <h2>
+        <Link
+          to="/"
+        >
+          Click here to go back!
+        </Link>
+      </h2>
+    </ProtectedRoute>
+    <Route
+      component={[Function]}
+      path="/"
+    />
+  </Switch>
+</BrowserRouter>
+`;

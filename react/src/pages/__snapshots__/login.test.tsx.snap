@@ -5,78 +5,85 @@ exports[`<Login /> should render correctly 1`] = `
   component="main"
   maxWidth="xs"
 >
-  <WithStyles(ForwardRef(Typography))
-    component="h1"
-    variant="h5"
+  <div
+    className="paper"
   >
-    Sign In
-  </WithStyles(ForwardRef(Typography))>
-  <WithStyles(ForwardRef(FormControl))>
-    <WithStyles(ForwardRef(TextField))
-      fullWidth={true}
-      id="username"
-      label="User Name"
-      margin="normal"
-      name="username"
-      onChange={[Function]}
-      required={true}
-      value=""
-      variant="outlined"
-    />
-    <WithStyles(ForwardRef(TextField))
-      fullWidth={true}
-      id="password"
-      label="Password"
-      margin="normal"
-      name="password"
-      onChange={[Function]}
-      required={true}
-      type="password"
-      value=""
-      variant="outlined"
-    />
-    <WithStyles(ForwardRef(Button))
-      color="primary"
-      fullWidth={true}
-      onClick={[Function]}
-      type="submit"
-      variant="contained"
+    <WithStyles(ForwardRef(Typography))
+      component="h1"
+      variant="h5"
     >
       Sign In
-    </WithStyles(ForwardRef(Button))>
-    <WithStyles(ForwardRef(Grid))
-      container={true}
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(FormControl))
+      className="form"
     >
-      <WithStyles(ForwardRef(Grid))
-        item={true}
-        xs={true}
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="username"
+        label="User Name"
+        margin="normal"
+        name="username"
+        onChange={[Function]}
+        required={true}
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="password"
+        label="Password"
+        margin="normal"
+        name="password"
+        onChange={[Function]}
+        required={true}
+        type="password"
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(Button))
+        color="primary"
+        fullWidth={true}
+        id="submit"
+        onClick={[Function]}
+        size="large"
+        type="submit"
+        variant="contained"
       >
-        <WithStyles(ForwardRef(Link))
-          href="#"
+        <WithStyles(ForwardRef(CircularProgress))
+          color="inherit"
+          id="loading"
+          size={35}
+        />
+        <label
+          id="signInText"
         >
-          Forgot password?
-        </WithStyles(ForwardRef(Link))>
-      </WithStyles(ForwardRef(Grid))>
+          Sign In
+        </label>
+      </WithStyles(ForwardRef(Button))>
       <WithStyles(ForwardRef(Grid))
-        item={true}
+        container={true}
       >
-        <WithStyles(ForwardRef(Link))
-          href="#"
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+          xs={true}
         >
-          Don't have an account? Sign Up
-        </WithStyles(ForwardRef(Link))>
+          <WithStyles(ForwardRef(Link))
+            href="#"
+          >
+            Forgot password?
+          </WithStyles(ForwardRef(Link))>
+        </WithStyles(ForwardRef(Grid))>
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+        >
+          <WithStyles(ForwardRef(Link))
+            href="#"
+          >
+            Don't have an account? Sign Up
+          </WithStyles(ForwardRef(Link))>
+        </WithStyles(ForwardRef(Grid))>
       </WithStyles(ForwardRef(Grid))>
-    </WithStyles(ForwardRef(Grid))>
-    <div
-      style={
-        Object {
-          "textOverflow": "ellipsis",
-          "width": "10rem",
-        }
-      }
-    >
-      The token is.....
-    </div>
-  </WithStyles(ForwardRef(FormControl))>
+    </WithStyles(ForwardRef(FormControl))>
+  </div>
 </WithStyles(ForwardRef(Container))>
 `;
