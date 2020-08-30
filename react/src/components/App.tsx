@@ -1,13 +1,8 @@
 import React from "react";
 import "../assets/css/App.css";
-import {
-  Switch,
-  Route,
-  BrowserRouter as Router,
-  Redirect,
-  Link,
-} from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom";
 import Login from "../pages/login";
+import { ProtectedRoute } from "./protectedRoute";
 
 function App() {
   return (
@@ -25,43 +20,5 @@ function App() {
     </Router>
   );
 }
-
-// mock authentication - this should be an api call to check whether cookie exists
-const Authentication = {
-  isAuthenticated: false,
-  authenticate(cb: () => void) {
-    this.isAuthenticated = true;
-    setTimeout(cb, 3000); // fake async
-  },
-  signout(cb: () => void) {
-    this.isAuthenticated = false;
-    setTimeout(cb, 3000);
-  },
-};
-
-// thanks to some random person
-const ProtectedRoute: React.ComponentType<any> = ({
-  component: Component,
-  ...rest
-}) => {
-  Authentication.authenticate(() => {});
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        Authentication.isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
-    />
-  );
-};
 
 export default App;

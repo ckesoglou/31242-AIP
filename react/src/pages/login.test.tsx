@@ -1,32 +1,63 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { Server } from "miragejs";
-import { makeServer } from "../components/server";
-
+import { MemoryRouter, Route } from "react-router-dom";
 import Login from "./login";
 
-let server: Server;
-
-beforeEach(() => {
-  server = makeServer({ environment: "test" });
-});
-
-afterEach(() => {
-  server.shutdown();
-});
+const testProps = {
+  history: {} as any,
+  location: {} as any,
+  match: {} as any,
+};
 
 describe("<Login />", () => {
   it("should render correctly", () => {
-    const wrapper = shallow(<Login />);
+    const wrapper = shallow(
+      <Login
+        history={testProps.history}
+        location={testProps.location}
+        match={testProps.match}
+      />
+    );
+
     expect(wrapper).toMatchSnapshot();
   });
 
-  it("should get a valid cookie on successful login", () => {
-    const wrapper = mount(<Login />);
-    let button = wrapper.find("button");
-    expect(button).toHaveLength(1);
-    button.simulate("click");
+  it("navigates to next page for successful login", () => {
+    const wrapper = mount(
+      <MemoryRouter initialEntries={["/login"]}>
+        <Route path="/login" component={Login} />
+        <Route path="/home">
+          <h1>Hello</h1>
+        </Route>
+      </MemoryRouter>
+    );
 
-    // check ui changed
+    let loginComponent = wrapper.find("Login");
+    loginComponent.setState({
+      username: "",
+      password: "",
+      error: "",
+      successfulLogin: true,
+    });
+
+    // @ts-ignore
+    expect(wrapper.find("Router").prop("history").location.pathname).toEqual(
+      "/home"
+    );
+  });
+
+  it("should handle login if button is clicked", () => {
+    const spy = jest.spyOn(Login.prototype, "handleLogin");
+    const wrapper = mount(
+      <Login
+        history={testProps.history}
+        location={testProps.location}
+        match={testProps.match}
+      />
+    );
+
+    wrapper.find("button").simulate("click");
+
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 });
