@@ -18,6 +18,7 @@ type SignUpState = {
   display_name: string;
   password: string;
   error: string;
+  submitted: boolean;
   successfulSignUp: boolean;
 };
 
@@ -41,6 +42,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     display_name: "",
     password: "",
     error: "",
+    submitted: false,
     successfulSignUp: false,
   };
 
@@ -148,14 +150,16 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               fullWidth
               size="large"
               variant="contained"
+              disabled={this.state.submitted}
               color="primary"
-              onClick={() =>
+              onClick={() => {
                 this.handleSignUp(
                   this.state.username,
                   this.state.display_name,
                   this.state.password
-                )
-              }
+                );
+                this.setState({ submitted: !this.state.submitted });
+              }}
             >
               <CircularProgress size={35} color="inherit" id="loading" />
               <label id="signUpText">Sign Up</label>
