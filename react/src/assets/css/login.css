@@ -1,15 +1,9 @@
-<<<<<<< HEAD
-.login {
-=======
 .paper {
   margin-top: 8rem;
->>>>>>> 13584228-login-front-end
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-<<<<<<< HEAD
-=======
 .form {
   width: 100%;
   margin-top: 1rem;
@@ -23,4 +17,3 @@
 #signInText {
   padding: 0.275rem;
 }
->>>>>>> 13584228-login-front-end
