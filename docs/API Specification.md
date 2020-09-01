@@ -11,13 +11,25 @@
 
 <h1 id="ioweyou-tech-default">Default</h1>
 
+<<<<<<< HEAD
 ## get\_\_users_login
+=======
+## get__login
+>>>>>>> 13584228-login-front-end
 
 > Code samples
 
 ```javascript
+<<<<<<< HEAD
 fetch("/users/login", {
   method: "GET",
+=======
+
+fetch('/login',
+{
+  method: 'GET'
+
+>>>>>>> 13584228-login-front-end
 })
   .then(function (res) {
     return res.json();
@@ -27,17 +39,17 @@ fetch("/users/login", {
   });
 ```
 
-`GET /users/login`
+`GET /login`
 
 Attempts to authenticate the user with the refresh JSON Web Token (if stored in the client's cookies) and redirects the user. Otherwise, the React login webpage will be returned.
 
-<h3 id="get__users_login-parameters">Parameters</h3>
+<h3 id="get__login-parameters">Parameters</h3>
 
 | Name          | In     | Type   | Required | Description                                                                                                                                         |
 | ------------- | ------ | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | access_tokens | cookie | string | false    | If present, this JSON Web Token cookie will be decoded and used to attempt authentication. Contains a refresh_token property and username property. |
 
-<h3 id="get__users_login-responses">Responses</h3>
+<h3 id="get__login-responses">Responses</h3>
 
 | Status | Meaning                                                    | Description                                                                                                                                       | Schema |
 | ------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -50,7 +62,11 @@ This operation does not require authentication
 
 <h1 id="ioweyou-tech-login">Login</h1>
 
+<<<<<<< HEAD
 ## post\_\_users_login
+=======
+## post__login
+>>>>>>> 13584228-login-front-end
 
 > Code samples
 
@@ -63,7 +79,7 @@ const headers = {
   'Content-Type':'application/json'
 };
 
-fetch('/users/login',
+fetch('/login',
 {
   method: 'POST',
   body: inputBody,
@@ -77,7 +93,7 @@ fetch('/users/login',
 
 ```
 
-`POST /users/login`
+`POST /login`
 
 Attempts authentication with the provided username and password in the requestBody. Sets the access_tokens cookie alongside a redirect request if successful.
 
@@ -90,7 +106,7 @@ Attempts authentication with the provided username and password in the requestBo
 }
 ```
 
-<h3 id="post__users_login-parameters">Parameters</h3>
+<h3 id="post__login-parameters">Parameters</h3>
 
 | Name       | In   | Type   | Required | Description                                  |
 | ---------- | ---- | ------ | -------- | -------------------------------------------- |
@@ -98,7 +114,7 @@ Attempts authentication with the provided username and password in the requestBo
 | » username | body | string | true     | Username of the account attempting to login. |
 | » password | body | string | true     | Plaintext password of the user.              |
 
-<h3 id="post__users_login-responses">Responses</h3>
+<h3 id="post__login-responses">Responses</h3>
 
 | Status | Meaning                                                          | Description                                                                                                                                                                                                        | Schema |
 | ------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
@@ -109,3 +125,72 @@ Attempts authentication with the provided username and password in the requestBo
 <aside class="success">
 This operation does not require authentication
 </aside>
+<<<<<<< HEAD
+=======
+
+<h1 id="ioweyou-tech-signup">Signup</h1>
+
+## post__signup
+
+> Code samples
+
+```javascript
+const inputBody = '{
+  "username": "jsmith",
+  "display_name": "John Smith",
+  "password": "hunter2"
+}';
+const headers = {
+  'Content-Type':'application/json'
+};
+
+fetch('/signup',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`POST /signup`
+
+Attempts to create a user with the provided username, display name, and password in the requestBody. Sets the access_tokens cookie alongside a redirect request if successful.
+
+> Body parameter
+
+```json
+{
+  "username": "jsmith",
+  "display_name": "John Smith",
+  "password": "hunter2"
+}
+```
+
+<h3 id="post__signup-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» username|body|string|true|Desired username for the to-be-created account.|
+|» display_name|body|string|false|Desired display name for the to-be-created account.|
+|» password|body|string|true|Plaintext password for the to-be-created account.|
+
+<h3 id="post__signup-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Returned when the user is successfully created. This will set a JSON Web Token as a httpOnly cookie (with access & refresh tokens).|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Returned when required requestBody was not provided, or invalid.|None|
+|422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Returned when the username is already taken.|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+>>>>>>> 13584228-login-front-end
