@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link"; // Use react-router link instead?
 import TextField from "@material-ui/core/TextField";
 import { Container, Typography } from "@material-ui/core";
-import { testEndpoint, baseUrl } from "../api/endpoints";
+import { baseUrl } from "../api/endpoints";
 
 type SignUpProps = {};
 

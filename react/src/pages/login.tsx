@@ -5,29 +5,6 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link"; // Use react-router link instead?
 import TextField from "@material-ui/core/TextField";
 import {
-<<<<<<< HEAD
-  FormControlLabel,
-  Checkbox,
-  Container,
-  Typography,
-} from "@material-ui/core";
-
-type LoginProps = {};
-
-type LoginState = {};
-
-class Login extends React.Component<LoginProps, LoginState> {
-  state: LoginState = {};
-
-  render() {
-    return (
-      <Container component="main" maxWidth="xs">
-        <div>
-          <Typography component="h1" variant="h5">
-            Sign In
-          </Typography>
-          <form>
-=======
   Container,
   Typography,
   FormControl,
@@ -123,7 +100,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
             Sign In
           </Typography>
           <FormControl className="form">
->>>>>>> 13584228-login-front-end
             <TextField
               variant="outlined"
               margin="normal"
@@ -132,11 +108,8 @@ class Login extends React.Component<ILoginProps, LoginState> {
               id="username"
               label="User Name"
               name="username"
-<<<<<<< HEAD
-=======
               value={this.state.username}
               onChange={(e) => this.setState({ username: e.target.value })}
->>>>>>> 13584228-login-front-end
             />
             <TextField
               variant="outlined"
@@ -147,15 +120,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
               label="Password"
               name="password"
               type="password"
-<<<<<<< HEAD
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button type="submit" fullWidth variant="contained" color="primary">
-              Sign In
-=======
               value={this.state.password}
               onChange={(e) => this.setState({ password: e.target.value })}
             />
@@ -172,24 +136,16 @@ class Login extends React.Component<ILoginProps, LoginState> {
             >
               <CircularProgress size={35} color="inherit" id="loading" />
               <label id="signInText">Sign In</label>
->>>>>>> 13584228-login-front-end
             </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="#">Forgot password?</Link>
               </Grid>
               <Grid item>
-<<<<<<< HEAD
-                <Link href="/signup">{"Don't have an account? Sign Up"}</Link>
-              </Grid>
-            </Grid>
-          </form>
-=======
                 <Link href="#">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </FormControl>
->>>>>>> 13584228-login-front-end
         </div>
       </Container>
     );

@@ -1,15 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-import { shallow } from "enzyme";
-
-import Login from "./login";
-
-describe("Login", () => {
-  it("should render correctly", () => {
-    const component = shallow(<Login />);
-
-    expect(component).toMatchSnapshot();
-=======
 import { shallow, mount } from "enzyme";
 import { MemoryRouter, Route } from "react-router-dom";
 import Login from "./login";
@@ -70,6 +59,5 @@ describe("<Login />", () => {
     wrapper.find("button").simulate("click");
 
     expect(spy).toHaveBeenCalledTimes(1);
->>>>>>> 13584228-login-front-end
   });
 });
