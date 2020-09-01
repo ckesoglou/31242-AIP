@@ -11,22 +11,37 @@ import {
   FormControl,
 } from "@material-ui/core";
 import { signUpEndpoint } from "../api/endpoints";
-
-type SignUpProps = {};
+import { Redirect, RouteComponentProps } from "react-router-dom";
 
 type SignUpState = {
   username: string;
   display_name: string;
   password: string;
   error: string;
+  successfulSignUp: boolean;
 };
 
-class SignUp extends React.Component<SignUpProps, SignUpState> {
+interface ISignUpProps extends RouteComponentProps {
+  location: {
+    key: string;
+    pathname: string;
+    search: string;
+    hash: string;
+    state: {
+      next: {
+        pathname: string;
+      };
+    };
+  };
+}
+
+class SignUp extends React.Component<ISignUpProps, SignUpState> {
   state: SignUpState = {
     username: "",
     display_name: "",
     password: "",
     error: "",
+    successfulSignUp: false,
   };
 
   setLoading(): void {
@@ -66,7 +81,8 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
         return res.json();
       })
       .then((body) => {
-        console.log(body);
+        console.log("Success:", body);
+        this.setState({ successfulSignUp: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
@@ -76,6 +92,15 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
   }
 
   render() {
+    // redirect to previous protected page if previously not authenticated
+    const { next } = this.props.location.state || {
+      next: { pathname: "/home" },
+    };
+
+    if (this.state.successfulSignUp) {
+      return <Redirect to={next} />;
+    }
+
     return (
       <Container component="main" maxWidth="xs">
         <div className="paper">
