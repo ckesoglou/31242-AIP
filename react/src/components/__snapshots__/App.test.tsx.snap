@@ -22,6 +22,10 @@ exports[`<App /> should render correctly 1`] = `
     </ProtectedRoute>
     <Route
       component={[Function]}
+      path="/signup"
+    />
+    <Route
+      component={[Function]}
       path="/"
     />
   </Switch>
