@@ -4,8 +4,13 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link"; // Use react-router link instead?
 import TextField from "@material-ui/core/TextField";
-import { Container, Typography } from "@material-ui/core";
-import { baseUrl } from "../api/endpoints";
+import {
+  Container,
+  Typography,
+  CircularProgress,
+  FormControl,
+} from "@material-ui/core";
+import { signUpEndpoint } from "../api/endpoints";
 
 type SignUpProps = {};
 
@@ -13,6 +18,7 @@ type SignUpState = {
   username: string;
   display_name: string;
   password: string;
+  error: string;
 };
 
 class SignUp extends React.Component<SignUpProps, SignUpState> {
@@ -20,67 +26,63 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
     username: "",
     display_name: "",
     password: "",
+    error: "",
   };
 
-  // handle field changes
-  handleChange = (input: string) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    this.setState({ [input]: e.target.value } as Pick<
-      SignUpState,
-      keyof SignUpState
-    >);
-  };
+  setLoading(): void {
+    let signUpText = document.getElementById("signUpText");
+    let loading = document.getElementById("loading");
+    if (loading) {
+      loading.style.display = "block";
+    }
+    if (signUpText) {
+      signUpText.innerText = "";
+    }
+  }
 
   // handle Sign Up button click
-  handleClick():
-    | ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
-    | undefined {
+  handleSignUp(username: string, display_name: string, password: string): void {
+    this.setLoading();
+
     const inputBody = JSON.stringify({
-      username: this.state.username,
-      display_name: this.state.display_name,
-      password: this.state.password,
+      username: username,
+      display_name: display_name,
+      password: password,
     });
+
     const headers = {
       "Content-Type": "application/json",
     };
 
     fetch(
-      `${baseUrl}/signup`, // TODO: fix endpoints after API implementation
+      `${signUpEndpoint}`, // TODO: fix endpoints after API implementation
       {
         method: "POST",
         body: inputBody,
         headers: headers,
       }
     )
-      .then(function (res) {
+      .then((res) => {
         return res.json();
       })
-      .then(function (body) {
+      .then((body) => {
         console.log(body);
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ error: exception });
       });
-    // // test API fetch
-    // fetch(testEndpoint)
-    //     .then(res => res.json())
-    //     .then(
-    //         (result) => {
-    //             console.log('result: ', result);
-    //         },
-    //         (error) => {
-    //             console.log(error);
-    //         }
-    //     )
     return;
   }
 
   render() {
     return (
       <Container component="main" maxWidth="xs">
-        <div>
+        <div className="paper">
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <form>
+          <FormControl className="form">
             <TextField
               variant="outlined"
               margin="normal"
@@ -89,7 +91,8 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
               id="username"
               label="User Name"
               name="username"
-              onChange={this.handleChange("username")}
+              value={this.state.username}
+              onChange={(e) => this.setState({ username: e.target.value })}
             />
             <TextField
               variant="outlined"
@@ -99,7 +102,8 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
               id="display_name"
               label="Display Name"
               name="display_name"
-              onChange={this.handleChange("display_name")}
+              value={this.state.display_name}
+              onChange={(e) => this.setState({ display_name: e.target.value })}
             />
             <TextField
               variant="outlined"
@@ -110,23 +114,33 @@ class SignUp extends React.Component<SignUpProps, SignUpState> {
               label="Password"
               name="password"
               type="password"
-              onChange={this.handleChange("password")}
+              value={this.state.password}
+              onChange={(e) => this.setState({ password: e.target.value })}
             />
             <Button
+              id="submit"
               type="submit"
               fullWidth
+              size="large"
               variant="contained"
               color="primary"
-              onClick={() => this.handleClick()}
+              onClick={() =>
+                this.handleSignUp(
+                  this.state.username,
+                  this.state.display_name,
+                  this.state.password
+                )
+              }
             >
-              Sign Up
+              <CircularProgress size={35} color="inherit" id="loading" />
+              <label id="signUpText">Sign Up</label>
             </Button>
             <Grid container>
-              <Grid item xs>
+              <Grid item>
                 <Link href="/">Sign in instead</Link>
               </Grid>
             </Grid>
-          </form>
+          </FormControl>
         </div>
       </Container>
     );

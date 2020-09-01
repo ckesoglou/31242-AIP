@@ -142,7 +142,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
                 <Link href="#">Forgot password?</Link>
               </Grid>
               <Grid item>
-                <Link href="#">{"Don't have an account? Sign Up"}</Link>
+                <Link href="/signup">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </FormControl>
