@@ -17,9 +17,15 @@ on:
     branches: [master]
 
 env:
+<<<<<<< HEAD:.github/workflows/azure.yml
   AZURE_WEBAPP_NAME: ioweyou # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: "10.x" # set this to the node version to use
+=======
+  AZURE_WEBAPP_NAME: ioweyou          # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '12.x'                # set this to the node version to use
+>>>>>>> 13584228-login-front-end:.github/workflows/continuous-deployment.yml
 
 jobs:
   build-and-deploy:

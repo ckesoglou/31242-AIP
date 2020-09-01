@@ -64,6 +64,52 @@ paths:
             Returned when the password supplied is incorrect.
       tags:
         - Login
+  /signup:
+    summary: Endpoint to create a user.
+    post:
+      description: >-
+        Attempts to create a user with the provided username, display name, and password in the
+        requestBody. Sets the access_tokens cookie alongside a redirect request if
+        successful.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Desired username for the to-be-created account.
+                  maxLength: 16
+                  example: jsmith
+                display_name:
+                  type: string
+                  description: Desired display name for the to-be-created account.
+                  maxLength: 50
+                  example: John Smith
+                password:
+                  type: string
+                  description: Plaintext password for the to-be-created account.
+                  maxLength: 60
+                  example: hunter2
+              required: 
+                - username
+                - displayName
+                - password
+      responses:
+        '201':
+          description: >-
+            Returned when the user is successfully created. This will set a JSON Web
+            Token as a httpOnly cookie (with access & refresh tokens).
+        '400':
+          description: >-
+            Returned when required requestBody was not provided, or invalid.
+        '422':
+          description: >-
+            Returned when the username is already taken.
+      tags: 
+        - Signup
 components:
   securitySchemes:
     userAuthenticated:

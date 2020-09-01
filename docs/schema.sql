@@ -5,6 +5,16 @@ CREATE TABLE users (
 	PRIMARY KEY (username)
 );
 
+CREATE TABLE tokens (
+	refresh_token varchar not null,
+	username varchar(16) not null,
+	device_name varchar(30) not null,
+	created_time datetime not null,
+	expiry_time datetime not null,
+	FOREIGN KEY (username) REFERENCES users(username),
+	PRIMARY KEY (refresh_token)
+);
+
 CREATE TABLE items (
 	id uniqueidentifier not null,
 	display_name varchar(16) not null,
