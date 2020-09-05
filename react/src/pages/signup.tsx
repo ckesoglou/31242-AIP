@@ -7,21 +7,22 @@ import TextField from "@material-ui/core/TextField";
 import {
   Container,
   Typography,
-  FormControl,
   CircularProgress,
+  FormControl,
 } from "@material-ui/core";
-import { loginEndpoint } from "../api/endpoints";
+import { signUpEndpoint } from "../api/endpoints";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 
-type LoginState = {
+type SignUpState = {
   username: string;
+  display_name: string;
   password: string;
   error: string;
   submitted: boolean;
-  successfulLogin: boolean;
+  successfulSignUp: boolean;
 };
 
-interface ILoginProps extends RouteComponentProps {
+interface ISignUpProps extends RouteComponentProps {
   location: {
     key: string;
     pathname: string;
@@ -35,31 +36,34 @@ interface ILoginProps extends RouteComponentProps {
   };
 }
 
-class Login extends React.Component<ILoginProps, LoginState> {
-  state: LoginState = {
+class SignUp extends React.Component<ISignUpProps, SignUpState> {
+  state: SignUpState = {
     username: "",
+    display_name: "",
     password: "",
     error: "",
     submitted: false,
-    successfulLogin: false,
+    successfulSignUp: false,
   };
 
   setLoading(): void {
-    let signInText = document.getElementById("signInText");
+    let signUpText = document.getElementById("signUpText");
     let loading = document.getElementById("loading");
     if (loading) {
       loading.style.display = "block";
     }
-    if (signInText) {
-      signInText.innerText = "";
+    if (signUpText) {
+      signUpText.innerText = "";
     }
   }
 
-  handleLogin(username: string, password: string): void {
+  // handle Sign Up button click
+  handleSignUp(username: string, display_name: string, password: string): void {
     this.setLoading();
 
     const inputBody = JSON.stringify({
       username: username,
+      display_name: display_name,
       password: password,
     });
 
@@ -67,22 +71,26 @@ class Login extends React.Component<ILoginProps, LoginState> {
       "Content-Type": "application/json",
     };
 
-    fetch(`${loginEndpoint}`, {
-      method: "POST",
-      body: inputBody,
-      headers: headers,
-    })
+    fetch(
+      `${signUpEndpoint}`, // TODO: fix endpoints after API implementation
+      {
+        method: "POST",
+        body: inputBody,
+        headers: headers,
+      }
+    )
       .then((res) => {
         return res.json();
       })
       .then((body) => {
         console.log("Success:", body);
-        this.setState({ successfulLogin: true });
+        this.setState({ successfulSignUp: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ error: exception });
       });
+    return;
   }
 
   render() {
@@ -91,7 +99,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
       next: { pathname: "/home" },
     };
 
-    if (this.state.successfulLogin) {
+    if (this.state.successfulSignUp) {
       return <Redirect to={next} />;
     }
 
@@ -99,7 +107,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
       <Container component="main" maxWidth="xs">
         <div className="paper">
           <Typography component="h1" variant="h5">
-            Sign In
+            Sign Up
           </Typography>
           <FormControl className="form">
             <TextField
@@ -112,6 +120,17 @@ class Login extends React.Component<ILoginProps, LoginState> {
               name="username"
               value={this.state.username}
               onChange={(e) => this.setState({ username: e.target.value })}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="display_name"
+              label="Display Name"
+              name="display_name"
+              value={this.state.display_name}
+              onChange={(e) => this.setState({ display_name: e.target.value })}
             />
             <TextField
               variant="outlined"
@@ -134,19 +153,20 @@ class Login extends React.Component<ILoginProps, LoginState> {
               disabled={this.state.submitted}
               color="primary"
               onClick={() => {
-                this.handleLogin(this.state.username, this.state.password);
+                this.handleSignUp(
+                  this.state.username,
+                  this.state.display_name,
+                  this.state.password
+                );
                 this.setState({ submitted: !this.state.submitted });
               }}
             >
               <CircularProgress size={35} color="inherit" id="loading" />
-              <label id="signInText">Sign In</label>
+              <label id="signUpText">Sign Up</label>
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#">Forgot password?</Link>
-              </Grid>
               <Grid item>
-                <Link href="/signup">{"Don't have an account? Sign Up"}</Link>
+                <Link href="/">Sign in instead</Link>
               </Grid>
             </Grid>
           </FormControl>
@@ -156,4 +176,4 @@ class Login extends React.Component<ILoginProps, LoginState> {
   }
 }
 
-export default Login;
+export default SignUp;

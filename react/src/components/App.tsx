@@ -2,6 +2,7 @@ import React from "react";
 import "../assets/css/App.css";
 import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom";
 import Login from "../pages/login";
+import SignUp from "../pages/signup";
 import { ProtectedRoute } from "./protectedRoute";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
             <Link to="/">Click here to go back!</Link>
           </h2>
         </ProtectedRoute>
+        <Route path="/signup" component={SignUp} />
         <Route path="/" component={Login} />
       </Switch>
     </Router>

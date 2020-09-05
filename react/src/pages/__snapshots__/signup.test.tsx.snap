@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Login /> should render correctly 1`] = `
+exports[`SignUp should render correctly 1`] = `
 <WithStyles(ForwardRef(Container))
   component="main"
   maxWidth="xs"
@@ -12,7 +12,7 @@ exports[`<Login /> should render correctly 1`] = `
       component="h1"
       variant="h5"
     >
-      Sign In
+      Sign Up
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(FormControl))
       className="form"
@@ -23,6 +23,17 @@ exports[`<Login /> should render correctly 1`] = `
         label="User Name"
         margin="normal"
         name="username"
+        onChange={[Function]}
+        required={true}
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="display_name"
+        label="Display Name"
+        margin="normal"
+        name="display_name"
         onChange={[Function]}
         required={true}
         value=""
@@ -56,9 +67,9 @@ exports[`<Login /> should render correctly 1`] = `
           size={35}
         />
         <label
-          id="signInText"
+          id="signUpText"
         >
-          Sign In
+          Sign Up
         </label>
       </WithStyles(ForwardRef(Button))>
       <WithStyles(ForwardRef(Grid))
@@ -66,21 +77,11 @@ exports[`<Login /> should render correctly 1`] = `
       >
         <WithStyles(ForwardRef(Grid))
           item={true}
-          xs={true}
         >
           <WithStyles(ForwardRef(Link))
-            href="#"
+            href="/"
           >
-            Forgot password?
-          </WithStyles(ForwardRef(Link))>
-        </WithStyles(ForwardRef(Grid))>
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-        >
-          <WithStyles(ForwardRef(Link))
-            href="/signup"
-          >
-            Don't have an account? Sign Up
+            Sign in instead
           </WithStyles(ForwardRef(Link))>
         </WithStyles(ForwardRef(Grid))>
       </WithStyles(ForwardRef(Grid))>
