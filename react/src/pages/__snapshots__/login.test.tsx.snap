@@ -42,6 +42,7 @@ exports[`<Login /> should render correctly 1`] = `
       />
       <WithStyles(ForwardRef(Button))
         color="primary"
+        disabled={false}
         fullWidth={true}
         id="submit"
         onClick={[Function]}

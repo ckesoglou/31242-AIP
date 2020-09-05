@@ -17,6 +17,7 @@ type LoginState = {
   username: string;
   password: string;
   error: string;
+  submitted: boolean;
   successfulLogin: boolean;
 };
 
@@ -39,6 +40,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
     username: "",
     password: "",
     error: "",
+    submitted: false,
     successfulLogin: false,
   };
 
@@ -129,10 +131,12 @@ class Login extends React.Component<ILoginProps, LoginState> {
               fullWidth
               size="large"
               variant="contained"
+              disabled={this.state.submitted}
               color="primary"
-              onClick={() =>
-                this.handleLogin(this.state.username, this.state.password)
-              }
+              onClick={() => {
+                this.handleLogin(this.state.username, this.state.password);
+                this.setState({ submitted: !this.state.submitted });
+              }}
             >
               <CircularProgress size={35} color="inherit" id="loading" />
               <label id="signInText">Sign In</label>
