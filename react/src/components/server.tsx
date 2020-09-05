@@ -13,6 +13,12 @@ export function makeServer({ environment = "development" } = {}) {
 
         return new Response(200, undefined, body);
       });
+
+      this.post("/signup", (schema, request) => {
+        let body = request.requestBody;
+
+        return new Response(201, undefined, body);
+      });
     },
   });
 
