@@ -19,11 +19,11 @@ paths:
             type: string
           in: cookie
       responses:
-        '200':
+        "200":
           description: >-
             Returned with the react login page when refresh token authentication failed
             or did not take place.
-        '302':
+        "302":
           description: >-
             Returned when refresh token authentication succeeded, redirecting to the
             dashboard React page or user's referrer URL (if within the application).
@@ -47,22 +47,22 @@ paths:
                   type: string
                   description: Plaintext password of the user.
                   example: hunter2
-              required: 
+              required:
                 - username
                 - password
       responses:
-        '302':
+        "302":
           description: >-
             Returned when the login was successful. This will set a JSON Web
             Token as a httpOnly cookie (with access & refresh tokens) and redirect
             the user to the referrer URL (if within the application) or the dashboard.
-        '400':
+        "400":
           description: >-
             Returned when required requestBody was not provided, or invalid.
-        '401':
+        "401":
           description: >-
             Returned when the password supplied is incorrect.
-      tags: 
+      tags:
         - Login
   /signup:
     summary: Endpoint to create a user.
