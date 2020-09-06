@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignUp should render correctly 1`] = `
+<WithStyles(ForwardRef(Container))
+  component="main"
+  maxWidth="xs"
+>
+  <div
+    className="paper"
+  >
+    <WithStyles(ForwardRef(Typography))
+      component="h1"
+      variant="h5"
+    >
+      Sign Up
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(FormControl))
+      className="form"
+    >
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="username"
+        label="User Name"
+        margin="normal"
+        name="username"
+        onChange={[Function]}
+        required={true}
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="display_name"
+        label="Display Name"
+        margin="normal"
+        name="display_name"
+        onChange={[Function]}
+        required={true}
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(TextField))
+        fullWidth={true}
+        id="password"
+        label="Password"
+        margin="normal"
+        name="password"
+        onChange={[Function]}
+        required={true}
+        type="password"
+        value=""
+        variant="outlined"
+      />
+      <WithStyles(ForwardRef(Button))
+        color="primary"
+        disabled={false}
+        fullWidth={true}
+        id="submit"
+        onClick={[Function]}
+        size="large"
+        type="submit"
+        variant="contained"
+      >
+        <WithStyles(ForwardRef(CircularProgress))
+          color="inherit"
+          id="loading"
+          size={35}
+        />
+        <label
+          id="signUpText"
+        >
+          Sign Up
+        </label>
+      </WithStyles(ForwardRef(Button))>
+      <WithStyles(ForwardRef(Grid))
+        container={true}
+      >
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+        >
+          <WithStyles(ForwardRef(Link))
+            href="/"
+          >
+            Sign in instead
+          </WithStyles(ForwardRef(Link))>
+        </WithStyles(ForwardRef(Grid))>
+      </WithStyles(ForwardRef(Grid))>
+    </WithStyles(ForwardRef(FormControl))>
+  </div>
+</WithStyles(ForwardRef(Container))>
+`;
