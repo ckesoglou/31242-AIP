@@ -1,4 +1,3 @@
-import DBInstance from "../DBInstance";
 import Image from "../../entities/Image";
 
 export interface IImageDao {
@@ -7,21 +6,15 @@ export interface IImageDao {
 
 class ImageDao implements IImageDao {
   /**
-   * @param blob
+   * @param * Data blob of the image in the form of a base64 encoded string
    *
    */
 
   public async getOne() {
-    try {
-      await DBInstance.authenticate();
-      console.log("Connection has been established successfully.");
-      const imageBlob = await Image.findAll({
-        attributes: ["blob"],
-      });
-      return imageBlob;
-    } catch (error) {
-      console.error("Unable to connect to the database:", error);
-    }
+    const imageBlob = await Image.findAll({
+      attributes: ["blob"],
+    });
+    return imageBlob;
   }
 }
 
