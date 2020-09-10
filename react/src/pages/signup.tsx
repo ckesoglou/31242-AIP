@@ -9,6 +9,7 @@ import {
   Typography,
   CircularProgress,
   FormControl,
+  Grow,
 } from "@material-ui/core";
 import { signUpEndpoint } from "../api/endpoints";
 import { Redirect, RouteComponentProps } from "react-router-dom";
@@ -55,6 +56,16 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     if (signUpText) {
       signUpText.innerText = "";
     }
+  }
+
+  showPasswordRequirements(): JSX.Element {
+    const [enabled] = React.useState(true);
+
+    return (
+      <div>
+        <Grow></Grow>
+      </div>
+    );
   }
 
   // handle Sign Up button click
@@ -142,7 +153,11 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               name="password"
               type="password"
               value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value })}
+              onClick={this.showPasswordRequirements}
+              onChange={(e) => {
+                this.setState({ password: e.target.value });
+                // this.showPasswordRequirements(e.target.value);
+              }}
             />
             <Button
               id="submit"
