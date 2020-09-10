@@ -126,23 +126,15 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
         switch (fieldName) {
           case "specialCharacter":
             passwordRequirements.specialCharacter = value ? true : false;
-            document.getElementById("specialCharacter")!.style.color = value
-              ? ""
-              : "red";
             break;
           case "characterLength":
             passwordRequirements.characterLength = value ? true : false;
-            document.getElementById("characterLength")!.style.color = value
-              ? ""
-              : "red";
             break;
           case "uppercaseCharacter":
             passwordRequirements.uppercaseCharacter = value ? true : false;
-            document.getElementById("uppercaseCharacter")!.style.color = value
-              ? ""
-              : "red";
             break;
         }
+        document.getElementById(fieldName)!.style.color = value ? "" : "red";
 
         return { passwordRequirements };
       },
@@ -209,33 +201,35 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <FormControl required className="form">
+          <FormControl className="form">
             <TextField
               variant="outlined"
               margin="normal"
-              required={true}
+              required
               fullWidth
               id="username"
               label="User Name"
               name="username"
               value={this.state.username}
               onChange={(e) => this.setState({ username: e.target.value })}
+              onFocus={() => this.handlePasswordFocus(false)}
             />
             <TextField
               variant="outlined"
               margin="normal"
-              required={true}
+              required
               fullWidth
               id="display_name"
               label="Display Name"
               name="display_name"
               value={this.state.display_name}
               onChange={(e) => this.setState({ display_name: e.target.value })}
+              onFocus={() => this.handlePasswordFocus(false)}
             />
             <TextField
               variant="outlined"
               margin="normal"
-              required={true}
+              required
               fullWidth
               id="password"
               label="Password"
@@ -249,9 +243,9 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               onFocus={() => {
                 this.handlePasswordFocus(true);
               }}
-              onBlur={() => {
-                this.handlePasswordFocus(false);
-              }}
+              // onBlur={() => {
+              //   this.handlePasswordFocus(false);
+              // }}
               onChange={(e) => this.handlePasswordChange(e.target.value)}
             />
             <div id="passwordRequirements">

@@ -95,7 +95,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
           <Typography component="h1" variant="h5">
             Sign In
           </Typography>
-          <FormControl required className="form">
+          <FormControl className="form">
             <TextField
               variant="outlined"
               margin="normal"

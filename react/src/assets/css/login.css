@@ -14,9 +14,7 @@
 #loading {
   display: none;
 }
-#signInText {
-  padding: 0.275rem;
-}
+#signInText,
 #signUpText {
   padding: 0.275rem;
 }
@@ -31,9 +29,3 @@
 #passwordCriteriaHeader {
   font-weight: bold;
 }
-
-/* #characterLength,
-#upperCaseCharacter,
-#specialCharacter {
-  color
-} */
