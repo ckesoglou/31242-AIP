@@ -45,8 +45,14 @@ class Login extends React.Component<ILoginProps, LoginState> {
   };
 
   setLoading(): void {
-    document.getElementById("signInText")!.innerText = "";
-    document.getElementById("loading")!.style.display = "block";
+    let signInText = document.getElementById("signInText");
+    let loading = document.getElementById("loading");
+    if (loading) {
+      loading.style.display = "block";
+    }
+    if (signInText) {
+      signInText.innerText = "";
+    }
   }
 
   handleLogin(username: string, password: string): void {
