@@ -17,3 +17,6 @@
 #signInText {
   padding: 0.275rem;
 }
+#passwordRequirements {
+  display: none;
+}
