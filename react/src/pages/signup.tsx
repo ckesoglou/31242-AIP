@@ -65,8 +65,14 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   };
 
   setLoading(): void {
-    document.getElementById("signUpText")!.innerText = "";
-    document.getElementById("loading")!.style.display = "block";
+    let signUpText = document.getElementById("signUpText");
+    let loading = document.getElementById("loading");
+    if (loading) {
+      loading.style.display = "block";
+    }
+    if (signUpText) {
+      signUpText.innerText = "";
+    }
   }
 
   hasUppercase = (str: string) => {

@@ -1,8 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-
-import SignUp from "./signup";
 import { MemoryRouter, Route } from "react-router-dom";
+import SignUp from "./signup";
 
 const testProps = {
   history: {} as any,
@@ -48,7 +47,7 @@ describe("SignUp", () => {
     );
   });
 
-  it("should handle sign up if button is clicked", () => {
+  it("button should not be clickable on load", () => {
     const spy = jest.spyOn(SignUp.prototype, "handleSignUp");
     const wrapper = mount(
       <SignUp
@@ -57,6 +56,27 @@ describe("SignUp", () => {
         match={testProps.match}
       />
     );
+
+    let button = wrapper.find("button");
+    button.simulate("click");
+
+    expect(spy).toHaveBeenCalledTimes(0);
+    expect(button.html().includes('disabled=""')).toBe(true);
+  });
+
+  it("should handle sign up if button is clicked and information is filled", () => {
+    const spy = jest.spyOn(SignUp.prototype, "handleSignUp");
+    const wrapper = mount(
+      <SignUp
+        history={testProps.history}
+        location={testProps.location}
+        match={testProps.match}
+      />
+    );
+
+    wrapper
+      .find("input#password")
+      .simulate("change", { target: { value: "This is a valid password!" } });
 
     wrapper.find("button").simulate("click");
 
