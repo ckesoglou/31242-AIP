@@ -10,6 +10,8 @@ import {
   CircularProgress,
   FormControl,
   Grow,
+  Paper,
+  ClickAwayListener,
 } from "@material-ui/core";
 import { signUpEndpoint } from "../api/endpoints";
 import { Redirect, RouteComponentProps } from "react-router-dom";
@@ -21,6 +23,7 @@ type SignUpState = {
   error: string;
   submitted: boolean;
   successfulSignUp: boolean;
+  showPasswordRequirements: boolean;
 };
 
 interface ISignUpProps extends RouteComponentProps {
@@ -45,6 +48,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     error: "",
     submitted: false,
     successfulSignUp: false,
+    showPasswordRequirements: false,
   };
 
   setLoading(): void {
@@ -58,14 +62,13 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     }
   }
 
-  showPasswordRequirements(): JSX.Element {
-    const [enabled] = React.useState(true);
-
-    return (
-      <div>
-        <Grow></Grow>
-      </div>
-    );
+  handlePasswordFocus(focus: boolean): void {
+    this.setState({ showPasswordRequirements: focus });
+    focus
+      ? (document.getElementById("passwordRequirements")!.style.display =
+          "block")
+      : (document.getElementById("passwordRequirements")!.style.display =
+          "none");
   }
 
   // handle Sign Up button click
@@ -153,12 +156,24 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               name="password"
               type="password"
               value={this.state.password}
-              onClick={this.showPasswordRequirements}
+              onFocus={() => {
+                this.handlePasswordFocus(true);
+              }}
+              onBlur={() => {
+                this.handlePasswordFocus(false);
+              }}
               onChange={(e) => {
                 this.setState({ password: e.target.value });
-                // this.showPasswordRequirements(e.target.value);
               }}
             />
+            <div id="passwordRequirements">
+              <Grow in={this.state.showPasswordRequirements} timeout={500}>
+                <Paper>
+                  <p>Hey! It's Kev</p>
+                  <p>Bet you're wondering - wow this looks cool!</p>
+                </Paper>
+              </Grow>
+            </div>
             <Button
               id="submit"
               type="submit"
