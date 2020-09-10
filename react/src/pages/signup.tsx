@@ -88,6 +88,75 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
           "none");
   }
 
+  handlePasswordChange(currentPassword: string): void {
+    this.setState({ password: currentPassword });
+
+    // validate character length - seven is used because this event occurs on change
+    if (currentPassword.length >= 8) {
+      this.setPasswordFieldState("characterLength", true);
+    } else {
+      this.setPasswordFieldState("characterLength", false);
+      this.setState({ validPassword: false });
+    }
+
+    // validate upper case character exists
+    if (this.hasUppercase(currentPassword)) {
+      this.setPasswordFieldState("uppercaseCharacter", true);
+    } else {
+      this.setPasswordFieldState("uppercaseCharacter", false);
+      this.setState({ validPassword: false });
+    }
+
+    // validate special character exists
+    if (this.hasSpecialCharacter(currentPassword)) {
+      this.setPasswordFieldState("specialCharacter", true);
+    } else {
+      this.setPasswordFieldState("specialCharacter", false);
+      this.setState({ validPassword: false });
+    }
+  }
+
+  setPasswordFieldState(fieldName: string, value: boolean) {
+    this.setState(
+      (prevState) => {
+        let passwordRequirements = Object.assign(
+          {},
+          prevState.passwordRequirements
+        );
+        switch (fieldName) {
+          case "specialCharacter":
+            passwordRequirements.specialCharacter = value ? true : false;
+            document.getElementById("specialCharacter")!.style.color = value
+              ? ""
+              : "red";
+            break;
+          case "characterLength":
+            passwordRequirements.characterLength = value ? true : false;
+            document.getElementById("characterLength")!.style.color = value
+              ? ""
+              : "red";
+            break;
+          case "uppercaseCharacter":
+            passwordRequirements.uppercaseCharacter = value ? true : false;
+            document.getElementById("uppercaseCharacter")!.style.color = value
+              ? ""
+              : "red";
+            break;
+        }
+
+        return { passwordRequirements };
+      },
+      () => {
+        // check whether all requirements have been met
+        Object.values(this.state.passwordRequirements).every(
+          (item) => item === true
+        )
+          ? this.setState({ validPassword: true })
+          : this.setState({ validPassword: false });
+      }
+    );
+  }
+
   // handle Sign Up button click
   handleSignUp(username: string, display_name: string, password: string): void {
     this.setLoading();
@@ -173,74 +242,17 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               name="password"
               type="password"
               value={this.state.password}
-              error={this.state.validPassword}
+              error={
+                this.state.validPassword !== undefined &&
+                !this.state.validPassword
+              }
               onFocus={() => {
                 this.handlePasswordFocus(true);
               }}
               onBlur={() => {
                 this.handlePasswordFocus(false);
               }}
-              onChange={(e) => {
-                this.setState({ password: e.target.value });
-
-                // validate character length
-                if (e.target.value.length >= 8) {
-                  this.setState((prevState) => {
-                    let passwordRequirements = Object.assign(
-                      {},
-                      prevState.passwordRequirements
-                    );
-                    passwordRequirements.characterLength = true;
-                    document.getElementById("characterLength")!.style.color =
-                      "";
-                    return { passwordRequirements };
-                  });
-                } else {
-                  document.getElementById("characterLength")!.style.color =
-                    "red";
-                }
-
-                // validate upper case character exists
-                if (this.hasUppercase(e.target.value)) {
-                  this.setState((prevState) => {
-                    let passwordRequirements = Object.assign(
-                      {},
-                      prevState.passwordRequirements
-                    );
-                    passwordRequirements.uppercaseCharacter = true;
-                    document.getElementById("uppercaseCharacter")!.style.color =
-                      "";
-                    return { passwordRequirements };
-                  });
-                } else {
-                  document.getElementById("uppercaseCharacter")!.style.color =
-                    "red";
-                }
-
-                // validate special character exists
-                if (this.hasSpecialCharacter(e.target.value)) {
-                  this.setState((prevState) => {
-                    let passwordRequirements = Object.assign(
-                      {},
-                      prevState.passwordRequirements
-                    );
-                    passwordRequirements.specialCharacter = true;
-                    document.getElementById("specialCharacter")!.style.color =
-                      "";
-                    return { passwordRequirements };
-                  });
-                } else {
-                  document.getElementById("specialCharacter")!.style.color =
-                    "red";
-                }
-
-                // check whether all requirements have been met
-                Object.values(this.state.passwordRequirements).every(
-                  (item) => item === true
-                )
-                  ? this.setState({ validPassword: true })
-                  : this.setState({ validPassword: false });
-              }}
+              onChange={(e) => this.handlePasswordChange(e.target.value)}
             />
             <div id="passwordRequirements">
               <Grow in={this.state.showPasswordRequirements} timeout={500}>
