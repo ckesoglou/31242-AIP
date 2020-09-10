@@ -45,14 +45,8 @@ class Login extends React.Component<ILoginProps, LoginState> {
   };
 
   setLoading(): void {
-    let signInText = document.getElementById("signInText");
-    let loading = document.getElementById("loading");
-    if (loading) {
-      loading.style.display = "block";
-    }
-    if (signInText) {
-      signInText.innerText = "";
-    }
+    document.getElementById("signInText")!.innerText = "";
+    document.getElementById("loading")!.style.display = "block";
   }
 
   handleLogin(username: string, password: string): void {
@@ -101,7 +95,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
           <Typography component="h1" variant="h5">
             Sign In
           </Typography>
-          <FormControl className="form">
+          <FormControl required className="form">
             <TextField
               variant="outlined"
               margin="normal"

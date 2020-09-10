@@ -11,7 +11,6 @@ import {
   FormControl,
   Grow,
   Paper,
-  ClickAwayListener,
 } from "@material-ui/core";
 import { signUpEndpoint } from "../api/endpoints";
 import { Redirect, RouteComponentProps } from "react-router-dom";
@@ -24,7 +23,15 @@ type SignUpState = {
   submitted: boolean;
   successfulSignUp: boolean;
   showPasswordRequirements: boolean;
+  passwordRequirements: PasswordRequirementsObject;
+  validPassword: boolean | undefined;
 };
+
+interface PasswordRequirementsObject {
+  specialCharacter: boolean;
+  characterLength: boolean;
+  uppercaseCharacter: boolean;
+}
 
 interface ISignUpProps extends RouteComponentProps {
   location: {
@@ -49,18 +56,28 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     submitted: false,
     successfulSignUp: false,
     showPasswordRequirements: false,
+    passwordRequirements: {
+      specialCharacter: false,
+      characterLength: false,
+      uppercaseCharacter: false,
+    },
+    validPassword: undefined,
   };
 
   setLoading(): void {
-    let signUpText = document.getElementById("signUpText");
-    let loading = document.getElementById("loading");
-    if (loading) {
-      loading.style.display = "block";
-    }
-    if (signUpText) {
-      signUpText.innerText = "";
-    }
+    document.getElementById("signUpText")!.innerText = "";
+    document.getElementById("loading")!.style.display = "block";
   }
+
+  hasUppercase = (str: string) => {
+    return /[A-Z]/.test(str);
+  };
+
+  hasSpecialCharacter = (str: string) => {
+    var specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
+    return specialCharacters.test(str);
+  };
 
   handlePasswordFocus(focus: boolean): void {
     this.setState({ showPasswordRequirements: focus });
@@ -123,11 +140,11 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <FormControl className="form">
+          <FormControl required className="form">
             <TextField
               variant="outlined"
               margin="normal"
-              required
+              required={true}
               fullWidth
               id="username"
               label="User Name"
@@ -138,7 +155,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
             <TextField
               variant="outlined"
               margin="normal"
-              required
+              required={true}
               fullWidth
               id="display_name"
               label="Display Name"
@@ -149,13 +166,14 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
             <TextField
               variant="outlined"
               margin="normal"
-              required
+              required={true}
               fullWidth
               id="password"
               label="Password"
               name="password"
               type="password"
               value={this.state.password}
+              error={this.state.validPassword}
               onFocus={() => {
                 this.handlePasswordFocus(true);
               }}
@@ -164,13 +182,77 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               }}
               onChange={(e) => {
                 this.setState({ password: e.target.value });
+
+                // validate character length
+                if (e.target.value.length >= 8) {
+                  this.setState((prevState) => {
+                    let passwordRequirements = Object.assign(
+                      {},
+                      prevState.passwordRequirements
+                    );
+                    passwordRequirements.characterLength = true;
+                    document.getElementById("characterLength")!.style.color =
+                      "";
+                    return { passwordRequirements };
+                  });
+                } else {
+                  document.getElementById("characterLength")!.style.color =
+                    "red";
+                }
+
+                // validate upper case character exists
+                if (this.hasUppercase(e.target.value)) {
+                  this.setState((prevState) => {
+                    let passwordRequirements = Object.assign(
+                      {},
+                      prevState.passwordRequirements
+                    );
+                    passwordRequirements.uppercaseCharacter = true;
+                    document.getElementById("uppercaseCharacter")!.style.color =
+                      "";
+                    return { passwordRequirements };
+                  });
+                } else {
+                  document.getElementById("uppercaseCharacter")!.style.color =
+                    "red";
+                }
+
+                // validate special character exists
+                if (this.hasSpecialCharacter(e.target.value)) {
+                  this.setState((prevState) => {
+                    let passwordRequirements = Object.assign(
+                      {},
+                      prevState.passwordRequirements
+                    );
+                    passwordRequirements.specialCharacter = true;
+                    document.getElementById("specialCharacter")!.style.color =
+                      "";
+                    return { passwordRequirements };
+                  });
+                } else {
+                  document.getElementById("specialCharacter")!.style.color =
+                    "red";
+                }
+
+                // check whether all requirements have been met
+                Object.values(this.state.passwordRequirements).every(
+                  (item) => item === true
+                )
+                  ? this.setState({ validPassword: true })
+                  : this.setState({ validPassword: false });
               }}
             />
             <div id="passwordRequirements">
               <Grow in={this.state.showPasswordRequirements} timeout={500}>
-                <Paper>
-                  <p>Hey! It's Kev</p>
-                  <p>Bet you're wondering - wow this looks cool!</p>
+                <Paper id="passwordCriteria">
+                  <p id="passwordCriteriaHeader">Password Criteria</p>
+                  <p id="characterLength">Needs to be at least 8 characters</p>
+                  <p id="uppercaseCharacter">
+                    Needs to have one upper-case character
+                  </p>
+                  <p id="specialCharacter">
+                    Needs to have one special character - e.g. !@#$%
+                  </p>
                 </Paper>
               </Grow>
             </div>
@@ -180,7 +262,11 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               fullWidth
               size="large"
               variant="contained"
-              disabled={this.state.submitted}
+              disabled={
+                this.state.submitted ||
+                this.state.validPassword === undefined ||
+                !this.state.validPassword
+              }
               color="primary"
               onClick={() => {
                 this.handleSignUp(
