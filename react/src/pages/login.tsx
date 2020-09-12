@@ -1,17 +1,18 @@
 import React from "react";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import "../assets/css/login.css";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link"; // Use react-router link instead?
-import TextField from "@material-ui/core/TextField";
+import { loginEndpoint } from "../api/endpoints";
+import { Authentication } from "../components/protectedRoute";
 import {
   Container,
   Typography,
-  FormControl,
   CircularProgress,
+  FormControl,
+  TextField,
+  Link,
+  Grid,
+  Button,
 } from "@material-ui/core";
-import { loginEndpoint } from "../api/endpoints";
-import { Redirect, RouteComponentProps } from "react-router-dom";
 
 type LoginState = {
   username: string;
@@ -95,13 +96,14 @@ class Login extends React.Component<ILoginProps, LoginState> {
     };
 
     if (this.state.successfulLogin) {
+      Authentication.authenticate(() => {}); // Only for development!
       return <Redirect to={next} />;
     }
 
     return (
       <Container component="main" maxWidth="xs">
         <div className="paper">
-          <Typography component="h1" variant="h5">
+          <Typography id="header" component="h1" variant="h4">
             Sign In
           </Typography>
           <FormControl className="form">

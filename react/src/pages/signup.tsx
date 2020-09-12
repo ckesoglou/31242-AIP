@@ -1,9 +1,8 @@
 import React from "react";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import "../assets/css/login.css";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link"; // Use react-router link instead?
-import TextField from "@material-ui/core/TextField";
+import { signUpEndpoint } from "../api/endpoints";
+import { Authentication } from "../components/protectedRoute";
 import {
   Container,
   Typography,
@@ -12,8 +11,6 @@ import {
   Grow,
   Paper,
 } from "@material-ui/core";
-import { signUpEndpoint } from "../api/endpoints";
-import { Redirect, RouteComponentProps } from "react-router-dom";
 
 type SignUpState = {
   username: string;
@@ -194,6 +191,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       })
       .then((body) => {
         console.log("Success:", body);
+        Authentication.authenticate(() => {}); // Only for development!
         this.setState({ successfulSignUp: true });
       })
       .catch((exception) => {
@@ -216,7 +214,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     return (
       <Container component="main" maxWidth="xs">
         <div className="paper">
-          <Typography component="h1" variant="h5">
+          <Typography id="header" component="h1" variant="h4">
             Sign Up
           </Typography>
           <FormControl className="form">
