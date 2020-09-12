@@ -48,6 +48,24 @@ interface ISignUpProps extends RouteComponentProps {
 }
 
 class SignUp extends React.Component<ISignUpProps, SignUpState> {
+  private lengthRef: React.RefObject<HTMLInputElement>;
+  private uppercaseRef: React.RefObject<HTMLInputElement>;
+  private specialRef: React.RefObject<HTMLInputElement>;
+  private signUpRef: React.RefObject<HTMLLabelElement>;
+  private loadingRef: React.RefObject<HTMLInputElement>;
+  private passwordRequirementsRef: React.RefObject<HTMLInputElement>;
+
+  constructor(props: ISignUpProps) {
+    super(props);
+
+    this.lengthRef = React.createRef();
+    this.uppercaseRef = React.createRef();
+    this.specialRef = React.createRef();
+    this.signUpRef = React.createRef();
+    this.loadingRef = React.createRef();
+    this.passwordRequirementsRef = React.createRef();
+  }
+
   state: SignUpState = {
     username: "",
     display_name: "",
@@ -65,14 +83,8 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   };
 
   setLoading(): void {
-    let signUpText = document.getElementById("signUpText");
-    let loading = document.getElementById("loading");
-    if (loading) {
-      loading.style.display = "block";
-    }
-    if (signUpText) {
-      signUpText.innerText = "";
-    }
+    this.signUpRef.current!.innerText = "";
+    this.loadingRef.current!.style.display = "block";
   }
 
   hasUppercase = (str: string) => {
@@ -88,10 +100,8 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   handlePasswordFocus(focus: boolean): void {
     this.setState({ showPasswordRequirements: focus });
     focus
-      ? (document.getElementById("passwordRequirements")!.style.display =
-          "block")
-      : (document.getElementById("passwordRequirements")!.style.display =
-          "none");
+      ? (this.passwordRequirementsRef.current!.style.display = "block")
+      : (this.passwordRequirementsRef.current!.style.display = "none");
   }
 
   handlePasswordChange(currentPassword: string): void {
@@ -132,15 +142,17 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
         switch (fieldName) {
           case "specialCharacter":
             passwordRequirements.specialCharacter = value ? true : false;
+            this.specialRef.current!.style.color = value ? "#86C232" : "red";
             break;
           case "characterLength":
             passwordRequirements.characterLength = value ? true : false;
+            this.lengthRef.current!.style.color = value ? "#86C232" : "red";
             break;
           case "uppercaseCharacter":
             passwordRequirements.uppercaseCharacter = value ? true : false;
+            this.uppercaseRef.current!.style.color = value ? "#86C232" : "red";
             break;
         }
-        document.getElementById(fieldName)!.style.color = value ? "" : "red";
 
         return { passwordRequirements };
       },
@@ -254,15 +266,17 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               // }}
               onChange={(e) => this.handlePasswordChange(e.target.value)}
             />
-            <div id="passwordRequirements">
+            <div ref={this.passwordRequirementsRef} id="passwordRequirements">
               <Grow in={this.state.showPasswordRequirements} timeout={500}>
                 <Paper id="passwordCriteria">
                   <p id="passwordCriteriaHeader">Password Criteria</p>
-                  <p id="characterLength">Needs to be at least 8 characters</p>
-                  <p id="uppercaseCharacter">
+                  <p ref={this.lengthRef} id="characterLength">
+                    Needs to be at least 8 characters
+                  </p>
+                  <p ref={this.uppercaseRef} id="uppercaseCharacter">
                     Needs to have one upper-case character
                   </p>
-                  <p id="specialCharacter">
+                  <p ref={this.specialRef} id="specialCharacter">
                     Needs to have one special character - e.g. !@#$%
                   </p>
                 </Paper>
@@ -289,8 +303,15 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
                 this.setState({ submitted: !this.state.submitted });
               }}
             >
-              <CircularProgress size={35} color="inherit" id="loading" />
-              <label id="signUpText">Sign Up</label>
+              <CircularProgress
+                ref={this.loadingRef}
+                size={35}
+                color="inherit"
+                id="loading"
+              />
+              <label ref={this.signUpRef} id="signUpText">
+                Sign Up
+              </label>
             </Button>
             <Grid container>
               <Grid item>

@@ -78,8 +78,10 @@ describe("SignUp", () => {
       .find("input#password")
       .simulate("change", { target: { value: "This is a valid password!" } });
 
-    wrapper.find("button").simulate("click");
+    let button = wrapper.find("button");
+    button.simulate("click");
 
     expect(spy).toHaveBeenCalledTimes(1);
+    expect(button.html().includes('disabled=""')).toBe(true);
   });
 });
