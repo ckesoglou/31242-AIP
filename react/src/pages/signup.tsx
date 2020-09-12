@@ -141,15 +141,15 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
         );
         switch (fieldName) {
           case "specialCharacter":
-            passwordRequirements.specialCharacter = value ? true : false;
+            passwordRequirements.specialCharacter = value;
             this.specialRef.current!.style.color = value ? "#86C232" : "red";
             break;
           case "characterLength":
-            passwordRequirements.characterLength = value ? true : false;
+            passwordRequirements.characterLength = value;
             this.lengthRef.current!.style.color = value ? "#86C232" : "red";
             break;
           case "uppercaseCharacter":
-            passwordRequirements.uppercaseCharacter = value ? true : false;
+            passwordRequirements.uppercaseCharacter = value;
             this.uppercaseRef.current!.style.color = value ? "#86C232" : "red";
             break;
         }
@@ -288,7 +288,9 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               disabled={
                 this.state.submitted ||
                 this.state.validPassword === undefined ||
-                !this.state.validPassword
+                !this.state.validPassword ||
+                !this.state.display_name ||
+                !this.state.username
               }
               color="primary"
               onClick={() => {
