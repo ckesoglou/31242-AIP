@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
 import { ParamsDictionary } from "express-serve-static-core";
 
-import UserDao from "@daos/User/UserDao.mock";
+import UserDao from "@daos/User/UserDao";
 import { paramMissingError } from "@shared/constants";
 
 // Init shared
@@ -44,7 +44,7 @@ router.put("/update", async (req: Request, res: Response) => {
       error: paramMissingError,
     });
   }
-  user.id = Number(user.id);
+  user.username = String(user.username);
   await userDao.update(user);
   return res.status(OK).end();
 });
@@ -54,8 +54,8 @@ router.put("/update", async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.delete("/delete/:id", async (req: Request, res: Response) => {
-  const { id } = req.params as ParamsDictionary;
-  await userDao.delete(Number(id));
+  const { username } = req.params as ParamsDictionary;
+  await userDao.delete(username);
   return res.status(OK).end();
 });
 
