@@ -19,6 +19,12 @@ export function makeServer({ environment = "development" } = {}) {
 
         return new Response(201, undefined, body);
       });
+
+      // this.get("/user/:id", (schema, request) => {
+      //   let id = request.params.id;
+
+      //   return
+      // })
     },
   });
 
