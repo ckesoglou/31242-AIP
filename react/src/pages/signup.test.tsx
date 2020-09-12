@@ -77,6 +77,12 @@ describe("SignUp", () => {
     wrapper
       .find("input#password")
       .simulate("change", { target: { value: "This is a valid password!" } });
+    wrapper
+      .find("input#username")
+      .simulate("change", { target: { value: "This is a valid username!" } });
+    wrapper.find("input#display_name").simulate("change", {
+      target: { value: "This is a valid display name!" },
+    });
 
     let button = wrapper.find("button");
     button.simulate("click");
