@@ -107,7 +107,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   handlePasswordChange(currentPassword: string): void {
     this.setState({ password: currentPassword });
 
-    // validate character length - seven is used because this event occurs on change
+    // validate character length
     if (currentPassword.length >= 8) {
       this.setPasswordFieldState("characterLength", true);
     } else {
@@ -261,9 +261,6 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               onFocus={() => {
                 this.handlePasswordFocus(true);
               }}
-              // onBlur={() => {
-              //   this.handlePasswordFocus(false);
-              // }}
               onChange={(e) => this.handlePasswordChange(e.target.value)}
             />
             <div ref={this.passwordRequirementsRef} id="passwordRequirements">
