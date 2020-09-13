@@ -39,6 +39,9 @@
     "http-status-codes": "^1.4.0",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
+    "tedious": "^9.2.1",
     "winston": "^3.3.3"
   },
   "devDependencies": {
@@ -51,10 +54,11 @@
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.0.27",
     "@types/supertest": "^2.0.10",
+    "@types/validator": "^13.1.0",
     "find": "^0.3.0",
     "fs-extra": "^9.0.1",
     "jasmine": "^3.6.1",
-    "jest": "^26.4.1",
+    "jest": "^24.9.0",
     "jsonfile": "^6.0.1",
     "nodemon": "^2.0.4",
     "prettier": "2.1.1",
