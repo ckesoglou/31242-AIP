@@ -36,6 +36,15 @@ interface ILoginProps extends RouteComponentProps {
 }
 
 class Login extends React.Component<ILoginProps, LoginState> {
+  private signInRef: React.RefObject<HTMLLabelElement>;
+  private loadingRef: React.RefObject<HTMLInputElement>;
+
+  constructor(props: ILoginProps) {
+    super(props);
+
+    this.signInRef = React.createRef();
+    this.loadingRef = React.createRef();
+  }
   state: LoginState = {
     username: "",
     password: "",
@@ -45,14 +54,8 @@ class Login extends React.Component<ILoginProps, LoginState> {
   };
 
   setLoading(): void {
-    let signInText = document.getElementById("signInText");
-    let loading = document.getElementById("loading");
-    if (loading) {
-      loading.style.display = "block";
-    }
-    if (signInText) {
-      signInText.innerText = "";
-    }
+    this.signInRef.current!.innerText = "";
+    this.loadingRef.current!.style.display = "block";
   }
 
   handleLogin(username: string, password: string): void {
@@ -138,8 +141,15 @@ class Login extends React.Component<ILoginProps, LoginState> {
                 this.setState({ submitted: !this.state.submitted });
               }}
             >
-              <CircularProgress size={35} color="inherit" id="loading" />
-              <label id="signInText">Sign In</label>
+              <CircularProgress
+                ref={this.loadingRef}
+                size={35}
+                color="inherit"
+                id="loading"
+              />
+              <label ref={this.signInRef} id="signInText">
+                Sign In
+              </label>
             </Button>
             <Grid container>
               <Grid item xs>
