@@ -92,7 +92,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   };
 
   hasSpecialCharacter = (str: string) => {
-    var specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    var specialCharacters = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
 
     return specialCharacters.test(str);
   };
