@@ -1,25 +1,35 @@
+import { DataTypes, Model } from "sequelize";
+import db from "../daos/db-instance";
+
 export interface IUser {
-  id: number;
-  name: string;
-  email: string;
+  username: number;
+  displayName: string;
+  password: string;
 }
 
-class User implements IUser {
-  public id: number;
-  public name: string;
-  public email: string;
-
-  constructor(nameOrUser: string | IUser, email?: string, id?: number) {
-    if (typeof nameOrUser === "string") {
-      this.name = nameOrUser;
-      this.email = email || "";
-      this.id = id || -1;
-    } else {
-      this.name = nameOrUser.name;
-      this.email = nameOrUser.email;
-      this.id = nameOrUser.id;
-    }
-  }
+class User extends Model<IUser> implements IUser {
+  public username!: number;
+  public displayName!: string;
+  public password!: string;
 }
+
+User.init(
+  {
+    username: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+    },
+    displayName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  { sequelize: db, tableName: "users" }
+);
 
 export default User;

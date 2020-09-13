@@ -1,28 +1,33 @@
-import { IUser } from "@entities/User";
+import User, { IUser } from "@entities/user";
+import db from "../db-instance";
 
 export interface IUserDao {
-  getOne: (email: string) => Promise<IUser | null>;
+  getOne: (username: string) => Promise<IUser | null>;
   getAll: () => Promise<IUser[]>;
   add: (user: IUser) => Promise<void>;
   update: (user: IUser) => Promise<void>;
-  delete: (id: number) => Promise<void>;
+  delete: (username: string) => Promise<void>;
 }
 
 class UserDao implements IUserDao {
   /**
    * @param email
    */
-  public async getOne(email: string): Promise<IUser | null> {
-    // TODO
-    return [] as any;
+  public async getOne(username: string): Promise<IUser | null> {
+    const user = await User.findByPk(username, {
+      attributes: ["display_name"],
+    });
+    return user;
   }
 
   /**
    *
    */
   public async getAll(): Promise<IUser[]> {
-    // TODO
-    return [] as any;
+    const users = await User.findAll({
+      attributes: ["display_name"],
+    });
+    return users;
   }
 
   /**
@@ -47,7 +52,7 @@ class UserDao implements IUserDao {
    *
    * @param id
    */
-  public async delete(id: number): Promise<void> {
+  public async delete(username: string): Promise<void> {
     // TODO
     return {} as any;
   }
