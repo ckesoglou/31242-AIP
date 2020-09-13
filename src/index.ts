@@ -1,4 +1,4 @@
-import app from "src/server";
+import app from "@server";
 import logger from "@shared/logger";
 import env from "./environment";
 import db from "./daos/db-instance";
