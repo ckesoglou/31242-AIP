@@ -1,6 +1,8 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import "../assets/css/userprofile.css";
+import { userProfileEndpoint } from "../api/endpoints";
+import { Authentication } from "../components/protectedRoute";
 import {
   Container,
   Typography,
@@ -72,6 +74,21 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     newRequestDialog: false,
   };
 
+  handleTabsChange = (event: ChangeEvent<{}>, index: number) => {
+    this.setState({ tabIndex: index });
+
+    switch (index) {
+      case 0:
+        // Owed API call
+        fetch(`${userProfileEndpoint}`);
+
+      case 1:
+      // Owe API call
+      case 2:
+      // Requests API call
+    }
+  };
+
   render() {
     return (
       <Container component="main" maxWidth="lg">
@@ -126,13 +143,14 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 <Paper className="content">
                   <Tabs
                     value={this.state.tabIndex}
-                    onChange={(e, i) => this.setState({ tabIndex: i })}
+                    onChange={(e, i) => this.handleTabsChange(e, i)}
                     variant="fullWidth"
                   >
                     <Tab label="Owed" />
                     <Tab label="Owe" />
                     <Tab label="Requests" />
                     <AddBoxOutlinedIcon
+                      id="addRequestButton"
                       color="primary"
                       fontSize="large"
                       onClick={() => this.setState({ newRequestDialog: true })}

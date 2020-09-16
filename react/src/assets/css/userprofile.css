@@ -21,3 +21,9 @@
 #requestFormButton {
   text-align: center;
 }
+#addRequestButton {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin-left: 1rem;
+}
