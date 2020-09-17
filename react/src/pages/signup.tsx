@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import "../assets/css/login.css";
 import { signUpEndpoint } from "../api/endpoints";
-import { Authentication } from "../components/protectedRoute";
+import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
@@ -15,6 +15,7 @@ import {
   Grow,
   Paper,
 } from "@material-ui/core";
+import { UserContext } from "../components/user-context";
 
 type SignUpState = {
   username: string;

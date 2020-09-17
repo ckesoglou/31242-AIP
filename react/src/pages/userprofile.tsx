@@ -2,7 +2,7 @@ import React, { ChangeEvent } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import "../assets/css/userprofile.css";
 import { userProfileEndpoint } from "../api/endpoints";
-import { Authentication } from "../components/protectedRoute";
+import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
@@ -22,6 +22,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
+import { UserContext } from "../components/user-context";
 
 type UserProfileState = {
   tabIndex: number;
@@ -74,6 +75,11 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     newRequestDialog: false,
   };
 
+  static contextType: React.Context<{
+    user: {};
+    updateUser: (newUser: object) => void;
+  }> = UserContext;
+
   handleTabsChange = (event: ChangeEvent<{}>, index: number) => {
     this.setState({ tabIndex: index });
 
@@ -90,6 +96,18 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   };
 
   render() {
+    let context = this.context;
+    let userDetails = context.user;
+
+    if (userDetails) {
+      return (
+        <div>
+          <p>Well well well...</p>
+          <p>Welcome {userDetails.name} to the table!</p>
+        </div>
+      );
+    }
+
     return (
       <Container component="main" maxWidth="lg">
         <div className="paper">
