@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import "../assets/css/login.css";
 import { loginEndpoint } from "../api/endpoints";
-import { Authentication } from "../components/protectedRoute";
+import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
@@ -13,6 +13,7 @@ import {
   Grid,
   Button,
 } from "@material-ui/core";
+import { UserContext } from "../components/user-context";
 
 type LoginState = {
   username: string;
@@ -54,6 +55,11 @@ class Login extends React.Component<ILoginProps, LoginState> {
     successfulLogin: false,
   };
 
+  static contextType: React.Context<{
+    user: {};
+    updateUser: (newUser: object) => void;
+  }> = UserContext;
+
   setLoading(): void {
     this.signInRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
@@ -81,7 +87,12 @@ class Login extends React.Component<ILoginProps, LoginState> {
       })
       .then((body) => {
         console.log("Success:", body);
-        this.setState({ successfulLogin: true });
+        this.setState({ successfulLogin: true }, () => {
+          this.context.updateUser({
+            name: this.state.username,
+            password: this.state.password,
+          });
+        });
       })
       .catch((exception) => {
         console.error("Error:", exception);
