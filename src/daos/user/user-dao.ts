@@ -1,4 +1,4 @@
-import User, { IUser } from "@entities/user";
+import User, { IUser } from "@entities/User";
 import db from "../db-instance";
 
 export interface IUserDao {
