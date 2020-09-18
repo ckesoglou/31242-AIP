@@ -147,7 +147,11 @@ class Login extends React.Component<ILoginProps, LoginState> {
               fullWidth
               size="large"
               variant="contained"
-              disabled={this.state.submitted}
+              disabled={
+                this.state.submitted ||
+                !this.state.username ||
+                !this.state.password
+              }
               color="primary"
               onClick={() => {
                 this.handleLogin(this.state.username, this.state.password);
