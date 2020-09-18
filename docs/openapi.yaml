@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: ioweyou.tech
-  version: 1.0.0
+  version: 1.1.0
 paths:
   /login:
     summary: Endpoint to authenticate a user.
@@ -31,7 +31,6 @@ paths:
       description: >-
         Attempts authentication with the provided username and password in the
         requestBody. Sets the access_tokens cookie alongside a redirect request if
-        successful.
       requestBody:
         required: true
         content:
@@ -57,20 +56,18 @@ paths:
             Token as a httpOnly cookie (with access & refresh tokens) and redirect
             the user to the referrer URL (if within the application) or the dashboard.
         "400":
-          description: >-
-            Returned when required requestBody was not provided, or invalid.
+          description: "Returned when required requestBody was not provided, or invalid."
         "401":
-          description: >-
-            Returned when the password supplied is incorrect.
+          description: Returned when the password supplied is incorrect.
       tags:
         - Login
   /signup:
     summary: Endpoint to create a user.
     post:
       description: >-
-        Attempts to create a user with the provided username, display name, and password in the
-        requestBody. Sets the access_tokens cookie alongside a redirect request if
-        successful.
+        Attempts to create a user with the provided username, display name, and
+        password in the requestBody. Sets the access_tokens cookie alongside a
+        redirect request if successful.
       requestBody:
         required: true
         content:
@@ -93,23 +90,197 @@ paths:
                   description: Plaintext password for the to-be-created account.
                   maxLength: 60
                   example: hunter2
-              required: 
+              required:
                 - username
                 - displayName
                 - password
       responses:
-        '201':
+        "201":
           description: >-
-            Returned when the user is successfully created. This will set a JSON Web
-            Token as a httpOnly cookie (with access & refresh tokens).
-        '400':
-          description: >-
-            Returned when required requestBody was not provided, or invalid.
-        '422':
-          description: >-
-            Returned when the username is already taken.
-      tags: 
+            Returned when the user is successfully created. This will set a JSON
+            Web Token as a httpOnly cookie (with access & refresh tokens).
+        "400":
+          description: "Returned when required requestBody was not provided, or invalid."
+        "422":
+          description: Returned when the username is already taken.
+      tags:
         - Signup
+  /user/{username}:
+    summary: Endpoint to view a user.
+    get:
+      description: >-
+        Attempts to view the user information with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      parameters:
+        - name: "username"
+          in: path
+          required: true
+          description: >-
+            The name that needs to be fetched
+          schema:
+            type: string
+      responses:
+        "200":
+          description: >-
+            Returned user information.
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+      tags:
+        - User
+    put:
+      description: >-
+        Attempts to update user if they are currently logged in
+      tags:
+        - User
+      parameters:
+        - name: "username"
+          in: path
+          required: true
+          description: >-
+            The name that needs to be updated
+          schema:
+            type: string
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+    delete:
+      description: >-
+        Attempts to delete user if they are currently logged in
+      tags:
+        - User
+      parameters:
+        - name: "username"
+          in: path
+          required: true
+          description: >-
+            The name that needs to b deleted
+          schema:
+            type: string
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+  /user/logout:
+    summary: Logs out current logged in user session.
+    get:
+      description: >-
+        Attempts to log user out of current session.
+      parameters: []
+      responses:
+        "200":
+          description: >-
+            Returned user information.
+      tags:
+        - User
+  /user/{username}/owed:
+    summary: Endpoint to view favours owed to a user.
+    get:
+      description: >-
+        Attempts to view the favours owed to a user with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      parameters:
+        - name: access_tokens
+          description: >-
+            If present, this JSON Web Token cookie will be decoded and used to
+            attempt authentication. Contains a refresh_token property and
+            username property.
+          schema:
+            type: string
+          in: cookie
+        - name: "username"
+          in: path
+          required: true
+          description: >-
+            The name that needs to be fetched
+          schema:
+            type: string
+      responses:
+        "200":
+          description: >-
+            Returned list of favours owed to user.
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+      tags:
+        - User
+  /user/{username}/owe:
+    summary: Endpoint to view favours a user owes.
+    get:
+      description: >-
+        Attempts to view the favours a user owes with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      parameters:
+        - name: access_tokens
+          description: >-
+            If present, this JSON Web Token cookie will be decoded and used to
+            attempt authentication. Contains a refresh_token property and
+            username property.
+          schema:
+            type: string
+          in: cookie
+        - name: "username"
+          in: path
+          required: true
+          description: >-
+            The name that needs to be fetched
+          schema:
+            type: string
+      responses:
+        "200":
+          description: >-
+            Returned list of favours a user owes.
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+      tags:
+        - User
+  /user/{username}/requests:
+    summary: Endpoint to view all requests created by a user.
+    get:
+      description: >-
+        Attempts to view the requests created by a user with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      parameters:
+        - name: access_tokens
+          description: >-
+            If present, this JSON Web Token cookie will be decoded and used to
+            attempt authentication. Contains a refresh_token property and
+            username property.
+          schema:
+            type: string
+          in: cookie
+        - name: "username"
+          in: path
+          required: true
+          description: >-
+            The name that needs to be fetched
+          schema:
+            type: string
+      responses:
+        "200":
+          description: >-
+            Returned list of requests created by user.
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+      tags:
+        - User
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+    xml:
+      name: "User"
 components:
   securitySchemes:
     userAuthenticated:
