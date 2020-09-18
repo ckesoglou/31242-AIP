@@ -1,5 +1,5 @@
 import app from "@server";
-import logger from "@shared/logger";
+import logger from "@shared/Logger";
 import env from "./environment";
 import db from "./daos/db-instance";
 
