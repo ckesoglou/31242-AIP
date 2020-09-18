@@ -61,7 +61,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box p={4}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -83,11 +83,33 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   handleTabsChange = (event: ChangeEvent<{}>, index: number) => {
     this.setState({ tabIndex: index });
 
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
     switch (index) {
       case 0:
         // Owed API call
-        fetch(`${userProfileEndpoint}`);
-
+        fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
+          method: "GET",
+          headers: headers,
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((body) => {
+            console.log("Success:", body);
+            // this.setState({ successfulLogin: true }, () => {
+            //   this.context.updateUser({
+            //     name: this.state.username,
+            //     password: this.state.password,
+            //   });
+            // });
+          })
+          .catch((exception) => {
+            console.error("Error:", exception);
+            // this.setState({ error: exception });
+          });
       case 1:
       // Owe API call
       case 2:
@@ -96,17 +118,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   };
 
   render() {
-    let context = this.context;
-    let userDetails = context.user;
-
-    if (userDetails) {
-      return (
-        <div>
-          <p>Well well well...</p>
-          <p>Welcome {userDetails.name} to the table!</p>
-        </div>
-      );
-    }
+    const context = this.context;
 
     return (
       <Container component="main" maxWidth="lg">
@@ -125,191 +137,171 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   {"Placeholder Image"}
                 </Typography>
               </div>
+              <p>Well well well.. look who it is - {this.context.user.name}!</p>
               <Link href="/">Click here to go back!</Link>
             </Grid>
             <Grid item xs={4}>
-              <div className="section">
-                <Paper>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </Paper>
-                <br></br>
-                <Paper>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </Paper>
-              </div>
+              <Paper>
+                <div className="section">
+                  <Typography component="h3" variant="h4">
+                    {"Placeholder Image"}
+                  </Typography>
+                  <Typography>
+                    {
+                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+                    }
+                  </Typography>
+                </div>
+              </Paper>
             </Grid>
             <Grid item xs={8}>
-              <div className="section">
-                <Paper className="content">
-                  <Tabs
-                    value={this.state.tabIndex}
-                    onChange={(e, i) => this.handleTabsChange(e, i)}
-                    variant="fullWidth"
+              {/* <div className="section"> */}
+              <Paper className="content">
+                <Tabs
+                  value={this.state.tabIndex}
+                  onChange={(e, i) => this.handleTabsChange(e, i)}
+                  variant="fullWidth"
+                >
+                  <Tab label="Owed" />
+                  <Tab label="Owe" />
+                  <Tab label="Requests" />
+                  <AddBoxOutlinedIcon
+                    id="addRequestButton"
+                    color="primary"
+                    fontSize="large"
+                    onClick={() => this.setState({ newRequestDialog: true })}
+                  />
+                  <Dialog
+                    maxWidth="sm"
+                    scroll="paper"
+                    open={this.state.newRequestDialog}
+                    TransitionComponent={Grow}
+                    onClose={() => this.setState({ newRequestDialog: false })}
                   >
-                    <Tab label="Owed" />
-                    <Tab label="Owe" />
-                    <Tab label="Requests" />
-                    <AddBoxOutlinedIcon
-                      id="addRequestButton"
-                      color="primary"
-                      fontSize="large"
-                      onClick={() => this.setState({ newRequestDialog: true })}
-                    />
-                    <Dialog
-                      maxWidth="sm"
-                      scroll="paper"
-                      open={this.state.newRequestDialog}
-                      TransitionComponent={Grow}
-                      onClose={() => this.setState({ newRequestDialog: false })}
-                    >
-                      <DialogTitle
-                        disableTypography={true}
-                        id="requestFormTitle"
+                    <DialogTitle disableTypography={true} id="requestFormTitle">
+                      <Typography component="h5" variant="h5">
+                        {"Creating a new request..."}
+                      </Typography>
+                    </DialogTitle>
+                    <DialogContent dividers className="content">
+                      <DialogContentText id="requestFormQuestion">
+                        {"Lets start with what you'd like..."}
+                      </DialogContentText>
+                      <TextField
+                        autoFocus
+                        id="favourText"
+                        label="Favour"
+                        type="text"
+                        variant="outlined"
+                        margin="normal"
+                        required
+                      />
+                      <DialogContentText id="requestFormQuestion">
+                        {"Next, what would you like to offer in return?"}
+                      </DialogContentText>
+                      <TextField
+                        id="rewardText"
+                        label="Reward"
+                        type="text"
+                        variant="outlined"
+                        margin="normal"
+                        required
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        size="large"
+                        color="primary"
+                        onClick={() =>
+                          this.setState({ newRequestDialog: false })
+                        }
+                        autoFocus
                       >
-                        <Typography component="h5" variant="h5">
-                          {"Creating a new request..."}
-                        </Typography>
-                      </DialogTitle>
-                      <DialogContent dividers className="content">
-                        <DialogContentText id="requestFormQuestion">
-                          {"Lets start with what you'd like..."}
-                        </DialogContentText>
-                        <TextField
-                          autoFocus
-                          id="favourText"
-                          label="Favour"
-                          type="text"
-                          variant="outlined"
-                          margin="normal"
-                          required
-                        />
-                        <DialogContentText id="requestFormQuestion">
-                          {"Next, what would you like to offer in return?"}
-                        </DialogContentText>
-                        <TextField
-                          id="rewardText"
-                          label="Reward"
-                          type="text"
-                          variant="outlined"
-                          margin="normal"
-                          required
-                        />
-                      </DialogContent>
-                      <DialogActions>
-                        <Button
-                          size="large"
-                          color="primary"
-                          onClick={() =>
-                            this.setState({ newRequestDialog: false })
-                          }
-                          autoFocus
-                        >
-                          Create
-                        </Button>
-                        <Button
-                          size="large"
-                          color="primary"
-                          onClick={() =>
-                            this.setState({ newRequestDialog: false })
-                          }
-                        >
-                          Nevermind
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </Tabs>
-                  <TabPanel value={this.state.tabIndex} index={0}>
-                    Item One <br></br>Lorem Ipsum is simply dummy text of the
-                    printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an
-                    unknown printer took a galley of type and scrambled it to
-                    make a type specimen book. It has survived not only five
-                    centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the
-                    1960s with the release of Letraset sheets containing Lorem
-                    Ipsum passages, and more recently with desktop publishing
-                    software like Aldus PageMaker including versions of Lorem
-                    Ipsum.<br></br>
-                    <br></br>Lorem Ipsum is simply dummy text of the printing
-                    and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an
-                    unknown printer took a galley of type and scrambled it to
-                    make a type specimen book. It has survived not only five
-                    centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the
-                    1960s with the release of Letraset sheets containing Lorem
-                    Ipsum passages, and more recently with desktop publishing
-                    software like Aldus PageMaker including versions of Lorem
-                    Ipsum.
-                  </TabPanel>
-                  <TabPanel value={this.state.tabIndex} index={1}>
-                    Item Two <br></br>Lorem Ipsum is simply dummy text of the
-                    printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an
-                    unknown printer took a galley of type and scrambled it to
-                    make a type specimen book. It has survived not only five
-                    centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the
-                    1960s with the release of Letraset sheets containing Lorem
-                    Ipsum passages, and more recently with desktop publishing
-                    software like Aldus PageMaker including versions of Lorem
-                    Ipsum.<br></br>
-                    <br></br>Lorem Ipsum is simply dummy text of the printing
-                    and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an
-                    unknown printer took a galley of type and scrambled it to
-                    make a type specimen book. It has survived not only five
-                    centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the
-                    1960s with the release of Letraset sheets containing Lorem
-                    Ipsum passages, and more recently with desktop publishing
-                    software like Aldus PageMaker including versions of Lorem
-                    Ipsum.
-                  </TabPanel>
-                  <TabPanel value={this.state.tabIndex} index={2}>
-                    Item Three <br></br>Lorem Ipsum is simply dummy text of the
-                    printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an
-                    unknown printer took a galley of type and scrambled it to
-                    make a type specimen book. It has survived not only five
-                    centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the
-                    1960s with the release of Letraset sheets containing Lorem
-                    Ipsum passages, and more recently with desktop publishing
-                    software like Aldus PageMaker including versions of Lorem
-                    Ipsum.<br></br>
-                    <br></br>Lorem Ipsum is simply dummy text of the printing
-                    and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an
-                    unknown printer took a galley of type and scrambled it to
-                    make a type specimen book. It has survived not only five
-                    centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the
-                    1960s with the release of Letraset sheets containing Lorem
-                    Ipsum passages, and more recently with desktop publishing
-                    software like Aldus PageMaker including versions of Lorem
-                    Ipsum.
-                  </TabPanel>
-                </Paper>
-              </div>
+                        Create
+                      </Button>
+                      <Button
+                        size="large"
+                        color="primary"
+                        onClick={() =>
+                          this.setState({ newRequestDialog: false })
+                        }
+                      >
+                        Nevermind
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </Tabs>
+                <TabPanel value={this.state.tabIndex} index={0}>
+                  Item One <br></br>Lorem Ipsum is simply dummy text of the
+                  printing and typesetting industry. Lorem Ipsum has been the
+                  industry's standard dummy text ever since the 1500s, when an
+                  unknown printer took a galley of type and scrambled it to make
+                  a type specimen book. It has survived not only five centuries,
+                  but also the leap into electronic typesetting, remaining
+                  essentially unchanged. It was popularised in the 1960s with
+                  the release of Letraset sheets containing Lorem Ipsum
+                  passages, and more recently with desktop publishing software
+                  like Aldus PageMaker including versions of Lorem Ipsum.
+                  <br></br>
+                  <br></br>Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book. It has survived not only five centuries, but
+                  also the leap into electronic typesetting, remaining
+                  essentially unchanged. It was popularised in the 1960s with
+                  the release of Letraset sheets containing Lorem Ipsum
+                  passages, and more recently with desktop publishing software
+                  like Aldus PageMaker including versions of Lorem Ipsum.
+                </TabPanel>
+                <TabPanel value={this.state.tabIndex} index={1}>
+                  Item Two <br></br>Lorem Ipsum is simply dummy text of the
+                  printing and typesetting industry. Lorem Ipsum has been the
+                  industry's standard dummy text ever since the 1500s, when an
+                  unknown printer took a galley of type and scrambled it to make
+                  a type specimen book. It has survived not only five centuries,
+                  but also the leap into electronic typesetting, remaining
+                  essentially unchanged. It was popularised in the 1960s with
+                  the release of Letraset sheets containing Lorem Ipsum
+                  passages, and more recently with desktop publishing software
+                  like Aldus PageMaker including versions of Lorem Ipsum.
+                  <br></br>
+                  <br></br>Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book. It has survived not only five centuries, but
+                  also the leap into electronic typesetting, remaining
+                  essentially unchanged. It was popularised in the 1960s with
+                  the release of Letraset sheets containing Lorem Ipsum
+                  passages, and more recently with desktop publishing software
+                  like Aldus PageMaker including versions of Lorem Ipsum.
+                </TabPanel>
+                <TabPanel value={this.state.tabIndex} index={2}>
+                  Item Three <br></br>Lorem Ipsum is simply dummy text of the
+                  printing and typesetting industry. Lorem Ipsum has been the
+                  industry's standard dummy text ever since the 1500s, when an
+                  unknown printer took a galley of type and scrambled it to make
+                  a type specimen book. It has survived not only five centuries,
+                  but also the leap into electronic typesetting, remaining
+                  essentially unchanged. It was popularised in the 1960s with
+                  the release of Letraset sheets containing Lorem Ipsum
+                  passages, and more recently with desktop publishing software
+                  like Aldus PageMaker including versions of Lorem Ipsum.
+                  <br></br>
+                  <br></br>Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book. It has survived not only five centuries, but
+                  also the leap into electronic typesetting, remaining
+                  essentially unchanged. It was popularised in the 1960s with
+                  the release of Letraset sheets containing Lorem Ipsum
+                  passages, and more recently with desktop publishing software
+                  like Aldus PageMaker including versions of Lorem Ipsum.
+                </TabPanel>
+              </Paper>
+              {/* </div> */}
             </Grid>
           </Grid>
         </div>
