@@ -52,7 +52,7 @@
     "@types/jasmine": "^3.5.12",
     "@types/jsonfile": "^6.0.0",
     "@types/morgan": "^1.9.1",
-    "@types/node": "^14.0.27",
+    "@types/node": "^14.11.1",
     "@types/supertest": "^2.0.10",
     "@types/validator": "^13.1.0",
     "find": "^0.3.0",
