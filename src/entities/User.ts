@@ -2,13 +2,13 @@ import { DataTypes, Model } from "sequelize";
 import db from "../daos/db-instance";
 
 export interface IUser {
-  username: number;
+  username: string;
   displayName: string;
   password: string;
 }
 
 class User extends Model<IUser> implements IUser {
-  public username!: number;
+  public username!: string;
   public displayName!: string;
   public password!: string;
 }
