@@ -84,6 +84,11 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     validPassword: undefined,
   };
 
+  static contextType: React.Context<{
+    user: {};
+    updateUser: (newUser: object) => void;
+  }> = UserContext;
+
   setLoading(): void {
     this.signUpRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
@@ -197,7 +202,12 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       .then((body) => {
         console.log("Success:", body);
         Authentication.authenticate(() => {}); // Only for development!
-        this.setState({ successfulSignUp: true });
+        this.setState({ successfulSignUp: true }, () => {
+          this.context.updateUser({
+            name: this.state.username,
+            password: this.state.password,
+          });
+        });
       })
       .catch((exception) => {
         console.error("Error:", exception);
