@@ -27,6 +27,10 @@ import { UserContext } from "../components/user-context";
 type UserProfileState = {
   tabIndex: number;
   newRequestDialog: boolean;
+  owed: string;
+  owe: string;
+  requests: string;
+  error: string;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -70,9 +74,24 @@ function TabPanel(props: TabPanelProps) {
 }
 
 class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
+  private textRef: React.RefObject<HTMLLabelElement>;
+  private loadingRef: React.RefObject<HTMLInputElement>;
+
+  constructor(props: IUserProfileProps) {
+    super(props);
+
+    this.textRef = React.createRef();
+    this.loadingRef = React.createRef();
+  }
+
   state: UserProfileState = {
     tabIndex: 0,
     newRequestDialog: false,
+    owed:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    owe: "",
+    requests: "",
+    error: "",
   };
 
   static contextType: React.Context<{
@@ -80,42 +99,72 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     updateUser: (newUser: object) => void;
   }> = UserContext;
 
-  handleTabsChange = (event: ChangeEvent<{}>, index: number) => {
-    this.setState({ tabIndex: index });
+  setLoading(): void {
+    this.textRef.current!.innerText = "";
+    this.loadingRef.current!.style.display = "block";
+  }
 
+  handleTabsChange(event: ChangeEvent<{}> | undefined, index: number): void {
+    this.setState({ tabIndex: index });
+    switch (index) {
+      case 0:
+        // Owed API call
+        this.fetchRequest(
+          `${userProfileEndpoint.concat(this.context.user.name)}`,
+          "GET",
+          0
+        );
+        break;
+      case 1:
+        // Owe API call
+        this.fetchRequest(
+          `${userProfileEndpoint.concat(this.context.user.name)}`,
+          "GET",
+          1
+        );
+        break;
+      case 2:
+        // Requests API call
+        this.fetchRequest(
+          `${userProfileEndpoint.concat(this.context.user.name)}`,
+          "GET",
+          2
+        );
+        break;
+    }
+  }
+
+  fetchRequest(endpoint: string, httpType: string, index: number): void {
     const headers = {
       "Content-Type": "application/json",
     };
 
-    switch (index) {
-      case 0:
-        // Owed API call
-        fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
-          method: "GET",
-          headers: headers,
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .then((body) => {
-            console.log("Success:", body);
-            // this.setState({ successfulLogin: true }, () => {
-            //   this.context.updateUser({
-            //     name: this.state.username,
-            //     password: this.state.password,
-            //   });
-            // });
-          })
-          .catch((exception) => {
-            console.error("Error:", exception);
-            // this.setState({ error: exception });
-          });
-      case 1:
-      // Owe API call
-      case 2:
-      // Requests API call
-    }
-  };
+    fetch(endpoint, {
+      method: httpType,
+      headers: headers,
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((body) => {
+        console.log("Success:", body);
+        switch (index) {
+          case 0:
+            this.setState({ owed: body });
+            break;
+          case 1:
+            this.setState({ owe: body });
+            break;
+          case 2:
+            this.setState({ requests: body });
+            break;
+        }
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ error: exception });
+      });
+  }
 
   render() {
     return (
@@ -230,73 +279,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   </Dialog>
                 </Tabs>
                 <TabPanel value={this.state.tabIndex} index={0}>
-                  Item One <br></br>Lorem Ipsum is simply dummy text of the
-                  printing and typesetting industry. Lorem Ipsum has been the
-                  industry's standard dummy text ever since the 1500s, when an
-                  unknown printer took a galley of type and scrambled it to make
-                  a type specimen book. It has survived not only five centuries,
-                  but also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                  <br></br>
-                  <br></br>Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
+                  {this.state.owed}
                 </TabPanel>
                 <TabPanel value={this.state.tabIndex} index={1}>
-                  Item Two <br></br>Lorem Ipsum is simply dummy text of the
-                  printing and typesetting industry. Lorem Ipsum has been the
-                  industry's standard dummy text ever since the 1500s, when an
-                  unknown printer took a galley of type and scrambled it to make
-                  a type specimen book. It has survived not only five centuries,
-                  but also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                  <br></br>
-                  <br></br>Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
+                  {this.state.owe}
                 </TabPanel>
                 <TabPanel value={this.state.tabIndex} index={2}>
-                  Item Three <br></br>Lorem Ipsum is simply dummy text of the
-                  printing and typesetting industry. Lorem Ipsum has been the
-                  industry's standard dummy text ever since the 1500s, when an
-                  unknown printer took a galley of type and scrambled it to make
-                  a type specimen book. It has survived not only five centuries,
-                  but also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                  <br></br>
-                  <br></br>Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
+                  {this.state.requests}
                 </TabPanel>
               </Paper>
               {/* </div> */}

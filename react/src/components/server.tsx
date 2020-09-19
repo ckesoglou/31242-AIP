@@ -53,10 +53,8 @@ export function makeServer({ environment = "development" } = {}) {
         return new Response(201, undefined, body);
       });
 
-      this.get("/user/:username", (schema, request) => {
-        let username = request.params.username;
-        return schema.db.users.find(username);
-        // return new Response(200, undefined, `Hey good job Mr.${username}!`);
+      this.get("/user/:id", (schema, request) => {
+        return { id: "1", title: "Interstellar" };
       });
     },
   });
