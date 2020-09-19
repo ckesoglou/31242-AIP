@@ -118,8 +118,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   };
 
   render() {
-    const context = this.context;
-
     return (
       <Container component="main" maxWidth="lg">
         <div className="paper">
