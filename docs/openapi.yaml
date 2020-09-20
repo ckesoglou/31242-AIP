@@ -125,11 +125,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/definitions/User"
+                $ref: "#/components/schemas/User"
         "400":
           description: "Invalid user supplied"
+          content: {}
         "404":
           description: "User not found"
+          content: {}
       tags:
         - User
     put:
@@ -145,11 +147,20 @@ paths:
             The name that needs to be updated
           schema:
             type: string
+      requestBody:
+        description: Updated user object
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
       responses:
         "400":
           description: "Invalid user supplied"
+          content: {}
         "404":
           description: "User not found"
+          content: {}
     delete:
       description: >-
         Attempts to delete user if they are currently logged in
@@ -166,8 +177,10 @@ paths:
       responses:
         "400":
           description: "Invalid user supplied"
+          content: {}
         "404":
           description: "User not found"
+          content: {}
   /api/user/logout:
     summary: Logs out current logged in user session.
     get:
@@ -175,9 +188,9 @@ paths:
         Attempts to log user out of current session.
       parameters: []
       responses:
-        "200":
-          description: >-
-            Returned user information.
+        default:
+          description: "Successful logout"
+          content: {}
       tags:
         - User
   /api/user/{username}/owed:
@@ -212,7 +225,7 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: "#/definitions/IOU"
+                  $ref: "#/components/schemas/IOU"
         "400":
           description: "Invalid user supplied"
         "404":
@@ -251,7 +264,7 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: "#/definitions/IOU"
+                  $ref: "#/components/schemas/IOU"
         "400":
           description: "Invalid user supplied"
         "404":
@@ -290,89 +303,110 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: "#/definitions/Request"
+                  $ref: "#/components/schemas/Request"
         "400":
           description: "Invalid user supplied"
         "404":
           description: "User not found"
       tags:
         - User
-definitions:
-  User:
-    type: "object"
-    properties:
-      username:
-        type: "string"
-        example: jsmith
-      dispaly_name:
-        type: string
-        example: John Smith
-    xml:
-      name: "User"
-  IOU:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      item:
-        type: "object"
-        $ref: "#/definitions/Item"
-      giver:
-        type: "object"
-        $ref: "#/definitions/User"
-      receiver:
-        type: "object"
-        $ref: "#/definitions/User"
-      parent_request:
-        type: "object"
-        $ref: "#/definitions/Request"
-      proof_of_debt:
-        type: "integer"
-      proof_of_completion:
-        type: "integer"
-      created_time:
-        type: "string"
-        example: "2020-03-09T22:18:26.625Z"
-      claimed_time:
-        type: "string"
-        example: "2020-03-09T22:18:26.625Z"
-      is_claimed:
-        type: "boolean"
-        example: false
-  Item:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      display_name:
-        type: "string"
-        example: "Coffee"
-  Request:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      author:
-        type: "object"
-        $ref: "#/definitions/User"
-      completed_by:
-        type: "object"
-        $ref: "#/definitions/User"
-      proof_of_completion:
-        type: "integer"
-      details:
-        type: "string"
-        example: "Clean the fridge"
-      created_time:
-        type: "string"
-        example: "2020-03-09T22:18:26.625Z"
-      completion_time:
-        type: "string"
-        example: "2020-03-09T22:18:26.625Z"
-      is_completed:
-        type: "boolean"
-        example: false
 components:
+  schemas:
+    User:
+      required:
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: jsmith
+        dispaly_name:
+          type: string
+          example: John Smith
+      xml:
+        name: User
+    IOU:
+      required:
+        - id
+        - item
+        - giver
+        - created_time
+        - is_claimed
+      type: object
+      properties:
+        id:
+          type: integer
+        item:
+          type: object
+          $ref: "#/components/schemas/Item"
+        giver:
+          type: object
+          $ref: "#/components/schemas/User"
+        receiver:
+          type: object
+          $ref: "#/components/schemas/User"
+        parent_request:
+          type: object
+          $ref: "#/components/schemas/Request"
+        proof_of_debt:
+          type: integer
+        proof_of_completion:
+          type: integer
+        created_time:
+          type: string
+          format: date-time
+          example: "2020-03-09T22:18:26.625Z"
+        claimed_time:
+          type: string
+          format: date-time
+          example: "2020-03-09T22:18:26.625Z"
+        is_claimed:
+          type: boolean
+          example: false
+    Item:
+      required:
+        - id
+        - display_name
+      type: object
+      properties:
+        id:
+          type: integer
+        display_name:
+          type: string
+          example: Coffee
+    Request:
+      required:
+        - id
+        - author
+        - details
+        - created_time
+        - is_completed
+      type: object
+      properties:
+        id:
+          type: integer
+        author:
+          type: object
+          $ref: "#/components/schemas/User"
+        completed_by:
+          type: object
+          $ref: "#/components/schemas/User"
+        proof_of_completion:
+          type: integer
+        details:
+          type: string
+          example: Clean the fridge
+        created_time:
+          type: string
+          format: date-time
+          example: 2020-03-09T22:18:26.625Z
+        completion_time:
+          type: string
+          format: date-time
+          example: 2020-03-09T22:18:26.625Z
+        is_completed:
+          type: boolean
+          example: false
   securitySchemes:
     userAuthenticated:
       type: apiKey
