@@ -1,48 +1,51 @@
 <!-- Generator: Widdershins v4.0.1 -->
 
-<h1 id="ioweyou-tech">ioweyou.tech v1.0.0</h1>
+<h1 id="ioweyou-tech">ioweyou.tech v1.1.0</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
 # Authentication
 
-- API Key (userAuthenticated)
-  - Parameter Name: **access_tokens**, in: cookie. Security scheme protecting endpoints that require a regular authenticated user account.
+* API Key (userAuthenticated)
+    - Parameter Name: **access_tokens**, in: cookie. Security scheme protecting endpoints that require a regular authenticated user account.
 
 <h1 id="ioweyou-tech-default">Default</h1>
 
-## get\_\_login
+## get__api_login
 
 > Code samples
 
 ```javascript
-fetch("/login", {
-  method: "GET",
+
+fetch('/api/login',
+{
+  method: 'GET'
+
 })
-  .then(function (res) {
+.then(function(res) {
     return res.json();
-  })
-  .then(function (body) {
+}).then(function(body) {
     console.log(body);
-  });
+});
+
 ```
 
-`GET /login`
+`GET /api/login`
 
 Attempts to authenticate the user with the refresh JSON Web Token (if stored in the client's cookies) and redirects the user. Otherwise, the React login webpage will be returned.
 
-<h3 id="get__login-parameters">Parameters</h3>
+<h3 id="get__api_login-parameters">Parameters</h3>
 
-| Name          | In     | Type   | Required | Description                                                                                                                                         |
-| ------------- | ------ | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| access_tokens | cookie | string | false    | If present, this JSON Web Token cookie will be decoded and used to attempt authentication. Contains a refresh_token property and username property. |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|access_tokens|cookie|string|false|If present, this JSON Web Token cookie will be decoded and used to attempt authentication. Contains a refresh_token property and username property.|
 
-<h3 id="get__login-responses">Responses</h3>
+<h3 id="get__api_login-responses">Responses</h3>
 
-| Status | Meaning                                                    | Description                                                                                                                                       | Schema |
-| ------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)    | Returned with the react login page when refresh token authentication failed or did not take place.                                                | None   |
-| 302    | [Found](https://tools.ietf.org/html/rfc7231#section-6.4.3) | Returned when refresh token authentication succeeded, redirecting to the dashboard React page or user's referrer URL (if within the application). | None   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned with the react login page when refresh token authentication failed or did not take place.|None|
+|302|[Found](https://tools.ietf.org/html/rfc7231#section-6.4.3)|Returned when refresh token authentication succeeded, redirecting to the dashboard React page or user's referrer URL (if within the application).|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -50,7 +53,7 @@ This operation does not require authentication
 
 <h1 id="ioweyou-tech-login">Login</h1>
 
-## post\_\_login
+## post__api_login
 
 > Code samples
 
@@ -63,7 +66,7 @@ const headers = {
   'Content-Type':'application/json'
 };
 
-fetch('/login',
+fetch('/api/login',
 {
   method: 'POST',
   body: inputBody,
@@ -77,9 +80,9 @@ fetch('/login',
 
 ```
 
-`POST /login`
+`POST /api/login`
 
-Attempts authentication with the provided username and password in the requestBody. Sets the access_tokens cookie alongside a redirect request if successful.
+Attempts authentication with the provided username and password in the requestBody. Sets the access_tokens cookie alongside a redirect request if
 
 > Body parameter
 
@@ -90,21 +93,21 @@ Attempts authentication with the provided username and password in the requestBo
 }
 ```
 
-<h3 id="post__login-parameters">Parameters</h3>
+<h3 id="post__api_login-parameters">Parameters</h3>
 
-| Name       | In   | Type   | Required | Description                                  |
-| ---------- | ---- | ------ | -------- | -------------------------------------------- |
-| body       | body | object | true     | none                                         |
-| » username | body | string | true     | Username of the account attempting to login. |
-| » password | body | string | true     | Plaintext password of the user.              |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» username|body|string|true|Username of the account attempting to login.|
+|» password|body|string|true|Plaintext password of the user.|
 
-<h3 id="post__login-responses">Responses</h3>
+<h3 id="post__api_login-responses">Responses</h3>
 
-| Status | Meaning                                                          | Description                                                                                                                                                                                                        | Schema |
-| ------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| 302    | [Found](https://tools.ietf.org/html/rfc7231#section-6.4.3)       | Returned when the login was successful. This will set a JSON Web Token as a httpOnly cookie (with access & refresh tokens) and redirect the user to the referrer URL (if within the application) or the dashboard. | None   |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Returned when required requestBody was not provided, or invalid.                                                                                                                                                   | None   |
-| 401    | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)  | Returned when the password supplied is incorrect.                                                                                                                                                                  | None   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|302|[Found](https://tools.ietf.org/html/rfc7231#section-6.4.3)|Returned when the login was successful. This will set a JSON Web Token as a httpOnly cookie (with access & refresh tokens) and redirect the user to the referrer URL (if within the application) or the dashboard.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Returned when required requestBody was not provided, or invalid.|None|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Returned when the password supplied is incorrect.|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -112,7 +115,7 @@ This operation does not require authentication
 
 <h1 id="ioweyou-tech-signup">Signup</h1>
 
-## post\_\_signup
+## post__api_signup
 
 > Code samples
 
@@ -126,7 +129,7 @@ const headers = {
   'Content-Type':'application/json'
 };
 
-fetch('/signup',
+fetch('/api/signup',
 {
   method: 'POST',
   body: inputBody,
@@ -140,7 +143,7 @@ fetch('/signup',
 
 ```
 
-`POST /signup`
+`POST /api/signup`
 
 Attempts to create a user with the provided username, display name, and password in the requestBody. Sets the access_tokens cookie alongside a redirect request if successful.
 
@@ -154,23 +157,703 @@ Attempts to create a user with the provided username, display name, and password
 }
 ```
 
-<h3 id="post__signup-parameters">Parameters</h3>
+<h3 id="post__api_signup-parameters">Parameters</h3>
 
-| Name           | In   | Type   | Required | Description                                         |
-| -------------- | ---- | ------ | -------- | --------------------------------------------------- |
-| body           | body | object | true     | none                                                |
-| » username     | body | string | true     | Desired username for the to-be-created account.     |
-| » display_name | body | string | false    | Desired display name for the to-be-created account. |
-| » password     | body | string | true     | Plaintext password for the to-be-created account.   |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» username|body|string|true|Desired username for the to-be-created account.|
+|» display_name|body|string|false|Desired display name for the to-be-created account.|
+|» password|body|string|true|Plaintext password for the to-be-created account.|
 
-<h3 id="post__signup-responses">Responses</h3>
+<h3 id="post__api_signup-responses">Responses</h3>
 
-| Status | Meaning                                                                  | Description                                                                                                                         | Schema |
-| ------ | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)             | Returned when the user is successfully created. This will set a JSON Web Token as a httpOnly cookie (with access & refresh tokens). | None   |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)         | Returned when required requestBody was not provided, or invalid.                                                                    | None   |
-| 422    | [Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3) | Returned when the username is already taken.                                                                                        | None   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Returned when the user is successfully created. This will set a JSON Web Token as a httpOnly cookie (with access & refresh tokens).|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Returned when required requestBody was not provided, or invalid.|None|
+|422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Returned when the username is already taken.|None|
 
 <aside class="success">
 This operation does not require authentication
 </aside>
+
+<h1 id="ioweyou-tech-user">User</h1>
+
+## get__api_user_{username}
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/user/{username}',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/user/{username}`
+
+Attempts to view the user information with the refresh JSON Web Token (if stored in the client's cookies).
+
+<h3 id="get__api_user_{username}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|username|path|string|true|The name that needs to be fetched|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "username": "jsmith",
+  "dispaly_name": "John Smith"
+}
+```
+
+<h3 id="get__api_user_{username}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned user information.|[User](#schemauser)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
+
+<h3 id="get__api_user_{username}-responseschema">Response Schema</h3>
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## put__api_user_{username}
+
+> Code samples
+
+```javascript
+const inputBody = '{
+  "username": "jsmith",
+  "dispaly_name": "John Smith"
+}';
+const headers = {
+  'Content-Type':'*/*'
+};
+
+fetch('/api/user/{username}',
+{
+  method: 'PUT',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`PUT /api/user/{username}`
+
+Attempts to update user if they are currently logged in
+
+> Body parameter
+
+<h3 id="put__api_user_{username}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|username|path|string|true|The name that needs to be updated|
+|body|body|[User](#schemauser)|true|Updated user object|
+
+> Example responses
+
+<h3 id="put__api_user_{username}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
+
+<h3 id="put__api_user_{username}-responseschema">Response Schema</h3>
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## delete__api_user_{username}
+
+> Code samples
+
+```javascript
+
+fetch('/api/user/{username}',
+{
+  method: 'DELETE'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`DELETE /api/user/{username}`
+
+Attempts to delete user if they are currently logged in
+
+<h3 id="delete__api_user_{username}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|username|path|string|true|The name that needs to b deleted|
+
+> Example responses
+
+<h3 id="delete__api_user_{username}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
+
+<h3 id="delete__api_user_{username}-responseschema">Response Schema</h3>
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_user_logout
+
+> Code samples
+
+```javascript
+
+fetch('/api/user/logout',
+{
+  method: 'GET'
+
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/user/logout`
+
+Attempts to log user out of current session.
+
+> Example responses
+
+<h3 id="get__api_user_logout-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|default|Default|Successful logout|None|
+
+<h3 id="get__api_user_logout-responseschema">Response Schema</h3>
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_user_{username}_owed
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/user/{username}/owed',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/user/{username}/owed`
+
+Attempts to view the favours owed to a user with the refresh JSON Web Token (if stored in the client's cookies).
+
+<h3 id="get__api_user_{username}_owed-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|access_tokens|cookie|string|false|If present, this JSON Web Token cookie will be decoded and used to attempt authentication. Contains a refresh_token property and username property.|
+|username|path|string|true|The name that needs to be fetched|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": 0,
+    "item": {
+      "id": 0,
+      "display_name": "Coffee"
+    },
+    "giver": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "receiver": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "parent_request": {
+      "id": 0,
+      "author": {
+        "username": "jsmith",
+        "dispaly_name": "John Smith"
+      },
+      "completed_by": {
+        "username": "jsmith",
+        "dispaly_name": "John Smith"
+      },
+      "proof_of_completion": 0,
+      "details": "Clean the fridge",
+      "created_time": "2020-03-09T22:18:26.625Z",
+      "completion_time": "2020-03-09T22:18:26.625Z",
+      "is_completed": false
+    },
+    "proof_of_debt": 0,
+    "proof_of_completion": 0,
+    "created_time": "2020-03-09T22:18:26.625Z",
+    "claimed_time": "2020-03-09T22:18:26.625Z",
+    "is_claimed": false
+  }
+]
+```
+
+<h3 id="get__api_user_{username}_owed-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of favours owed to user.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
+
+<h3 id="get__api_user_{username}_owed-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[IOU](#schemaiou)]|false|none|none|
+|» id|integer|true|none|none|
+|» item|[Item](#schemaitem)|true|none|none|
+|»» id|integer|true|none|none|
+|»» display_name|string|true|none|none|
+|» giver|[User](#schemauser)|true|none|none|
+|»» username|string|true|none|none|
+|»» dispaly_name|string|false|none|none|
+|» receiver|[User](#schemauser)|false|none|none|
+|» parent_request|[Request](#schemarequest)|false|none|none|
+|»» id|integer|true|none|none|
+|»» author|[User](#schemauser)|true|none|none|
+|»» completed_by|[User](#schemauser)|false|none|none|
+|»» proof_of_completion|integer|false|none|none|
+|»» details|string|true|none|none|
+|»» created_time|string(date-time)|true|none|none|
+|»» completion_time|string(date-time)|false|none|none|
+|»» is_completed|boolean|true|none|none|
+|» proof_of_debt|integer|false|none|none|
+|» proof_of_completion|integer|false|none|none|
+|» created_time|string(date-time)|true|none|none|
+|» claimed_time|string(date-time)|false|none|none|
+|» is_claimed|boolean|true|none|none|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_user_{username}_owe
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/user/{username}/owe',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/user/{username}/owe`
+
+Attempts to view the favours a user owes with the refresh JSON Web Token (if stored in the client's cookies).
+
+<h3 id="get__api_user_{username}_owe-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|access_tokens|cookie|string|false|If present, this JSON Web Token cookie will be decoded and used to attempt authentication. Contains a refresh_token property and username property.|
+|username|path|string|true|The name that needs to be fetched|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": 0,
+    "item": {
+      "id": 0,
+      "display_name": "Coffee"
+    },
+    "giver": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "receiver": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "parent_request": {
+      "id": 0,
+      "author": {
+        "username": "jsmith",
+        "dispaly_name": "John Smith"
+      },
+      "completed_by": {
+        "username": "jsmith",
+        "dispaly_name": "John Smith"
+      },
+      "proof_of_completion": 0,
+      "details": "Clean the fridge",
+      "created_time": "2020-03-09T22:18:26.625Z",
+      "completion_time": "2020-03-09T22:18:26.625Z",
+      "is_completed": false
+    },
+    "proof_of_debt": 0,
+    "proof_of_completion": 0,
+    "created_time": "2020-03-09T22:18:26.625Z",
+    "claimed_time": "2020-03-09T22:18:26.625Z",
+    "is_claimed": false
+  }
+]
+```
+
+<h3 id="get__api_user_{username}_owe-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of favours a user owes.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
+
+<h3 id="get__api_user_{username}_owe-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[IOU](#schemaiou)]|false|none|none|
+|» id|integer|true|none|none|
+|» item|[Item](#schemaitem)|true|none|none|
+|»» id|integer|true|none|none|
+|»» display_name|string|true|none|none|
+|» giver|[User](#schemauser)|true|none|none|
+|»» username|string|true|none|none|
+|»» dispaly_name|string|false|none|none|
+|» receiver|[User](#schemauser)|false|none|none|
+|» parent_request|[Request](#schemarequest)|false|none|none|
+|»» id|integer|true|none|none|
+|»» author|[User](#schemauser)|true|none|none|
+|»» completed_by|[User](#schemauser)|false|none|none|
+|»» proof_of_completion|integer|false|none|none|
+|»» details|string|true|none|none|
+|»» created_time|string(date-time)|true|none|none|
+|»» completion_time|string(date-time)|false|none|none|
+|»» is_completed|boolean|true|none|none|
+|» proof_of_debt|integer|false|none|none|
+|» proof_of_completion|integer|false|none|none|
+|» created_time|string(date-time)|true|none|none|
+|» claimed_time|string(date-time)|false|none|none|
+|» is_claimed|boolean|true|none|none|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_user_{username}_requests
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/user/{username}/requests',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/user/{username}/requests`
+
+Attempts to view the requests created by a user with the refresh JSON Web Token (if stored in the client's cookies).
+
+<h3 id="get__api_user_{username}_requests-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|access_tokens|cookie|string|false|If present, this JSON Web Token cookie will be decoded and used to attempt authentication. Contains a refresh_token property and username property.|
+|username|path|string|true|The name that needs to be fetched|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": 0,
+    "author": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "completed_by": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "proof_of_completion": 0,
+    "details": "Clean the fridge",
+    "created_time": "2020-03-09T22:18:26.625Z",
+    "completion_time": "2020-03-09T22:18:26.625Z",
+    "is_completed": false
+  }
+]
+```
+
+<h3 id="get__api_user_{username}_requests-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of requests created by user.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
+
+<h3 id="get__api_user_{username}_requests-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[Request](#schemarequest)]|false|none|none|
+|» id|integer|true|none|none|
+|» author|[User](#schemauser)|true|none|none|
+|»» username|string|true|none|none|
+|»» dispaly_name|string|false|none|none|
+|» completed_by|[User](#schemauser)|false|none|none|
+|» proof_of_completion|integer|false|none|none|
+|» details|string|true|none|none|
+|» created_time|string(date-time)|true|none|none|
+|» completion_time|string(date-time)|false|none|none|
+|» is_completed|boolean|true|none|none|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+# Schemas
+
+<h2 id="tocS_User">User</h2>
+<!-- backwards compatibility -->
+<a id="schemauser"></a>
+<a id="schema_User"></a>
+<a id="tocSuser"></a>
+<a id="tocsuser"></a>
+
+```json
+{
+  "username": "jsmith",
+  "dispaly_name": "John Smith"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|username|string|true|none|none|
+|dispaly_name|string|false|none|none|
+
+<h2 id="tocS_IOU">IOU</h2>
+<!-- backwards compatibility -->
+<a id="schemaiou"></a>
+<a id="schema_IOU"></a>
+<a id="tocSiou"></a>
+<a id="tocsiou"></a>
+
+```json
+{
+  "id": 0,
+  "item": {
+    "id": 0,
+    "display_name": "Coffee"
+  },
+  "giver": {
+    "username": "jsmith",
+    "dispaly_name": "John Smith"
+  },
+  "receiver": {
+    "username": "jsmith",
+    "dispaly_name": "John Smith"
+  },
+  "parent_request": {
+    "id": 0,
+    "author": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "completed_by": {
+      "username": "jsmith",
+      "dispaly_name": "John Smith"
+    },
+    "proof_of_completion": 0,
+    "details": "Clean the fridge",
+    "created_time": "2020-03-09T22:18:26.625Z",
+    "completion_time": "2020-03-09T22:18:26.625Z",
+    "is_completed": false
+  },
+  "proof_of_debt": 0,
+  "proof_of_completion": 0,
+  "created_time": "2020-03-09T22:18:26.625Z",
+  "claimed_time": "2020-03-09T22:18:26.625Z",
+  "is_claimed": false
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|integer|true|none|none|
+|item|[Item](#schemaitem)|true|none|none|
+|giver|[User](#schemauser)|true|none|none|
+|receiver|[User](#schemauser)|false|none|none|
+|parent_request|[Request](#schemarequest)|false|none|none|
+|proof_of_debt|integer|false|none|none|
+|proof_of_completion|integer|false|none|none|
+|created_time|string(date-time)|true|none|none|
+|claimed_time|string(date-time)|false|none|none|
+|is_claimed|boolean|true|none|none|
+
+<h2 id="tocS_Item">Item</h2>
+<!-- backwards compatibility -->
+<a id="schemaitem"></a>
+<a id="schema_Item"></a>
+<a id="tocSitem"></a>
+<a id="tocsitem"></a>
+
+```json
+{
+  "id": 0,
+  "display_name": "Coffee"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|integer|true|none|none|
+|display_name|string|true|none|none|
+
+<h2 id="tocS_Request">Request</h2>
+<!-- backwards compatibility -->
+<a id="schemarequest"></a>
+<a id="schema_Request"></a>
+<a id="tocSrequest"></a>
+<a id="tocsrequest"></a>
+
+```json
+{
+  "id": 0,
+  "author": {
+    "username": "jsmith",
+    "dispaly_name": "John Smith"
+  },
+  "completed_by": {
+    "username": "jsmith",
+    "dispaly_name": "John Smith"
+  },
+  "proof_of_completion": 0,
+  "details": "Clean the fridge",
+  "created_time": "2020-03-09T22:18:26.625Z",
+  "completion_time": "2020-03-09T22:18:26.625Z",
+  "is_completed": false
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|integer|true|none|none|
+|author|[User](#schemauser)|true|none|none|
+|completed_by|[User](#schemauser)|false|none|none|
+|proof_of_completion|integer|false|none|none|
+|details|string|true|none|none|
+|created_time|string(date-time)|true|none|none|
+|completion_time|string(date-time)|false|none|none|
+|is_completed|boolean|true|none|none|
+
