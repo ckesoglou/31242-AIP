@@ -1,13 +1,16 @@
 import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
+import bcrypt from 'bcrypt';
 
-import UserDao from '@daos/User/UserDao.mock';
+import UserDao from "@daos/user/user-dao";
 import { paramMissingError } from '@shared/constants';
+import User, { IUser } from '@entities/User.ts';
 
 // Init shared
 const router = Router();
 const userDao = new UserDao();
+const saltRounds = 10;
 
 /******************************************************************************
  *                      Create New User - "POST /api/signup/"
@@ -22,18 +25,17 @@ router.post('/', async (req: Request, res: Response) => {
             error: paramMissingError,
         });
     }
-    const users = await userDao.getAll();
-
-    for (let user of users) { //Could extract this function into the UserDAO
-        if (user['name'] == username) { //Need to discuss the IUser interface
-            return res.status(UNPROCESSABLE_ENTITY).json({
-               error: "Username already exists", 
-            });
-        }
+    const foundUser = await userDao.getOne(username);
+    if (foundUser) {
+        return res.status(UNPROCESSABLE_ENTITY).json({
+            error: "Username already exists", 
+        });
     }
 
-    let user = {id: 0, name: username, email: "Something"};
-    await userDao.add(user);
+    let passHash: string = await bcrypt.hash(password, saltRounds)
+
+    let User: IUser = {username: username, display_name: displayName, password_hash: passHash};
+    await userDao.add(User);
 
     return res.status(CREATED).json({
         refreshToken: "",
