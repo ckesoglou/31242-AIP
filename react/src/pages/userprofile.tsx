@@ -90,8 +90,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     owed:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
     owe: "",
-    requests: "",
-    error: "",
+    requests: "abc",
+    error: "abcdef",
   };
 
   static contextType: React.Context<{
@@ -109,27 +109,42 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     switch (index) {
       case 0:
         // Owed API call
-        this.fetchRequest(
-          `${userProfileEndpoint.concat(this.context.user.name)}`,
-          "GET",
-          0
-        );
+        // this.fetchRequest(
+        //   `${userProfileEndpoint.concat(this.context.user.name)}`,
+        //   "GET",
+        //   0
+        // );
+        if (this.state.owed == "Hehe") {
+          this.setState({ owed: "Haha" });
+        } else {
+          this.setState({ owed: "Hehe" });
+        }
         break;
       case 1:
         // Owe API call
-        this.fetchRequest(
-          `${userProfileEndpoint.concat(this.context.user.name)}`,
-          "GET",
-          1
-        );
+        if (this.state.owe == "Hehe") {
+          this.setState({ owe: "Haha" });
+        } else {
+          this.setState({ owe: "Hehe" });
+        }
+        // this.fetchRequest(
+        //   `${userProfileEndpoint.concat(this.context.user.name)}`,
+        //   "GET",
+        //   1
+        // );
         break;
       case 2:
         // Requests API call
-        this.fetchRequest(
-          `${userProfileEndpoint.concat(this.context.user.name)}`,
-          "GET",
-          2
-        );
+        if (this.state.requests == "Hehe") {
+          this.setState({ requests: "Haha" });
+        } else {
+          this.setState({ requests: "Hehe" });
+        }
+        // this.fetchRequest(
+        //   `${userProfileEndpoint.concat(this.context.user.name)}`,
+        //   "GET",
+        //   2
+        // );
         break;
     }
   }
