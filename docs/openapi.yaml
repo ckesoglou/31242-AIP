@@ -3,7 +3,7 @@ info:
   title: ioweyou.tech
   version: 1.1.0
 paths:
-  /login:
+  /api/login:
     summary: Endpoint to authenticate a user.
     get:
       description: >-
@@ -61,7 +61,7 @@ paths:
           description: Returned when the password supplied is incorrect.
       tags:
         - Login
-  /signup:
+  /api/signup:
     summary: Endpoint to create a user.
     post:
       description: >-
@@ -105,7 +105,7 @@ paths:
           description: Returned when the username is already taken.
       tags:
         - Signup
-  /user/{username}:
+  /api/user/{username}:
     summary: Endpoint to view a user.
     get:
       description: >-
@@ -121,8 +121,11 @@ paths:
             type: string
       responses:
         "200":
-          description: >-
-            Returned user information.
+          description: "Returned user information."
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/User"
         "400":
           description: "Invalid user supplied"
         "404":
@@ -165,7 +168,7 @@ paths:
           description: "Invalid user supplied"
         "404":
           description: "User not found"
-  /user/logout:
+  /api/user/logout:
     summary: Logs out current logged in user session.
     get:
       description: >-
@@ -177,7 +180,7 @@ paths:
             Returned user information.
       tags:
         - User
-  /user/{username}/owed:
+  /api/user/{username}/owed:
     summary: Endpoint to view favours owed to a user.
     get:
       description: >-
@@ -203,13 +206,20 @@ paths:
         "200":
           description: >-
             Returned list of favours owed to user.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/definitions/IOU"
         "400":
           description: "Invalid user supplied"
         "404":
           description: "User not found"
       tags:
         - User
-  /user/{username}/owe:
+  /api/user/{username}/owe:
     summary: Endpoint to view favours a user owes.
     get:
       description: >-
@@ -235,13 +245,20 @@ paths:
         "200":
           description: >-
             Returned list of favours a user owes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/definitions/IOU"
         "400":
           description: "Invalid user supplied"
         "404":
           description: "User not found"
       tags:
         - User
-  /user/{username}/requests:
+  /api/user/{username}/requests:
     summary: Endpoint to view all requests created by a user.
     get:
       description: >-
@@ -267,6 +284,13 @@ paths:
         "200":
           description: >-
             Returned list of requests created by user.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/definitions/Request"
         "400":
           description: "Invalid user supplied"
         "404":
@@ -279,8 +303,75 @@ definitions:
     properties:
       username:
         type: "string"
+        example: jsmith
+      dispaly_name:
+        type: string
+        example: John Smith
     xml:
       name: "User"
+  IOU:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      item:
+        type: "object"
+        $ref: "#/definitions/Item"
+      giver:
+        type: "object"
+        $ref: "#/definitions/User"
+      receiver:
+        type: "object"
+        $ref: "#/definitions/User"
+      parent_request:
+        type: "object"
+        $ref: "#/definitions/Request"
+      proof_of_debt:
+        type: "integer"
+      proof_of_completion:
+        type: "integer"
+      created_time:
+        type: "string"
+        example: "2020-03-09T22:18:26.625Z"
+      claimed_time:
+        type: "string"
+        example: "2020-03-09T22:18:26.625Z"
+      is_claimed:
+        type: "boolean"
+        example: false
+  Item:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      display_name:
+        type: "string"
+        example: "Coffee"
+  Request:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      author:
+        type: "object"
+        $ref: "#/definitions/User"
+      completed_by:
+        type: "object"
+        $ref: "#/definitions/User"
+      proof_of_completion:
+        type: "integer"
+      details:
+        type: "string"
+        example: "Clean the fridge"
+      created_time:
+        type: "string"
+        example: "2020-03-09T22:18:26.625Z"
+      completion_time:
+        type: "string"
+        example: "2020-03-09T22:18:26.625Z"
+      is_completed:
+        type: "boolean"
+        example: false
 components:
   securitySchemes:
     userAuthenticated:
