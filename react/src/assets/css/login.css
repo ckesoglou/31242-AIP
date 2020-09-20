@@ -1,0 +1,31 @@
+.paper {
+  margin-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form {
+  width: 100%;
+  margin-top: 1rem;
+}
+#submit {
+  margin: 1rem 0rem 1rem;
+}
+#loading {
+  display: none;
+}
+#signInText,
+#signUpText {
+  padding: 0.275rem;
+}
+#passwordRequirements {
+  display: none;
+  font-size: smaller;
+}
+#passwordCriteria {
+  padding: 0.1rem 1rem 0.1rem 1rem;
+  margin: 0;
+}
+#passwordCriteriaHeader {
+  font-weight: bold;
+}
