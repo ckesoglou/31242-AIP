@@ -3,14 +3,14 @@ import db from "../daos/db-instance";
 
 export interface IUser {
   username: string;
-  displayName: string;
-  password: string;
+  display_name: string;
+  password_hash: string;
 }
 
 class User extends Model<IUser> implements IUser {
   public username!: string;
-  public displayName!: string;
-  public password!: string;
+  public display_name!: string;
+  public password_hash!: string;
 }
 
 User.init(
@@ -20,16 +20,16 @@ User.init(
       primaryKey: true,
       allowNull: false,
     },
-    displayName: {
+    display_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    password_hash: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   },
-  { sequelize: db, tableName: "users" }
+  { sequelize: db, tableName: "users", timestamps: false }
 );
 
 export default User;
