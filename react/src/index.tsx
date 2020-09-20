@@ -8,7 +8,7 @@ import theme from "./components/theme";
 import { makeServer } from "./components/server";
 
 // mock api
-makeServer();
+//makeServer();
 
 ReactDOM.render(
   <React.StrictMode>
