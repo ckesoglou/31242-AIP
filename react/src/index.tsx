@@ -1,14 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './assets/css/index.css';
-import App from './components/App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./assets/css/index.css";
+import App from "./components/App";
+import * as serviceWorker from "./serviceWorker";
+import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import theme from "./components/theme";
+import { makeServer } from "./components/server";
+
+// mock api
+makeServer();
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
