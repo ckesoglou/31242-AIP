@@ -173,7 +173,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
 
     const inputBody = JSON.stringify({
       username: username,
-      display_name: display_name,
+      displayName: display_name,
       password: password,
     });
 
@@ -182,7 +182,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     };
 
     fetch(
-      `${signUpEndpoint}`, // TODO: fix endpoints after API implementation
+      '/api/signup/', // TODO: fix endpoints after API implementation
       {
         method: "POST",
         body: inputBody,
