@@ -36,7 +36,6 @@ class UserDao implements IUserDao {
    */
   public async add(user: IUser): Promise<void> {
     await User.create({ username: user.username, display_name: user.display_name, password_hash: user.password_hash});
-    return;
   }
 
   /**
