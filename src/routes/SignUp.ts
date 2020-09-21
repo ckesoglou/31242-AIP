@@ -10,12 +10,13 @@ import User, { IUser } from '@entities/User.ts';
 // Init shared
 const router = Router();
 const userDao = new UserDao();
-const saltRounds = 10;
+const saltRounds = 10; //Salt Rounds determines how many times the password is hashed. 
+                       //As bCrypt randomizes salts, this makes brute forcing and rainbow table attacks much more difficult.
 
 /******************************************************************************
  *                      Create New User - "POST /api/signup/"
  * 
- *             - Assuming simple data validaiton is done in front end -
+ *             - Assuming simple data validation is done in front end -
  ******************************************************************************/
 
 router.post('/', async (req: Request, res: Response) => {

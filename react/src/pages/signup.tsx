@@ -182,7 +182,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     };
 
     fetch(
-      '/api/signup/', // TODO: fix endpoints after API implementation
+      `${signUpEndpoint}`, // TODO: fix endpoints after API implementation
       {
         method: "POST",
         body: inputBody,
