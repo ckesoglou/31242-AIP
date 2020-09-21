@@ -221,7 +221,7 @@ Attempts to view the user information with the refresh JSON Web Token (if stored
 ```json
 {
   "username": "jsmith",
-  "dispaly_name": "John Smith"
+  "display_name": "John Smith"
 }
 ```
 
@@ -246,7 +246,7 @@ This operation does not require authentication
 ```javascript
 const inputBody = '{
   "username": "jsmith",
-  "dispaly_name": "John Smith"
+  "display_name": "John Smith"
 }';
 const headers = {
   'Content-Type':'*/*'
@@ -321,7 +321,7 @@ Attempts to delete user if they are currently logged in
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|username|path|string|true|The name that needs to b deleted|
+|username|path|string|true|The name that needs to be deleted|
 
 > Example responses
 
@@ -424,21 +424,21 @@ Attempts to view the favours owed to a user with the refresh JSON Web Token (if 
     },
     "giver": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "receiver": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "parent_request": {
       "id": 0,
       "author": {
         "username": "jsmith",
-        "dispaly_name": "John Smith"
+        "display_name": "John Smith"
       },
       "completed_by": {
         "username": "jsmith",
-        "dispaly_name": "John Smith"
+        "display_name": "John Smith"
       },
       "proof_of_completion": 0,
       "details": "Clean the fridge",
@@ -476,7 +476,7 @@ Status Code **200**
 |»» display_name|string|true|none|none|
 |» giver|[User](#schemauser)|true|none|none|
 |»» username|string|true|none|none|
-|»» dispaly_name|string|false|none|none|
+|»» display_name|string|false|none|none|
 |» receiver|[User](#schemauser)|false|none|none|
 |» parent_request|[Request](#schemarequest)|false|none|none|
 |»» id|integer|true|none|none|
@@ -546,21 +546,21 @@ Attempts to view the favours a user owes with the refresh JSON Web Token (if sto
     },
     "giver": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "receiver": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "parent_request": {
       "id": 0,
       "author": {
         "username": "jsmith",
-        "dispaly_name": "John Smith"
+        "display_name": "John Smith"
       },
       "completed_by": {
         "username": "jsmith",
-        "dispaly_name": "John Smith"
+        "display_name": "John Smith"
       },
       "proof_of_completion": 0,
       "details": "Clean the fridge",
@@ -598,7 +598,7 @@ Status Code **200**
 |»» display_name|string|true|none|none|
 |» giver|[User](#schemauser)|true|none|none|
 |»» username|string|true|none|none|
-|»» dispaly_name|string|false|none|none|
+|»» display_name|string|false|none|none|
 |» receiver|[User](#schemauser)|false|none|none|
 |» parent_request|[Request](#schemarequest)|false|none|none|
 |»» id|integer|true|none|none|
@@ -664,11 +664,11 @@ Attempts to view the requests created by a user with the refresh JSON Web Token 
     "id": 0,
     "author": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "completed_by": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "proof_of_completion": 0,
     "details": "Clean the fridge",
@@ -697,7 +697,7 @@ Status Code **200**
 |» id|integer|true|none|none|
 |» author|[User](#schemauser)|true|none|none|
 |»» username|string|true|none|none|
-|»» dispaly_name|string|false|none|none|
+|»» display_name|string|false|none|none|
 |» completed_by|[User](#schemauser)|false|none|none|
 |» proof_of_completion|integer|false|none|none|
 |» details|string|true|none|none|
@@ -721,7 +721,7 @@ This operation does not require authentication
 ```json
 {
   "username": "jsmith",
-  "dispaly_name": "John Smith"
+  "display_name": "John Smith"
 }
 
 ```
@@ -731,7 +731,7 @@ This operation does not require authentication
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |username|string|true|none|none|
-|dispaly_name|string|false|none|none|
+|display_name|string|false|none|none|
 
 <h2 id="tocS_IOU">IOU</h2>
 <!-- backwards compatibility -->
@@ -749,21 +749,21 @@ This operation does not require authentication
   },
   "giver": {
     "username": "jsmith",
-    "dispaly_name": "John Smith"
+    "display_name": "John Smith"
   },
   "receiver": {
     "username": "jsmith",
-    "dispaly_name": "John Smith"
+    "display_name": "John Smith"
   },
   "parent_request": {
     "id": 0,
     "author": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "completed_by": {
       "username": "jsmith",
-      "dispaly_name": "John Smith"
+      "display_name": "John Smith"
     },
     "proof_of_completion": 0,
     "details": "Clean the fridge",
@@ -829,11 +829,11 @@ This operation does not require authentication
   "id": 0,
   "author": {
     "username": "jsmith",
-    "dispaly_name": "John Smith"
+    "display_name": "John Smith"
   },
   "completed_by": {
     "username": "jsmith",
-    "dispaly_name": "John Smith"
+    "display_name": "John Smith"
   },
   "proof_of_completion": 0,
   "details": "Clean the fridge",

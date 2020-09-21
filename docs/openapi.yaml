@@ -171,7 +171,7 @@ paths:
           in: path
           required: true
           description: >-
-            The name that needs to b deleted
+            The name that needs to be deleted
           schema:
             type: string
       responses:
@@ -320,7 +320,7 @@ components:
         username:
           type: string
           example: jsmith
-        dispaly_name:
+        display_name:
           type: string
           example: John Smith
       xml:
