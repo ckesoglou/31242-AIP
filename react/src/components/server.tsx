@@ -58,14 +58,18 @@ export function makeServer({ environment = "development" } = {}) {
         return new Response(201, jsonHeader, body);
       });
 
-      this.get("/user/:id", () => {
-        let body = {
-          username: "jsmith",
-          display_name: "John Smith",
-        };
+      this.get(
+        "/user/:id",
+        () => {
+          let body = {
+            username: "jsmith",
+            display_name: "John Smith",
+          };
 
-        return new Response(200, jsonHeader, body);
-      });
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 2000 } // mock delay - helps visualise loading for user
+      );
     },
   });
 
