@@ -24,9 +24,13 @@
 #requestFormButton {
   text-align: center;
 }
-#addRequestButton {
+.tabButton {
   display: flex;
   flex-direction: column;
   align-self: center;
   margin-left: 1rem;
+  margin-right: 1rem;
+}
+#loading {
+  display: none;
 }

@@ -20,8 +20,10 @@ import {
   Button,
   Grow,
   TextField,
+  CircularProgress,
 } from "@material-ui/core";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import { UserContext } from "../components/user-context";
 
 type UserProfileState = {
@@ -51,10 +53,12 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
   value: any;
+  loadingRef: any;
+  textRef: any;
 }
 
 function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+  const { children, value, index, loadingRef, textRef, ...other } = props;
 
   return (
     <div
@@ -66,7 +70,13 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box p={4}>
-          <Typography>{children}</Typography>
+          <CircularProgress
+            ref={props.loadingRef}
+            size={35}
+            color="inherit"
+            id="loading"
+          />
+          <Typography ref={props.textRef}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -87,10 +97,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   state: UserProfileState = {
     tabIndex: 0,
     newRequestDialog: false,
-    owed:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    owed: "",
     owe: "",
-    requests: "abc",
+    requests: "",
     error: "",
   };
 
@@ -99,9 +108,14 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     updateUser: (newUser: object) => void;
   }> = UserContext;
 
-  setLoading(): void {
-    this.textRef.current!.innerText = "";
-    this.loadingRef.current!.style.display = "block";
+  setLoading(value: boolean): void {
+    if (value) {
+      this.textRef.current!.style.display = "none";
+      this.loadingRef.current!.style.display = "block";
+    } else {
+      this.textRef.current!.style.display = "block";
+      this.loadingRef.current!.style.display = "none";
+    }
   }
 
   componentDidMount() {
@@ -112,7 +126,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     const headers = {
       "Content-Type": "application/json",
     };
-
+    this.setLoading(true);
     Promise.all([
       fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
         method: "GET",
@@ -130,6 +144,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then(([owed, owe, requests]) => {
         Promise.all([owed.json(), owe.json(), requests.json()]).then(
           ([owedResult, oweResult, requestsResult]) => {
+            this.setLoading(false);
             console.log("Success:", owedResult);
             console.log("Success:", oweResult);
             console.log("Success:", requestsResult);
@@ -203,10 +218,16 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   <Tab label="Owe" />
                   <Tab label="Requests" />
                   <AddBoxOutlinedIcon
-                    id="addRequestButton"
+                    className={"tabButton"}
                     color="primary"
                     fontSize="large"
                     onClick={() => this.setState({ newRequestDialog: true })}
+                  />
+                  <RefreshIcon
+                    className={"tabButton"}
+                    color="primary"
+                    fontSize="large"
+                    onClick={() => this.fetchAll()}
                   />
                   <Dialog
                     maxWidth="sm"
@@ -268,13 +289,28 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     </DialogActions>
                   </Dialog>
                 </Tabs>
-                <TabPanel value={this.state.tabIndex} index={0}>
+                <TabPanel
+                  value={this.state.tabIndex}
+                  loadingRef={this.loadingRef}
+                  textRef={this.textRef}
+                  index={0}
+                >
                   {this.state.owed}
                 </TabPanel>
-                <TabPanel value={this.state.tabIndex} index={1}>
+                <TabPanel
+                  value={this.state.tabIndex}
+                  loadingRef={this.loadingRef}
+                  textRef={this.textRef}
+                  index={1}
+                >
                   {this.state.owe}
                 </TabPanel>
-                <TabPanel value={this.state.tabIndex} index={2}>
+                <TabPanel
+                  value={this.state.tabIndex}
+                  loadingRef={this.loadingRef}
+                  textRef={this.textRef}
+                  index={2}
+                >
                   {this.state.requests}
                 </TabPanel>
               </Paper>
