@@ -5,6 +5,7 @@ export function makeServer({ environment = "development" } = {}) {
   let server = new Server({
     environment,
     models: {
+      // This may or may not be useful but keeping in case we need it
       user: Model,
       item: Model,
       request: Model,
@@ -13,6 +14,7 @@ export function makeServer({ environment = "development" } = {}) {
     },
 
     seeds(server) {
+      // This may or may not be useful but keeping in case we need it
       server.db.loadData({
         user: [
           { username: "Ben", display_name: "BenIsCool", password_hash: "asdf" },
@@ -39,22 +41,30 @@ export function makeServer({ environment = "development" } = {}) {
 
     routes() {
       this.namespace = baseUrl;
+      const jsonHeader = {
+        "Content-Type": "application/json",
+      };
 
       this.post("/login/", (schema, request) => {
-        document.cookie = "token=benjaminJohnston";
+        //document.cookie = "token=benjaminJohnston";
         let body = request.requestBody;
 
-        return new Response(200, undefined, body);
+        return new Response(200, jsonHeader, body);
       });
 
       this.post("/signup/", (schema, request) => {
         let body = request.requestBody;
 
-        return new Response(201, undefined, body);
+        return new Response(201, jsonHeader, body);
       });
 
-      this.get("/user/:id", (schema, request) => {
-        return { id: "1", title: "Interstellar" };
+      this.get("/user/:id", () => {
+        let body = {
+          username: "jsmith",
+          display_name: "John Smith",
+        };
+
+        return new Response(200, jsonHeader, body);
       });
     },
   });
