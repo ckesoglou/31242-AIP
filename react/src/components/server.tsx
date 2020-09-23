@@ -45,6 +45,7 @@ export function makeServer({ environment = "development" } = {}) {
         "Content-Type": "application/json",
       };
 
+      // Below is mock API for login/signup
       this.post("/login/", (schema, request) => {
         //document.cookie = "token=benjaminJohnston";
         let body = request.requestBody;
@@ -58,6 +59,7 @@ export function makeServer({ environment = "development" } = {}) {
         return new Response(201, jsonHeader, body);
       });
 
+      // Below is mock API for user profile
       this.get(
         "/user/:id",
         () => {
@@ -65,6 +67,127 @@ export function makeServer({ environment = "development" } = {}) {
             username: "jsmith",
             display_name: "John Smith",
           };
+
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 2000 } // mock delay - helps visualise loading for user
+      );
+
+      this.get(
+        "/user/:id/owed",
+        () => {
+          let body = [
+            {
+              id: 0,
+              item: {
+                id: 0,
+                display_name: "Coffee",
+              },
+              giver: {
+                username: "jsmith",
+                display_name: "John Smith",
+              },
+              receiver: {
+                username: "jsmith",
+                display_name: "John Smith",
+              },
+              parent_request: {
+                id: 0,
+                author: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                completed_by: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                proof_of_completion: 0,
+                details: "Clean the fridge",
+                created_time: "2020-03-09T22:18:26.625Z",
+                completion_time: "2020-03-09T22:18:26.625Z",
+                is_completed: false,
+              },
+              proof_of_debt: 0,
+              proof_of_completion: 0,
+              created_time: "2020-03-09T22:18:26.625Z",
+              claimed_time: "2020-03-09T22:18:26.625Z",
+              is_claimed: false,
+            },
+          ];
+
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 2000 } // mock delay - helps visualise loading for user
+      );
+
+      this.get(
+        "/user/:id/owe",
+        () => {
+          let body = [
+            {
+              id: 0,
+              item: {
+                id: 0,
+                display_name: "Coffee",
+              },
+              giver: {
+                username: "jsmith",
+                display_name: "John Smith",
+              },
+              receiver: {
+                username: "jsmith",
+                display_name: "John Smith",
+              },
+              parent_request: {
+                id: 0,
+                author: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                completed_by: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                proof_of_completion: 0,
+                details: "Clean the fridge",
+                created_time: "2020-03-09T22:18:26.625Z",
+                completion_time: "2020-03-09T22:18:26.625Z",
+                is_completed: false,
+              },
+              proof_of_debt: 0,
+              proof_of_completion: 0,
+              created_time: "2020-03-09T22:18:26.625Z",
+              claimed_time: "2020-03-09T22:18:26.625Z",
+              is_claimed: false,
+            },
+          ];
+
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 2000 } // mock delay - helps visualise loading for user
+      );
+
+      this.get(
+        "/user/:id/requests",
+        () => {
+          let body = [
+            {
+              id: 0,
+              author: {
+                username: "jsmith",
+                display_name: "John Smith",
+              },
+              completed_by: {
+                username: "jsmith",
+                display_name: "John Smith",
+              },
+              proof_of_completion: 0,
+              details: "Clean the fridge",
+              created_time: "2020-03-09T22:18:26.625Z",
+              completion_time: "2020-03-09T22:18:26.625Z",
+              is_completed: false,
+            },
+          ];
 
           return new Response(200, jsonHeader, body);
         },

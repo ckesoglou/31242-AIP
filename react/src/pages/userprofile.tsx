@@ -128,15 +128,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     };
     this.setLoading(true);
     Promise.all([
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
+      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owe`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
+      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owed`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
+      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/requests`, {
         method: "GET",
         headers: headers,
       }),
