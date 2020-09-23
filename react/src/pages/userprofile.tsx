@@ -91,7 +91,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
     owe: "",
     requests: "abc",
-    error: "abcdef",
+    error: "",
   };
 
   static contextType: React.Context<{
@@ -104,81 +104,55 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     this.loadingRef.current!.style.display = "block";
   }
 
-  handleTabsChange(event: ChangeEvent<{}> | undefined, index: number): void {
-    this.setState({ tabIndex: index });
-    switch (index) {
-      case 0:
-        // Owed API call
-        // this.fetchRequest(
-        //   `${userProfileEndpoint.concat(this.context.user.name)}`,
-        //   "GET",
-        //   0
-        // );
-        if (this.state.owed == "Hehe") {
-          this.setState({ owed: "Haha" });
-        } else {
-          this.setState({ owed: "Hehe" });
-        }
-        break;
-      case 1:
-        // Owe API call
-        if (this.state.owe == "Hehe") {
-          this.setState({ owe: "Haha" });
-        } else {
-          this.setState({ owe: "Hehe" });
-        }
-        // this.fetchRequest(
-        //   `${userProfileEndpoint.concat(this.context.user.name)}`,
-        //   "GET",
-        //   1
-        // );
-        break;
-      case 2:
-        // Requests API call
-        if (this.state.requests == "Hehe") {
-          this.setState({ requests: "Haha" });
-        } else {
-          this.setState({ requests: "Hehe" });
-        }
-        // this.fetchRequest(
-        //   `${userProfileEndpoint.concat(this.context.user.name)}`,
-        //   "GET",
-        //   2
-        // );
-        break;
-    }
+  componentDidMount() {
+    this.fetchAll();
   }
 
-  fetchRequest(endpoint: string, httpType: string, index: number): void {
+  fetchAll(): void {
     const headers = {
       "Content-Type": "application/json",
     };
 
-    fetch(endpoint, {
-      method: httpType,
-      headers: headers,
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        switch (index) {
-          case 0:
-            this.setState({ owed: body });
-            break;
-          case 1:
-            this.setState({ owe: body });
-            break;
-          case 2:
-            this.setState({ requests: body });
-            break;
-        }
+    Promise.all([
+      fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
+        method: "GET",
+        headers: headers,
+      }),
+      fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
+        method: "GET",
+        headers: headers,
+      }),
+      fetch(`${userProfileEndpoint.concat(this.context.user.name)}`, {
+        method: "GET",
+        headers: headers,
+      }),
+    ])
+      .then(([owed, owe, requests]) => {
+        Promise.all([owed.json(), owe.json(), requests.json()]).then(
+          ([owedResult, oweResult, requestsResult]) => {
+            console.log("Success:", owedResult);
+            console.log("Success:", oweResult);
+            console.log("Success:", requestsResult);
+            let owedRaw = JSON.stringify(owedResult);
+            let oweRaw = JSON.stringify(oweResult);
+            let requestsRaw = JSON.stringify(requestsResult);
+            this.setState({
+              owed: owedRaw,
+              owe: oweRaw,
+              requests: requestsRaw,
+            });
+          }
+        );
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ error: exception });
       });
+  }
+
+  handleTabsChange(event: ChangeEvent<{}> | undefined, index: number): void {
+    this.setState({ tabIndex: index });
+    // This method may be needed in the future
   }
 
   render() {
@@ -200,6 +174,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 </Typography>
               </div>
               <p>Well well well.. look who it is - {this.context.user.name}!</p>
+              <p>{this.state.error}</p>
               <Link href="/">Click here to go back!</Link>
             </Grid>
             <Grid item xs={4}>
