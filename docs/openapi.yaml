@@ -217,6 +217,8 @@ paths:
                   $ref: "#/components/schemas/IOU"
         "400":
           description: Invalid user supplied
+        "401":
+          description: Unauthorized user
         "404":
           description: User not found
       tags:
@@ -241,6 +243,8 @@ paths:
                   $ref: "#/components/schemas/IOU"
         "400":
           description: Invalid user supplied
+        "401":
+          description: Unauthorized user
         "404":
           description: User not found
       tags:
