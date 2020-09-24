@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: ioweyou.tech
-  version: 1.1.0
+  version: 1.1.1
 paths:
   /api/login:
     summary: Endpoint to authenticate a user.
@@ -31,6 +31,7 @@ paths:
       description: >-
         Attempts authentication with the provided username and password in the
         requestBody. Sets the access_tokens cookie alongside a redirect request if
+        successful.
       requestBody:
         required: true
         content:
@@ -56,7 +57,7 @@ paths:
             Token as a httpOnly cookie (with access & refresh tokens) and redirect
             the user to the referrer URL (if within the application) or the dashboard.
         "400":
-          description: "Returned when required requestBody was not provided, or invalid."
+          description: Returned when required requestBody was not provided, or invalid.
         "401":
           description: Returned when the password supplied is incorrect.
       tags:
@@ -100,7 +101,7 @@ paths:
             Returned when the user is successfully created. This will set a JSON
             Web Token as a httpOnly cookie (with access & refresh tokens).
         "400":
-          description: "Returned when required requestBody was not provided, or invalid."
+          description: Returned when required requestBody was not provided, or invalid.
         "422":
           description: Returned when the username is already taken.
       tags:
@@ -112,25 +113,24 @@ paths:
         Attempts to view the user information with the refresh JSON Web Token (if
         stored in the client's cookies).
       parameters:
-        - name: "username"
+        - name: username
           in: path
           required: true
-          description: >-
-            The name that needs to be fetched
+          description: The name that needs to be fetched
           schema:
             type: string
       responses:
         "200":
-          description: "Returned user information."
+          description: Returned user information.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
         "400":
-          description: "Invalid user supplied"
+          description: Invalid user supplied
           content: {}
         "404":
-          description: "User not found"
+          description: User not found
           content: {}
       tags:
         - User
@@ -140,11 +140,10 @@ paths:
       tags:
         - User
       parameters:
-        - name: "username"
+        - name: username
           in: path
           required: true
-          description: >-
-            The name that needs to be updated
+          description: The name that needs to be updated
           schema:
             type: string
       requestBody:
@@ -156,10 +155,10 @@ paths:
         required: true
       responses:
         "400":
-          description: "Invalid user supplied"
+          description: Invalid user supplied
           content: {}
         "404":
-          description: "User not found"
+          description: User not found
           content: {}
     delete:
       description: >-
@@ -167,19 +166,18 @@ paths:
       tags:
         - User
       parameters:
-        - name: "username"
+        - name: username
           in: path
           required: true
-          description: >-
-            The name that needs to be deleted
+          description: The name that needs to be deleted
           schema:
             type: string
       responses:
         "400":
-          description: "Invalid user supplied"
+          description: Invalid user supplied
           content: {}
         "404":
-          description: "User not found"
+          description: User not found
           content: {}
   /api/user/logout:
     summary: Logs out current logged in user session.
@@ -189,7 +187,7 @@ paths:
       parameters: []
       responses:
         default:
-          description: "Successful logout"
+          description: Successful logout
           content: {}
       tags:
         - User
@@ -208,17 +206,15 @@ paths:
           schema:
             type: string
           in: cookie
-        - name: "username"
+        - name: username
           in: path
           required: true
-          description: >-
-            The name that needs to be fetched
+          description: The name that needs to be fetched
           schema:
             type: string
       responses:
         "200":
-          description: >-
-            Returned list of favours owed to user.
+          description: Returned list of favours owed to user.
           content:
             application/json:
               schema:
@@ -227,9 +223,9 @@ paths:
                   type: object
                   $ref: "#/components/schemas/IOU"
         "400":
-          description: "Invalid user supplied"
+          description: Invalid user supplied
         "404":
-          description: "User not found"
+          description: User not found
       tags:
         - User
   /api/user/{username}/owe:
@@ -247,17 +243,15 @@ paths:
           schema:
             type: string
           in: cookie
-        - name: "username"
+        - name: username
           in: path
           required: true
-          description: >-
-            The name that needs to be fetched
+          description: The name that needs to be fetched
           schema:
             type: string
       responses:
         "200":
-          description: >-
-            Returned list of favours a user owes.
+          description: Returned list of favours a user owes.
           content:
             application/json:
               schema:
@@ -266,9 +260,9 @@ paths:
                   type: object
                   $ref: "#/components/schemas/IOU"
         "400":
-          description: "Invalid user supplied"
+          description: Invalid user supplied
         "404":
-          description: "User not found"
+          description: User not found
       tags:
         - User
   /api/user/{username}/requests:
@@ -286,17 +280,15 @@ paths:
           schema:
             type: string
           in: cookie
-        - name: "username"
+        - name: username
           in: path
           required: true
-          description: >-
-            The name that needs to be fetched
+          description: The name that needs to be fetched
           schema:
             type: string
       responses:
         "200":
-          description: >-
-            Returned list of requests created by user.
+          description: Returned list of requests created by user.
           content:
             application/json:
               schema:
@@ -305,9 +297,9 @@ paths:
                   type: object
                   $ref: "#/components/schemas/Request"
         "400":
-          description: "Invalid user supplied"
+          description: Invalid user supplied
         "404":
-          description: "User not found"
+          description: User not found
       tags:
         - User
 components:
