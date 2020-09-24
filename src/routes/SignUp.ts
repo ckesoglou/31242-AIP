@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
 import bcrypt from 'bcrypt';
+import Joi, { string, ObjectSchema } from "joi";
 
 import UserDao from "@daos/user/user-dao";
 import { paramMissingError } from '@shared/constants';
@@ -19,23 +20,39 @@ const saltRounds = 10; //Salt Rounds determines how many times the password is h
  *             - Assuming simple data validation is done in front end -
  ******************************************************************************/
 
+interface ISignUpPOST {
+    username: string;
+    displayName: string;
+    password: string;
+  }
+
+  const SignUpPOST: ObjectSchema<ISignUpPOST> = Joi.object({
+    username: Joi.string().alphanum().min(2).max(16, "utf8"),
+    password: Joi.string().min(1).max(72, "utf8"),
+    displayName: Joi.string().alphanum().min(2).max(16, "utf8"),
+  }).options({ presence: "required" });
+
 router.post('/', async (req: Request, res: Response) => {
-    const {username, displayName, password} = req.body;
-    if (!username || !displayName || !password) {
+    const { error, value } = SignUpPOST.validate(req.body);
+
+    if (error) {
         return res.status(BAD_REQUEST).json({
             error: paramMissingError,
         });
     }
-    const foundUser = await userDao.getOne(username);
+
+    let request = value as ISignUpPOST;
+
+    const foundUser = await userDao.getOne(request.username);
     if (foundUser) {
         return res.status(UNPROCESSABLE_ENTITY).json({
             error: "Username already exists", 
         });
     }
 
-    let passHash: string = await bcrypt.hash(password, saltRounds)
+    let passHash: string = await bcrypt.hash(request.password, saltRounds)
 
-    let User: IUser = {username: username, display_name: displayName, password_hash: passHash};
+    let User: IUser = {username: request.username, display_name: request.displayName, password_hash: passHash};
     await userDao.add(User);
 
     return res.status(CREATED).json({
