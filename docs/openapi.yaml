@@ -67,8 +67,7 @@ paths:
     post:
       description: >-
         Attempts to create a user with the provided username, display name, and
-        password in the requestBody. Sets the access_tokens cookie alongside a
-        redirect request if successful.
+        password in the requestBody. Sets the access_tokens cookie if successful.
       requestBody:
         required: true
         content:
