@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import User from "../entities/User";
 import db from "./DBInstance";
-import bcrypt from "bcrypt";
 
 User.init(
   {

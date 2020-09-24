@@ -7,4 +7,5 @@ export default {
   db_username: process.env.DB_USERNAME ?? "",
   db_password: process.env.DB_PASSWORD ?? "",
   db_name: process.env.DB_NAME ?? "ioweyou",
+  jwt_secret: process.env.JWT_SECRET ?? "ioweyou.tech",
 };
