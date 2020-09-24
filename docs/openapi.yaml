@@ -153,6 +153,8 @@ paths:
               $ref: "#/components/schemas/User"
         required: true
       responses:
+        "200":
+          description: Resource updated successfully
         "400":
           description: Invalid user supplied
           content: {}
@@ -172,6 +174,8 @@ paths:
           schema:
             type: string
       responses:
+        "200":
+          description: Resource deleted successfully
         "400":
           description: Invalid user supplied
           content: {}
