@@ -270,6 +270,27 @@ paths:
           description: User not found
       tags:
         - Request
+  /api/requests/open:
+    summary: Endpoint to view all open public requests.
+    get:
+      description: >-
+        Attempts to view all open requests created.
+      responses:
+        "200":
+          description: Returned list of open requests.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/components/schemas/Request"
+        "400":
+          description: Invalid user supplied
+        "404":
+          description: User not found
+      tags:
+        - Request
 components:
   schemas:
     User:
