@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import "../assets/css/userprofile.css";
-import { userProfileEndpoint } from "../api/endpoints";
+import { userProfileEndpoint, requestsNewEndpoint } from "../api/endpoints";
 import { Authentication } from "../components/protected-route";
 import {
   Container,
@@ -21,6 +21,7 @@ import {
   Grow,
   TextField,
   CircularProgress,
+  Snackbar,
 } from "@material-ui/core";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
@@ -33,6 +34,9 @@ type UserProfileState = {
   owe: string;
   requests: string;
   error: string;
+  newRequestFavour: string;
+  newRequestReward: string;
+  requestSnack: boolean;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -101,6 +105,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     owe: "",
     requests: "",
     error: "",
+    newRequestFavour: "",
+    newRequestReward: "",
+    requestSnack: false,
   };
 
   static contextType: React.Context<{
@@ -119,10 +126,30 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   componentDidMount() {
-    this.fetchAll();
+    this.fetchAllTabs();
   }
 
-  fetchAll(): void {
+  fetchNewRequest(): void {
+    this.setState({ requestSnack: true });
+    fetch(`${requestsNewEndpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        favour: this.state.newRequestFavour,
+        reward: this.state.newRequestReward,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((body) => {
+        console.log("Success:", body);
+      });
+  }
+
+  fetchAllTabs(): void {
     const headers = {
       "Content-Type": "application/json",
     };
@@ -145,9 +172,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         Promise.all([owed.json(), owe.json(), requests.json()]).then(
           ([owedResult, oweResult, requestsResult]) => {
             this.setLoading(false);
-            console.log("Success:", owedResult);
-            console.log("Success:", oweResult);
-            console.log("Success:", requestsResult);
             let owedRaw = JSON.stringify(owedResult);
             let oweRaw = JSON.stringify(oweResult);
             let requestsRaw = JSON.stringify(requestsResult);
@@ -156,6 +180,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               owe: oweRaw,
               requests: requestsRaw,
             });
+            console.log("Success:", owedResult, oweResult, requestsResult);
           }
         );
       })
@@ -227,7 +252,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     className={"tabButton"}
                     color="primary"
                     fontSize="large"
-                    onClick={() => this.fetchAll()}
+                    onClick={() => this.fetchAllTabs()}
                   />
                   <Dialog
                     maxWidth="sm"
@@ -253,6 +278,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         variant="outlined"
                         margin="normal"
                         required
+                        onChange={(e) => {
+                          this.setState({ newRequestFavour: e.target.value });
+                        }}
                       />
                       <DialogContentText id="requestFormQuestion">
                         {"Next, what would you like to offer in return?"}
@@ -264,6 +292,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         variant="outlined"
                         margin="normal"
                         required
+                        onChange={(e) => {
+                          this.setState({ newRequestReward: e.target.value });
+                        }}
                       />
                     </DialogContent>
                     <DialogActions>
@@ -274,6 +305,10 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                           this.setState({ newRequestDialog: false })
                         }
                         autoFocus
+                        disabled={
+                          !this.state.newRequestFavour ||
+                          !this.state.newRequestReward
+                        }
                       >
                         Create
                       </Button>
@@ -289,6 +324,18 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     </DialogActions>
                   </Dialog>
                 </Tabs>
+                <Snackbar
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  message="I love snacks"
+                  open={this.state.requestSnack}
+                  onClose={() => {
+                    this.setState({ requestSnack: false });
+                  }}
+                  autoHideDuration={5000}
+                />
                 <TabPanel
                   value={this.state.tabIndex}
                   loadingRef={this.loadingRef}

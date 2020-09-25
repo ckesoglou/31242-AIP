@@ -175,27 +175,20 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   }
 
   // handle Sign Up button click
-  handleSignUp(username: string, display_name: string, password: string): void {
+  handleSignUp(): void {
     this.setLoading();
 
-    const inputBody = JSON.stringify({
-      username: username,
-      display_name: display_name,
-      password: password,
-    });
-
-    const headers = {
-      "Content-Type": "application/json",
-    };
-
-    fetch(
-      `${signUpEndpoint}`, // TODO: fix endpoints after API implementation
-      {
-        method: "POST",
-        body: inputBody,
-        headers: headers,
-      }
-    )
+    fetch(`${signUpEndpoint}`, {
+      method: "POST",
+      body: JSON.stringify({
+        username: this.state.username,
+        display_name: this.state.display_name,
+        password: this.state.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -307,11 +300,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               }
               color="primary"
               onClick={() => {
-                this.handleSignUp(
-                  this.state.username,
-                  this.state.display_name,
-                  this.state.password
-                );
+                this.handleSignUp();
                 this.setState({ submitted: !this.state.submitted });
               }}
             >
