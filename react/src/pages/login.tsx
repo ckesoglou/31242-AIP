@@ -65,22 +65,18 @@ class Login extends React.Component<ILoginProps, LoginState> {
     this.loadingRef.current!.style.display = "block";
   }
 
-  handleLogin(username: string, password: string): void {
+  handleLogin(): void {
     this.setLoading();
-
-    const inputBody = JSON.stringify({
-      username: username,
-      password: password,
-    });
-
-    const headers = {
-      "Content-Type": "application/json",
-    };
 
     fetch(`${loginEndpoint}`, {
       method: "POST",
-      body: inputBody,
-      headers: headers,
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
         return res.json();
@@ -154,7 +150,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
               }
               color="primary"
               onClick={() => {
-                this.handleLogin(this.state.username, this.state.password);
+                this.handleLogin();
                 this.setState({ submitted: !this.state.submitted });
               }}
             >
