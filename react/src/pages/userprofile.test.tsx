@@ -1,65 +1,56 @@
-// import React from "react";
-// import { shallow, mount } from "enzyme";
+import React from "react";
+import { shallow, mount } from "enzyme";
 
-// import SignUp from "./signup";
-// import { MemoryRouter, Route } from "react-router-dom";
+import UserProfile from "./userprofile";
+import { MemoryRouter, Route } from "react-router-dom";
 
-// const testProps = {
-//   history: {} as any,
-//   location: {} as any,
-//   match: {} as any,
-// };
+const testProps = {
+  history: {} as any,
+  location: {} as any,
+  match: {} as any,
+};
 
-// describe("SignUp", () => {
-//   it("should render correctly", () => {
-//     const component = shallow(
-//       <SignUp
-//         history={testProps.history}
-//         location={testProps.location}
-//         match={testProps.match}
-//       />
-//     );
+describe("UserProfile", () => {
+  it("should render correctly", () => {
+    const component = shallow(
+      <UserProfile
+        history={testProps.history}
+        location={testProps.location}
+        match={testProps.match}
+      />
+    );
 
-//     expect(component).toMatchSnapshot();
-//   });
+    expect(component).toMatchSnapshot();
+  });
 
-//   it("navigates to next page for successful sign up", () => {
-//     const wrapper = mount(
-//       <MemoryRouter initialEntries={["/signup"]}>
-//         <Route path="/signup" component={SignUp} />
-//         <Route path="/home">
-//           <h1>Hello</h1>
-//         </Route>
-//       </MemoryRouter>
-//     );
+  it("should handle new request if button is clicked", () => {
+    const spy = jest.spyOn(UserProfile.prototype, "handleSignUp");
+    // this needs to be fixed
+    const wrapper = mount(
+      <UserProfile
+        history={testProps.history}
+        location={testProps.location}
+        match={testProps.match}
+      />
+    );
 
-//     let signUpComponent = wrapper.find("SignUp");
-//     signUpComponent.setState({
-//       username: "",
-//       display_name: "",
-//       password: "",
-//       error: "",
-//       successfulSignUp: true,
-//     });
+    wrapper.find("button").simulate("click");
 
-//     // @ts-ignore
-//     expect(wrapper.find("Router").prop("history").location.pathname).toEqual(
-//       "/home"
-//     );
-//   });
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
 
-//   it("should handle sign up if button is clicked", () => {
-//     const spy = jest.spyOn(SignUp.prototype, "handleSignUp");
-//     const wrapper = mount(
-//       <SignUp
-//         history={testProps.history}
-//         location={testProps.location}
-//         match={testProps.match}
-//       />
-//     );
+  it("should refresh tab contents if button is clicked", () => {
+    const spy = jest.spyOn(UserProfile.prototype, "fetchAllTabs");
+    const wrapper = mount(
+      <UserProfile
+        history={testProps.history}
+        location={testProps.location}
+        match={testProps.match}
+      />
+    );
 
-//     wrapper.find("button").simulate("click");
+    wrapper.find("button").simulate("click");
 
-//     expect(spy).toHaveBeenCalledTimes(1);
-//   });
-// });
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+});
