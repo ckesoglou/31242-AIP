@@ -33,10 +33,10 @@ type UserProfileState = {
   owed: string;
   owe: string;
   requests: string;
-  error: string;
   newRequestFavour: string;
   newRequestReward: string;
   requestSnack: boolean;
+  snackMessage: string;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -104,10 +104,10 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     owed: "",
     owe: "",
     requests: "",
-    error: "",
     newRequestFavour: "",
     newRequestReward: "",
     requestSnack: false,
+    snackMessage: "",
   };
 
   static contextType: React.Context<{
@@ -130,7 +130,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   fetchNewRequest(): void {
-    this.setState({ requestSnack: true });
     fetch(`${requestsNewEndpoint}`, {
       method: "POST",
       headers: {
@@ -146,7 +145,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       })
       .then((body) => {
         console.log("Success:", body);
+        this.setState({ snackMessage: "New request created!" });
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ snackMessage: `${exception}` });
       });
+    this.setState({ requestSnack: true });
   }
 
   fetchAllTabs(): void {
@@ -186,7 +191,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ error: exception });
+        this.setState({ snackMessage: `${exception}` });
+        this.setState({ requestSnack: true });
       });
   }
 
@@ -214,7 +220,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 </Typography>
               </div>
               <p>Well well well.. look who it is - {this.context.user.name}!</p>
-              <p>{this.state.error}</p>
               <Link href="/">Click here to go back!</Link>
             </Grid>
             <Grid item xs={4}>
@@ -299,11 +304,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     </DialogContent>
                     <DialogActions>
                       <Button
+                        id="createRequest"
                         size="large"
                         color="primary"
-                        onClick={() =>
-                          this.setState({ newRequestDialog: false })
-                        }
+                        onClick={() => {
+                          this.fetchNewRequest();
+                          this.setState({
+                            newRequestDialog: false,
+                          });
+                        }}
                         autoFocus
                         disabled={
                           !this.state.newRequestFavour ||
@@ -329,7 +338,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     vertical: "bottom",
                     horizontal: "left",
                   }}
-                  message="I love snacks"
+                  message={this.state.snackMessage}
                   open={this.state.requestSnack}
                   onClose={() => {
                     this.setState({ requestSnack: false });
