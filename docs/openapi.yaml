@@ -93,24 +93,331 @@ paths:
                   description: Plaintext password for the to-be-created account.
                   maxLength: 60
                   example: hunter2
-              required: 
+              required:
                 - username
                 - displayName
                 - password
       responses:
-        '201':
+        "201":
           description: >-
             Returned when the user is successfully created. This will set a JSON Web
             Token as a httpOnly cookie (with access & refresh tokens).
-        '400':
+        "400":
           description: >-
             Returned when required requestBody was not provided, or invalid.
-        '422':
+        "422":
           description: >-
             Returned when the username is already taken.
-      tags: 
+      tags:
         - Signup
+  /api/requests:
+    summary: Endpoint for retrieving or creating requests
+    get:
+      description: Retrieve a list of requests, optionally matched to provided criteria.
+      parameters:
+        - in: query
+          name: author
+          schema:
+            type: string
+          description: Filter based on request author.
+          example: jsmith
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Filter for requests whose details contain the provided string.
+          example: clean fridge
+        - in: query
+          name: createdAfter
+          schema:
+            type: string
+          description: Filter for requests created after or on this date (YYYY-MM-DD).
+          example: "2020-01-01"
+        - in: query
+          name: createdBefore
+          schema:
+            type: string
+          description: Filter for requests created before or on this date (YYYY-MM-DD).
+          example: "2020-06-30"
+        - in: query
+          name: completedAfter
+          schema:
+            type: string
+          description: Filter for requests completed after or on this date (YYYY-MM-DD).
+          example: "2020-07-01"
+        - in: query
+          name: completedBefore
+          schema:
+            type: string
+          description: Filter for requests completed before or on this date (YYYY-MM-DD).
+          example: "2020-12-31"
+        - in: query
+          name: completed
+          schema:
+            type: boolean
+          description: Filter based on whether the request is completed or not.
+          example: true
+        - in: query
+          name: completedBy
+          schema:
+            type: string
+          description: Filter based on which user completed the request.
+          example: hbaker
+      responses:
+        "200":
+          description: Request was understood, and the matching requests are returned (if any).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/request"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - Request
+    post:
+      description: Create a request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                details:
+                  type: string
+                  description: Details of the request (what you are asking for), limited to 50 bytes.
+                  example: Clean my fridge
+              required:
+                - details
+      responses:
+        "201":
+          description: Request was successfully created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID of the created request
+                    example: "424195ef-eb69-492e-bc5a-741d664a99aa"
+
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - Request
+  /api/request/{requestID}:
+    summary: Endpoint for operations related to a specific request.
+    get:
+      description: Retrieves details of a given request.
+      parameters:
+        - in: path
+          name: requestID
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of a given request.
+      responses:
+        "200":
+          description: Request was found, and it's details are returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/request"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - Request
+    put:
+      description: Endpoint to update a request
+      parameters:
+        - in: path
+          name: requestID
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of a given request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                details:
+                  type: string
+                  description: Updated details of the request (what you are asking for), limited to 50 bytes.
+                  example: Clean my fridge
+              required:
+                - details
+      responses:
+        "200":
+          description: Request successfully updated.
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "404":
+          description: No request was found for the given ID.
+      tags:
+        - Request
+    delete:
+      description: Endpoint to delete a request
+      parameters:
+        - in: path
+          name: requestID
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of a given request.
+      responses:
+        "200":
+          description: Request successfully deleted
+        "401":
+          description: Not authenticated.
+        "403":
+          description: Not authorised to delete this request (you are not the owner of it)
+        "404":
+          description: The request was not found
+      tags:
+        - Request
+  /api/request/{requestID}/rewards:
+    summary: Endpoint to create new request rewards
+    post:
+      description: Create a new reward for this request
+      parameters:
+        - in: path
+          name: requestID
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of a given request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item:
+                  type: string
+                  description: Unique identifier for item being offered as a reward
+                  example: "65023bcb-bee9-416f-b3a9-d996212b99f1"
+              required:
+                - item
+      responses:
+        "201":
+          description: Returned when the reward was successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID of the created reward (IOU)
+                    example: "1ce5d3cc-cb15-4050-9f0f-95d089721ed8"
+      tags:
+        - Request
+  /api/request/{requestID}/rewards/{rewardID}:
+    summary: Endpoint for request related operations.
+    delete:
+      description: Deleted the given request reward.
+      parameters:
+        - in: path
+          name: requestID
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of a given request.
+        - in: path
+          name: rewardID
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of a given request reward (IOU).
+      responses:
+        "200":
+          description: Request reward successfully deleted
+        "401":
+          description: Not authenticated.
+        "403":
+          description: Not authorised to delete this request reward (you are not the owner of it)
+        "404":
+          description: Either the request or reward was not found
+      tags:
+        - Request
 components:
+  schemas:
+    request:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the request
+        author:
+          type: string
+          description: Author of the request
+        completed_by:
+          type: string
+          description: Username of who completed the request
+        proof_of_completion:
+          type: string
+          description: Unique identifier for the proof of completion image
+        details:
+          type: string
+          description: Details of the request
+        created_time:
+          type: string
+          description: Timestamp of when the request was created
+        completion_time:
+          type: string
+          description: Timestamp of when the request was completed
+        is_completed:
+          type: boolean
+          description: Whether or not the request is completed
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Unique identifier of the reward (IOU)
+              item:
+                type: string
+                description: Unique identifier of the reward item
+              item_display_name:
+                type: string
+                description: Display name of the item
+              giver:
+                type: string
+                description: Username of who is providing this reward
+    badRequest:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+            description: Error message
+            example: Reason why request was invalid
   securitySchemes:
     userAuthenticated:
       type: apiKey
