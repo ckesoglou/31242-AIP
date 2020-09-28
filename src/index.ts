@@ -1,11 +1,22 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import app from "@server";
 import logger from "@shared/Logger";
+import env from "./environment";
+import db from "./daos/db-instance";
 
 // Start the server
-const port = Number(process.env.PORT || 3000);
+const port = Number(env.port || 4000);
+
+async function dbconnect() {
+  try {
+    await db.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+}
+
+dbconnect();
+
 app.listen(port, () => {
   logger.info("Express server started on port: " + port);
 });
