@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import UserProfile from "./userprofile";
+import { UserContext } from "../components/user-context";
 
 const testProps = {
   history: {} as any,
@@ -10,13 +11,19 @@ const testProps = {
 
 describe("UserProfile", () => {
   it("should render correctly", () => {
-    // need to provide context
     const component = shallow(
-      <UserProfile
-        history={testProps.history}
-        location={testProps.location}
-        match={testProps.match}
-      />
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin" },
+          updateUser: (newUser: Object) => {},
+        }}
+      >
+        <UserProfile
+          history={testProps.history}
+          location={testProps.location}
+          match={testProps.match}
+        />
+      </UserContext.Provider>
     );
 
     expect(component).toMatchSnapshot();
@@ -32,6 +39,7 @@ describe("UserProfile", () => {
       />
     );
 
+    wrapper.find("svg#requestForm").simulate("click");
     wrapper
       .find("input#favourText")
       .simulate("change", { target: { value: "Ben!" } });
@@ -44,7 +52,8 @@ describe("UserProfile", () => {
   });
 
   it("should have loading circle on tab contents if button is clicked", () => {
-    const spy = jest.spyOn(UserProfile.prototype, "fetchAllTabs");
+    const spyTabs = jest.spyOn(UserProfile.prototype, "fetchAllTabs");
+    const spyCircle = jest.spyOn(UserProfile.prototype, "setLoading");
     const wrapper = mount(
       <UserProfile
         history={testProps.history}
@@ -53,10 +62,9 @@ describe("UserProfile", () => {
       />
     );
 
-    wrapper.find("button#createRequest").simulate("click");
-    let loadingCircle = wrapper.find("loading").length;
+    wrapper.find("svg#refresh").simulate("click");
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(loadingCircle).toBe(1);
+    expect(spyTabs).toHaveBeenCalledTimes(2);
+    expect(spyCircle).toHaveBeenCalledTimes(2);
   });
 });

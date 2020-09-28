@@ -10,7 +10,8 @@ exports[`SignUp should render correctly 1`] = `
   >
     <WithStyles(ForwardRef(Typography))
       component="h1"
-      variant="h5"
+      id="header"
+      variant="h4"
     >
       Sign Up
     </WithStyles(ForwardRef(Typography))>
