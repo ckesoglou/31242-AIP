@@ -2,7 +2,6 @@ import React, { ChangeEvent } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import "../assets/css/userprofile.css";
 import { userProfileEndpoint, requestsNewEndpoint } from "../api/endpoints";
-import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
