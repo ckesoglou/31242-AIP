@@ -70,7 +70,7 @@ paths:
                   example: hunter2
               required:
                 - username
-                - displayName
+                - display_name
                 - password
       responses:
         "201":
