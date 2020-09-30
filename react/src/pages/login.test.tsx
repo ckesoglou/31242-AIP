@@ -56,6 +56,13 @@ describe("<Login />", () => {
       />
     );
 
+    wrapper
+      .find("input#password")
+      .simulate("change", { target: { value: "This is a valid password!" } });
+    wrapper
+      .find("input#username")
+      .simulate("change", { target: { value: "This is a valid username!" } });
+
     wrapper.find("button").simulate("click");
 
     expect(spy).toHaveBeenCalledTimes(1);
