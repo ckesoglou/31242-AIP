@@ -1,0 +1,23 @@
+#completeIconSize{
+    font-size: 100px;
+}
+
+#IouTaskComplete{
+    display:inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#taskCompleter{
+    font-size: 40px;
+    margin:0px;
+}
+
+#taskTimeStamp{
+    font-size:10px;
+    margin:0px;
+}
+
+#task{
+    font-size: 20px;
+}
