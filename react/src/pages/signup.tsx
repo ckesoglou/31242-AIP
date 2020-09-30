@@ -1,19 +1,21 @@
 import React from "react";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import "../assets/css/login.css";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link"; // Use react-router link instead?
-import TextField from "@material-ui/core/TextField";
+import { signUpEndpoint } from "../api/endpoints";
+import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
   CircularProgress,
   FormControl,
+  TextField,
+  Link,
+  Grid,
+  Button,
   Grow,
   Paper,
 } from "@material-ui/core";
-import { signUpEndpoint } from "../api/endpoints";
-import { Redirect, RouteComponentProps } from "react-router-dom";
+import { UserContext } from "../components/user-context";
 
 type SignUpState = {
   username: string;
@@ -81,6 +83,11 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     },
     validPassword: undefined,
   };
+
+  static contextType: React.Context<{
+    user: {};
+    updateUser: (newUser: object) => void;
+  }> = UserContext;
 
   setLoading(): void {
     this.signUpRef.current!.innerText = "";
@@ -168,33 +175,33 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   }
 
   // handle Sign Up button click
-  handleSignUp(username: string, display_name: string, password: string): void {
+  handleSignUp(): void {
     this.setLoading();
 
-    const inputBody = JSON.stringify({
-      username: username,
-      display_name: display_name,
-      password: password,
-    });
-
-    const headers = {
-      "Content-Type": "application/json",
-    };
-
-    fetch(
-      `${signUpEndpoint}`, // TODO: fix endpoints after API implementation
-      {
-        method: "POST",
-        body: inputBody,
-        headers: headers,
-      }
-    )
+    fetch(`${signUpEndpoint}`, {
+      method: "POST",
+      body: JSON.stringify({
+        username: this.state.username,
+        display_name: this.state.display_name,
+        password: this.state.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         return res.json();
       })
       .then((body) => {
         console.log("Success:", body);
-        this.setState({ successfulSignUp: true });
+        // TODO: Only for development! To be deleted
+        Authentication.authenticate(() => {});
+        this.setState({ successfulSignUp: true }, () => {
+          this.context.updateUser({
+            name: this.state.username,
+            password: this.state.password,
+          });
+        });
       })
       .catch((exception) => {
         console.error("Error:", exception);
@@ -216,7 +223,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     return (
       <Container component="main" maxWidth="xs">
         <div className="paper">
-          <Typography component="h1" variant="h5">
+          <Typography id="header" component="h1" variant="h4">
             Sign Up
           </Typography>
           <FormControl className="form">
@@ -294,11 +301,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               }
               color="primary"
               onClick={() => {
-                this.handleSignUp(
-                  this.state.username,
-                  this.state.display_name,
-                  this.state.password
-                );
+                this.handleSignUp();
                 this.setState({ submitted: !this.state.submitted });
               }}
             >
