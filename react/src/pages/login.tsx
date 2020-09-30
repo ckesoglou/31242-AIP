@@ -103,7 +103,8 @@ class Login extends React.Component<ILoginProps, LoginState> {
     };
 
     if (this.state.successfulLogin) {
-      Authentication.authenticate(() => {}); // Only for development!
+      // TODO: Only for development! To be deleted
+      Authentication.authenticate(() => {});
       return <Redirect to={next} />;
     }
 

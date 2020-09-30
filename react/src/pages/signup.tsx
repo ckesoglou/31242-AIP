@@ -194,7 +194,8 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       })
       .then((body) => {
         console.log("Success:", body);
-        Authentication.authenticate(() => {}); // Only for development!
+        // TODO: Only for development! To be deleted
+        Authentication.authenticate(() => {});
         this.setState({ successfulSignUp: true }, () => {
           this.context.updateUser({
             name: this.state.username,

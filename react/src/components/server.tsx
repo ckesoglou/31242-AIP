@@ -17,7 +17,11 @@ export function makeServer({ environment = "development" } = {}) {
       // This may or may not be useful but keeping in case we need it
       server.db.loadData({
         user: [
-          { username: "Ben", display_name: "BenIsCool", password_hash: "asdf" },
+          {
+            username: "Ben",
+            display_name: "BenIsCool",
+            password_hash: "asdf",
+          },
           {
             username: "Johnston",
             display_name: "JohnstonIsCool",
