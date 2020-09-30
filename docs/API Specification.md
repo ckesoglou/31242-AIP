@@ -119,7 +119,7 @@ Attempts to create a user with the provided username, display name, and password
 |---|---|---|---|---|
 |body|body|object|true|none|
 |» username|body|string|true|Desired username for the to-be-created account.|
-|» display_name|body|string|false|Desired display name for the to-be-created account.|
+|» display_name|body|string|true|Desired display name for the to-be-created account.|
 |» password|body|string|true|Plaintext password for the to-be-created account.|
 
 <h3 id="post__api_signup-responses">Responses</h3>
