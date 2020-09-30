@@ -1,32 +1,10 @@
 openapi: 3.0.2
 info:
   title: ioweyou.tech
-  version: 1.0.0
+  version: 1.2.0
 paths:
-  /login:
+  /api/login:
     summary: Endpoint to authenticate a user.
-    get:
-      description: >-
-        Attempts to authenticate the user with the refresh JSON Web Token (if stored
-        in the client's cookies) and redirects the user. Otherwise, the React login
-        webpage will be returned.
-      parameters:
-        - name: access_tokens
-          description: >-
-            If present, this JSON Web Token cookie will be decoded and used to attempt
-            authentication. Contains a refresh_token property and username property.
-          schema:
-            type: string
-          in: cookie
-      responses:
-        "200":
-          description: >-
-            Returned with the react login page when refresh token authentication failed
-            or did not take place.
-        "302":
-          description: >-
-            Returned when refresh token authentication succeeded, redirecting to the
-            dashboard React page or user's referrer URL (if within the application).
     post:
       description: >-
         Attempts authentication with the provided username and password in the
@@ -57,20 +35,17 @@ paths:
             Token as a httpOnly cookie (with access & refresh tokens) and redirect
             the user to the referrer URL (if within the application) or the dashboard.
         "400":
-          description: >-
-            Returned when required requestBody was not provided, or invalid.
+          description: Returned when required requestBody was not provided, or invalid.
         "401":
-          description: >-
-            Returned when the password supplied is incorrect.
+          description: Returned when the password supplied is incorrect.
       tags:
-        - Login
-  /signup:
+        - Authentication
+  /api/signup:
     summary: Endpoint to create a user.
     post:
       description: >-
-        Attempts to create a user with the provided username, display name, and password in the
-        requestBody. Sets the access_tokens cookie alongside a redirect request if
-        successful.
+        Attempts to create a user with the provided username, display name, and
+        password in the requestBody. Sets the access_tokens cookie if successful.
       requestBody:
         required: true
         content:
@@ -93,29 +68,540 @@ paths:
                   description: Plaintext password for the to-be-created account.
                   maxLength: 60
                   example: hunter2
-              required: 
+              required:
                 - username
                 - displayName
                 - password
       responses:
-        '201':
+        "201":
           description: >-
-            Returned when the user is successfully created. This will set a JSON Web
-            Token as a httpOnly cookie (with access & refresh tokens).
-        '400':
-          description: >-
-            Returned when required requestBody was not provided, or invalid.
-        '422':
-          description: >-
-            Returned when the username is already taken.
-      tags: 
-        - Signup
+            Returned when the user is successfully created. This will set a JSON
+            Web Token as a httpOnly cookie (with access & refresh tokens).
+        "400":
+          description: Returned when required requestBody was not provided, or invalid.
+        "422":
+          description: Returned when the username is already taken.
+      tags:
+        - Authentication
+  /api/user:
+    summary: Endpoint to view a user.
+    get:
+      description: >-
+        Attempts to view the user information with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      security:
+        - userAuthenticated: []
+      responses:
+        "200":
+          description: Returned user information.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid user supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      tags:
+        - User
+    put:
+      description: >-
+        Attempts to update user if they are currently logged in
+      tags:
+        - User
+      security:
+        - userAuthenticated: []
+      requestBody:
+        description: Updated user object
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          description: Resource updated successfully
+        "400":
+          description: Invalid user supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+    delete:
+      description: >-
+        Attempts to delete user if they are currently logged in
+      tags:
+        - User
+      security:
+        - userAuthenticated: []
+      responses:
+        "200":
+          description: Resource deleted successfully
+        "400":
+          description: Invalid user supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+  /api/user/requests:
+    summary: Endpoint to view all requests created by a user.
+    get:
+      description: >-
+        Attempts to view the requests created by a user with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      security:
+        - userAuthenticated: []
+      responses:
+        "200":
+          description: Returned list of requests created by user.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/components/schemas/Request"
+        "400":
+          description: Invalid user supplied
+        "404":
+          description: User not found
+      tags:
+        - User
+  /api/user/logout:
+    summary: Logs out current logged in user session.
+    get:
+      description: >-
+        Attempts to log user out of current session.
+      parameters: []
+      responses:
+        default:
+          description: Successful logout
+          content: {}
+      tags:
+        - User
+        - Authentication
+  /api/iou/owed:
+    summary: Endpoint to view favours owed to a user.
+    get:
+      description: >-
+        Attempts to view the favours owed to a user with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      security:
+        - userAuthenticated: []
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: Starting row of the returned array. Default 0.
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Maximum number of returned items. Default 25.
+      responses:
+        "200":
+          description: Returned list of favours owed to user.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+                    item:
+                      type: object
+                      $ref: "#/components/schemas/Item"
+                    giver:
+                      type: object
+                      $ref: "#/components/schemas/User"
+                    parent_request:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11078"
+                    proof_of_debt:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11079"
+                    proof_of_completion:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11076"
+                    created_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    claimed_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    is_claimed:
+                      type: boolean
+                      example: false
+        "400":
+          description: Invalid user supplied
+        "401":
+          description: Unauthorized user
+        "404":
+          description: User not found
+      tags:
+        - IOU
+    post:
+      description: Record a new IOU that you are owed
+      security:
+        - userAuthenticated: []
+      requestBody:
+        description: Updated user object
+        required: true
+        content:
+          "multipart/form-data":
+            schema:
+              type: object
+              properties:
+                receiver:
+                  type: string
+                  description: Username of person who owes you
+                  example: janesmith
+                item:
+                  type: string
+                  description: Unique identifier of the item they owe you
+                  example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+                proof:
+                  type: string
+                  format: binary
+                  description: Image proof of debt
+      responses:
+        "201":
+          description: IOU has been created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the newly created IOU
+                    example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+      tags:
+        - IOU
+  /api/iou/owed/{iouID}/complete:
+    summary: Endpoint for completing an IOU
+    put:
+      description: Mark an IOU as completed
+      security:
+        - userAuthenticated: []
+      parameters:
+        - in: query
+          name: iouID
+          schema:
+            type: string
+          description: Unique identifier for the IOU
+      responses:
+        "200":
+          description: IOU was successfully completed.
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+        "403":
+          description: Not authorised to complete this request (you are not the owner of it)
+        "404":
+          description: Not found (did you mean to use the /owe endpoint)
+      tags:
+        - "IOU"
+  /api/iou/owe:
+    summary: Endpoint to view favours a user owes.
+    get:
+      description: >-
+        Attempts to view the favours a user owes with the refresh JSON Web Token (if
+        stored in the client's cookies).
+      security:
+        - userAuthenticated: []
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: Starting row of the returned array. Default 0.
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Maximum number of returned items. Default 25.
+      responses:
+        "200":
+          description: Returned list of favours a user owes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+                    item:
+                      type: object
+                      $ref: "#/components/schemas/Item"
+                    receiver:
+                      type: object
+                      $ref: "#/components/schemas/User"
+                    parent_request:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11078"
+                    proof_of_debt:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11079"
+                    proof_of_completion:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11076"
+                    created_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    claimed_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    is_claimed:
+                      type: boolean
+                      example: false
+        "401":
+          description: Not authenticated.
+        "403":
+          description: Not authorised to delete this request (you are not the owner of it)
+        "404":
+          description: User not found
+      tags:
+        - IOU
+    post:
+      description: Record a new IOU that you are owed
+      security:
+        - userAuthenticated: []
+      requestBody:
+        description: Updated user object
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                receiver:
+                  type: string
+                  description: Username of person who owes you
+                  example: janesmith
+                item:
+                  type: string
+                  description: Unique identifier of the item they owe you
+                  example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+      responses:
+        "201":
+          description: IOU has been created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the newly created IOU
+                    example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+      tags:
+        - IOU
+  /api/iou/owe/{iouID}/complete:
+    summary: Endpoint for completing an IOU
+    put:
+      description: Mark an IOU as completed
+      security:
+        - userAuthenticated: []
+      requestBody:
+        description: Proof of completion for a given IOU
+        required: true
+        content:
+          "multipart/form-data":
+            schema:
+              type: object
+              properties:
+                iouID:
+                  type: string
+                  description: Unique identifier for the IOU
+                  example: "510ab12d-1689-4b2c-8a8d-275376f11072"
+                proof:
+                  type: string
+                  format: binary
+                  description: Image proof of debt
+      responses:
+        "200":
+          description: Request was understood, and the matching requests are returned (if any).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Request"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - "IOU"
 components:
+  schemas:
+    User:
+      required:
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: jsmith
+        display_name:
+          type: string
+          example: John Smith
+      xml:
+        name: User
+    IOU:
+      required:
+        - id
+        - item
+        - giver
+        - created_time
+        - is_claimed
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for an IOU
+          example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+        item:
+          type: object
+          $ref: "#/components/schemas/Item"
+        giver:
+          type: object
+          $ref: "#/components/schemas/User"
+        receiver:
+          type: object
+          $ref: "#/components/schemas/User"
+        parent_request:
+          type: object
+          $ref: "#/components/schemas/Request"
+        proof_of_debt:
+          type: string
+          description: Unique identifier for an image
+          example: "510ab12d-1689-4b2c-8a8d-275376f11071"
+        proof_of_completion:
+          type: string
+          description: Unique identifier for an image
+          example: "510ab12d-1689-4b2c-8a8d-275376f11079"
+        created_time:
+          type: string
+          format: date-time
+          example: "2020-03-09T22:18:26.625Z"
+        claimed_time:
+          type: string
+          format: date-time
+          example: "2020-03-09T22:18:26.625Z"
+        is_claimed:
+          type: boolean
+          example: false
+    Item:
+      required:
+        - id
+        - display_name
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for an IOU
+          example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+        display_name:
+          type: string
+          example: Coffee
+    Request:
+      required:
+        - id
+        - author
+        - details
+        - created_time
+        - is_completed
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for an IOU
+          example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+        author:
+          type: object
+          $ref: "#/components/schemas/User"
+        completed_by:
+          type: object
+          $ref: "#/components/schemas/User"
+        proof_of_completion:
+          type: string
+          format: binary
+          description: Image proof of completion
+        details:
+          type: string
+          example: Clean the fridge
+        created_time:
+          type: string
+          format: date-time
+          example: 2020-03-09T22:18:26.625Z
+        completion_time:
+          type: string
+          format: date-time
+          example: 2020-03-09T22:18:26.625Z
+        is_completed:
+          type: boolean
+          example: false
+    badRequest:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+            description: Error message
+            example: Reason why request was invalid
   securitySchemes:
     userAuthenticated:
       type: apiKey
       description: >-
         Security scheme protecting endpoints that require a regular
-        authenticated user account.
+        authenticated user account. Contains a refresh_token property and
+        username property.
       name: access_tokens
       in: cookie
