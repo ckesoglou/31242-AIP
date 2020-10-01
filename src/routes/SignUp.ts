@@ -32,7 +32,7 @@ interface ISignUpPOST {
 
   const SignUpPOST: ObjectSchema<ISignUpPOST> = Joi.object({
     username: Joi.string().alphanum().min(2).max(16, "utf8"),
-    password: Joi.string().min(1).max(72, "utf8"),
+    password: Joi.string().min(8).pattern(/(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/).max(72, "utf8"),
     displayName: Joi.string().alphanum().min(2).max(16, "utf8"),
   }).options({ presence: "required" });
 
@@ -84,14 +84,9 @@ router.post('/', async (req: Request, res: Response) => {
         { expiresIn: "30m" }
     );
 
-    res.cookie("access_tokens", {
+    return res.cookie("access_tokens", {
         access_token: clientAccessToken,
         refresh_token: clientRefreshToken,
-    });
-
-    return res.status(CREATED).json({
-        refreshToken: "",
-        accessToken: ""
     });
 });
 
