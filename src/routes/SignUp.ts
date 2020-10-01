@@ -3,10 +3,14 @@ import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
 import bcrypt from 'bcrypt';
 import Joi, { string, ObjectSchema } from "joi";
+import { v4 as uuid } from "uuid";
+import jwt from "jsonwebtoken";
 
+import env from "../Environment";
 import UserDao from "@daos/user/user-dao";
 import { paramMissingError } from '@shared/constants';
 import User, { IUser } from '@entities/User.ts';
+import { createToken } from "@daos/Tokens";
 
 // Init shared
 const router = Router();
@@ -54,6 +58,36 @@ router.post('/', async (req: Request, res: Response) => {
 
     let User: IUser = {username: request.username, display_name: request.displayName, password_hash: passHash};
     await userDao.add(User);
+
+    const now = new Date();
+    const monthFromNow = new Date();
+    monthFromNow.setDate(monthFromNow.getDate() + 30);
+
+    const serverRefreshToken = await createToken(
+        uuid(), 
+        request.username,
+        req.headers.host ?? "Unknown",
+        now,
+        monthFromNow
+    );
+    const clientRefreshToken = jwt.sign(
+        {
+        username: request.username,
+        token: serverRefreshToken.refresh_token,
+        },
+        env.jwt_secret,
+        { expiresIn: "30 days" }
+    );
+    const clientAccessToken = jwt.sign(
+        { username: request,.username },
+        env.jwt_secret,
+        { expiresIn: "30m" }
+    );
+
+    res.cookie("access_tokens", {
+        access_token: clientAccessToken,
+        refresh_token: clientRefreshToken,
+    });
 
     return res.status(CREATED).json({
         refreshToken: "",
