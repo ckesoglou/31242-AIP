@@ -1,17 +1,19 @@
 import React from "react";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import "../assets/css/login.css";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link"; // Use react-router link instead?
-import TextField from "@material-ui/core/TextField";
+import { loginEndpoint } from "../api/endpoints";
+import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
-  FormControl,
   CircularProgress,
+  FormControl,
+  TextField,
+  Link,
+  Grid,
+  Button,
 } from "@material-ui/core";
-import { loginEndpoint } from "../api/endpoints";
-import { Redirect, RouteComponentProps } from "react-router-dom";
+import { UserContext } from "../components/user-context";
 
 type LoginState = {
   username: string;
@@ -53,34 +55,40 @@ class Login extends React.Component<ILoginProps, LoginState> {
     successfulLogin: false,
   };
 
+  static contextType: React.Context<{
+    user: {};
+    updateUser: (newUser: object) => void;
+  }> = UserContext;
+
   setLoading(): void {
     this.signInRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
   }
 
-  handleLogin(username: string, password: string): void {
+  handleLogin(): void {
     this.setLoading();
-
-    const inputBody = JSON.stringify({
-      username: username,
-      password: password,
-    });
-
-    const headers = {
-      "Content-Type": "application/json",
-    };
 
     fetch(`${loginEndpoint}`, {
       method: "POST",
-      body: inputBody,
-      headers: headers,
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
         return res.json();
       })
       .then((body) => {
         console.log("Success:", body);
-        this.setState({ successfulLogin: true });
+        this.setState({ successfulLogin: true }, () => {
+          this.context.updateUser({
+            name: this.state.username,
+            password: this.state.password,
+          });
+        });
       })
       .catch((exception) => {
         console.error("Error:", exception);
@@ -95,13 +103,15 @@ class Login extends React.Component<ILoginProps, LoginState> {
     };
 
     if (this.state.successfulLogin) {
+      // TODO: Only for development! To be deleted
+      Authentication.authenticate(() => {});
       return <Redirect to={next} />;
     }
 
     return (
       <Container component="main" maxWidth="xs">
         <div className="paper">
-          <Typography component="h1" variant="h5">
+          <Typography id="header" component="h1" variant="h4">
             Sign In
           </Typography>
           <FormControl className="form">
@@ -134,10 +144,14 @@ class Login extends React.Component<ILoginProps, LoginState> {
               fullWidth
               size="large"
               variant="contained"
-              disabled={this.state.submitted}
+              disabled={
+                this.state.submitted ||
+                !this.state.username ||
+                !this.state.password
+              }
               color="primary"
               onClick={() => {
-                this.handleLogin(this.state.username, this.state.password);
+                this.handleLogin();
                 this.setState({ submitted: !this.state.submitted });
               }}
             >
