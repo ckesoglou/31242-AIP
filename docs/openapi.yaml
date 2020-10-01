@@ -145,30 +145,6 @@ paths:
         "404":
           description: User not found
           content: {}
-  /api/user/requests:
-    summary: Endpoint to view all requests created by a user.
-    get:
-      description: >-
-        Attempts to view the requests created by a user with the refresh JSON Web Token (if
-        stored in the client's cookies).
-      security:
-        - userAuthenticated: []
-      responses:
-        "200":
-          description: Returned list of requests created by user.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  $ref: "#/components/schemas/Request"
-        "400":
-          description: Invalid user supplied
-        "404":
-          description: User not found
-      tags:
-        - User
   /api/user/logout:
     summary: Logs out current logged in user session.
     get:
