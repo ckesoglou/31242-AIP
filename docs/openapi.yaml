@@ -245,9 +245,9 @@ paths:
         "400":
           description: Invalid user supplied
         "401":
-          description: Unauthorized user
-        "404":
-          description: User not found
+          description: Not authenticated.
+        "403":
+          description: Not authorised to view these IOUs (you are not the giver/receiver of it)
       tags:
         - IOU
     post:
@@ -388,8 +388,6 @@ paths:
           description: Not authenticated.
         "403":
           description: Not authorised to delete this request (you are not the owner of it)
-        "404":
-          description: User not found
       tags:
         - IOU
     post:
