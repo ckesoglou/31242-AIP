@@ -190,6 +190,7 @@ paths:
         schema:
           type: string
         description: Unique identifier for the image.
+        required: true
     get:
       description: Retrieve an image.
       responses:
