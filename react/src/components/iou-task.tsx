@@ -2,12 +2,12 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import "../assets/css/iou-request.css";
 
-type TaskProps = {
+type IouTaskProps = {
     taskDescription: string;
 }
 
-class IouTask extends React.Component<TaskProps> {
-    constructor(props: TaskProps) {
+class IouTask extends React.Component<IouTaskProps> {
+    constructor(props: IouTaskProps) {
         super(props);
     }
 
