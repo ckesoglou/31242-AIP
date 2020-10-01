@@ -261,7 +261,7 @@ paths:
             schema:
               type: object
               properties:
-                receiver:
+                username:
                   type: string
                   description: Username of person who owes you
                   example: janesmith
@@ -434,6 +434,12 @@ paths:
         - IOU
   /api/iou/owe/{iouID}/complete:
     summary: Endpoint for completing an IOU
+    parameters:
+      - in: query
+        name: iouID
+        schema:
+          type: string
+        description: Unique identifier for the IOU
     put:
       description: Mark an IOU as completed
       security:
@@ -446,10 +452,6 @@ paths:
             schema:
               type: object
               properties:
-                iouID:
-                  type: string
-                  description: Unique identifier for the IOU
-                  example: "510ab12d-1689-4b2c-8a8d-275376f11072"
                 proof:
                   type: string
                   format: binary
