@@ -182,6 +182,80 @@ paths:
       tags:
         - User
         - Authentication
+  /api/leaderboard:
+    summary: Leaderboard endpoint,
+    get:
+      description: Retrieve the current leaderboard.
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: Starting row of the returned array. Default 0.
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Maximum number of returned items. Default 25. Maximum 100.
+      responses:
+        "200":
+          description: Leaderboard retrieved and returned successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rank:
+                      type: number
+                      description: Rank of this user.
+                      example: 1
+                    user:
+                      $ref: "#/components/schemas/User"
+                      description: User for this position.
+                    score:
+                      type: number
+                      description: Numeric leaderboard score of this user.
+                      example: 35
+        "400":
+          description: The HTTP request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - Leaderboard
+  /api/leaderboard/me:
+    summary: Personal leaderboard endpoint
+    get:
+      description: Retrieve the current score and rank of the logged in user.
+      responses:
+        "200":
+          description: Leaderboard position of the current user retrieved and returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rank:
+                    type: number
+                    description: Rank of this user.
+                    example: 1
+                  score:
+                    type: number
+                    description: Numeric leaderboard score of this user.
+                    example: 35
+        "400":
+          description: The HTTP request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+      tags:
+        - Leaderboard
 components:
   schemas:
     User:
@@ -279,6 +353,15 @@ components:
         is_completed:
           type: boolean
           example: false
+    badRequest:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+            description: Error message
+            example: Reason why request was invalid
   securitySchemes:
     userAuthenticated:
       type: apiKey
