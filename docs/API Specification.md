@@ -407,9 +407,9 @@ Attempts to log user out of current session.
 This operation does not require authentication
 </aside>
 
-<h1 id="ioweyou-tech-iou">IOU</h1>
+<h1 id="ioweyou-tech-leaderboard">Leaderboard</h1>
 
-## get__api_iou_owed
+## get__api_leaderboard
 
 > Code samples
 
@@ -419,7 +419,7 @@ const headers = {
   'Accept':'application/json'
 };
 
-fetch('/api/iou/owed',
+fetch('/api/leaderboard',
 {
   method: 'GET',
 
@@ -433,16 +433,16 @@ fetch('/api/iou/owed',
 
 ```
 
-`GET /api/iou/owed`
+`GET /api/leaderboard`
 
-Attempts to view the favours owed to a user with the refresh JSON Web Token (if stored in the client's cookies).
+Retrieve the current leaderboard.
 
-<h3 id="get__api_iou_owed-parameters">Parameters</h3>
+<h3 id="get__api_leaderboard-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned items. Default 25.|
+|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
 
 > Example responses
 
@@ -451,142 +451,40 @@ Attempts to view the favours owed to a user with the refresh JSON Web Token (if 
 ```json
 [
   {
-    "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
-    "item": {
-      "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
-      "display_name": "Coffee"
-    },
-    "giver": {
+    "rank": 1,
+    "user": {
       "username": "jsmith",
       "display_name": "John Smith"
     },
-    "parent_request": "510ab12d-1689-4b2c-8a8d-275376f11078",
-    "proof_of_debt": "510ab12d-1689-4b2c-8a8d-275376f11079",
-    "proof_of_completion": "510ab12d-1689-4b2c-8a8d-275376f11076",
-    "created_time": "2020-03-09T22:18:26.625Z",
-    "claimed_time": "2020-03-09T22:18:26.625Z",
-    "is_claimed": false
+    "score": 35
   }
 ]
 ```
 
-<h3 id="get__api_iou_owed-responses">Responses</h3>
+<h3 id="get__api_leaderboard-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of favours owed to user.|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized user|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Leaderboard retrieved and returned successfully.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
 
-<h3 id="get__api_iou_owed-responseschema">Response Schema</h3>
+<h3 id="get__api_leaderboard-responseschema">Response Schema</h3>
 
 Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» id|string|false|none|Unique identifier for an IOU|
-|» item|[Item](#schemaitem)|false|none|none|
-|»» id|string|true|none|Unique identifier for an IOU|
-|»» display_name|string|true|none|none|
-|» giver|[User](#schemauser)|false|none|none|
+|» rank|number|false|none|Rank of this user.|
+|» user|[User](#schemauser)|false|none|none|
 |»» username|string|true|none|none|
 |»» display_name|string|false|none|none|
-|» parent_request|string|false|none|Unique identifier for an IOU|
-|» proof_of_debt|string|false|none|Unique identifier for an image|
-|» proof_of_completion|string|false|none|Unique identifier for an image|
-|» created_time|string(date-time)|false|none|none|
-|» claimed_time|string(date-time)|false|none|none|
-|» is_claimed|boolean|false|none|none|
+|» score|number|false|none|Numeric leaderboard score of this user.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-userAuthenticated
+<aside class="success">
+This operation does not require authentication
 </aside>
 
-## post__api_iou_owed
-
-> Code samples
-
-```javascript
-const inputBody = '{
-  "receiver": "janesmith",
-  "item": "510ab12d-1689-4b2c-8a8d-275376f11077",
-  "proof": "string"
-}';
-const headers = {
-  'Content-Type':'multipart/form-data',
-  'Accept':'application/json'
-};
-
-fetch('/api/iou/owed',
-{
-  method: 'POST',
-  body: inputBody,
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-`POST /api/iou/owed`
-
-Record a new IOU that you are owed
-
-> Body parameter
-
-```yaml
-receiver: janesmith
-item: 510ab12d-1689-4b2c-8a8d-275376f11077
-proof: string
-
-```
-
-<h3 id="post__api_iou_owed-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|Updated user object|
-|» receiver|body|string|false|Username of person who owes you|
-|» item|body|string|false|Unique identifier of the item they owe you|
-|» proof|body|string(binary)|false|Image proof of debt|
-
-> Example responses
-
-> 201 Response
-
-```json
-{
-  "id": "510ab12d-1689-4b2c-8a8d-275376f11077"
-}
-```
-
-<h3 id="post__api_iou_owed-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|IOU has been created.|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
-
-<h3 id="post__api_iou_owed-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string|false|none|Unique identifier for the newly created IOU|
-
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-userAuthenticated
-</aside>
-
-## put__api_iou_owed_{iouID}_complete
+## get__api_leaderboard_me
 
 > Code samples
 
@@ -596,68 +494,7 @@ const headers = {
   'Accept':'application/json'
 };
 
-fetch('/api/iou/owed/{iouID}/complete',
-{
-  method: 'PUT',
-
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-`PUT /api/iou/owed/{iouID}/complete`
-
-Mark an IOU as completed
-
-<h3 id="put__api_iou_owed_{iouid}_complete-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|iouID|query|string|false|Unique identifier for the IOU|
-
-> Example responses
-
-> 400 Response
-
-```json
-{
-  "errors": [
-    "Reason why request was invalid"
-  ]
-}
-```
-
-<h3 id="put__api_iou_owed_{iouid}_complete-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|IOU was successfully completed.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
-|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to complete this request (you are not the owner of it)|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not found (did you mean to use the /owe endpoint)|None|
-
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-userAuthenticated
-</aside>
-
-## get__api_iou_owe
-
-> Code samples
-
-```javascript
-
-const headers = {
-  'Accept':'application/json'
-};
-
-fetch('/api/iou/owe',
+fetch('/api/leaderboard/me',
 {
   method: 'GET',
 
@@ -671,258 +508,40 @@ fetch('/api/iou/owe',
 
 ```
 
-`GET /api/iou/owe`
+`GET /api/leaderboard/me`
 
-Attempts to view the favours a user owes with the refresh JSON Web Token (if stored in the client's cookies).
-
-<h3 id="get__api_iou_owe-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned items. Default 25.|
+Retrieve the current score and rank of the logged in user.
 
 > Example responses
 
 > 200 Response
 
 ```json
-[
-  {
-    "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
-    "item": {
-      "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
-      "display_name": "Coffee"
-    },
-    "receiver": {
-      "username": "jsmith",
-      "display_name": "John Smith"
-    },
-    "parent_request": "510ab12d-1689-4b2c-8a8d-275376f11078",
-    "proof_of_debt": "510ab12d-1689-4b2c-8a8d-275376f11079",
-    "proof_of_completion": "510ab12d-1689-4b2c-8a8d-275376f11076",
-    "created_time": "2020-03-09T22:18:26.625Z",
-    "claimed_time": "2020-03-09T22:18:26.625Z",
-    "is_claimed": false
-  }
-]
+{
+  "rank": 1,
+  "score": 35
+}
 ```
 
-<h3 id="get__api_iou_owe-responses">Responses</h3>
+<h3 id="get__api_leaderboard_me-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of favours a user owes.|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Leaderboard position of the current user retrieved and returned.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
-|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to delete this request (you are not the owner of it)|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
 
-<h3 id="get__api_iou_owe-responseschema">Response Schema</h3>
+<h3 id="get__api_leaderboard_me-responseschema">Response Schema</h3>
 
 Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» id|string|false|none|Unique identifier for an IOU|
-|» item|[Item](#schemaitem)|false|none|none|
-|»» id|string|true|none|Unique identifier for an IOU|
-|»» display_name|string|true|none|none|
-|» receiver|[User](#schemauser)|false|none|none|
-|»» username|string|true|none|none|
-|»» display_name|string|false|none|none|
-|» parent_request|string|false|none|Unique identifier for an IOU|
-|» proof_of_debt|string|false|none|Unique identifier for an image|
-|» proof_of_completion|string|false|none|Unique identifier for an image|
-|» created_time|string(date-time)|false|none|none|
-|» claimed_time|string(date-time)|false|none|none|
-|» is_claimed|boolean|false|none|none|
+|» rank|number|false|none|Rank of this user.|
+|» score|number|false|none|Numeric leaderboard score of this user.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-userAuthenticated
-</aside>
-
-## post__api_iou_owe
-
-> Code samples
-
-```javascript
-const inputBody = '{
-  "receiver": "janesmith",
-  "item": "510ab12d-1689-4b2c-8a8d-275376f11077"
-}';
-const headers = {
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
-
-fetch('/api/iou/owe',
-{
-  method: 'POST',
-  body: inputBody,
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-`POST /api/iou/owe`
-
-Record a new IOU that you are owed
-
-> Body parameter
-
-```json
-{
-  "receiver": "janesmith",
-  "item": "510ab12d-1689-4b2c-8a8d-275376f11077"
-}
-```
-
-<h3 id="post__api_iou_owe-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|Updated user object|
-|» receiver|body|string|false|Username of person who owes you|
-|» item|body|string|false|Unique identifier of the item they owe you|
-
-> Example responses
-
-> 201 Response
-
-```json
-{
-  "id": "510ab12d-1689-4b2c-8a8d-275376f11077"
-}
-```
-
-<h3 id="post__api_iou_owe-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|IOU has been created.|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
-
-<h3 id="post__api_iou_owe-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string|false|none|Unique identifier for the newly created IOU|
-
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-userAuthenticated
-</aside>
-
-## put__api_iou_owe_{iouID}_complete
-
-> Code samples
-
-```javascript
-const inputBody = '{
-  "iouID": "510ab12d-1689-4b2c-8a8d-275376f11072",
-  "proof": "string"
-}';
-const headers = {
-  'Content-Type':'multipart/form-data',
-  'Accept':'application/json'
-};
-
-fetch('/api/iou/owe/{iouID}/complete',
-{
-  method: 'PUT',
-  body: inputBody,
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-`PUT /api/iou/owe/{iouID}/complete`
-
-Mark an IOU as completed
-
-> Body parameter
-
-```yaml
-iouID: 510ab12d-1689-4b2c-8a8d-275376f11072
-proof: string
-
-```
-
-<h3 id="put__api_iou_owe_{iouid}_complete-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|Proof of completion for a given IOU|
-|» iouID|body|string|false|Unique identifier for the IOU|
-|» proof|body|string(binary)|false|Image proof of debt|
-
-> Example responses
-
-> 200 Response
-
-```json
-[
-  {
-    "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
-    "author": {
-      "username": "jsmith",
-      "display_name": "John Smith"
-    },
-    "completed_by": {
-      "username": "jsmith",
-      "display_name": "John Smith"
-    },
-    "proof_of_completion": "string",
-    "details": "Clean the fridge",
-    "created_time": "2020-03-09T22:18:26.625Z",
-    "completion_time": "2020-03-09T22:18:26.625Z",
-    "is_completed": false
-  }
-]
-```
-
-<h3 id="put__api_iou_owe_{iouid}_complete-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request was understood, and the matching requests are returned (if any).|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
-
-<h3 id="put__api_iou_owe_{iouid}_complete-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Request](#schemarequest)]|false|none|none|
-|» id|string|true|none|Unique identifier for an IOU|
-|» author|[User](#schemauser)|true|none|none|
-|»» username|string|true|none|none|
-|»» display_name|string|false|none|none|
-|» completed_by|[User](#schemauser)|false|none|none|
-|» proof_of_completion|string(binary)|false|none|Image proof of completion|
-|» details|string|true|none|none|
-|» created_time|string(date-time)|true|none|none|
-|» completion_time|string(date-time)|false|none|none|
-|» is_completed|boolean|true|none|none|
-
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-userAuthenticated
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 # Schemas
