@@ -407,6 +407,57 @@ Attempts to log user out of current session.
 This operation does not require authentication
 </aside>
 
+<h1 id="ioweyou-tech-image">Image</h1>
+
+## get__api_image_{imagePK}
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'image/*'
+};
+
+fetch('/api/image/{imagePK}',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/image/{imagePK}`
+
+Retrieve an image.
+
+<h3 id="get__api_image_{imagepk}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|imagePK|query|string|false|Unique identifier for the image.|
+
+> Example responses
+
+> 200 Response
+
+<h3 id="get__api_image_{imagepk}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Image found and returned.|string|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Image not found.|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 # Schemas
 
 <h2 id="tocS_User">User</h2>
