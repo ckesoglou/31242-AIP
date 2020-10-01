@@ -302,11 +302,12 @@ paths:
       security:
         - userAuthenticated: []
       parameters:
-        - in: query
+        - in: path
           name: iouID
           schema:
             type: string
           description: Unique identifier for the IOU
+          required: true
       responses:
         "200":
           description: IOU was successfully completed.
@@ -435,11 +436,12 @@ paths:
   /api/iou/owe/{iouID}/complete:
     summary: Endpoint for completing an IOU
     parameters:
-      - in: query
+      - in: path
         name: iouID
         schema:
           type: string
         description: Unique identifier for the IOU
+        required: true
     put:
       description: Mark an IOU as completed
       security:
