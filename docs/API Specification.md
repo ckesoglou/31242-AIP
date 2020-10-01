@@ -407,6 +407,143 @@ Attempts to log user out of current session.
 This operation does not require authentication
 </aside>
 
+<h1 id="ioweyou-tech-leaderboard">Leaderboard</h1>
+
+## get__api_leaderboard
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/leaderboard',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/leaderboard`
+
+Retrieve the current leaderboard.
+
+<h3 id="get__api_leaderboard-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|start|query|string|false|Starting row of the returned array. Default 0.|
+|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "rank": 1,
+    "user": {
+      "username": "jsmith",
+      "display_name": "John Smith"
+    },
+    "score": 35
+  }
+]
+```
+
+<h3 id="get__api_leaderboard-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Leaderboard retrieved and returned successfully.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+
+<h3 id="get__api_leaderboard-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» rank|number|false|none|Rank of this user.|
+|» user|[User](#schemauser)|false|none|none|
+|»» username|string|true|none|none|
+|»» display_name|string|false|none|none|
+|» score|number|false|none|Numeric leaderboard score of this user.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_leaderboard_me
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/leaderboard/me',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/leaderboard/me`
+
+Retrieve the current score and rank of the logged in user.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "rank": 1,
+  "score": 35
+}
+```
+
+<h3 id="get__api_leaderboard_me-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Leaderboard position of the current user retrieved and returned.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+
+<h3 id="get__api_leaderboard_me-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» rank|number|false|none|Rank of this user.|
+|» score|number|false|none|Numeric leaderboard score of this user.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 # Schemas
 
 <h2 id="tocS_User">User</h2>
@@ -554,4 +691,26 @@ This operation does not require authentication
 |created_time|string(date-time)|true|none|none|
 |completion_time|string(date-time)|false|none|none|
 |is_completed|boolean|true|none|none|
+
+<h2 id="tocS_badRequest">badRequest</h2>
+<!-- backwards compatibility -->
+<a id="schemabadrequest"></a>
+<a id="schema_badRequest"></a>
+<a id="tocSbadrequest"></a>
+<a id="tocsbadrequest"></a>
+
+```json
+{
+  "errors": [
+    "Reason why request was invalid"
+  ]
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|errors|[string]|false|none|none|
 
