@@ -261,7 +261,7 @@ paths:
             schema:
               type: object
               properties:
-                receiver:
+                username:
                   type: string
                   description: Username of person who owes you
                   example: janesmith
