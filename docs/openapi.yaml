@@ -200,7 +200,7 @@ paths:
           name: limit
           schema:
             type: string
-          description: Maximum number of returned items. Default 25.
+          description: Maximum number of returned items. Default 25. Maximum 100.
       responses:
         "200":
           description: Returned list of favours owed to user.
