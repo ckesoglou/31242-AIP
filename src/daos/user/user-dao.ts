@@ -4,25 +4,16 @@ import db from "../db-instance";
 export interface IUserDao {
   getOne: (username: string) => Promise<IUser | null>;
   getAll: () => Promise<IUser[]>;
-  add: (user: IUser) => Promise<void>;
-  update: (user: IUser) => Promise<void>;
-  delete: (username: string) => Promise<void>;
+  update: (username: string, newUser: IUser) => Promise<IUser | null>;
+  delete: (username: string) => Promise<boolean>;
 }
 
 class UserDao implements IUserDao {
-  /**
-   * @param email
-   */
   public async getOne(username: string): Promise<IUser | null> {
-    const user = await User.findByPk(username, {
-      attributes: ["display_name"],
-    });
+    const user = await User.findByPk(username);
     return user;
   }
 
-  /**
-   *
-   */
   public async getAll(): Promise<IUser[]> {
     const users = await User.findAll({
       attributes: ["display_name"],
@@ -30,31 +21,33 @@ class UserDao implements IUserDao {
     return users;
   }
 
-  /**
-   *
-   * @param user
-   */
-  public async add(user: IUser): Promise<void> {
-    // TODO
-    return {} as any;
+  public async update(userName: String, newUser: IUser): Promise<IUser | null> {
+    User.findOne({ where: { username: `${userName}` } }).then(function (user) {
+      if (user) {
+        user
+          .update({
+            display_name: newUser.displayName,
+            username: newUser.username,
+          })
+          .then(async function () {
+            await User.sync({ alter: true });
+            return newUser;
+          });
+      }
+    });
+    return null;
   }
 
-  /**
-   *
-   * @param user
-   */
-  public async update(user: IUser): Promise<void> {
-    // TODO
-    return {} as any;
-  }
-
-  /**
-   *
-   * @param id
-   */
-  public async delete(username: string): Promise<void> {
-    // TODO
-    return {} as any;
+  public async delete(userName: string): Promise<boolean> {
+    User.findOne({ where: { username: `${userName}` } }).then(function (user) {
+      if (user) {
+        user.destroy().then(async function () {
+          await User.sync({ alter: true });
+          return true;
+        });
+      }
+    });
+    return false;
   }
 }
 

@@ -10,53 +10,62 @@ const router = Router();
 const userDao = new UserDao();
 
 /******************************************************************************
- *                      Get All Users - "GET /api/users/all"
+ *                      Get current User - "GET /api/users/"
  ******************************************************************************/
 
-router.get("/all", async (req: Request, res: Response) => {
-  const users = await userDao.getAll();
-  return res.status(OK).json({ users });
-});
-
-/******************************************************************************
- *                       Add One - "POST /api/users/add"
- ******************************************************************************/
-
-router.post("/add", async (req: Request, res: Response) => {
-  const { user } = req.body;
+router.get("/", async (req: Request, res: Response) => {
+  var tokens = req.cookies("access_tokens");
+  var username = tokens.access_tokens.clientRefreshToken.username;
+  const user = await userDao.getOne(username);
   if (!user) {
-    return res.status(BAD_REQUEST).json({
+    return res.status(401).json({
       error: paramMissingError,
     });
   }
-  await userDao.add(user);
-  return res.status(CREATED).end();
+  return res.status(OK).json({ user });
 });
 
 /******************************************************************************
- *                       Update - "PUT /api/users/update"
+ *                       Update current User - "PUT /api/users/"
  ******************************************************************************/
 
-router.put("/update", async (req: Request, res: Response) => {
+router.put("/", async (req: Request, res: Response) => {
   const { user } = req.body;
-  if (!user) {
-    return res.status(BAD_REQUEST).json({
+  var tokens = req.cookies("access_tokens");
+  var username = tokens.access_tokens.clientRefreshToken.username;
+  if (!(await userDao.update(username, user))) {
+    return res.status(401).json({
       error: paramMissingError,
     });
   }
-  user.username = String(user.username);
-  await userDao.update(user);
-  return res.status(OK).end();
+  return res.status(200).end();
 });
 
 /******************************************************************************
- *                    Delete - "DELETE /api/users/delete/:id"
+ *                       Delete current User - "DELETE /api/users/"
  ******************************************************************************/
 
-router.delete("/delete/:id", async (req: Request, res: Response) => {
-  const { username } = req.params as ParamsDictionary;
-  await userDao.delete(username);
-  return res.status(OK).end();
+router.delete("/", async (req: Request, res: Response) => {
+  var tokens = req.cookies("access_tokens");
+  var username = tokens.access_tokens.clientRefreshToken.username;
+  if (!(await userDao.delete(username))) {
+    return res.status(401).json({
+      error: paramMissingError,
+    });
+  }
+  return res.status(200).end();
+});
+
+/******************************************************************************
+ *                       Logout current User - "GET /api/users/logout"
+ ******************************************************************************/
+
+router.get("/logout", async (req: Request, res: Response) => {
+  res.cookie("access_tokens", {
+    access_token: null,
+    refresh_token: null,
+  });
+  return res.status(200).end();
 });
 
 /******************************************************************************
