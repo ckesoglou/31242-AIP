@@ -98,12 +98,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-        "400":
-          description: Invalid user supplied
-          content: {}
-        "404":
-          description: User not found
-          content: {}
+        "401":
+          description: Not authenticated.
       tags:
         - User
     put:
@@ -123,12 +119,8 @@ paths:
       responses:
         "200":
           description: Resource updated successfully
-        "400":
-          description: Invalid user supplied
-          content: {}
-        "404":
-          description: User not found
-          content: {}
+        "401":
+          description: Not authenticated.
     delete:
       description: >-
         Attempts to delete user if they are currently logged in
@@ -139,12 +131,8 @@ paths:
       responses:
         "200":
           description: Resource deleted successfully
-        "400":
-          description: Invalid user supplied
-          content: {}
-        "404":
-          description: User not found
-          content: {}
+        "401":
+          description: Not authenticated.
   /api/user/logout:
     summary: Logs out current logged in user session.
     get:

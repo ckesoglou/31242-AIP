@@ -180,10 +180,7 @@ Attempts to view the user information with the refresh JSON Web Token (if stored
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned user information.|[User](#schemauser)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
-
-<h3 id="get__api_user-responseschema">Response Schema</h3>
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -229,17 +226,12 @@ Attempts to update user if they are currently logged in
 |---|---|---|---|---|
 |body|body|[User](#schemauser)|true|Updated user object|
 
-> Example responses
-
 <h3 id="put__api_user-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource updated successfully|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
-
-<h3 id="put__api_user-responseschema">Response Schema</h3>
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -269,101 +261,12 @@ fetch('/api/user',
 
 Attempts to delete user if they are currently logged in
 
-> Example responses
-
 <h3 id="delete__api_user-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource deleted successfully|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
-
-<h3 id="delete__api_user-responseschema">Response Schema</h3>
-
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-userAuthenticated
-</aside>
-
-## get__api_user_requests
-
-> Code samples
-
-```javascript
-
-const headers = {
-  'Accept':'application/json'
-};
-
-fetch('/api/user/requests',
-{
-  method: 'GET',
-
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-`GET /api/user/requests`
-
-Attempts to view the requests created by a user with the refresh JSON Web Token (if stored in the client's cookies).
-
-> Example responses
-
-> 200 Response
-
-```json
-[
-  {
-    "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
-    "author": {
-      "username": "jsmith",
-      "display_name": "John Smith"
-    },
-    "completed_by": {
-      "username": "jsmith",
-      "display_name": "John Smith"
-    },
-    "proof_of_completion": "string",
-    "details": "Clean the fridge",
-    "created_time": "2020-03-09T22:18:26.625Z",
-    "completion_time": "2020-03-09T22:18:26.625Z",
-    "is_completed": false
-  }
-]
-```
-
-<h3 id="get__api_user_requests-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of requests created by user.|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
-
-<h3 id="get__api_user_requests-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Request](#schemarequest)]|false|none|none|
-|» id|string|true|none|Unique identifier for an IOU|
-|» author|[User](#schemauser)|true|none|none|
-|»» username|string|true|none|none|
-|»» display_name|string|false|none|none|
-|» completed_by|[User](#schemauser)|false|none|none|
-|» proof_of_completion|string(binary)|false|none|Image proof of completion|
-|» details|string|true|none|none|
-|» created_time|string(date-time)|true|none|none|
-|» completion_time|string(date-time)|false|none|none|
-|» is_completed|boolean|true|none|none|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -680,7 +583,7 @@ View favours the currently logged in user owes to others.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned items. Default 25.|
+|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
 
 > Example responses
 
