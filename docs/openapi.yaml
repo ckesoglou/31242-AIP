@@ -525,6 +525,30 @@ paths:
           description: Not authenticated.
       tags:
         - Leaderboard
+  /api/image/{imagePK}:
+    summary: Image endpoint.
+    parameters:
+      - in: query
+        name: imagePK
+        schema:
+          type: string
+        description: Unique identifier for the image.
+        required: true
+    get:
+      description: Retrieve an image.
+      responses:
+        "200":
+          description: Image found and returned.
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+                description: Returned binary data. This should be handled by the browser directly.
+        "404":
+          description: Image not found.
+      tags:
+        - Image
 components:
   schemas:
     User:
