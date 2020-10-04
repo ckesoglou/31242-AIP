@@ -17,13 +17,16 @@ import {
   TextField,
   Typography,
   withStyles,
+  ListItemText,
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
-import SearchIcon from "@material-ui/icons/Search";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
-import SendIcon from "@material-ui/icons/Send";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import {
+  Search,
+  MeetingRoom,
+  PeopleOutline,
+  ThumbsUpDown,
+} from "@material-ui/icons";
 
 type HomeState = {
   initials: string;
@@ -120,8 +123,11 @@ class Home extends React.Component<IHomeProps, HomeState> {
                   {"Home"}
                 </Typography>
                 <Avatar
-                  onClick={() => {
-                    this.setState({ userMenu: true });
+                  onClick={(event: React.MouseEvent<HTMLElement>) => {
+                    this.setState({
+                      userMenu: true,
+                      anchorEl: event.currentTarget,
+                    });
                   }}
                   id="avatar"
                 >
@@ -133,43 +139,44 @@ class Home extends React.Component<IHomeProps, HomeState> {
                   keepMounted
                   open={this.state.userMenu}
                   onClose={() => {
-                    this.setState({ userMenu: false });
+                    this.setState({ userMenu: false, anchorEl: null });
                   }}
                 >
-                  <StyledMenuItem>
-                    <ListItemIcon>
-                      <SendIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Sent mail" />
-                  </StyledMenuItem>
-                  <StyledMenuItem>
-                    <ListItemIcon>
-                      <DraftsIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Drafts" />
-                  </StyledMenuItem>
-                  <StyledMenuItem>
-                    <ListItemIcon>
-                      <InboxIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Inbox" />
-                  </StyledMenuItem>
+                  <Link color="inherit" component={RouterLink} to="/">
+                    <StyledMenuItem>
+                      <ListItemIcon>
+                        <MeetingRoom fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Click here to go back!" />
+                    </StyledMenuItem>
+                  </Link>
+                  <Link color="inherit" component={RouterLink} to="/user">
+                    <StyledMenuItem>
+                      <ListItemIcon>
+                        <ThumbsUpDown fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="My Favours" />
+                    </StyledMenuItem>
+                  </Link>
+                  <Link color="inherit" component={RouterLink} to="/user">
+                    <StyledMenuItem>
+                      <ListItemIcon>
+                        <PeopleOutline fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="My Requests" />
+                    </StyledMenuItem>
+                  </Link>
+                  <MenuItem />
+                  <Link color="inherit" component={RouterLink} to="/user">
+                    <StyledMenuItem>
+                      <ListItemIcon>
+                        <ExitToAppIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Log Out" />
+                    </StyledMenuItem>
+                  </Link>
                 </StyledMenu>
               </div>
-              <h1>You've reached the next page!</h1>
-              <h2>
-                <Link component={RouterLink} to="/">
-                  Click here to go back!
-                </Link>
-              </h2>
-              <h2>
-                <Link component={RouterLink} to="/user">
-                  Click here for user page!
-                </Link>
-                <p>
-                  Well well well.. look who it is - {this.context.user.name}!
-                </p>
-              </h2>
             </Grid>
             <Grid item xs={8}>
               <div className="content">
@@ -184,7 +191,7 @@ class Home extends React.Component<IHomeProps, HomeState> {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <SearchIcon />
+                          <Search />
                         </InputAdornment>
                       ),
                     }}
@@ -197,6 +204,11 @@ class Home extends React.Component<IHomeProps, HomeState> {
                   >
                     <label>Filter</label>
                   </Button>
+                </Box>
+                <Box>
+                  <h2>
+                    Well well well.. look who it is - {this.context.user.name}!
+                  </h2>
                 </Box>
               </div>
             </Grid>
