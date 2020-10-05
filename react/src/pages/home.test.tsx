@@ -1,70 +1,87 @@
-// import React from "react";
-// import { shallow, mount } from "enzyme";
-// import { MemoryRouter, Route } from "react-router-dom";
-// import Login from "./login";
+import React from "react";
+import { shallow, mount } from "enzyme";
+import { MemoryRouter, Route } from "react-router-dom";
+import Home from "./home";
+import UserProfile from "./userprofile";
+import { UserContext } from "../components/user-context";
 
-// const testProps = {
-//   history: {} as any,
-//   location: {} as any,
-//   match: {} as any,
-// };
+const testProps = {
+  history: {} as any,
+  location: {} as any,
+  match: {} as any,
+};
 
-// describe("<Login />", () => {
-//   it("should render correctly", () => {
-//     const wrapper = shallow(
-//       <Login
-//         history={testProps.history}
-//         location={testProps.location}
-//         match={testProps.match}
-//       />
-//     );
+describe("<Home />", () => {
+  it("should render correctly", () => {
+    const wrapper = shallow(
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: (newUser: Object) => {},
+        }}
+      >
+        <Home
+          history={testProps.history}
+          location={testProps.location}
+          match={testProps.match}
+        />
+      </UserContext.Provider>
+    );
 
-//     expect(wrapper).toMatchSnapshot();
-//   });
+    expect(wrapper).toMatchSnapshot();
+  });
 
-//   it("navigates to next page for successful login", () => {
-//     const wrapper = mount(
-//       <MemoryRouter initialEntries={["/login"]}>
-//         <Route path="/login" component={Login} />
-//         <Route path="/home">
-//           <h1>Hello</h1>
-//         </Route>
-//       </MemoryRouter>
-//     );
+  it("navigates to user page from user menu", () => {
+    const wrapper = mount(
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: (newUser: Object) => {},
+        }}
+      >
+        <MemoryRouter initialEntries={["/home"]}>
+          <Route path="/home" component={Home} />
+          <Route path="/user" component={UserProfile} />
+        </MemoryRouter>
+      </UserContext.Provider>
+    );
+    let homeComponent = wrapper.find("Home");
+    homeComponent.find("div#avatar").simulate("click");
+    // kudos to https://github.com/enzymejs/enzyme/issues/516
+    homeComponent.find("a#favoursLink").simulate("click", { button: 0 });
 
-//     let loginComponent = wrapper.find("Login");
-//     loginComponent.setState({
-//       username: "",
-//       password: "",
-//       error: "",
-//       successfulLogin: true,
-//     });
+    // @ts-ignore
+    expect(wrapper.find("Router").prop("history").location.pathname).toEqual(
+      "/user"
+    );
+    // @ts-ignore
+    expect(wrapper.find("UserProfile").prop("location").state.tabIndex).toEqual(
+      1
+    );
+  });
 
-//     // @ts-ignore
-//     expect(wrapper.find("Router").prop("history").location.pathname).toEqual(
-//       "/home"
-//     );
-//   });
+  it("should have initials of logged in user for avatar", () => {
+    const spy = jest.spyOn(Home.prototype, "nameToUpperInitials");
+    const wrapper = mount(
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: (newUser: Object) => {},
+        }}
+      >
+        <MemoryRouter>
+          <Home
+            history={testProps.history}
+            location={testProps.location}
+            match={testProps.match}
+          />
+        </MemoryRouter>
+      </UserContext.Provider>
+    );
 
-//   it("should handle login if button is clicked", () => {
-//     const spy = jest.spyOn(Login.prototype, "handleLogin");
-//     const wrapper = mount(
-//       <Login
-//         history={testProps.history}
-//         location={testProps.location}
-//         match={testProps.match}
-//       />
-//     );
+    let avatar = wrapper.find(Home).find("div#avatar");
 
-//     wrapper
-//       .find("input#password")
-//       .simulate("change", { target: { value: "This is a valid password!" } });
-//     wrapper
-//       .find("input#username")
-//       .simulate("change", { target: { value: "This is a valid username!" } });
-
-//     wrapper.find("button").simulate("click");
-
-//     expect(spy).toHaveBeenCalledTimes(1);
-//   });
-// });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(avatar.text()).toBe("KL");
+  });
+});
