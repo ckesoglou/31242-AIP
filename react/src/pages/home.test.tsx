@@ -20,11 +20,7 @@ describe("<Home />", () => {
           updateUser: (newUser: Object) => {},
         }}
       >
-        <Home
-          history={testProps.history}
-          location={testProps.location}
-          match={testProps.match}
-        />
+        <Home />
       </UserContext.Provider>
     );
 
@@ -70,11 +66,7 @@ describe("<Home />", () => {
         }}
       >
         <MemoryRouter>
-          <Home
-            history={testProps.history}
-            location={testProps.location}
-            match={testProps.match}
-          />
+          <Home />
         </MemoryRouter>
       </UserContext.Provider>
     );

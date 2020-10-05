@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import "../assets/css/home.css";
 import {
   Avatar,
@@ -34,20 +34,22 @@ type HomeState = {
   anchorEl: HTMLElement | null;
 };
 
-interface IHomeProps extends RouteComponentProps {
-  location: {
-    key: string;
-    pathname: string;
-    search: string;
-    hash: string;
-    state: {
-      next: {
-        pathname: string;
-      };
-    };
-  };
-}
+// This may or may not be useful but keeping in case we need it
+// interface IHomeProps extends RouteComponentProps {
+//   location: {
+//     key: string;
+//     pathname: string;
+//     search: string;
+//     hash: string;
+//     state: {
+//       next: {
+//         pathname: string;
+//       };
+//     };
+//   };
+// }
 
+// kudos to https://material-ui.com/components/menus/
 const StyledMenu = withStyles({
   paper: {
     border: "1px solid #d3d4d5",
@@ -68,6 +70,7 @@ const StyledMenu = withStyles({
   />
 ));
 
+// kudos to https://material-ui.com/components/menus/
 const StyledMenuItem = withStyles((theme) => ({
   root: {
     "&:focus": {
@@ -79,11 +82,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-class Home extends React.Component<IHomeProps, HomeState> {
-  constructor(props: IHomeProps) {
-    super(props);
-  }
-
+class Home extends React.Component {
   state: HomeState = {
     initials: "",
     userMenu: false,
