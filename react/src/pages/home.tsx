@@ -96,17 +96,22 @@ class Home extends React.Component<IHomeProps, HomeState> {
   }> = UserContext;
 
   // most readable solution from https://stackoverflow.com/questions/33076177/getting-name-initials-using-js
-  nameToInitials(fullName: string) {
+  nameToUpperInitials(fullName: string) {
     const namesArray = fullName.split(" ");
-    if (namesArray.length === 1) return `${namesArray[0].charAt(0)}`;
+    if (namesArray.length === 1)
+      return `${namesArray[0].charAt(0).toUpperCase()}`;
     else
-      return `${namesArray[0].charAt(0)}${namesArray[
+      return `${namesArray[0].charAt(0).toUpperCase()}${namesArray[
         namesArray.length - 1
-      ].charAt(0)}`;
+      ]
+        .charAt(0)
+        .toUpperCase()}`;
   }
 
   componentDidMount() {
-    this.setState({ initials: this.nameToInitials(this.context.user.name) });
+    this.setState({
+      initials: this.nameToUpperInitials(this.context.user.name),
+    });
   }
 
   render() {
@@ -150,7 +155,12 @@ class Home extends React.Component<IHomeProps, HomeState> {
                       <ListItemText primary="Click here to go back!" />
                     </StyledMenuItem>
                   </Link>
-                  <Link color="inherit" component={RouterLink} to="/user">
+                  <Link
+                    id="favoursLink"
+                    color="inherit"
+                    component={RouterLink}
+                    to={{ pathname: "/user", state: { tabIndex: 1 } }}
+                  >
                     <StyledMenuItem>
                       <ListItemIcon>
                         <ThumbsUpDown fontSize="small" />
@@ -158,7 +168,12 @@ class Home extends React.Component<IHomeProps, HomeState> {
                       <ListItemText primary="My Favours" />
                     </StyledMenuItem>
                   </Link>
-                  <Link color="inherit" component={RouterLink} to="/user">
+                  <Link
+                    id="requestLink"
+                    color="inherit"
+                    component={RouterLink}
+                    to={{ pathname: "/user", state: { tabIndex: 2 } }}
+                  >
                     <StyledMenuItem>
                       <ListItemIcon>
                         <PeopleOutline fontSize="small" />
@@ -167,7 +182,12 @@ class Home extends React.Component<IHomeProps, HomeState> {
                     </StyledMenuItem>
                   </Link>
                   <MenuItem />
-                  <Link color="inherit" component={RouterLink} to="/user">
+                  <Link
+                    id="logOutLink"
+                    color="inherit"
+                    component={RouterLink}
+                    to="/user"
+                  >
                     <StyledMenuItem>
                       <ListItemIcon>
                         <ExitToAppIcon fontSize="small" />

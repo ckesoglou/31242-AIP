@@ -3,7 +3,13 @@
 exports[`UserProfile should render correctly 1`] = `
 <UserProfile
   history={Object {}}
-  location={Object {}}
+  location={
+    Object {
+      "state": Object {
+        "tabIndex": undefined,
+      },
+    }
+  }
   match={Object {}}
 />
 `;

@@ -48,6 +48,7 @@ interface IUserProfileProps extends RouteComponentProps {
       next: {
         pathname: string;
       };
+      tabIndex: number;
     };
   };
 }
@@ -98,7 +99,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   state: UserProfileState = {
-    tabIndex: 0,
+    tabIndex: this.props.location.state.tabIndex ?? 0,
     newRequestDialog: false,
     owed: "",
     owe: "",
