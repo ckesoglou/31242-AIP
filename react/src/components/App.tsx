@@ -8,6 +8,8 @@ import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
 import IouComplete from "./iou-complete";
 import IouTask from "./iou-task";
+import IouProof from "./iou-proof";
+import IouFavour from "./iou-single-favour";
 
 
 type AppState = {
@@ -34,8 +36,10 @@ class App extends React.Component {
             ></ProtectedRoute>
             <ProtectedRoute path="/home">
               <h1>You've reached the next page!</h1>
+              <IouProof imagePK="1"/>
               <IouTask taskDescription="Give me a hug?"/>
               <IouComplete IOUCompleter='John' IOUtimestamp="Completed on: 02/02/2020" taskCompleted={true}/>
+              <IouFavour giverUsername="James" recieverUsername="Kevin" items={[{id:"2", display_name:"Coffee"}]}/>
               <h2>
                 <Link to="/">Click here to go back!</Link>
               </h2>

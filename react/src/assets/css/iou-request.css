@@ -21,3 +21,106 @@
 #task{
     font-size: 20px;
 }
+
+#proofImage{
+    height:75px;
+    width: 75px;
+}
+
+#favourArrow{
+    font-size:50px;
+    vertical-align: middle;
+}
+
+/* #favourUserImage{   For when user and reward images are supported
+    height:75px;
+    width: 75px;
+    border-radius: 50%;
+    border: #000000 solid 5px;
+    vertical-align: middle;
+}
+
+#favourImageContainer{
+    display:inline-block;
+    height:75px;
+    width: 75px;
+    border-radius: 50%;
+    border: #000000 solid 5px;
+    vertical-align: middle;
+    text-align:center;
+}
+
+#rewardImageContainer{
+    display: inline-block;
+}
+
+#favourRewardImage{
+    height:75px;
+    width: 75px;
+    border-radius: 50%;
+    border: #3B60E9 solid 5px;
+    vertical-align: middle;
+} */
+
+.circle{
+    height:75px;
+    width: 75px;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 65px;
+    border: white solid 5px;
+    background-color: #222629;
+}
+
+.multipleItemCircle{
+    margin:5px;
+}
+
+#itemsContainer{
+    display: inline-block;
+    position: absolute;
+    background-color: #227ec5;
+    padding: 3px;
+    border-radius: 6px;
+    margin-top: -175px;
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+    pointer-events:none;
+}
+
+#itemsContainerArrow{
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    margin-left: 40px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #227ec5 transparent transparent transparent;
+}
+
+#multipleItemsContainer{
+    display:inline-block;
+    cursor: pointer;
+}
+
+#firstCircle{
+    margin-left: 10px;
+}
+
+#secondCircle{
+    margin-left:-85px;
+}
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
