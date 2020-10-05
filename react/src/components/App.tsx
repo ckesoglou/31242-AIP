@@ -38,7 +38,7 @@ class App extends React.Component {
               <h1>You've reached the next page!</h1>
               <IouProof imagePK="1"/>
               <IouTask taskDescription="Give me a hug?"/>
-              <IouComplete IOUCompleter='John' IOUtimestamp="Completed on: 02/02/2020" taskCompleted={true}/>
+              <IouComplete IOUCompleter='John' IOUtimestamp="Completed on: 02/02/2020" taskCompleted={false} requestID="1"/>
               <IouFavour giverUsername="James" recieverUsername="Kevin" items={[{id:"2", display_name:"Coffee"}]}/>
               <h2>
                 <Link to="/">Click here to go back!</Link>

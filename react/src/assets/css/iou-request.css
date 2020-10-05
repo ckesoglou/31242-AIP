@@ -1,5 +1,42 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
 #completeIconSize{
     font-size: 100px;
+}
+
+#completeForm{
+    text-align: center;
+}
+
+#completeFormQuestion{
+    margin-top: 1rem;
+}
+
+#inputProof{
+    text-align: center;
+    width:50%;
+}
+
+#completeProofFileInfo{
+    margin-top: 1rem;
+}
+
+#completeProofImage{
+    max-width: 60%;
+    max-height: 60%;
+}
+
+#incompleteIouContainer{
+    width:300px;
+}
+
+#completeIouContainer{
+    width:150px;
+    cursor: pointer;
 }
 
 #IouTaskComplete{
