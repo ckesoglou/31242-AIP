@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: ioweyou.tech
-  version: 1.1.1
+  version: 1.2.0
 paths:
   /api/login:
     summary: Endpoint to authenticate a user.
@@ -145,30 +145,6 @@ paths:
         "404":
           description: User not found
           content: {}
-  /api/user/requests:
-    summary: Endpoint to view all requests created by a user.
-    get:
-      description: >-
-        Attempts to view the requests created by a user with the refresh JSON Web Token (if
-        stored in the client's cookies).
-      security:
-        - userAuthenticated: []
-      responses:
-        "200":
-          description: Returned list of requests created by user.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  $ref: "#/components/schemas/Request"
-        "400":
-          description: Invalid user supplied
-        "404":
-          description: User not found
-      tags:
-        - User
   /api/user/logout:
     summary: Logs out current logged in user session.
     get:
@@ -182,6 +158,397 @@ paths:
       tags:
         - User
         - Authentication
+  /api/iou/owed:
+    summary: Endpoint to view favours owed to a user.
+    get:
+      description: View the favours owed to the currently logged in user.
+      security:
+        - userAuthenticated: []
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: Starting row of the returned array. Default 0.
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Maximum number of returned items. Default 25. Maximum 100.
+      responses:
+        "200":
+          description: Returned list of favours owed to user.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+                    item:
+                      type: object
+                      $ref: "#/components/schemas/Item"
+                    giver:
+                      type: object
+                      $ref: "#/components/schemas/User"
+                    parent_request:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11078"
+                    proof_of_debt:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11079"
+                    proof_of_completion:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11076"
+                    created_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    claimed_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    is_claimed:
+                      type: boolean
+                      example: false
+        "400":
+          description: Invalid user supplied
+        "401":
+          description: Not authenticated.
+        "403":
+          description: Not authorised to view these IOUs (you are not the giver/receiver of it)
+      tags:
+        - IOU
+    post:
+      description: Record a new IOU that you are owed
+      security:
+        - userAuthenticated: []
+      requestBody:
+        required: true
+        content:
+          "multipart/form-data":
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username of person who owes you
+                  example: janesmith
+                item:
+                  type: string
+                  description: Unique identifier of the item they owe you
+                  example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+                proof:
+                  type: string
+                  format: binary
+                  description: Image proof of debt
+      responses:
+        "201":
+          description: IOU has been created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the newly created IOU
+                    example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+      tags:
+        - IOU
+  /api/iou/owed/{iouID}/complete:
+    summary: Endpoint for completing an IOU
+    put:
+      description: Mark an IOU as completed
+      security:
+        - userAuthenticated: []
+      parameters:
+        - in: path
+          name: iouID
+          schema:
+            type: string
+          description: Unique identifier for the IOU
+          required: true
+      responses:
+        "200":
+          description: IOU was successfully completed.
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+        "403":
+          description: Not authorised to complete this request (you are not the owner of it)
+        "404":
+          description: Not found (did you mean to use the /owe endpoint)
+      tags:
+        - "IOU"
+  /api/iou/owe:
+    summary: Endpoint to view favours a user owes.
+    get:
+      description: View favours the currently logged in user owes to others.
+      security:
+        - userAuthenticated: []
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: Starting row of the returned array. Default 0.
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Maximum number of returned items. Default 25. Maximum 100.
+      responses:
+        "200":
+          description: Returned list of favours a user owes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+                    item:
+                      type: object
+                      $ref: "#/components/schemas/Item"
+                    receiver:
+                      type: object
+                      $ref: "#/components/schemas/User"
+                    parent_request:
+                      type: string
+                      description: Unique identifier for an IOU
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11078"
+                    proof_of_debt:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11079"
+                    proof_of_completion:
+                      type: string
+                      description: Unique identifier for an image
+                      example: "510ab12d-1689-4b2c-8a8d-275376f11076"
+                    created_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    claimed_time:
+                      type: string
+                      format: date-time
+                      example: "2020-03-09T22:18:26.625Z"
+                    is_claimed:
+                      type: boolean
+                      example: false
+        "401":
+          description: Not authenticated.
+        "403":
+          description: Not authorised to delete this request (you are not the owner of it)
+      tags:
+        - IOU
+    post:
+      description: Record a new IOU that you are owed
+      security:
+        - userAuthenticated: []
+      requestBody:
+        description: Updated user object
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username of person who you owe
+                  example: janesmith
+                item:
+                  type: string
+                  description: Unique identifier of the item they owe you
+                  example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+      responses:
+        "201":
+          description: IOU has been created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier for the newly created IOU
+                    example: "510ab12d-1689-4b2c-8a8d-275376f11077"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+      tags:
+        - IOU
+  /api/iou/owe/{iouID}/complete:
+    summary: Endpoint for completing an IOU
+    parameters:
+      - in: path
+        name: iouID
+        schema:
+          type: string
+        description: Unique identifier for the IOU
+        required: true
+    put:
+      description: Mark an IOU as completed
+      security:
+        - userAuthenticated: []
+      requestBody:
+        description: Proof of completion for a given IOU
+        required: true
+        content:
+          "multipart/form-data":
+            schema:
+              type: object
+              properties:
+                proof:
+                  type: string
+                  format: binary
+                  description: Image proof of debt
+      responses:
+        "200":
+          description: Request was understood, and the matching requests are returned (if any).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Request"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - "IOU"
+  /api/leaderboard:
+    summary: Leaderboard endpoint,
+    get:
+      description: Retrieve the current leaderboard.
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: Starting row of the returned array. Default 0.
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Maximum number of returned items. Default 25. Maximum 100.
+      responses:
+        "200":
+          description: Leaderboard retrieved and returned successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rank:
+                      type: number
+                      description: Rank of this user.
+                      example: 1
+                    user:
+                      $ref: "#/components/schemas/User"
+                      description: User for this position.
+                    score:
+                      type: number
+                      description: Numeric leaderboard score of this user.
+                      example: 35
+        "400":
+          description: The HTTP request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - Leaderboard
+  /api/leaderboard/me:
+    summary: Personal leaderboard endpoint
+    get:
+      description: Retrieve the current score and rank of the logged in user.
+      responses:
+        "200":
+          description: Leaderboard position of the current user retrieved and returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rank:
+                    type: number
+                    description: Rank of this user.
+                    example: 1
+                  score:
+                    type: number
+                    description: Numeric leaderboard score of this user.
+                    example: 35
+        "400":
+          description: The HTTP request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+        "401":
+          description: Not authenticated.
+      tags:
+        - Leaderboard
+  /api/image/{imagePK}:
+    summary: Image endpoint.
+    parameters:
+      - in: query
+        name: imagePK
+        schema:
+          type: string
+        description: Unique identifier for the image.
+        required: true
+    get:
+      description: Retrieve an image.
+      responses:
+        "200":
+          description: Image found and returned.
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+                description: Returned binary data. This should be handled by the browser directly.
+        "404":
+          description: Image not found.
+      tags:
+        - Image
 components:
   schemas:
     User:
@@ -207,7 +574,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          description: Unique identifier for an IOU
+          example: "510ab12d-1689-4b2c-8a8d-275376f11077"
         item:
           type: object
           $ref: "#/components/schemas/Item"
@@ -221,9 +590,13 @@ components:
           type: object
           $ref: "#/components/schemas/Request"
         proof_of_debt:
-          type: integer
+          type: string
+          description: Unique identifier for an image
+          example: "510ab12d-1689-4b2c-8a8d-275376f11071"
         proof_of_completion:
-          type: integer
+          type: string
+          description: Unique identifier for an image
+          example: "510ab12d-1689-4b2c-8a8d-275376f11079"
         created_time:
           type: string
           format: date-time
@@ -242,7 +615,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          description: Unique identifier for an IOU
+          example: "510ab12d-1689-4b2c-8a8d-275376f11077"
         display_name:
           type: string
           example: Coffee
@@ -256,7 +631,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          description: Unique identifier for an IOU
+          example: "510ab12d-1689-4b2c-8a8d-275376f11077"
         author:
           type: object
           $ref: "#/components/schemas/User"
@@ -264,7 +641,9 @@ components:
           type: object
           $ref: "#/components/schemas/User"
         proof_of_completion:
-          type: integer
+          type: string
+          format: binary
+          description: Image proof of completion
         details:
           type: string
           example: Clean the fridge
@@ -279,6 +658,15 @@ components:
         is_completed:
           type: boolean
           example: false
+    badRequest:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+            description: Error message
+            example: Reason why request was invalid
   securitySchemes:
     userAuthenticated:
       type: apiKey
