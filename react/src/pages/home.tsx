@@ -146,7 +146,12 @@ class Home extends React.Component {
                     this.setState({ userMenu: false, anchorEl: null });
                   }}
                 >
-                  <Link color="inherit" component={RouterLink} to="/">
+                  <Link
+                    color="inherit"
+                    component={RouterLink}
+                    to="/"
+                    style={{ textDecoration: "none" }}
+                  >
                     <StyledMenuItem>
                       <ListItemIcon>
                         <MeetingRoom fontSize="small" />
@@ -159,6 +164,7 @@ class Home extends React.Component {
                     color="inherit"
                     component={RouterLink}
                     to={{ pathname: "/user", state: { tabIndex: 1 } }}
+                    style={{ textDecoration: "none" }}
                   >
                     <StyledMenuItem>
                       <ListItemIcon>
@@ -172,6 +178,7 @@ class Home extends React.Component {
                     color="inherit"
                     component={RouterLink}
                     to={{ pathname: "/user", state: { tabIndex: 2 } }}
+                    style={{ textDecoration: "none" }}
                   >
                     <StyledMenuItem>
                       <ListItemIcon>
@@ -185,7 +192,8 @@ class Home extends React.Component {
                     id="logOutLink"
                     color="inherit"
                     component={RouterLink}
-                    to="/user"
+                    to="/login"
+                    style={{ textDecoration: "none" }}
                   >
                     <StyledMenuItem>
                       <ListItemIcon>
@@ -198,7 +206,7 @@ class Home extends React.Component {
               </div>
             </Grid>
             <Grid item xs={8}>
-              <div className="content">
+              <Paper elevation={3} className="content">
                 <Typography component="h3" variant="h4">
                   {"Requests"}
                 </Typography>
@@ -229,7 +237,7 @@ class Home extends React.Component {
                     Well well well.. look who it is - {this.context.user.name}!
                   </h2>
                 </Box>
-              </div>
+              </Paper>
             </Grid>
             <Grid item xs={4}>
               <Paper elevation={3} className="section">
