@@ -136,11 +136,11 @@ class IouComplete extends React.Component<IouCompeteProps, IouCompleteState> {
         let IOUFetchResults = this.fetchIOUdetails();
         //TODOOOOO
     }
-
+    
     render() {
         return(
             <div>
-                <div onClick={this.openCompleteForm} id={(this.props.taskCompleted) ? "completeProofImage" : "incompleteProofImage"}>
+                <div onClick={this.openCompleteForm} id={(this.props.taskCompleted) ? "completeIouContainer" : "incompleteIouContainer"}>
                     <Checkbox
                         checked={this.props.taskCompleted}
                         color="primary"

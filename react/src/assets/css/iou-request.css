@@ -31,12 +31,12 @@
 }
 
 #incompleteIouContainer{
-    width:300px;
+    width:125px;
+    cursor: pointer;
 }
 
 #completeIouContainer{
-    width:150px;
-    cursor: pointer;
+    width:260px;
 }
 
 #IouTaskComplete{
