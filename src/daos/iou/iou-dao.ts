@@ -16,6 +16,9 @@ export interface IIouDao {
     proof: string
   ) => Promise<Object>;
   completeOwed: (username: string, iouname: string) => Promise<null>;
+  getOwe: (username: string, start?: number, limit?: number) => Promise<IIou[]>;
+  postOwe: (giver: string, receiver: string, item: string) => Promise<Object>;
+  completeOwe: (giver: string, iouID: string) => Promise<null>;
 }
 
 class IouDao implements IIouDao {
