@@ -16,26 +16,9 @@ exports[`<App /> should render correctly 1`] = `
         path="/user"
       />
       <ProtectedRoute
+        component={[Function]}
         path="/home"
-      >
-        <h1>
-          You've reached the next page!
-        </h1>
-        <h2>
-          <Link
-            to="/"
-          >
-            Click here to go back!
-          </Link>
-        </h2>
-        <h2>
-          <Link
-            to="/user"
-          >
-            Click here for user page!
-          </Link>
-        </h2>
-      </ProtectedRoute>
+      />
       <Route
         component={[Function]}
         path="/signup"

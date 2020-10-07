@@ -1,9 +1,10 @@
 import React from "react";
 import "../assets/css/App.css";
-import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import Login from "../pages/login";
 import SignUp from "../pages/signup";
 import UserProfile from "../pages/userprofile";
+import Home from "../pages/home";
 import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
 import IouComplete from "./iou-complete";
@@ -40,13 +41,8 @@ class App extends React.Component {
               <IouTask taskDescription="Give me a hug?"/>
               <IouComplete IOUCompleter='John' IOUtimestamp="Completed on: 02/02/2020" taskCompleted={false} requestID="1"/>
               <IouFavour giverUsername="James" recieverUsername="Kevin" items={[{id:"2", display_name:"Coffee"}]}/>
-              <h2>
-                <Link to="/">Click here to go back!</Link>
-              </h2>
-              <h2>
-                <Link to="/user">Click here for user page!</Link>
-              </h2>
             </ProtectedRoute>
+            <ProtectedRoute path="/home" component={Home} />
             <Route path="/signup" component={SignUp} />
             <Route path="/" component={Login} />
           </Switch>
