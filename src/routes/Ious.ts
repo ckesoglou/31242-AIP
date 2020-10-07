@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
 import { ParamsDictionary } from "express-serve-static-core";
+import Joi, { ObjectSchema } from "joi";
 
 import IouDao from "@daos/iou/iou-dao";
 import { paramMissingError } from "@shared/constants";
@@ -8,6 +9,24 @@ import { paramMissingError } from "@shared/constants";
 // Init shared
 const router = Router();
 const iouDao = new IouDao();
+interface IIouOwedPOST {
+  username: string;
+  item: string;
+  proof: string;
+}
+const IouOwedPOST: ObjectSchema<IIouOwedPOST> = Joi.object({
+  username: Joi.string(),
+  item: Joi.string(),
+  proof: Joi.string(),
+}).options({ presence: "required" });
+interface IIouOwePOST {
+  username: string;
+  item: string;
+}
+const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
+  username: Joi.string(),
+  item: Joi.string(),
+}).options({ presence: "required" });
 
 /******************************************************************************
  *                      Get IOUs you are owed - "GET /api/iou/owed"
@@ -30,12 +49,23 @@ router.get("/", async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.post("/", async (req: Request, res: Response) => {
-  const { item, proof } = req.body;
-  const giver = req.body.username;
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
-  const iou = await iouDao.postOwed(giver, username, item, proof);
-  // TODO: handle 400 response
+
+  const { error, value } = IouOwedPOST.validate(req.body);
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      error: paramMissingError,
+    });
+  }
+
+  let request = value as IIouOwedPOST;
+  const iou = await iouDao.postOwed(
+    request.username,
+    username,
+    request.item,
+    request.proof
+  );
   if (!iou) {
     return res.status(401).json({
       error: paramMissingError,
@@ -82,12 +112,18 @@ router.get("/", async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.post("/", async (req: Request, res: Response) => {
-  const { item } = req.body;
-  const receiver = req.body.username;
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
-  const iou = await iouDao.postOwe(username, receiver, item);
-  // TODO: handle 400 response
+
+  const { error, value } = IouOwePOST.validate(req.body);
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      error: paramMissingError,
+    });
+  }
+
+  let request = value as IIouOwePOST;
+  const iou = await iouDao.postOwe(username, request.username, request.item);
   if (!iou) {
     return res.status(401).json({
       error: paramMissingError,
