@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
 import "../assets/css/userprofile.css";
 import { userProfileEndpoint, requestsNewEndpoint } from "../api/endpoints";
 import {
@@ -48,6 +48,7 @@ interface IUserProfileProps extends RouteComponentProps {
       next: {
         pathname: string;
       };
+      tabIndex: number;
     };
   };
 }
@@ -98,7 +99,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   state: UserProfileState = {
-    tabIndex: 0,
+    tabIndex: this.props.location.state.tabIndex ?? 0,
     newRequestDialog: false,
     owed: "",
     owe: "",
@@ -206,7 +207,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         <div className="paper">
           <Grid container spacing={8}>
             <Grid item xs={12}>
-              {/* <Paper className="paper">Profile</Paper> */}
               <div id="header">
                 <Typography component="h2" variant="h4">
                   {"Placeholder IOU"}
@@ -218,12 +218,19 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   {"Placeholder Image"}
                 </Typography>
               </div>
-              <p>Well well well.. look who it is - {this.context.user.name}!</p>
-              <Link href="/">Click here to go back!</Link>
             </Grid>
             <Grid item xs={4}>
-              <Paper>
+              <Paper elevation={3}>
                 <div className="section">
+                  <h2>
+                    <p>
+                      Well well well.. look who it is - {this.context.user.name}
+                      !
+                    </p>
+                    <Link component={RouterLink} to="/home">
+                      Click here to go back!
+                    </Link>
+                  </h2>
                   <Typography component="h3" variant="h4">
                     {"Placeholder Image"}
                   </Typography>
@@ -236,8 +243,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               </Paper>
             </Grid>
             <Grid item xs={8}>
-              {/* <div className="section"> */}
-              <Paper className="content">
+              <Paper elevation={3} className="content">
                 <Tabs
                   value={this.state.tabIndex}
                   onChange={(e, i) => this.handleTabsChange(e, i)}
@@ -372,7 +378,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   {this.state.requests}
                 </TabPanel>
               </Paper>
-              {/* </div> */}
             </Grid>
           </Grid>
         </div>
