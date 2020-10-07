@@ -2,10 +2,15 @@ import React from "react";
 import { shallow, mount } from "enzyme";
 import UserProfile from "./userprofile";
 import { UserContext } from "../components/user-context";
+import { MemoryRouter } from "react-router-dom";
 
 const testProps = {
   history: {} as any,
-  location: {} as any,
+  location: {
+    state: {
+      tabIndex: undefined,
+    },
+  } as any,
   match: {} as any,
 };
 
@@ -32,11 +37,13 @@ describe("UserProfile", () => {
   it("should handle new request if button is clicked", () => {
     const spy = jest.spyOn(UserProfile.prototype, "fetchNewRequest");
     const wrapper = mount(
-      <UserProfile
-        history={testProps.history}
-        location={testProps.location}
-        match={testProps.match}
-      />
+      <MemoryRouter>
+        <UserProfile
+          history={testProps.history}
+          location={testProps.location}
+          match={testProps.match}
+        />
+      </MemoryRouter>
     );
 
     wrapper.find("svg#requestForm").simulate("click");
@@ -55,11 +62,13 @@ describe("UserProfile", () => {
     const spyTabs = jest.spyOn(UserProfile.prototype, "fetchAllTabs");
     const spyCircle = jest.spyOn(UserProfile.prototype, "setLoading");
     const wrapper = mount(
-      <UserProfile
-        history={testProps.history}
-        location={testProps.location}
-        match={testProps.match}
-      />
+      <MemoryRouter>
+        <UserProfile
+          history={testProps.history}
+          location={testProps.location}
+          match={testProps.match}
+        />
+      </MemoryRouter>
     );
 
     wrapper.find("svg#refresh").simulate("click");

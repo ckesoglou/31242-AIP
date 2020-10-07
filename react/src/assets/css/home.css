@@ -1,0 +1,37 @@
+.paper {
+  margin-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+}
+.section {
+  padding: 2rem;
+}
+#header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#filterContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+}
+#filter-text {
+  margin-right: 3rem;
+}
+#filter-button {
+  margin-left: 3rem;
+}
+#avatar {
+  height: 4.5rem;
+  width: 4.5rem;
+  background-color: #86c232;
+}
