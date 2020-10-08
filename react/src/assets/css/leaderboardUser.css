@@ -1,0 +1,13 @@
+#leaderBoardUserContainer {
+  align-items: center;
+  padding-top: 1.5rem;
+}
+#leaderboardUserAvatar {
+  background-color: #86c232;
+  align-self: center;
+  margin: auto;
+}
+#leaderboardItem {
+  align-self: center;
+  text-align: center;
+}
