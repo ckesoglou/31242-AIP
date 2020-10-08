@@ -44,6 +44,7 @@
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "sequelize": "^6.3.4",
+    "tedious": "^9.2.1",
     "uuid": "^8.3.0",
     "winston": "^3.3.3"
   },
