@@ -26,7 +26,12 @@ Token.init(
       allowNull: false,
     },
   },
-  { sequelize: db, tableName: "users" }
+  {
+    sequelize: db,
+    tableName: "tokens",
+    createdAt: false,
+    updatedAt: false,
+  }
 );
 
 export async function getToken(refresh_token: string) {
@@ -40,11 +45,15 @@ export async function createToken(
   created_time: Date,
   expiry_time: Date
 ) {
-  return await Token.create({
+  return Token.create({
     refresh_token: refresh_token,
     username: username,
     device_name: device_name,
     created_time: created_time,
     expiry_time: expiry_time,
   });
+}
+
+export async function deleteToken(token: Token) {
+  return token.destroy();
 }
