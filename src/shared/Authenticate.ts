@@ -39,3 +39,42 @@ function verifyToken(token: string) {
     return jwt.verify(token, env.jwt_secret) as ITokenCookie;
   } catch (err) {}
 }
+
+export async function generateNewAuthenticationTokens(
+  user: User,
+  deviceName: string,
+  res: Response
+) {
+  const now = new Date();
+  const monthFromNow = new Date();
+  monthFromNow.setDate(monthFromNow.getDate() + 30);
+
+  const serverRefreshToken = await createToken(
+    uuid(),
+    user.username,
+    deviceName,
+    now,
+    monthFromNow
+  );
+  const clientRefreshToken = jwt.sign(
+    {
+      username: user.username,
+      token: serverRefreshToken.refresh_token,
+    },
+    env.jwt_secret,
+    { expiresIn: "30 days" }
+  );
+  const clientAccessToken = jwt.sign(
+    {
+      username: user.username,
+      token: uuid(),
+    },
+    env.jwt_secret,
+    { expiresIn: "30m" }
+  );
+
+  res.cookie("access_tokens", {
+    access_token: clientAccessToken,
+    refresh_token: clientRefreshToken,
+  });
+}
