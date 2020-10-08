@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { v4 as uuid } from "uuid";
 import jwt from "jsonwebtoken";
-import { createToken, getToken } from "@daos/Tokens";
+import { createToken, deleteToken, getToken } from "@daos/Tokens";
 import { getUser } from "@daos/Users";
 import { ITokenCookie } from "@entities/Token";
 import User from "@entities/User";
@@ -22,7 +22,7 @@ export async function getAuthenticatedUser(req: Request, res: Response) {
     const serverRefreshToken = await getToken(clientRefreshToken.token);
     if (user && serverRefreshToken) {
       // existing refresh token is removed before a new one is created
-      await serverRefreshToken.destroy();
+      await deleteToken(serverRefreshToken);
       await generateNewAuthenticationTokens(
         user,
         req.headers.host ?? "Unknown",
@@ -37,7 +37,7 @@ export async function getAuthenticatedUser(req: Request, res: Response) {
 function verifyToken(token: string) {
   try {
     return jwt.verify(token, env.jwt_secret) as ITokenCookie;
-  } catch (err) {}
+  } catch (err) { }
 }
 
 export async function generateNewAuthenticationTokens(
