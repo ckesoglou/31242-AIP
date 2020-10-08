@@ -1280,7 +1280,19 @@ Retrieve details about the request rewards on offer.
 > 200 Response
 
 ```json
-[]
+[
+  {
+    "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+    "giver": {
+      "username": "jsmith",
+      "display_name": "John Smith"
+    },
+    "item": {
+      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+      "display_name": "Coffee"
+    }
+  }
+]
 ```
 
 <h3 id="get__api_request_{requestid}_rewards-responses">Responses</h3>
@@ -1296,7 +1308,14 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» *anonymous*|any|false|none|none|
+|*anonymous*|[[Reward](#schemareward)]|false|none|none|
+|» id|string|false|none|Unique identifier of reward (also the ID of the IOU it becomes).|
+|» giver|[User](#schemauser)|false|none|none|
+|»» username|string|false|none|Unique username of the user|
+|»» display_name|string|false|none|Current display name of the user|
+|» item|[Item](#schemaitem)|false|none|none|
+|»» id|string|false|none|Unique identifier of the item.|
+|»» display_name|string|false|none|Current display name of the item.|
 
 <aside class="success">
 This operation does not require authentication
@@ -1416,13 +1435,19 @@ Retrieve details about a specific request rewards on offer.
 
 > Example responses
 
-> 400 Response
+> 200 Response
 
 ```json
 {
-  "errors": [
-    "Reason why request was invalid"
-  ]
+  "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+  "giver": {
+    "username": "jsmith",
+    "display_name": "John Smith"
+  },
+  "item": {
+    "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+    "display_name": "Coffee"
+  }
 }
 ```
 
@@ -1430,10 +1455,8 @@ Retrieve details about a specific request rewards on offer.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned details of a specific request reward.|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned details of a specific request reward.|[Reward](#schemareward)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
-
-<h3 id="get__api_request_{requestid}_reward_{rewardid}-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
@@ -1848,6 +1871,36 @@ This operation does not require authentication
 |created_time|string(date-time)|false|none|Timestamp of when the request was created.|
 |completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
 |is_completed|boolean|false|none|Whether or not this request has been completed by a user.|
+
+<h2 id="tocS_Reward">Reward</h2>
+<!-- backwards compatibility -->
+<a id="schemareward"></a>
+<a id="schema_Reward"></a>
+<a id="tocSreward"></a>
+<a id="tocsreward"></a>
+
+```json
+{
+  "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+  "giver": {
+    "username": "jsmith",
+    "display_name": "John Smith"
+  },
+  "item": {
+    "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+    "display_name": "Coffee"
+  }
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|string|false|none|Unique identifier of reward (also the ID of the IOU it becomes).|
+|giver|[User](#schemauser)|false|none|User who is offering this reward.|
+|item|[Item](#schemaitem)|false|none|Item being offered as an award.|
 
 <h2 id="tocS_badRequest">badRequest</h2>
 <!-- backwards compatibility -->
