@@ -27,6 +27,7 @@ import {
   PeopleOutline,
   ThumbsUpDown,
 } from "@material-ui/icons";
+import Leaderboard from "../components/leaderboard";
 
 type HomeState = {
   initials: string;
