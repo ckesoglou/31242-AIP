@@ -2,32 +2,32 @@
 
 exports[`<App /> should render correctly 1`] = `
 <BrowserRouter>
-  <Switch>
-    <ProtectedRoute
-      path="/users"
-    />
-    <ProtectedRoute
-      path="/home"
-    >
-      <h1>
-        You've reached the next page!
-      </h1>
-      <h2>
-        <Link
-          to="/"
-        >
-          Click here to go back!
-        </Link>
-      </h2>
-    </ProtectedRoute>
-    <Route
-      component={[Function]}
-      path="/signup"
-    />
-    <Route
-      component={[Function]}
-      path="/"
-    />
-  </Switch>
+  <ContextProvider
+    value={
+      Object {
+        "updateUser": [Function],
+        "user": Object {},
+      }
+    }
+  >
+    <Switch>
+      <ProtectedRoute
+        component={[Function]}
+        path="/user"
+      />
+      <ProtectedRoute
+        component={[Function]}
+        path="/home"
+      />
+      <Route
+        component={[Function]}
+        path="/signup"
+      />
+      <Route
+        component={[Function]}
+        path="/"
+      />
+    </Switch>
+  </ContextProvider>
 </BrowserRouter>
 `;

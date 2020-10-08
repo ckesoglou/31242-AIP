@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserProfile should render correctly 1`] = `
+<UserProfile
+  history={Object {}}
+  location={
+    Object {
+      "state": Object {
+        "tabIndex": undefined,
+      },
+    }
+  }
+  match={Object {}}
+/>
+`;
