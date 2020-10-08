@@ -3,7 +3,7 @@ import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
 import bcrypt from 'bcrypt';
 import Joi, { string, ObjectSchema } from "joi";
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
 // import jwt from "jsonwebtoken";
 
 import env from "../Environment";
