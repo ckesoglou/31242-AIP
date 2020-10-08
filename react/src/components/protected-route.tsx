@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
+// kudos to https://codesandbox.io/s/react-router-redirects-typescript-ozv7n?autoresize=1&fontsize=14&view=editor&file=/src/index.tsx:762-774
 const ProtectedRoute: React.ComponentType<any> = ({
   component: Component,
   ...rest
