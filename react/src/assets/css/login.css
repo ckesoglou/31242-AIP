@@ -29,3 +29,6 @@
 #passwordCriteriaHeader {
   font-weight: bold;
 }
+#header {
+  padding-bottom: 1rem;
+}

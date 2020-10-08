@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import { ProtectedRoute, Authentication } from "./protectedRoute";
+import { ProtectedRoute, Authentication } from "./protected-route";
 import { MemoryRouter, Route } from "react-router-dom";
 import Login from "../pages/login";
 
