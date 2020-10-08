@@ -1,5 +1,10 @@
 import { Model } from "sequelize";
 
+export interface ITokenCookie {
+  username: string;
+  token: string;
+}
+
 interface ITokenAttributes {
   refresh_token: string;
   username: string;
