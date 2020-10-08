@@ -5,7 +5,7 @@
   }
 
 #completeIconSize{
-    font-size: 100px;
+    font-size: 5.625rem;
 }
 
 #completeForm{
@@ -69,6 +69,62 @@
     vertical-align: middle;
 }
 
+#favourAvatarContainer{
+    display:inline-block;
+}
+
+#favourAvatar {
+    height: 4.5rem;
+    width: 4.5rem;
+    background-color: #86c232;
+  }
+
+#favourAvatarPopover {
+    margin-top: 10px;
+  }
+  
+#favourAvatarText {
+    padding: 10px;
+}
+
+#rewardAvatar {
+    height: 4.8125rem;
+    width: 4.8125rem;
+    background-color: #222629;
+    color:white;
+    font-size: 16px;
+    border: white solid 0.3125rem;
+}
+
+#rewardContainer {
+    display:inline-block;
+}
+
+#reqestRewardAvatar {
+    height: 4.8125rem;
+    width: 4.8125rem;
+    background-color: #222629;
+    color:white;
+    font-size: 16px;
+    border: white solid 0.3125rem;
+    display:inline-block;
+    line-height: 4.0625rem;
+    text-align: center;
+}
+
+#requestRewardPlus {
+    height: 4.8125rem;
+    width: 4.8125rem;
+    background-color: #222629;
+    color:white;
+    border: white solid 0.3125rem;
+    display:inline-block;
+    line-height: 4.0625rem;
+    text-align: center;
+    font-size: 32px;
+}
+
+
 /* #favourUserImage{   For when user and reward images are supported
     height:75px;
     width: 75px;
@@ -100,20 +156,16 @@
 } */
 
 .circle{
-    height:75px;
-    width: 75px;
+    height: 4.8125rem;
+    width: 4.8125rem;
     border-radius: 50%;
     color: #fff;
     text-align: center;
     display: inline-block;
     vertical-align: middle;
-    line-height: 65px;
-    border: white solid 5px;
+    line-height: 4.0625rem;
+    border: white solid 0.3125rem;
     background-color: #222629;
-}
-
-.multipleItemCircle{
-    margin:5px;
 }
 
 #itemsContainer{
@@ -144,12 +196,40 @@
     cursor: pointer;
 }
 
-#firstCircle{
-    margin-left: 10px;
+.firstCircle{
+    height: 4.8125rem;
+    width: 4.8125rem;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 4.0625rem;
+    border: white solid 0.3125rem;
+    background-color: #222629;
+    font-size: 16px;
 }
 
-#secondCircle{
-    margin-left:-85px;
+.secondCircle{
+    height: 4.8125rem;
+    width: 4.8125rem;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 4.0625rem;
+    border: white solid 0.3125rem;
+    background-color: #222629;
+    margin-left:-25px;
+    z-index: -1;
+    position: relative;
+    font-size: 16px;
+}
+
+.thirdCircle {
+    z-index: -2;
+
 }
 
 @-webkit-keyframes fadeIn {

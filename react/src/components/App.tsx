@@ -11,6 +11,7 @@ import IouComplete from "./iou-complete";
 import IouTask from "./iou-task";
 import IouProof from "./iou-proof";
 import IouFavour from "./iou-single-favour";
+import RequestRewards from "./request-rewards"
 
 
 type AppState = {
@@ -39,10 +40,11 @@ class App extends React.Component {
               <h1>You've reached the next page!</h1>
               <IouProof imagePK="1"/>
               <IouTask taskDescription="Give me a hug?"/>
-              <IouComplete IOUCompleter='John' IOUtimestamp="Completed on: 02/02/2020" taskCompleted={false} requestID="1"/>
-              <IouFavour giverUsername="James" recieverUsername="Kevin" items={[{id:"2", display_name:"Coffee"}]}/>
+              <IouComplete IOUCompleter='John' IOUtimestamp="Completed on: 02/02/2020" taskCompleted={true} requestID="1"/>
+              <IouFavour giverDisplayName="James Lee" recieverDisplayName="Kevin" item={{id:"2", display_name:"Coffee"}}/>
+              <RequestRewards items={[{id:"2", display_name:"Coffee"}]}/>
             </ProtectedRoute>
-            <ProtectedRoute path="/home" component={Home} />
+            {/* <ProtectedRoute path="/home" component={Home} /> */}
             <Route path="/signup" component={SignUp} />
             <Route path="/" component={Login} />
           </Switch>

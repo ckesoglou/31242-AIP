@@ -133,10 +133,11 @@ class IouComplete extends React.Component<IouCompeteProps, IouCompleteState> {
     }
 
     renderFormIOUDetails() {
-        let IOUFetchResults = this.fetchIOUdetails();
+        return;
+        //let IOUFetchResults = this.fetchIOUdetails();
         //TODOOOOO
     }
-    
+
     render() {
         return(
             <div>
