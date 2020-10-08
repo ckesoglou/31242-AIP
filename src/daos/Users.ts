@@ -18,7 +18,12 @@ User.init(
       allowNull: false,
     },
   },
-  { sequelize: db, tableName: "users" }
+  {
+    sequelize: db,
+    tableName: "users",
+    createdAt: false,
+    updatedAt: false,
+  }
 );
 
 export async function getUser(username: string) {
