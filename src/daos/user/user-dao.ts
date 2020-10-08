@@ -1,5 +1,5 @@
-import User, { IUser } from "@entities/User";
-import db from "../db-instance";
+import User, { IUser } from '@entities/User';
+import db from '../db-instance';
 
 export interface IUserDao {
   getOne: (username: string) => Promise<IUser | null>;
@@ -15,7 +15,7 @@ class UserDao implements IUserDao {
    */
   public async getOne(username: string): Promise<IUser | null> {
     const user = await User.findByPk(username, {
-      attributes: ["display_name"],
+      attributes: ['display_name'],
     });
     return user;
   }
@@ -25,7 +25,7 @@ class UserDao implements IUserDao {
    */
   public async getAll(): Promise<IUser[]> {
     const users = await User.findAll({
-      attributes: ["display_name"],
+      attributes: ['display_name'],
     });
     return users;
   }
