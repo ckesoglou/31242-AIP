@@ -990,6 +990,19 @@ components:
           type: boolean
           description: Whether or not this request has been completed by a user.
           example: false
+    Reward:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of reward (also the ID of the IOU it becomes).
+          example: 1ce5d3cc-cb15-4050-9f0f-95d089721ed8
+        giver:
+          description: User who is offering this reward.
+          $ref: "#/components/schemas/User"
+        item:
+          description: Item being offered as an award.
+          $ref: "#/components/schemas/Item"
     badRequest:
       type: object
       properties:
