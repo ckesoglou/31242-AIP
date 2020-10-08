@@ -9,11 +9,26 @@
   margin-top: 1rem;
 }
 #submit {
-  margin: 3rem 0rem 2rem;
+  margin: 1rem 0rem 1rem;
 }
 #loading {
   display: none;
 }
-#signInText {
+#signInText,
+#signUpText {
   padding: 0.275rem;
+}
+#passwordRequirements {
+  display: none;
+  font-size: smaller;
+}
+#passwordCriteria {
+  padding: 0.1rem 1rem 0.1rem 1rem;
+  margin: 0;
+}
+#passwordCriteriaHeader {
+  font-weight: bold;
+}
+#header {
+  padding-bottom: 1rem;
 }

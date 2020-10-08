@@ -10,7 +10,8 @@ exports[`SignUp should render correctly 1`] = `
   >
     <WithStyles(ForwardRef(Typography))
       component="h1"
-      variant="h5"
+      id="header"
+      variant="h4"
     >
       Sign Up
     </WithStyles(ForwardRef(Typography))>
@@ -24,6 +25,7 @@ exports[`SignUp should render correctly 1`] = `
         margin="normal"
         name="username"
         onChange={[Function]}
+        onFocus={[Function]}
         required={true}
         value=""
         variant="outlined"
@@ -35,25 +37,61 @@ exports[`SignUp should render correctly 1`] = `
         margin="normal"
         name="display_name"
         onChange={[Function]}
+        onFocus={[Function]}
         required={true}
         value=""
         variant="outlined"
       />
       <WithStyles(ForwardRef(TextField))
+        error={false}
         fullWidth={true}
         id="password"
         label="Password"
         margin="normal"
         name="password"
         onChange={[Function]}
+        onFocus={[Function]}
         required={true}
         type="password"
         value=""
         variant="outlined"
       />
+      <div
+        id="passwordRequirements"
+      >
+        <ForwardRef(Grow)
+          in={false}
+          timeout={500}
+        >
+          <WithStyles(ForwardRef(Paper))
+            id="passwordCriteria"
+          >
+            <p
+              id="passwordCriteriaHeader"
+            >
+              Password Criteria
+            </p>
+            <p
+              id="characterLength"
+            >
+              Needs to be at least 8 characters
+            </p>
+            <p
+              id="uppercaseCharacter"
+            >
+              Needs to have one upper-case character
+            </p>
+            <p
+              id="specialCharacter"
+            >
+              Needs to have one special character - e.g. !@#$%
+            </p>
+          </WithStyles(ForwardRef(Paper))>
+        </ForwardRef(Grow)>
+      </div>
       <WithStyles(ForwardRef(Button))
         color="primary"
-        disabled={false}
+        disabled={true}
         fullWidth={true}
         id="submit"
         onClick={[Function]}
