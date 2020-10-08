@@ -5,7 +5,7 @@ import db from "./DBInstance";
 Token.init(
   {
     refresh_token: {
-      type: DataTypes.STRING(),
+      type: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
@@ -29,8 +29,7 @@ Token.init(
   {
     sequelize: db,
     tableName: "tokens",
-    createdAt: false,
-    updatedAt: false,
+    timestamps: false
   }
 );
 

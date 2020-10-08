@@ -21,11 +21,22 @@ User.init(
   {
     sequelize: db,
     tableName: "users",
-    createdAt: false,
-    updatedAt: false,
+    timestamps: false
   }
 );
 
 export async function getUser(username: string) {
   return User.findByPk(username);
+}
+
+export async function createUser(
+  username: string,
+  display_name: string,
+  password_hash: string
+) {
+  return User.create({
+    username: username,
+    display_name: display_name,
+    password_hash: password_hash
+  });
 }
