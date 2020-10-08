@@ -7,7 +7,6 @@ import UserProfile from "../pages/userprofile";
 import Home from "../pages/home";
 import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
-import Leaderboard from "./leaderboard";
 
 type AppState = {
   user: Object;
