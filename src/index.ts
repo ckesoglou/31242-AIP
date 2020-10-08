@@ -1,7 +1,7 @@
 import app from "@server";
 import logger from "@shared/Logger";
-import env from "./environment";
-import db from "./daos/db-instance";
+import env from "./Environment";
+import db from "./daos/DBInstance";
 
 // Start the server
 const port = Number(env.port || 4000);
