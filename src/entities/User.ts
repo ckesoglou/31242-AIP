@@ -1,5 +1,5 @@
-import { DataTypes, Model } from "sequelize";
-import db from "../daos/db-instance";
+import { DataTypes, Model } from 'sequelize';
+import db from '../daos/db-instance';
 
 export interface IUser {
   username: string;
@@ -29,7 +29,7 @@ User.init(
       allowNull: false,
     },
   },
-  { sequelize: db, tableName: "users", timestamps: false }
+  { sequelize: db, tableName: 'users', timestamps: false }
 );
 
 export default User;
