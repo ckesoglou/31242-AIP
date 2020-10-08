@@ -1,15 +1,12 @@
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import "../assets/css/home.css";
 import {
-  Avatar,
   Box,
   Button,
   Container,
   Grid,
   InputAdornment,
-  Link,
-  ListItemIcon,
   Menu,
   MenuItem,
   MenuProps,
@@ -17,23 +14,12 @@ import {
   TextField,
   Typography,
   withStyles,
-  ListItemText,
+  CircularProgress,
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import {
-  Search,
-  MeetingRoom,
-  PeopleOutline,
-  ThumbsUpDown,
-} from "@material-ui/icons";
+import { AvatarWithMenu } from "../components/avatarWithMenu";
 import Leaderboard from "../components/leaderboard";
-
-type HomeState = {
-  initials: string;
-  userMenu: boolean;
-  anchorEl: HTMLElement | null;
-};
+import { Search } from "@material-ui/icons";
 
 // This may or may not be useful but keeping in case we need it
 // interface IHomeProps extends RouteComponentProps {
@@ -50,68 +36,22 @@ type HomeState = {
 //   };
 // }
 
-// kudos to https://material-ui.com/components/menus/
-const StyledMenu = withStyles({
-  paper: {
-    border: "1px solid #d3d4d5",
-  },
-})((props: MenuProps) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "center",
-    }}
-    {...props}
-  />
-));
-
-// kudos to https://material-ui.com/components/menus/
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    "&:focus": {
-      backgroundColor: theme.palette.primary.main,
-      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-        color: theme.palette.common.white,
-      },
-    },
-  },
-}))(MenuItem);
-
 class Home extends React.Component {
-  state: HomeState = {
-    initials: "",
-    userMenu: false,
-    anchorEl: null,
-  };
+  private loadingRef: React.RefObject<HTMLInputElement>;
+
+  constructor(props: RouteComponentProps) {
+    super(props);
+
+    this.loadingRef = React.createRef();
+  }
 
   static contextType: React.Context<{
     user: {};
     updateUser: (newUser: object) => void;
   }> = UserContext;
 
-  // most readable solution from https://stackoverflow.com/questions/33076177/getting-name-initials-using-js
-  nameToUpperInitials(fullName: string) {
-    const namesArray = fullName.split(" ");
-    if (namesArray.length === 1)
-      return `${namesArray[0].charAt(0).toUpperCase()}`;
-    else
-      return `${namesArray[0].charAt(0).toUpperCase()}${namesArray[
-        namesArray.length - 1
-      ]
-        .charAt(0)
-        .toUpperCase()}`;
-  }
-
-  componentDidMount() {
-    this.setState({
-      initials: this.nameToUpperInitials(this.context.user.name),
-    });
+  setLoading(value: boolean): void {
+    this.loadingRef.current!.style.display = value ? "block" : "none";
   }
 
   render() {
@@ -127,83 +67,7 @@ class Home extends React.Component {
                 <Typography component="h1" variant="h4">
                   {"Home"}
                 </Typography>
-                <Avatar
-                  onClick={(event: React.MouseEvent<HTMLElement>) => {
-                    this.setState({
-                      userMenu: true,
-                      anchorEl: event.currentTarget,
-                    });
-                  }}
-                  id="avatar"
-                >
-                  {this.state.initials}
-                </Avatar>
-                <StyledMenu
-                  id="customized-menu"
-                  anchorEl={this.state.anchorEl}
-                  keepMounted
-                  open={this.state.userMenu}
-                  onClose={() => {
-                    this.setState({ userMenu: false, anchorEl: null });
-                  }}
-                >
-                  <Link
-                    color="inherit"
-                    component={RouterLink}
-                    to="/"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <StyledMenuItem>
-                      <ListItemIcon>
-                        <MeetingRoom fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Click here to go back!" />
-                    </StyledMenuItem>
-                  </Link>
-                  <Link
-                    id="favoursLink"
-                    color="inherit"
-                    component={RouterLink}
-                    to={{ pathname: "/user", state: { tabIndex: 1 } }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <StyledMenuItem>
-                      <ListItemIcon>
-                        <ThumbsUpDown fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="My Favours" />
-                    </StyledMenuItem>
-                  </Link>
-                  <Link
-                    id="requestLink"
-                    color="inherit"
-                    component={RouterLink}
-                    to={{ pathname: "/user", state: { tabIndex: 2 } }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <StyledMenuItem>
-                      <ListItemIcon>
-                        <PeopleOutline fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="My Requests" />
-                    </StyledMenuItem>
-                  </Link>
-                  <MenuItem />
-                  <Link
-                    id="logOutLink"
-                    color="inherit"
-                    component={RouterLink}
-                    to="/login"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <StyledMenuItem>
-                      <ListItemIcon>
-                        <ExitToAppIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Log Out" />
-                    </StyledMenuItem>
-                  </Link>
-                </StyledMenu>
+                <AvatarWithMenu fullName={this.context.user.name} />
               </div>
             </Grid>
             <Grid item xs={8}>
@@ -237,16 +101,17 @@ class Home extends React.Component {
                   <h2>
                     Well well well.. look who it is - {this.context.user.name}!
                   </h2>
+                  <CircularProgress
+                    ref={this.loadingRef}
+                    size={35}
+                    color="inherit"
+                    id="loading"
+                  />
                 </Box>
               </Paper>
             </Grid>
             <Grid item xs={4}>
-              <Paper elevation={3} className="section">
-                <Typography component="h3" variant="h4">
-                  {"Leaderboard"}
-                </Typography>
-                <Leaderboard />
-              </Paper>
+              <Leaderboard />
             </Grid>
           </Grid>
         </div>

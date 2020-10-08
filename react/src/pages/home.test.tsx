@@ -4,12 +4,13 @@ import { MemoryRouter, Route } from "react-router-dom";
 import Home from "./home";
 import UserProfile from "./userprofile";
 import { UserContext } from "../components/user-context";
+import { AvatarWithMenu } from "../components/avatarWithMenu";
 
-const testProps = {
-  history: {} as any,
-  location: {} as any,
-  match: {} as any,
-};
+// const testProps = {
+//   history: {} as any,
+//   location: {} as any,
+//   match: {} as any,
+// };
 
 describe("<Home />", () => {
   it("should render correctly", () => {
@@ -17,7 +18,7 @@ describe("<Home />", () => {
       <UserContext.Provider
         value={{
           user: { name: "Kevin Leung" },
-          updateUser: (newUser: Object) => {},
+          updateUser: () => {},
         }}
       >
         <Home />
@@ -32,7 +33,7 @@ describe("<Home />", () => {
       <UserContext.Provider
         value={{
           user: { name: "Kevin Leung" },
-          updateUser: (newUser: Object) => {},
+          updateUser: () => {},
         }}
       >
         <MemoryRouter initialEntries={["/home"]}>
@@ -57,12 +58,12 @@ describe("<Home />", () => {
   });
 
   it("should have initials of logged in user for avatar", () => {
-    const spy = jest.spyOn(Home.prototype, "nameToUpperInitials");
+    const spy = jest.spyOn(AvatarWithMenu.prototype, "nameToUpperInitials");
     const wrapper = mount(
       <UserContext.Provider
         value={{
           user: { name: "Kevin Leung" },
-          updateUser: (newUser: Object) => {},
+          updateUser: () => {},
         }}
       >
         <MemoryRouter>

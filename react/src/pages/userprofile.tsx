@@ -24,6 +24,7 @@ import {
 } from "@material-ui/core";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 
 type UserProfileState = {
@@ -214,9 +215,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 <Typography component="h1" variant="h4">
                   {"Profile"}
                 </Typography>
-                <Typography component="h3" variant="h4">
-                  {"Placeholder Image"}
-                </Typography>
+                <AvatarWithMenu fullName={this.context.user.name} />
               </div>
             </Grid>
             <Grid item xs={4}>
