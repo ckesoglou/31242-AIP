@@ -1,97 +1,61 @@
 import { Request, Response, Router } from 'express';
-import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from 'http-status-codes';
-import { ParamsDictionary } from 'express-serve-static-core';
+import { BAD_REQUEST, CREATED, OK, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import bcrypt from 'bcrypt';
-import Joi, { string, ObjectSchema } from "joi";
-// import { v4 as uuid } from "uuid";
-// import jwt from "jsonwebtoken";
+import Joi, { ObjectSchema } from "joi";
 
-import env from "../Environment";
-import UserDao from "@daos/user/user-dao";
-import { paramMissingError } from '@shared/constants';
-import User, { IUser } from '@entities/User.ts';
-// import { createToken } from "@daos/Tokens";
+import { createUser, getUser } from "@daos/Users";
+import User from '@entities/User.ts';
+import { generateNewAuthenticationTokens } from '@shared/Authenticate';
 
-// Init shared
 const router = Router();
-const userDao = new UserDao();
-const saltRounds = 10; //Salt Rounds determines how many times the password is hashed. 
-                       //As bCrypt randomizes salts, this makes brute forcing and rainbow table attacks much more difficult.
+//Salt Rounds determines how many times the password is hashed. 
+//As bCrypt randomizes salts, this makes brute forcing and rainbow table attacks much more difficult.
+const saltRounds = 10;
 
-/******************************************************************************
- *                      Create New User - "POST /api/signup/"
- * 
- *             - Assuming simple data validation is done in front end -
- ******************************************************************************/
+/**
+ * POST: /signup
+ */
 
 interface ISignUpPOST {
-    username: string;
-    displayName: string;
-    password: string;
-  }
+  username: string;
+  displayName: string;
+  password: string;
+}
 
-  const SignUpPOST: ObjectSchema<ISignUpPOST> = Joi.object({
-    username: Joi.string().alphanum().min(2).max(16, "utf8"),
-    password: Joi.string().min(8).pattern(/(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/).max(72, "utf8"),
-    displayName: Joi.string().alphanum().min(2).max(16, "utf8"),
-  }).options({ presence: "required" });
+const SignUpPOST: ObjectSchema<ISignUpPOST> = Joi.object({
+  username: Joi.string().alphanum().min(2).max(16, "utf8"),
+  password: Joi.string().min(8).max(72, "utf8")
+    .ruleset.pattern(/(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/) // at least one uppercase and one symbol
+    .rule({ message: "Password must have at least one uppercase character and symbol" }),
+  displayName: Joi.string().trim().min(2).max(16, "utf8")
+    .ruleset.pattern(/^[a-zA-Z0-9 ]*$/) // letters numbers and spaces
+    .rule({ message: "Display name can only contain letters, numbers and spaces" }),
+}).options({ presence: "required" });
 
 router.post('/', async (req: Request, res: Response) => {
-    const { error, value } = SignUpPOST.validate(req.body);
+  const { error, value } = SignUpPOST.validate(req.body);
 
-    if (error) {
-        return res.status(BAD_REQUEST).json({
-            error: paramMissingError,
-        });
-    }
-
-    let request = value as ISignUpPOST;
-
-    const foundUser = await userDao.getOne(request.username);
-    if (foundUser) {
-        return res.status(UNPROCESSABLE_ENTITY).json({
-            error: "Username already exists", 
-        });
-    }
-
-    let passHash: string = await bcrypt.hash(request.password, saltRounds)
-
-    let User: IUser = {username: request.username, display_name: request.displayName, password_hash: passHash};
-    await userDao.add(User);
-
-    // const now = new Date();
-    // const monthFromNow = new Date();
-    // monthFromNow.setDate(monthFromNow.getDate() + 30);
-
-    // const serverRefreshToken = await createToken(
-    //     uuid(), 
-    //     request.username,
-    //     req.headers.host ?? "Unknown",
-    //     now,
-    //     monthFromNow
-    // );
-    // const clientRefreshToken = jwt.sign(
-    //     {
-    //     username: request.username,
-    //     token: serverRefreshToken.refresh_token,
-    //     },
-    //     env.jwt_secret,
-    //     { expiresIn: "30 days" }
-    // );
-    // const clientAccessToken = jwt.sign(
-    //     { username: request,.username },
-    //     env.jwt_secret,
-    //     { expiresIn: "30m" }
-    // );
-
-    return res.cookie("access_tokens", {
-        access_token: "clientAccessToken",
-        refresh_token: "clientRefreshToken",
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
     });
-});
+  }
 
-/******************************************************************************
- *                                     Export
- ******************************************************************************/
+  const requestBody = value as ISignUpPOST;
+
+  const foundUser = await getUser(requestBody.username);
+  if (foundUser) {
+    return res.status(UNPROCESSABLE_ENTITY).json({
+      errors: ["Username already exists"],
+    });
+  }
+
+  const passHash: string = await bcrypt.hash(requestBody.password, saltRounds)
+
+  const user = await createUser(requestBody.username, requestBody.displayName, passHash);
+  await generateNewAuthenticationTokens(user, req.headers.host ?? "Unknown", res);
+
+  return res.status(CREATED).end();
+});
 
 export default router;
