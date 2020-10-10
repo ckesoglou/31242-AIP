@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Avatar,
@@ -54,6 +54,11 @@ type AvatarWithMenuProps = {
   fullName: string;
 };
 
+type AvatarWithMenuState = {
+  userMenu: boolean;
+  anchorEl: HTMLElement | null;
+};
+
 // most readable solution from https://stackoverflow.com/questions/33076177/getting-name-initials-using-js
 function nameToUpperInitials(fullName: string) {
   const namesArray = fullName.split(" ");
@@ -67,90 +72,104 @@ function nameToUpperInitials(fullName: string) {
       .toUpperCase()}`;
 }
 
-function AvatarWithMenu(props: AvatarWithMenuProps) {
-  const [userMenu, setUserMenu] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+class AvatarWithMenu extends React.Component<
+  AvatarWithMenuProps,
+  AvatarWithMenuState
+> {
+  constructor(props: AvatarWithMenuProps) {
+    super(props);
+  }
+  state: AvatarWithMenuState = {
+    userMenu: false,
+    anchorEl: null,
+  };
 
-  return (
-    <div>
-      <Avatar
-        onClick={(event: React.MouseEvent<HTMLElement>) => {
-          setUserMenu(true);
-          setAnchorEl(event.currentTarget);
-        }}
-        id="avatar"
-      >
-        {nameToUpperInitials(props.fullName)}
-      </Avatar>
-      <StyledMenu
-        id="customized-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={userMenu}
-        onClose={() => {
-          setUserMenu(false);
-          setAnchorEl(null);
-        }}
-      >
-        <Link
-          color="inherit"
-          component={RouterLink}
-          to="/"
-          style={{ textDecoration: "none" }}
+  render() {
+    return (
+      <div>
+        <Avatar
+          onClick={(event: React.MouseEvent<HTMLElement>) => {
+            this.setState({
+              userMenu: true,
+              anchorEl: event.currentTarget,
+            });
+          }}
+          id="avatar"
         >
-          <StyledMenuItem>
-            <ListItemIcon>
-              <MeetingRoom fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Click here to go back!" />
-          </StyledMenuItem>
-        </Link>
-        <Link
-          id="favoursLink"
-          color="inherit"
-          component={RouterLink}
-          to={{ pathname: "/user", state: { tabIndex: 1 } }}
-          style={{ textDecoration: "none" }}
+          {nameToUpperInitials(this.props.fullName)}
+        </Avatar>
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={this.state.anchorEl}
+          keepMounted
+          open={this.state.userMenu}
+          onClose={() => {
+            this.setState({
+              userMenu: false,
+              anchorEl: null,
+            });
+          }}
         >
-          <StyledMenuItem>
-            <ListItemIcon>
-              <ThumbsUpDown fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="My Favours" />
-          </StyledMenuItem>
-        </Link>
-        <Link
-          id="requestLink"
-          color="inherit"
-          component={RouterLink}
-          to={{ pathname: "/user", state: { tabIndex: 2 } }}
-          style={{ textDecoration: "none" }}
-        >
-          <StyledMenuItem>
-            <ListItemIcon>
-              <PeopleOutline fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="My Requests" />
-          </StyledMenuItem>
-        </Link>
-        <MenuItem />
-        <Link
-          id="logOutLink"
-          color="inherit"
-          component={RouterLink}
-          to="/login"
-          style={{ textDecoration: "none" }}
-        >
-          <StyledMenuItem>
-            <ListItemIcon>
-              <ExitToApp fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Log Out" />
-          </StyledMenuItem>
-        </Link>
-      </StyledMenu>
-    </div>
-  );
+          <Link
+            color="inherit"
+            component={RouterLink}
+            to="/"
+            style={{ textDecoration: "none" }}
+          >
+            <StyledMenuItem>
+              <ListItemIcon>
+                <MeetingRoom fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Click here to go back!" />
+            </StyledMenuItem>
+          </Link>
+          <Link
+            id="favoursLink"
+            color="inherit"
+            component={RouterLink}
+            to={{ pathname: "/user", state: { tabIndex: 1 } }}
+            style={{ textDecoration: "none" }}
+          >
+            <StyledMenuItem>
+              <ListItemIcon>
+                <ThumbsUpDown fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="My Favours" />
+            </StyledMenuItem>
+          </Link>
+          <Link
+            id="requestLink"
+            color="inherit"
+            component={RouterLink}
+            to={{ pathname: "/user", state: { tabIndex: 2 } }}
+            style={{ textDecoration: "none" }}
+          >
+            <StyledMenuItem>
+              <ListItemIcon>
+                <PeopleOutline fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="My Requests" />
+            </StyledMenuItem>
+          </Link>
+          <MenuItem />
+          <Link
+            id="logOutLink"
+            color="inherit"
+            component={RouterLink}
+            to="/login"
+            style={{ textDecoration: "none" }}
+          >
+            <StyledMenuItem>
+              <ListItemIcon>
+                <ExitToApp fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Log Out" />
+            </StyledMenuItem>
+          </Link>
+        </StyledMenu>
+      </div>
+    );
+  }
 }
 
 export { AvatarWithMenu, nameToUpperInitials };

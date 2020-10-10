@@ -37,13 +37,20 @@ describe("UserProfile", () => {
   it("should handle new request if button is clicked", () => {
     const spy = jest.spyOn(UserProfile.prototype, "fetchNewRequest");
     const wrapper = mount(
-      <MemoryRouter>
-        <UserProfile
-          history={testProps.history}
-          location={testProps.location}
-          match={testProps.match}
-        />
-      </MemoryRouter>
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: () => {},
+        }}
+      >
+        <MemoryRouter>
+          <UserProfile
+            history={testProps.history}
+            location={testProps.location}
+            match={testProps.match}
+          />
+        </MemoryRouter>
+      </UserContext.Provider>
     );
 
     wrapper.find("svg#requestForm").simulate("click");
@@ -62,13 +69,20 @@ describe("UserProfile", () => {
     const spyTabs = jest.spyOn(UserProfile.prototype, "fetchAllTabs");
     const spyCircle = jest.spyOn(UserProfile.prototype, "setLoading");
     const wrapper = mount(
-      <MemoryRouter>
-        <UserProfile
-          history={testProps.history}
-          location={testProps.location}
-          match={testProps.match}
-        />
-      </MemoryRouter>
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: () => {},
+        }}
+      >
+        <MemoryRouter>
+          <UserProfile
+            history={testProps.history}
+            location={testProps.location}
+            match={testProps.match}
+          />
+        </MemoryRouter>
+      </UserContext.Provider>
     );
 
     wrapper.find("svg#refresh").simulate("click");

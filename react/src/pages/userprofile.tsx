@@ -117,13 +117,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }> = UserContext;
 
   setLoading(value: boolean): void {
-    if (value) {
-      this.textRef.current!.style.display = "none";
-      this.loadingRef.current!.style.display = "block";
-    } else {
-      this.textRef.current!.style.display = "block";
-      this.loadingRef.current!.style.display = "none";
-    }
+    this.loadingRef.current!.style.display = value ? "block" : "none";
+    this.textRef.current!.style.display = value ? "none" : "block";
   }
 
   componentDidMount() {

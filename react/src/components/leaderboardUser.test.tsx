@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 import LeaderboardUser from "./leaderboardUser";
 
-// Integration tests are on home.test.tsx
+// simple, static component
 describe("<LeaderboardUser />", () => {
   it("should render correctly", () => {
     const wrapper = shallow(

@@ -58,7 +58,6 @@ describe("<Home />", () => {
   });
 
   it("should have initials of logged in user for avatar", () => {
-    const spy = jest.spyOn(AvatarWithMenu.prototype, "nameToUpperInitials");
     const wrapper = mount(
       <UserContext.Provider
         value={{
@@ -74,7 +73,6 @@ describe("<Home />", () => {
 
     let avatar = wrapper.find(Home).find("div#avatar");
 
-    expect(spy).toHaveBeenCalledTimes(1);
     expect(avatar.text()).toBe("KL");
   });
 });
