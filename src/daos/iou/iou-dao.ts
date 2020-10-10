@@ -1,7 +1,7 @@
 import Iou, { IIou } from "@entities/Iou";
-import db from "../db-instance";
+import db from "../DBInstance";
 import { setFlagsFromString } from "v8";
-import sequelize from "../db-instance";
+import sequelize from "../DBInstance";
 
 export interface IIouDao {
   getOwed: (
