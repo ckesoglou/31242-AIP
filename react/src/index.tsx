@@ -5,10 +5,6 @@ import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { ThemeProvider, CssBaseline } from "@material-ui/core";
 import theme from "./components/theme";
-import { makeServer } from "./components/server";
-
-// mock api
-makeServer();
 
 ReactDOM.render(
   <React.StrictMode>
