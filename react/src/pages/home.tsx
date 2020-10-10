@@ -7,13 +7,9 @@ import {
   Container,
   Grid,
   InputAdornment,
-  Menu,
-  MenuItem,
-  MenuProps,
   Paper,
   TextField,
   Typography,
-  withStyles,
   CircularProgress,
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";

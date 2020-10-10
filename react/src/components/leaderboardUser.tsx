@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../assets/css/leaderboardUser.css";
 import { Avatar, Grid, Typography } from "@material-ui/core";
 import { nameToUpperInitials } from "./avatarWithMenu";
@@ -10,8 +10,9 @@ type LeaderboardUserProps = {
 };
 
 function LeaderboardUser(props: LeaderboardUserProps) {
-  const [userMenu, setUserMenu] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  // May be needed for future functionality
+  // const [userMenu, setUserMenu] = useState<boolean>(false);
+  // const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   return (
     <Grid container direction="row">
@@ -31,10 +32,10 @@ function LeaderboardUser(props: LeaderboardUserProps) {
             display: "flex",
             alignItems: "center",
           }}
-          onClick={(event: React.MouseEvent<HTMLElement>) => {
-            setUserMenu(true);
-            setAnchorEl(event.currentTarget);
-          }}
+          // onClick={(event: React.MouseEvent<HTMLElement>) => {
+          //   setUserMenu(true);
+          //   setAnchorEl(event.currentTarget);
+          // }}
           id="leaderboardUserAvatar"
         >
           {nameToUpperInitials(props.username)}

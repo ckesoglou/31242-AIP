@@ -5,7 +5,6 @@ import {
   leaderboardMeEndpoint,
 } from "../api/endpoints";
 import {
-  Button,
   CircularProgress,
   Container,
   Divider,
@@ -153,6 +152,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
               color="inherit"
               id="leaderboardLoading"
             />
+            {this.state.error}
             {/* kudos to
             https://stackoverflow.com/questions/61774099/how-to-add-pagination-to-a-long-list-using-react-materialui */}
             {this.state.users
@@ -184,7 +184,6 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
             siblingCount={0}
             color="primary"
           />
-          {/* <Pagination count={10} page={page} onChange={handleChange} /> */}
           <Divider variant="middle" />
           <div id="meScore" ref={this.textRef}>
             <Typography variant="h6">
@@ -192,11 +191,13 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
               {this.state.me?.score}!
             </Typography>
             <img
+              alt="Raising hands"
               width="40"
               height="40"
               src={process.env.PUBLIC_URL + "/raising-hands.png"}
             />
             <img
+              alt="Party popper"
               width="40"
               height="40"
               src={process.env.PUBLIC_URL + "/party-popper.png"}
