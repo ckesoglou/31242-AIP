@@ -76,9 +76,6 @@ class AvatarWithMenu extends React.Component<
   AvatarWithMenuProps,
   AvatarWithMenuState
 > {
-  constructor(props: AvatarWithMenuProps) {
-    super(props);
-  }
   state: AvatarWithMenuState = {
     userMenu: false,
     anchorEl: null,
