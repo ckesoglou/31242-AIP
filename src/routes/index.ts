@@ -1,4 +1,6 @@
 import { Router } from "express";
+import LoginRouter from "./Login";
+import SignUpRouter from './SignUp';
 import UserRouter from "./Users";
 import IouRouter from "./Ious";
 
@@ -6,6 +8,8 @@ import IouRouter from "./Ious";
 const router = Router();
 
 // Add sub-routes
+router.use("/login", LoginRouter);
+router.use("/signup", SignUpRouter);
 router.use("/users", UserRouter);
 router.use("/iou", IouRouter);
 

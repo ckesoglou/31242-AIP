@@ -1,9 +1,10 @@
 import React from "react";
 import "../assets/css/App.css";
-import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import Login from "../pages/login";
 import SignUp from "../pages/signup";
 import UserProfile from "../pages/userprofile";
+import Home from "../pages/home";
 import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
 
@@ -29,15 +30,7 @@ class App extends React.Component {
               path="/user"
               component={UserProfile}
             ></ProtectedRoute>
-            <ProtectedRoute path="/home">
-              <h1>You've reached the next page!</h1>
-              <h2>
-                <Link to="/">Click here to go back!</Link>
-              </h2>
-              <h2>
-                <Link to="/user">Click here for user page!</Link>
-              </h2>
-            </ProtectedRoute>
+            <ProtectedRoute path="/home" component={Home} />
             <Route path="/signup" component={SignUp} />
             <Route path="/" component={Login} />
           </Switch>
