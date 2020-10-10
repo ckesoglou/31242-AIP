@@ -32,7 +32,7 @@ const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
  *                      Get IOUs you are owed - "GET /api/iou/owed"
  ******************************************************************************/
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/owed", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
   const iou = await iouDao.getOwed(username);
@@ -48,7 +48,7 @@ router.get("/", async (req: Request, res: Response) => {
  *                      Create IOU you are owed - "POST /api/iou/owed"
  ******************************************************************************/
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/owed", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
 
@@ -78,7 +78,7 @@ router.post("/", async (req: Request, res: Response) => {
  *                       Mark an IOU as completed - "PUT /api/iou/owed/{iouID}/complete"
  ******************************************************************************/
 
-router.put("/", async (req: Request, res: Response) => {
+router.put("/owed/complete", async (req: Request, res: Response) => {
   const { iouID } = req.body;
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
@@ -95,7 +95,7 @@ router.put("/", async (req: Request, res: Response) => {
  *                      Get IOUs you owe - "GET /api/iou/owe"
  ******************************************************************************/
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/owe", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
   const iou = await iouDao.getOwe(username);
@@ -111,7 +111,7 @@ router.get("/", async (req: Request, res: Response) => {
  *                      Create IOU you owe - "POST /api/iou/owe"
  ******************************************************************************/
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/owe", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
 
@@ -136,7 +136,7 @@ router.post("/", async (req: Request, res: Response) => {
  *                       Mark an IOU as completed - "PUT /api/iou/owe/{iouID}/complete"
  ******************************************************************************/
 
-router.put("/", async (req: Request, res: Response) => {
+router.put("/owe/complete", async (req: Request, res: Response) => {
   const { iouID } = req.body;
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
