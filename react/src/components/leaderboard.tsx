@@ -32,9 +32,12 @@ type LeaderboardState = {
       }
     | undefined;
   error: string;
+  pageNumber: number;
 };
 
 type LeaderboardProps = {};
+
+const numberOfItemsPerPage = 3;
 
 class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
   private loadingRef: React.RefObject<HTMLInputElement>;
@@ -51,6 +54,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
     users: [],
     error: "",
     me: undefined,
+    pageNumber: 1,
   };
 
   componentDidMount() {
@@ -66,6 +70,14 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
     this.textRef.current!.style.display = value ? "none" : "block";
+  }
+
+  setCountOfLeaderboard(): number {
+    if (this.state.users.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.users.length / numberOfItemsPerPage);
+    } else {
+      return this.state.users.length / numberOfItemsPerPage;
+    }
   }
 
   fetchAllLeaderboard() {
@@ -141,22 +153,33 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
               color="inherit"
               id="leaderboardLoading"
             />
-            {this.state.users.map((user, i) => {
-              return (
-                <Grid item xs={12}>
-                  <LeaderboardUser
-                    key={i}
-                    rank={user.rank}
-                    username={user.user.username}
-                    score={user.score}
-                  />
-                </Grid>
-              );
-            })}
+            {/* kudos to
+            https://stackoverflow.com/questions/61774099/how-to-add-pagination-to-a-long-list-using-react-materialui */}
+            {this.state.users
+              .slice(
+                (this.state.pageNumber - 1) * numberOfItemsPerPage,
+                this.state.pageNumber * numberOfItemsPerPage
+              )
+              .map((user, i) => {
+                return (
+                  <Grid item xs={12}>
+                    <LeaderboardUser
+                      key={i}
+                      rank={user.rank}
+                      username={user.user.username}
+                      score={user.score}
+                    />
+                  </Grid>
+                );
+              })}
           </Grid>
           <Pagination
             id="pagination"
-            count={10}
+            count={this.setCountOfLeaderboard()}
+            page={this.state.pageNumber}
+            onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+              this.setState({ pageNumber: value });
+            }}
             defaultPage={1}
             siblingCount={0}
             color="primary"

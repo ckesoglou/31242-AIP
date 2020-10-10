@@ -226,6 +226,62 @@ export function makeServer({ environment = "development" } = {}) {
               },
               score: 10,
             },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
           ];
 
           return new Response(200, jsonHeader, body);
