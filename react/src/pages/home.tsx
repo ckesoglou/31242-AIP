@@ -57,9 +57,12 @@ class Home extends React.Component {
           <Grid container spacing={8}>
             <Grid item xs={12}>
               <div id="header">
-                <Typography component="h2" variant="h4">
-                  {"Placeholder IOU"}
-                </Typography>
+                <img
+                  width="120"
+                  height="80"
+                  alt="IOU Logo"
+                  src={process.env.PUBLIC_URL + "/iou-logo.png"}
+                />
                 <Typography component="h1" variant="h4">
                   {"Home"}
                 </Typography>
