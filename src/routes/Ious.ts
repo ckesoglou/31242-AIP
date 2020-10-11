@@ -9,9 +9,11 @@ import User from "@entities/User";
 import {
   getIousOwed,
   createIouOwed,
-  completeOwed,
-  getOwe,
-  postOwe,
+  completeIouOwed,
+  getIousOwe,
+  createIouOwe,
+  completeIouOwe,
+  iouExists,
 } from "@daos/Ious";
 
 // Init shared
@@ -85,18 +87,39 @@ router.post("/owed", async (req: Request, res: Response) => {
 /******************************************************************************
  *                       Mark an IOU as completed - "PUT /api/iou/owed/{iouID}/complete"
  ******************************************************************************/
+router.get("/p/:tagId", function (req, res) {
+  res.send("tagId is set to " + req.params.tagId);
+});
 
-router.put("/owed/complete", async (req: Request, res: Response) => {
-  const { iouID } = req.body;
-  var tokens = req.cookies("access_tokens");
-  var username = tokens.access_tokens.clientRefreshToken.username;
-  // TODO: handle 400 responses
-  if (!(await completeOwed(username, iouID))) {
+router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
+  const iouID = req.params.iouID;
+
+  // Get authenticated user
+  const user = await getAuthenticatedUser(req, res);
+  // if logged in
+  if (user) {
+    // if IOU exists
+    if (await iouExists(iouID)) {
+      // if users is receiver of IOU
+      if ((await completeIouOwed(iouID, user.username)) == true) {
+        return res.status(OK).end();
+      } else {
+        return res.status(403).json({
+          errors: [
+            "Not authorised to complete this request (you are not the owner of it)",
+          ],
+        });
+      }
+    } else {
+      return res.status(404).json({
+        errors: ["Not found (did you mean to use the /owe endpoint)"],
+      });
+    }
+  } else {
     return res.status(401).json({
-      error: paramMissingError,
+      errors: ["Not authenticated"],
     });
   }
-  return res.status(200).end();
 });
 
 /******************************************************************************
@@ -106,7 +129,7 @@ router.put("/owed/complete", async (req: Request, res: Response) => {
 router.get("/owe", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
-  const iou = await getOwe(username);
+  const iou = await getIousOwe(username);
   if (!iou) {
     return res.status(401).json({
       error: paramMissingError,
@@ -131,7 +154,7 @@ router.post("/owe", async (req: Request, res: Response) => {
   }
 
   let request = value as IIouOwePOST;
-  const iou = await postOwe(username, request.username, request.item);
+  const iou = await createIouOwe(username, request.username, request.item);
   if (!iou) {
     return res.status(401).json({
       error: paramMissingError,
@@ -149,7 +172,7 @@ router.put("/owe/complete", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
   // TODO: handle 400 responses
-  if (!(await completeOwed(username, iouID))) {
+  if (!(await completeIouOwe(username, iouID))) {
     return res.status(401).json({
       error: paramMissingError,
     });

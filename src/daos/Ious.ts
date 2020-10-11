@@ -88,24 +88,29 @@ export async function createIouOwed(
   return ious.id;
 }
 
-export async function completeOwed(receiver: string, iouID: string) {
-  Iou.findOne({ where: { id: iouID, receiver: receiver } }).then(function (
-    iou
-  ) {
-    if (iou) {
-      iou
-        .update({
-          is_claimed: true,
-        })
-        .then(async function () {
-          await Iou.sync({ alter: true });
-        });
-    }
-  });
-  return null;
+export async function iouExists(iouID: string): Promise<boolean> {
+  return (await Iou.findByPk(iouID)) ? true : false;
 }
 
-export async function getOwe(
+export async function completeIouOwed(
+  iouID: string,
+  receiver: string
+): Promise<boolean> {
+  // user that completes must be receiver
+  const iou = await Iou.findOne({ where: { id: iouID, receiver: receiver } });
+  if (iou === null) {
+    return false;
+  } else {
+    iou
+      .update({
+        is_claimed: true,
+      })
+      .then(async () => await Iou.sync({ alter: true }));
+  }
+  return true;
+}
+
+export async function getIousOwe(
   username: string,
   start: number = 0,
   limit: number = 25
@@ -122,7 +127,7 @@ export async function getOwe(
   return ious;
 }
 
-export async function postOwe(
+export async function createIouOwe(
   giver: string,
   receiver: string,
   item: string
@@ -142,7 +147,7 @@ export async function postOwe(
   return ious.id;
 }
 
-export async function completeOwe(giver: string, iouID: string) {
+export async function completeIouOwe(giver: string, iouID: string) {
   Iou.findOne({ where: { id: iouID, giver: giver } }).then(function (iou) {
     if (iou) {
       iou
