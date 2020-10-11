@@ -3,14 +3,19 @@ import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
 import { ParamsDictionary } from "express-serve-static-core";
 import Joi, { ObjectSchema } from "joi";
 
-import IouDao from "@daos/iou/iou-dao";
 import { paramMissingError } from "@shared/constants";
 import { getAuthenticatedUser } from "@shared/Authenticate";
 import User from "@entities/User";
+import {
+  getIousOwed,
+  postOwed,
+  completeOwed,
+  getOwe,
+  postOwe,
+} from "@daos/Ious";
 
 // Init shared
 const router = Router();
-const iouDao = new IouDao();
 interface IIouOwedPOST {
   username: string;
   item: string;
@@ -37,7 +42,7 @@ const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
 router.get("/owed", async (req: Request, res: Response) => {
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await iouDao.getOwed(user.username);
+    const iou = await getIousOwed(user.username);
     return res.status(OK).json({ iou });
   } else {
     return res.status(401).json({
@@ -57,12 +62,12 @@ router.post("/owed", async (req: Request, res: Response) => {
   const { error, value } = IouOwedPOST.validate(req.body);
   if (error) {
     return res.status(BAD_REQUEST).json({
-      error: paramMissingError,
+      error: [error.message],
     });
   }
 
-  let request = value as IIouOwedPOST;
-  const iou = await iouDao.postOwed(
+  const request = value as IIouOwedPOST;
+  const iou = await postOwed(
     request.username,
     username,
     request.item,
@@ -85,7 +90,7 @@ router.put("/owed/complete", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
   // TODO: handle 400 responses
-  if (!(await iouDao.completeOwed(username, iouID))) {
+  if (!(await completeOwed(username, iouID))) {
     return res.status(401).json({
       error: paramMissingError,
     });
@@ -100,7 +105,7 @@ router.put("/owed/complete", async (req: Request, res: Response) => {
 router.get("/owe", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
-  const iou = await iouDao.getOwe(username);
+  const iou = await getOwe(username);
   if (!iou) {
     return res.status(401).json({
       error: paramMissingError,
@@ -125,7 +130,7 @@ router.post("/owe", async (req: Request, res: Response) => {
   }
 
   let request = value as IIouOwePOST;
-  const iou = await iouDao.postOwe(username, request.username, request.item);
+  const iou = await postOwe(username, request.username, request.item);
   if (!iou) {
     return res.status(401).json({
       error: paramMissingError,
@@ -143,7 +148,7 @@ router.put("/owe/complete", async (req: Request, res: Response) => {
   var tokens = req.cookies("access_tokens");
   var username = tokens.access_tokens.clientRefreshToken.username;
   // TODO: handle 400 responses
-  if (!(await iouDao.completeOwed(username, iouID))) {
+  if (!(await completeOwed(username, iouID))) {
     return res.status(401).json({
       error: paramMissingError,
     });

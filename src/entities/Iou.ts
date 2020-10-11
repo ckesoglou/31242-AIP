@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import db from "../daos/DBInstance";
 
-export interface IIou {
+export interface IIouAttributes {
   id: string;
   item: string;
   giver: string;
@@ -14,7 +14,7 @@ export interface IIou {
   is_claimed: Boolean;
 }
 
-class Iou extends Model<IIou> implements IIou {
+class Iou extends Model<IIouAttributes> implements IIouAttributes {
   public id!: string;
   public item!: string;
   public giver!: string;
@@ -26,52 +26,5 @@ class Iou extends Model<IIou> implements IIou {
   public claimed_time: Date | undefined;
   public is_claimed!: Boolean;
 }
-
-Iou.init(
-  {
-    id: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false,
-    },
-    item: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    giver: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    receiver: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    parent_request: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    proof_of_debt: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    proof_of_completion: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    created_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    claimed_time: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    is_claimed: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-  },
-  { sequelize: db, tableName: "ious", timestamps: false }
-);
 
 export default Iou;
