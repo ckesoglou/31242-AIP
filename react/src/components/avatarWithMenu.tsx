@@ -11,11 +11,13 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import {
-  MeetingRoom,
   PeopleOutline,
   ThumbsUpDown,
   ExitToApp,
+  AssignmentInd,
+  PersonAdd,
 } from "@material-ui/icons";
+import { UserContext } from "./user-context";
 
 // kudos to https://material-ui.com/components/menus/
 const StyledMenu = withStyles({
@@ -52,6 +54,7 @@ const StyledMenuItem = withStyles((theme) => ({
 
 type AvatarWithMenuProps = {
   fullName: string;
+  loggedIn: boolean;
 };
 
 type AvatarWithMenuState = {
@@ -81,6 +84,11 @@ class AvatarWithMenu extends React.Component<
     anchorEl: null,
   };
 
+  static contextType: React.Context<{
+    user: {};
+    updateUser: (newUser: object) => void;
+  }> = UserContext;
+
   render() {
     return (
       <div>
@@ -95,75 +103,111 @@ class AvatarWithMenu extends React.Component<
         >
           {nameToUpperInitials(this.props.fullName)}
         </Avatar>
-        <StyledMenu
-          id="customized-menu"
-          anchorEl={this.state.anchorEl}
-          keepMounted
-          open={this.state.userMenu}
-          onClose={() => {
-            this.setState({
-              userMenu: false,
-              anchorEl: null,
-            });
-          }}
-        >
-          <Link
-            color="inherit"
-            component={RouterLink}
-            to="/"
-            style={{ textDecoration: "none" }}
+        {this.props.loggedIn && (
+          <StyledMenu
+            id="customized-menu"
+            anchorEl={this.state.anchorEl}
+            keepMounted
+            open={this.state.userMenu}
+            onClose={() => {
+              this.setState({
+                userMenu: false,
+                anchorEl: null,
+              });
+            }}
           >
-            <StyledMenuItem>
-              <ListItemIcon>
-                <MeetingRoom fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Click here to go back!" />
-            </StyledMenuItem>
-          </Link>
-          <Link
-            id="favoursLink"
-            color="inherit"
-            component={RouterLink}
-            to={{ pathname: "/user", state: { tabIndex: 1 } }}
-            style={{ textDecoration: "none" }}
+            <Link
+              id="favoursLink"
+              color="inherit"
+              component={RouterLink}
+              to={{ pathname: "/user", state: { tabIndex: 1 } }}
+              style={{ textDecoration: "none" }}
+            >
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <ThumbsUpDown fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="My Favours" />
+              </StyledMenuItem>
+            </Link>
+            <Link
+              id="requestLink"
+              color="inherit"
+              component={RouterLink}
+              to={{ pathname: "/user", state: { tabIndex: 2 } }}
+              style={{ textDecoration: "none" }}
+            >
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <PeopleOutline fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="My Requests" />
+              </StyledMenuItem>
+            </Link>
+            <MenuItem />
+            <Link
+              id="logOutLink"
+              color="inherit"
+              component={RouterLink}
+              to="/home"
+              onClick={() => {
+                this.context.updateUser({ name: "?" });
+              }}
+              style={{ textDecoration: "none" }}
+            >
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <ExitToApp fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Log Out" />
+              </StyledMenuItem>
+            </Link>
+          </StyledMenu>
+        )}
+        {!this.props.loggedIn && (
+          <StyledMenu
+            id="customized-menu"
+            anchorEl={this.state.anchorEl}
+            keepMounted
+            open={this.state.userMenu}
+            onClose={() => {
+              this.setState({
+                userMenu: false,
+                anchorEl: null,
+              });
+            }}
           >
-            <StyledMenuItem>
-              <ListItemIcon>
-                <ThumbsUpDown fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="My Favours" />
-            </StyledMenuItem>
-          </Link>
-          <Link
-            id="requestLink"
-            color="inherit"
-            component={RouterLink}
-            to={{ pathname: "/user", state: { tabIndex: 2 } }}
-            style={{ textDecoration: "none" }}
-          >
-            <StyledMenuItem>
-              <ListItemIcon>
-                <PeopleOutline fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="My Requests" />
-            </StyledMenuItem>
-          </Link>
-          <MenuItem />
-          <Link
-            id="logOutLink"
-            color="inherit"
-            component={RouterLink}
-            to="/login"
-            style={{ textDecoration: "none" }}
-          >
-            <StyledMenuItem>
-              <ListItemIcon>
-                <ExitToApp fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Log Out" />
-            </StyledMenuItem>
-          </Link>
-        </StyledMenu>
+            <Link
+              id="favoursLink"
+              color="inherit"
+              component={RouterLink}
+              to={{ pathname: "/login", state: { tabIndex: 1 } }}
+              style={{ textDecoration: "none" }}
+            >
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <AssignmentInd fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Login" />
+              </StyledMenuItem>
+            </Link>
+            <Link
+              id="requestLink"
+              color="inherit"
+              component={RouterLink}
+              to={{ pathname: "/signup", state: { tabIndex: 2 } }}
+              style={{ textDecoration: "none" }}
+            >
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <PersonAdd fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Sign Up" />
+              </StyledMenuItem>
+            </Link>
+            <MenuItem />
+          </StyledMenu>
+        )}
       </div>
     );
   }
