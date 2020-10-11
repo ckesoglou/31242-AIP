@@ -24,6 +24,7 @@ import {
 } from "@material-ui/core";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 
 type UserProfileState = {
@@ -116,13 +117,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }> = UserContext;
 
   setLoading(value: boolean): void {
-    if (value) {
-      this.textRef.current!.style.display = "none";
-      this.loadingRef.current!.style.display = "block";
-    } else {
-      this.textRef.current!.style.display = "block";
-      this.loadingRef.current!.style.display = "none";
-    }
+    this.loadingRef.current!.style.display = value ? "block" : "none";
+    this.textRef.current!.style.display = value ? "none" : "block";
   }
 
   componentDidMount() {
@@ -208,15 +204,16 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           <Grid container spacing={8}>
             <Grid item xs={12}>
               <div id="header">
-                <Typography component="h2" variant="h4">
-                  {"Placeholder IOU"}
-                </Typography>
+                <img
+                  width="120"
+                  height="80"
+                  alt="IOU Logo"
+                  src={process.env.PUBLIC_URL + "/iou-logo.png"}
+                />
                 <Typography component="h1" variant="h4">
                   {"Profile"}
                 </Typography>
-                <Typography component="h3" variant="h4">
-                  {"Placeholder Image"}
-                </Typography>
+                <AvatarWithMenu fullName={this.context.user.name} />
               </div>
             </Grid>
             <Grid item xs={4}>
