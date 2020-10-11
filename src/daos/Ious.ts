@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import Iou, { IIouAttributes } from "../entities/Iou";
 import db from "./DBInstance";
+import { v4 as uuid } from "uuid";
 
 Iou.init(
   {
@@ -66,14 +67,14 @@ export async function getIousOwed(
   return ious;
 }
 
-export async function postOwed(
+export async function createIouOwed(
   giver: string,
   receiver: string,
   item: string,
   proof: string
 ): Promise<Object> {
   const ious = await Iou.create({
-    id: "510ab12d-1689-4b2c-8a8d-275376f11077", // TODO: autogenerate id
+    id: uuid(),
     item: item,
     giver: giver,
     receiver: receiver,

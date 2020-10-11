@@ -8,7 +8,7 @@ import { getAuthenticatedUser } from "@shared/Authenticate";
 import User from "@entities/User";
 import {
   getIousOwed,
-  postOwed,
+  createIouOwed,
   completeOwed,
   getOwe,
   postOwe,
@@ -56,29 +56,30 @@ router.get("/owed", async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.post("/owed", async (req: Request, res: Response) => {
-  var tokens = req.cookies("access_tokens");
-  var username = tokens.access_tokens.clientRefreshToken.username;
-
+  // Validate request format
   const { error, value } = IouOwedPOST.validate(req.body);
   if (error) {
     return res.status(BAD_REQUEST).json({
       error: [error.message],
     });
   }
-
-  const request = value as IIouOwedPOST;
-  const iou = await postOwed(
-    request.username,
-    username,
-    request.item,
-    request.proof
-  );
-  if (!iou) {
+  // Get authenticated user
+  const user = await getAuthenticatedUser(req, res);
+  if (user) {
+    // Create new IOU
+    const requestBody = value as IIouOwedPOST;
+    const iou = await createIouOwed(
+      requestBody.username,
+      user.username,
+      requestBody.item,
+      requestBody.proof
+    );
+    return res.status(OK).json({ iou });
+  } else {
     return res.status(401).json({
-      error: paramMissingError,
+      errors: ["Not authenticated"],
     });
   }
-  return res.status(OK).json({ iou });
 });
 
 /******************************************************************************
