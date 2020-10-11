@@ -5,19 +5,13 @@ import Home from "./home";
 import UserProfile from "./userprofile";
 import { UserContext } from "../components/user-context";
 
-const testProps = {
-  history: {} as any,
-  location: {} as any,
-  match: {} as any,
-};
-
 describe("<Home />", () => {
   it("should render correctly", () => {
     const wrapper = shallow(
       <UserContext.Provider
         value={{
           user: { name: "Kevin Leung" },
-          updateUser: (newUser: Object) => {},
+          updateUser: () => {},
         }}
       >
         <Home />
@@ -32,7 +26,7 @@ describe("<Home />", () => {
       <UserContext.Provider
         value={{
           user: { name: "Kevin Leung" },
-          updateUser: (newUser: Object) => {},
+          updateUser: () => {},
         }}
       >
         <MemoryRouter initialEntries={["/home"]}>
@@ -57,12 +51,11 @@ describe("<Home />", () => {
   });
 
   it("should have initials of logged in user for avatar", () => {
-    const spy = jest.spyOn(Home.prototype, "nameToUpperInitials");
     const wrapper = mount(
       <UserContext.Provider
         value={{
           user: { name: "Kevin Leung" },
-          updateUser: (newUser: Object) => {},
+          updateUser: () => {},
         }}
       >
         <MemoryRouter>
@@ -73,7 +66,6 @@ describe("<Home />", () => {
 
     let avatar = wrapper.find(Home).find("div#avatar");
 
-    expect(spy).toHaveBeenCalledTimes(1);
     expect(avatar.text()).toBe("KL");
   });
 });

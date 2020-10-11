@@ -2,6 +2,7 @@ import React from "react";
 import { shallow, mount } from "enzyme";
 import { MemoryRouter, Route } from "react-router-dom";
 import Login from "./login";
+import { UserContext } from "../components/user-context";
 
 const testProps = {
   history: {} as any,
@@ -24,12 +25,19 @@ describe("<Login />", () => {
 
   it("navigates to next page for successful login", () => {
     const wrapper = mount(
-      <MemoryRouter initialEntries={["/login"]}>
-        <Route path="/login" component={Login} />
-        <Route path="/home">
-          <h1>Hello</h1>
-        </Route>
-      </MemoryRouter>
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: () => {},
+        }}
+      >
+        <MemoryRouter initialEntries={["/login"]}>
+          <Route path="/login" component={Login} />
+          <Route path="/home">
+            <h1>Hello</h1>
+          </Route>
+        </MemoryRouter>
+      </UserContext.Provider>
     );
 
     let loginComponent = wrapper.find("Login");
@@ -49,11 +57,18 @@ describe("<Login />", () => {
   it("should handle login if button is clicked", () => {
     const spy = jest.spyOn(Login.prototype, "handleLogin");
     const wrapper = mount(
-      <Login
-        history={testProps.history}
-        location={testProps.location}
-        match={testProps.match}
-      />
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: () => {},
+        }}
+      >
+        <Login
+          history={testProps.history}
+          location={testProps.location}
+          match={testProps.match}
+        />
+      </UserContext.Provider>
     );
 
     wrapper
