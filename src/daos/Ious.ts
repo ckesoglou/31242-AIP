@@ -133,7 +133,7 @@ export async function createIouOwe(
   item: string
 ): Promise<Object> {
   const ious = await Iou.create({
-    id: "510ab12d-1689-4b2c-8a8d-275376f11077", // TODO: autogenerate id
+    id: uuid(),
     item: item,
     giver: giver,
     receiver: receiver,
@@ -147,17 +147,22 @@ export async function createIouOwe(
   return ious.id;
 }
 
-export async function completeIouOwe(giver: string, iouID: string) {
-  Iou.findOne({ where: { id: iouID, giver: giver } }).then(function (iou) {
-    if (iou) {
-      iou
-        .update({
-          is_claimed: true,
-        })
-        .then(async function () {
-          await Iou.sync({ alter: true });
-        });
-    }
-  });
-  return null;
+export async function completeIouOwe(
+  iouID: string,
+  giver: string,
+  proof: string
+): Promise<boolean> {
+  // user that completes must be receiver
+  const iou = await Iou.findOne({ where: { id: iouID, giver: giver } });
+  if (iou === null) {
+    return false;
+  } else {
+    iou
+      .update({
+        is_claimed: true,
+        proof_of_completion: proof,
+      })
+      .then(async () => await Iou.sync({ alter: true }));
+  }
+  return true;
 }

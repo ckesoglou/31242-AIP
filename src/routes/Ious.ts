@@ -23,18 +23,24 @@ interface IIouOwedPOST {
   item: string;
   proof: string;
 }
+interface IIouOwePOST {
+  username: string;
+  item: string;
+}
+interface IIouOweCompletePUT {
+  proof: string;
+}
 const IouOwedPOST: ObjectSchema<IIouOwedPOST> = Joi.object({
   username: Joi.string(),
   item: Joi.string(),
   proof: Joi.string(),
 }).options({ presence: "required" });
-interface IIouOwePOST {
-  username: string;
-  item: string;
-}
 const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
   username: Joi.string(),
   item: Joi.string(),
+}).options({ presence: "required" });
+const IouOweCompletePUT: ObjectSchema<IIouOweCompletePUT> = Joi.object({
+  proof: Joi.string(),
 }).options({ presence: "required" });
 
 /******************************************************************************
@@ -87,17 +93,13 @@ router.post("/owed", async (req: Request, res: Response) => {
 /******************************************************************************
  *                       Mark an IOU as completed - "PUT /api/iou/owed/{iouID}/complete"
  ******************************************************************************/
-router.get("/p/:tagId", function (req, res) {
-  res.send("tagId is set to " + req.params.tagId);
-});
 
 router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
-  const iouID = req.params.iouID;
-
   // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   // if logged in
   if (user) {
+    const iouID = req.params.iouID;
     // if IOU exists
     if (await iouExists(iouID)) {
       // if users is receiver of IOU
@@ -127,57 +129,88 @@ router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.get("/owe", async (req: Request, res: Response) => {
-  var tokens = req.cookies("access_tokens");
-  var username = tokens.access_tokens.clientRefreshToken.username;
-  const iou = await getIousOwe(username);
-  if (!iou) {
+  const user = await getAuthenticatedUser(req, res);
+  if (user) {
+    const iou = await getIousOwe(user.username);
+    return res.status(OK).json({ iou });
+  } else {
     return res.status(401).json({
-      error: paramMissingError,
+      errors: ["Not authenticated"],
     });
   }
-  return res.status(OK).json({ iou });
 });
 
 /******************************************************************************
  *                      Create IOU you owe - "POST /api/iou/owe"
  ******************************************************************************/
-
 router.post("/owe", async (req: Request, res: Response) => {
-  var tokens = req.cookies("access_tokens");
-  var username = tokens.access_tokens.clientRefreshToken.username;
-
+  // Validate request format
   const { error, value } = IouOwePOST.validate(req.body);
   if (error) {
     return res.status(BAD_REQUEST).json({
-      error: paramMissingError,
+      error: [error.message],
     });
   }
-
-  let request = value as IIouOwePOST;
-  const iou = await createIouOwe(username, request.username, request.item);
-  if (!iou) {
+  // Get authenticated user
+  const user = await getAuthenticatedUser(req, res);
+  if (user) {
+    // Create new IOU
+    const requestBody = value as IIouOwePOST;
+    const iou = await createIouOwe(
+      user.username,
+      requestBody.username,
+      requestBody.item
+    );
+    return res.status(OK).json({ iou });
+  } else {
     return res.status(401).json({
-      error: paramMissingError,
+      errors: ["Not authenticated"],
     });
   }
-  return res.status(OK).json({ iou });
 });
 
 /******************************************************************************
  *                       Mark an IOU as completed - "PUT /api/iou/owe/{iouID}/complete"
  ******************************************************************************/
 
-router.put("/owe/complete", async (req: Request, res: Response) => {
-  const { iouID } = req.body;
-  var tokens = req.cookies("access_tokens");
-  var username = tokens.access_tokens.clientRefreshToken.username;
-  // TODO: handle 400 responses
-  if (!(await completeIouOwe(username, iouID))) {
-    return res.status(401).json({
-      error: paramMissingError,
+router.put("/owe/:iouID/complete", async (req: Request, res: Response) => {
+  // Validate request format
+  const { error, value } = IouOweCompletePUT.validate(req.body);
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      error: [error.message],
     });
   }
-  return res.status(200).end();
+  // Get authenticated user
+  const user = await getAuthenticatedUser(req, res);
+  // if logged in
+  if (user) {
+    const iouID = req.params.iouID;
+    const requestBody = value as IIouOweCompletePUT;
+    // if IOU exists
+    if (await iouExists(iouID)) {
+      // if users is receiver of IOU
+      if (
+        (await completeIouOwe(iouID, user.username, requestBody.proof)) == true
+      ) {
+        return res.status(OK).end();
+      } else {
+        return res.status(403).json({
+          errors: [
+            "Not authorised to complete this request (you are not the owner of it)",
+          ],
+        });
+      }
+    } else {
+      return res.status(404).json({
+        errors: ["Not found (did you mean to use the /owed endpoint)"],
+      });
+    }
+  } else {
+    return res.status(401).json({
+      errors: ["Not authenticated"],
+    });
+  }
 });
 
 /******************************************************************************
