@@ -1,6 +1,11 @@
 import React from "react";
 import "../assets/css/App.css";
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  BrowserRouter as Router,
+  Redirect,
+} from "react-router-dom";
 import Login from "../pages/login";
 import SignUp from "../pages/signup";
 import UserProfile from "../pages/userprofile";
@@ -15,7 +20,7 @@ type AppState = {
 
 class App extends React.Component {
   state: AppState = {
-    user: {},
+    user: { name: "?" },
     updateUser: (newUser: Object) => {
       this.setState({ user: newUser });
     },
@@ -30,9 +35,12 @@ class App extends React.Component {
               path="/user"
               component={UserProfile}
             ></ProtectedRoute>
-            <ProtectedRoute path="/home" component={Home} />
             <Route path="/signup" component={SignUp} />
-            <Route path="/" component={Login} />
+            <Route path="/login" component={Login} />
+            <Route path="/home" component={Home} />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
           </Switch>
         </UserContext.Provider>
       </Router>
