@@ -71,7 +71,7 @@ Iou.init(
       allowNull: false,
     },
   },
-  { sequelize: db, tableName: "iou" }
+  { sequelize: db, tableName: "ious", timestamps: false }
 );
 
 export default Iou;

@@ -5,6 +5,8 @@ import Joi, { ObjectSchema } from "joi";
 
 import IouDao from "@daos/iou/iou-dao";
 import { paramMissingError } from "@shared/constants";
+import { getAuthenticatedUser } from "@shared/Authenticate";
+import User from "@entities/User";
 
 // Init shared
 const router = Router();
@@ -33,15 +35,15 @@ const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
  ******************************************************************************/
 
 router.get("/owed", async (req: Request, res: Response) => {
-  var tokens = req.cookies("access_tokens");
-  var username = tokens.access_tokens.clientRefreshToken.username;
-  const iou = await iouDao.getOwed(username);
-  if (!iou) {
+  const user = await getAuthenticatedUser(req, res);
+  if (user) {
+    const iou = await iouDao.getOwed(user.username);
+    return res.status(OK).json({ iou });
+  } else {
     return res.status(401).json({
-      error: paramMissingError,
+      errors: ["Not authenticated"],
     });
   }
-  return res.status(OK).json({ iou });
 });
 
 /******************************************************************************

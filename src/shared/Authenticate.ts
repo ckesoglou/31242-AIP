@@ -37,7 +37,7 @@ export async function getAuthenticatedUser(req: Request, res: Response) {
 function verifyToken(token: string) {
   try {
     return jwt.verify(token, env.jwt_secret) as ITokenCookie;
-  } catch (err) { }
+  } catch (err) {}
 }
 
 export async function generateNewAuthenticationTokens(
