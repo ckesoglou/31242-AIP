@@ -1,11 +1,7 @@
 import { Request, Response, Router } from "express";
 import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
-import { ParamsDictionary } from "express-serve-static-core";
 import Joi, { ObjectSchema } from "joi";
-
-import { paramMissingError } from "@shared/constants";
 import { getAuthenticatedUser } from "@shared/Authenticate";
-import User from "@entities/User";
 import {
   getIousOwed,
   createIouOwed,

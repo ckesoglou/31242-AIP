@@ -1,5 +1,4 @@
-import { DataTypes, Model } from "sequelize";
-import db from "../daos/DBInstance";
+import { Model } from "sequelize";
 
 export interface IIouAttributes {
   id: string;
