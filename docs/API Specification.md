@@ -180,10 +180,7 @@ Attempts to view the user information with the refresh JSON Web Token (if stored
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned user information.|[User](#schemauser)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
-
-<h3 id="get__api_user-responseschema">Response Schema</h3>
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -229,17 +226,12 @@ Attempts to update user if they are currently logged in
 |---|---|---|---|---|
 |body|body|[User](#schemauser)|true|Updated user object|
 
-> Example responses
-
 <h3 id="put__api_user-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource updated successfully|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
-
-<h3 id="put__api_user-responseschema">Response Schema</h3>
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -269,17 +261,12 @@ fetch('/api/user',
 
 Attempts to delete user if they are currently logged in
 
-> Example responses
-
 <h3 id="delete__api_user-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource deleted successfully|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid user supplied|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|User not found|None|
-
-<h3 id="delete__api_user-responseschema">Response Schema</h3>
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
