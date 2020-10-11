@@ -4,13 +4,6 @@ import { MemoryRouter, Route } from "react-router-dom";
 import Home from "./home";
 import UserProfile from "./userprofile";
 import { UserContext } from "../components/user-context";
-import { AvatarWithMenu } from "../components/avatarWithMenu";
-
-// const testProps = {
-//   history: {} as any,
-//   location: {} as any,
-//   match: {} as any,
-// };
 
 describe("<Home />", () => {
   it("should render correctly", () => {
