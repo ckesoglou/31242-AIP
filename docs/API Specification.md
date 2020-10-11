@@ -1659,7 +1659,7 @@ const headers = {
   'Accept':'image/*'
 };
 
-fetch('/api/image/{imagePK}?imagePK=string',
+fetch('/api/image/{imagePK}',
 {
   method: 'GET',
 
@@ -1681,7 +1681,7 @@ Retrieve an image.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|imagePK|query|string|true|Unique identifier for the image.|
+|imagePK|path|string|true|Unique identifier for the image.|
 
 > Example responses
 
