@@ -356,7 +356,7 @@ View the favours owed to the currently logged in user.
   {
     "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
     "item": {
-      "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
+      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
       "display_name": "Coffee"
     },
     "giver": {
@@ -390,11 +390,11 @@ Status Code **200**
 |---|---|---|---|---|
 |» id|string|false|none|Unique identifier for an IOU|
 |» item|[Item](#schemaitem)|false|none|none|
-|»» id|string|true|none|Unique identifier for an IOU|
-|»» display_name|string|true|none|none|
+|»» id|string|false|none|Unique identifier of the item.|
+|»» display_name|string|false|none|Current display name of the item.|
 |» giver|[User](#schemauser)|false|none|none|
-|»» username|string|true|none|none|
-|»» display_name|string|false|none|none|
+|»» username|string|false|none|Unique username of the user|
+|»» display_name|string|false|none|Current display name of the user|
 |» parent_request|string|false|none|Unique identifier for an IOU|
 |» proof_of_debt|string|false|none|Unique identifier for an image|
 |» proof_of_completion|string|false|none|Unique identifier for an image|
@@ -594,7 +594,7 @@ View favours the currently logged in user owes to others.
   {
     "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
     "item": {
-      "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
+      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
       "display_name": "Coffee"
     },
     "receiver": {
@@ -627,11 +627,11 @@ Status Code **200**
 |---|---|---|---|---|
 |» id|string|false|none|Unique identifier for an IOU|
 |» item|[Item](#schemaitem)|false|none|none|
-|»» id|string|true|none|Unique identifier for an IOU|
-|»» display_name|string|true|none|none|
+|»» id|string|false|none|Unique identifier of the item.|
+|»» display_name|string|false|none|Current display name of the item.|
 |» receiver|[User](#schemauser)|false|none|none|
-|»» username|string|true|none|none|
-|»» display_name|string|false|none|none|
+|»» username|string|false|none|Unique username of the user|
+|»» display_name|string|false|none|Current display name of the user|
 |» parent_request|string|false|none|Unique identifier for an IOU|
 |» proof_of_debt|string|false|none|Unique identifier for an image|
 |» proof_of_completion|string|false|none|Unique identifier for an image|
@@ -777,7 +777,7 @@ proof: string
 ```json
 [
   {
-    "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
+    "id": "string",
     "author": {
       "username": "jsmith",
       "display_name": "John Smith"
@@ -786,7 +786,13 @@ proof: string
       "username": "jsmith",
       "display_name": "John Smith"
     },
-    "proof_of_completion": "string",
+    "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
+    "rewards": [
+      {
+        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+        "display_name": "Coffee"
+      }
+    ],
     "details": "Clean the fridge",
     "created_time": "2020-03-09T22:18:26.625Z",
     "completion_time": "2020-03-09T22:18:26.625Z",
@@ -809,20 +815,699 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[Request](#schemarequest)]|false|none|none|
-|» id|string|true|none|Unique identifier for an IOU|
-|» author|[User](#schemauser)|true|none|none|
-|»» username|string|true|none|none|
-|»» display_name|string|false|none|none|
+|» id|string|false|none|Unique identifier of the request.|
+|» author|[User](#schemauser)|false|none|none|
+|»» username|string|false|none|Unique username of the user|
+|»» display_name|string|false|none|Current display name of the user|
 |» completed_by|[User](#schemauser)|false|none|none|
-|» proof_of_completion|string(binary)|false|none|Image proof of completion|
-|» details|string|true|none|none|
-|» created_time|string(date-time)|true|none|none|
-|» completion_time|string(date-time)|false|none|none|
-|» is_completed|boolean|true|none|none|
+|» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
+|» rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|»» id|string|false|none|Unique identifier of the item.|
+|»» display_name|string|false|none|Current display name of the item.|
+|» details|string|false|none|Details of the request (maximum 50 bytes).|
+|» created_time|string(date-time)|false|none|Timestamp of when the request was created.|
+|» completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
+|» is_completed|boolean|false|none|Whether or not this request has been completed by a user.|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
 userAuthenticated
+</aside>
+
+<h1 id="ioweyou-tech-request">Request</h1>
+
+## get__api_requests
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/requests',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/requests`
+
+Retrieve a list of requests, optionally matched to provided criteria.
+
+<h3 id="get__api_requests-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|start|query|string|false|Starting row of the returned array. Default 0.|
+|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
+|author|query|string|false|Filter based on request author.|
+|search|query|string|false|Filter for requests whose details contain the provided string.|
+|rewards|query|array[string]|false|Filter for requests that contain all these items as rewards (array of item PK's).|
+|createdAfter|query|string|false|Filter for requests created after or on this date (YYYY-MM-DD).|
+|createdBefore|query|string|false|Filter for requests created before or on this date (YYYY-MM-DD).|
+|completedAfter|query|string|false|Filter for requests completed after or on this date (YYYY-MM-DD).|
+|completedBefore|query|string|false|Filter for requests completed before or on this date (YYYY-MM-DD).|
+|completed|query|boolean|false|Filter based on whether the request is completed or not.|
+|completedBy|query|string|false|Filter based on which user completed the request.|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": "string",
+    "author": {
+      "username": "jsmith",
+      "display_name": "John Smith"
+    },
+    "completed_by": {
+      "username": "jsmith",
+      "display_name": "John Smith"
+    },
+    "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
+    "rewards": [
+      {
+        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+        "display_name": "Coffee"
+      }
+    ],
+    "details": "Clean the fridge",
+    "created_time": "2020-03-09T22:18:26.625Z",
+    "completion_time": "2020-03-09T22:18:26.625Z",
+    "is_completed": false
+  }
+]
+```
+
+<h3 id="get__api_requests-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request was understood, and the matching requests are returned (if any).|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+
+<h3 id="get__api_requests-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[Request](#schemarequest)]|false|none|none|
+|» id|string|false|none|Unique identifier of the request.|
+|» author|[User](#schemauser)|false|none|none|
+|»» username|string|false|none|Unique username of the user|
+|»» display_name|string|false|none|Current display name of the user|
+|» completed_by|[User](#schemauser)|false|none|none|
+|» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
+|» rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|»» id|string|false|none|Unique identifier of the item.|
+|»» display_name|string|false|none|Current display name of the item.|
+|» details|string|false|none|Details of the request (maximum 50 bytes).|
+|» created_time|string(date-time)|false|none|Timestamp of when the request was created.|
+|» completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
+|» is_completed|boolean|false|none|Whether or not this request has been completed by a user.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## post__api_requests
+
+> Code samples
+
+```javascript
+const inputBody = '{
+  "details": "Clean my fridge",
+  "item": "2b4905a4-3e99-4ead-9257-a48bef738ec0"
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json'
+};
+
+fetch('/api/requests',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`POST /api/requests`
+
+Create a request.
+
+> Body parameter
+
+```json
+{
+  "details": "Clean my fridge",
+  "item": "2b4905a4-3e99-4ead-9257-a48bef738ec0"
+}
+```
+
+<h3 id="post__api_requests-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» details|body|string|true|Details of the request (what you are asking for), limited to 50 bytes.|
+|» item|body|string|true|Unique identifier of the item being offered as a reward.|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "id": "424195ef-eb69-492e-bc5a-741d664a99aa"
+}
+```
+
+<h3 id="post__api_requests-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Request was successfully created.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+
+<h3 id="post__api_requests-responseschema">Response Schema</h3>
+
+Status Code **201**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» id|string|false|none|Unique identifier of the created request.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_request_{requestID}
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/request/{requestID}',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/request/{requestID}`
+
+Retrieve details about a single request.
+
+<h3 id="get__api_request_{requestid}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|requestID|path|string|true|Unique identifier of a given request.|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "id": "string",
+  "author": {
+    "username": "jsmith",
+    "display_name": "John Smith"
+  },
+  "completed_by": {
+    "username": "jsmith",
+    "display_name": "John Smith"
+  },
+  "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
+  "rewards": [
+    {
+      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+      "display_name": "Coffee"
+    }
+  ],
+  "details": "Clean the fridge",
+  "created_time": "2020-03-09T22:18:26.625Z",
+  "completion_time": "2020-03-09T22:18:26.625Z",
+  "is_completed": false
+}
+```
+
+<h3 id="get__api_request_{requestid}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request ID found and it's details returned.|[Request](#schemarequest)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## delete__api_request_{requestID}
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/request/{requestID}',
+{
+  method: 'DELETE',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`DELETE /api/request/{requestID}`
+
+Delete a single request.
+
+<h3 id="delete__api_request_{requestid}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|requestID|path|string|true|Unique identifier of a given request.|
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "errors": [
+    "Reason why request was invalid"
+  ]
+}
+```
+
+<h3 id="delete__api_request_{requestid}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request has been successfully deleted.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to delete this request (you are not the author of it).|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## put__api_request_{requestID}_complete
+
+> Code samples
+
+```javascript
+const inputBody = '{
+  "proof": "string"
+}';
+const headers = {
+  'Content-Type':'multipart/form-data',
+  'Accept':'application/json'
+};
+
+fetch('/api/request/{requestID}/complete',
+{
+  method: 'PUT',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`PUT /api/request/{requestID}/complete`
+
+Complete a request.
+
+> Body parameter
+
+```yaml
+proof: string
+
+```
+
+<h3 id="put__api_request_{requestid}_complete-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» proof|body|string(binary)|true|Image proof of the request completion.|
+|requestID|path|string|true|Unique identifier of a given request.|
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "errors": [
+    "Reason why request was invalid"
+  ]
+}
+```
+
+<h3 id="put__api_request_{requestid}_complete-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successfully marked as complete.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_request_{requestID}_rewards
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/request/{requestID}/rewards',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/request/{requestID}/rewards`
+
+Retrieve details about the request rewards on offer.
+
+<h3 id="get__api_request_{requestid}_rewards-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|requestID|path|string|true|Unique identifier of a given request.|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+    "giver": {
+      "username": "jsmith",
+      "display_name": "John Smith"
+    },
+    "item": {
+      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+      "display_name": "Coffee"
+    }
+  }
+]
+```
+
+<h3 id="get__api_request_{requestid}_rewards-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of rewards.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+
+<h3 id="get__api_request_{requestid}_rewards-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[Reward](#schemareward)]|false|none|none|
+|» id|string|false|none|Unique identifier of reward (also the ID of the IOU it becomes).|
+|» giver|[User](#schemauser)|false|none|none|
+|»» username|string|false|none|Unique username of the user|
+|»» display_name|string|false|none|Current display name of the user|
+|» item|[Item](#schemaitem)|false|none|none|
+|»» id|string|false|none|Unique identifier of the item.|
+|»» display_name|string|false|none|Current display name of the item.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## post__api_request_{requestID}_rewards
+
+> Code samples
+
+```javascript
+const inputBody = '{
+  "item": "2b4905a4-3e99-4ead-9257-a48bef738ec0"
+}';
+const headers = {
+  'Content-Type':'application/json',
+  'Accept':'application/json'
+};
+
+fetch('/api/request/{requestID}/rewards',
+{
+  method: 'POST',
+  body: inputBody,
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`POST /api/request/{requestID}/rewards`
+
+Create a new reward for this request.
+
+> Body parameter
+
+```json
+{
+  "item": "2b4905a4-3e99-4ead-9257-a48bef738ec0"
+}
+```
+
+<h3 id="post__api_request_{requestid}_rewards-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object|true|none|
+|» item|body|string|true|Unique identifier of the item being offered as a reward.|
+|requestID|path|string|true|Unique identifier of a given request.|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "id": "424195ef-eb69-492e-bc5a-741d664a99aa"
+}
+```
+
+<h3 id="post__api_request_{requestid}_rewards-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Reward was successfully added.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+
+<h3 id="post__api_request_{requestid}_rewards-responseschema">Response Schema</h3>
+
+Status Code **201**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» id|string|false|none|Unique identifier of the created reward (also the owed IOU).|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get__api_request_{requestID}_reward_{rewardID}
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/request/{requestID}/reward/{rewardID}',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/request/{requestID}/reward/{rewardID}`
+
+Retrieve details about a specific request rewards on offer.
+
+<h3 id="get__api_request_{requestid}_reward_{rewardid}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|requestID|path|string|true|Unique identifier of a given request.|
+|rewardID|path|string|true|Unique identifier of a given request reward.|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+  "giver": {
+    "username": "jsmith",
+    "display_name": "John Smith"
+  },
+  "item": {
+    "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+    "display_name": "Coffee"
+  }
+}
+```
+
+<h3 id="get__api_request_{requestid}_reward_{rewardid}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned details of a specific request reward.|[Reward](#schemareward)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## delete__api_request_{requestID}_reward_{rewardID}
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/request/{requestID}/reward/{rewardID}',
+{
+  method: 'DELETE',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`DELETE /api/request/{requestID}/reward/{rewardID}`
+
+Delete a single request reward.
+
+<h3 id="delete__api_request_{requestid}_reward_{rewardid}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|requestID|path|string|true|Unique identifier of a given request.|
+|rewardID|path|string|true|Unique identifier of a given request reward.|
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "errors": [
+    "Reason why request was invalid"
+  ]
+}
+```
+
+<h3 id="delete__api_request_{requestid}_reward_{rewardid}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request reward has been successfully deleted.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to delete this reward (you are not the one offering it, or the request is already complete).|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID or reward ID was not found.|None|
+
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="ioweyou-tech-leaderboard">Leaderboard</h1>
@@ -894,8 +1579,8 @@ Status Code **200**
 |---|---|---|---|---|
 |» rank|number|false|none|Rank of this user.|
 |» user|[User](#schemauser)|false|none|none|
-|»» username|string|true|none|none|
-|»» display_name|string|false|none|none|
+|»» username|string|false|none|Unique username of the user|
+|»» display_name|string|false|none|Current display name of the user|
 |» score|number|false|none|Numeric leaderboard score of this user.|
 
 <aside class="success">
@@ -962,6 +1647,57 @@ Status Code **200**
 This operation does not require authentication
 </aside>
 
+<h1 id="ioweyou-tech-image">Image</h1>
+
+## get__api_image_{imagePK}
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'image/*'
+};
+
+fetch('/api/image/{imagePK}?imagePK=string',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/image/{imagePK}`
+
+Retrieve an image.
+
+<h3 id="get__api_image_{imagepk}-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|imagePK|query|string|true|Unique identifier for the image.|
+
+> Example responses
+
+> 200 Response
+
+<h3 id="get__api_image_{imagepk}-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Image found and returned.|string|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Image not found.|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 # Schemas
 
 <h2 id="tocS_User">User</h2>
@@ -983,8 +1719,8 @@ This operation does not require authentication
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|username|string|true|none|none|
-|display_name|string|false|none|none|
+|username|string|false|none|Unique username of the user|
+|display_name|string|false|none|Current display name of the user|
 
 <h2 id="tocS_IOU">IOU</h2>
 <!-- backwards compatibility -->
@@ -997,7 +1733,7 @@ This operation does not require authentication
 {
   "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
   "item": {
-    "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
+    "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
     "display_name": "Coffee"
   },
   "giver": {
@@ -1009,7 +1745,7 @@ This operation does not require authentication
     "display_name": "John Smith"
   },
   "parent_request": {
-    "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
+    "id": "string",
     "author": {
       "username": "jsmith",
       "display_name": "John Smith"
@@ -1018,7 +1754,13 @@ This operation does not require authentication
       "username": "jsmith",
       "display_name": "John Smith"
     },
-    "proof_of_completion": "string",
+    "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
+    "rewards": [
+      {
+        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+        "display_name": "Coffee"
+      }
+    ],
     "details": "Clean the fridge",
     "created_time": "2020-03-09T22:18:26.625Z",
     "completion_time": "2020-03-09T22:18:26.625Z",
@@ -1057,7 +1799,7 @@ This operation does not require authentication
 
 ```json
 {
-  "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
+  "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
   "display_name": "Coffee"
 }
 
@@ -1067,8 +1809,8 @@ This operation does not require authentication
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string|true|none|Unique identifier for an IOU|
-|display_name|string|true|none|none|
+|id|string|false|none|Unique identifier of the item.|
+|display_name|string|false|none|Current display name of the item.|
 
 <h2 id="tocS_Request">Request</h2>
 <!-- backwards compatibility -->
@@ -1079,7 +1821,7 @@ This operation does not require authentication
 
 ```json
 {
-  "id": "510ab12d-1689-4b2c-8a8d-275376f11077",
+  "id": "string",
   "author": {
     "username": "jsmith",
     "display_name": "John Smith"
@@ -1088,7 +1830,13 @@ This operation does not require authentication
     "username": "jsmith",
     "display_name": "John Smith"
   },
-  "proof_of_completion": "string",
+  "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
+  "rewards": [
+    {
+      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+      "display_name": "Coffee"
+    }
+  ],
   "details": "Clean the fridge",
   "created_time": "2020-03-09T22:18:26.625Z",
   "completion_time": "2020-03-09T22:18:26.625Z",
@@ -1101,14 +1849,45 @@ This operation does not require authentication
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string|true|none|Unique identifier for an IOU|
-|author|[User](#schemauser)|true|none|none|
-|completed_by|[User](#schemauser)|false|none|none|
-|proof_of_completion|string(binary)|false|none|Image proof of completion|
-|details|string|true|none|none|
-|created_time|string(date-time)|true|none|none|
-|completion_time|string(date-time)|false|none|none|
-|is_completed|boolean|true|none|none|
+|id|string|false|none|Unique identifier of the request.|
+|author|[User](#schemauser)|false|none|User who created the request.|
+|completed_by|[User](#schemauser)|false|none|User who completed the request.|
+|proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
+|rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|details|string|false|none|Details of the request (maximum 50 bytes).|
+|created_time|string(date-time)|false|none|Timestamp of when the request was created.|
+|completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
+|is_completed|boolean|false|none|Whether or not this request has been completed by a user.|
+
+<h2 id="tocS_Reward">Reward</h2>
+<!-- backwards compatibility -->
+<a id="schemareward"></a>
+<a id="schema_Reward"></a>
+<a id="tocSreward"></a>
+<a id="tocsreward"></a>
+
+```json
+{
+  "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+  "giver": {
+    "username": "jsmith",
+    "display_name": "John Smith"
+  },
+  "item": {
+    "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+    "display_name": "Coffee"
+  }
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|string|false|none|Unique identifier of reward (also the ID of the IOU it becomes).|
+|giver|[User](#schemauser)|false|none|User who is offering this reward.|
+|item|[Item](#schemaitem)|false|none|Item being offered as an award.|
 
 <h2 id="tocS_badRequest">badRequest</h2>
 <!-- backwards compatibility -->

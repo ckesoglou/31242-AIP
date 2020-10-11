@@ -6,7 +6,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE tokens (
-	refresh_token varchar not null,
+	refresh_token uniqueidentifier not null,
 	username varchar(16) not null,
 	device_name varchar(30) not null,
 	created_time datetime not null,

@@ -1,35 +1,15 @@
-import { DataTypes, Model } from "sequelize";
-import db from "../daos/db-instance";
+import { Model } from "sequelize";
 
-export interface IUser {
+interface IUserAttributes {
   username: string;
-  displayName: string;
-  password: string;
+  display_name: string;
+  password_hash: string;
 }
 
-class User extends Model<IUser> implements IUser {
+class User extends Model<IUserAttributes> implements IUserAttributes {
   public username!: string;
-  public displayName!: string;
-  public password!: string;
+  public display_name!: string;
+  public password_hash!: string;
 }
-
-User.init(
-  {
-    username: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false,
-    },
-    displayName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  { sequelize: db, tableName: "users" }
-);
 
 export default User;
