@@ -31,40 +31,6 @@ exports[`<AvatarWithMenu /> should render correctly 1`] = `
           "render": [Function],
         }
       }
-      style={
-        Object {
-          "textDecoration": "none",
-        }
-      }
-      to="/"
-    >
-      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
-        <WithStyles(ForwardRef(ListItemIcon))>
-          <MeetingRoomIcon
-            fontSize="small"
-          />
-        </WithStyles(ForwardRef(ListItemIcon))>
-        <WithStyles(ForwardRef(ListItemText))
-          primary="Click here to go back!"
-        />
-      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
-    </WithStyles(ForwardRef(Link))>
-    <WithStyles(ForwardRef(Link))
-      color="inherit"
-      component={
-        Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "displayName": "Link",
-          "propTypes": Object {
-            "innerRef": [Function],
-            "onClick": [Function],
-            "replace": [Function],
-            "target": [Function],
-            "to": [Function],
-          },
-          "render": [Function],
-        }
-      }
       id="favoursLink"
       style={
         Object {
@@ -73,7 +39,7 @@ exports[`<AvatarWithMenu /> should render correctly 1`] = `
       }
       to={
         Object {
-          "pathname": "/user",
+          "pathname": "/login",
           "state": Object {
             "tabIndex": 1,
           },
@@ -82,12 +48,12 @@ exports[`<AvatarWithMenu /> should render correctly 1`] = `
     >
       <WithStyles(WithStyles(ForwardRef(MenuItem)))>
         <WithStyles(ForwardRef(ListItemIcon))>
-          <ThumbsUpDownIcon
+          <AssignmentIndIcon
             fontSize="small"
           />
         </WithStyles(ForwardRef(ListItemIcon))>
         <WithStyles(ForwardRef(ListItemText))
-          primary="My Favours"
+          primary="Login"
         />
       </WithStyles(WithStyles(ForwardRef(MenuItem)))>
     </WithStyles(ForwardRef(Link))>
@@ -115,7 +81,7 @@ exports[`<AvatarWithMenu /> should render correctly 1`] = `
       }
       to={
         Object {
-          "pathname": "/user",
+          "pathname": "/signup",
           "state": Object {
             "tabIndex": 2,
           },
@@ -124,51 +90,16 @@ exports[`<AvatarWithMenu /> should render correctly 1`] = `
     >
       <WithStyles(WithStyles(ForwardRef(MenuItem)))>
         <WithStyles(ForwardRef(ListItemIcon))>
-          <PeopleOutlineIcon
+          <PersonAddIcon
             fontSize="small"
           />
         </WithStyles(ForwardRef(ListItemIcon))>
         <WithStyles(ForwardRef(ListItemText))
-          primary="My Requests"
+          primary="Sign Up"
         />
       </WithStyles(WithStyles(ForwardRef(MenuItem)))>
     </WithStyles(ForwardRef(Link))>
     <WithStyles(ForwardRef(MenuItem)) />
-    <WithStyles(ForwardRef(Link))
-      color="inherit"
-      component={
-        Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "displayName": "Link",
-          "propTypes": Object {
-            "innerRef": [Function],
-            "onClick": [Function],
-            "replace": [Function],
-            "target": [Function],
-            "to": [Function],
-          },
-          "render": [Function],
-        }
-      }
-      id="logOutLink"
-      style={
-        Object {
-          "textDecoration": "none",
-        }
-      }
-      to="/login"
-    >
-      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
-        <WithStyles(ForwardRef(ListItemIcon))>
-          <ExitToAppIcon
-            fontSize="small"
-          />
-        </WithStyles(ForwardRef(ListItemIcon))>
-        <WithStyles(ForwardRef(ListItemText))
-          primary="Log Out"
-        />
-      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
-    </WithStyles(ForwardRef(Link))>
   </WithStyles(Component)>
 </div>
 `;

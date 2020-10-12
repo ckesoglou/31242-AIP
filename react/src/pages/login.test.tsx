@@ -63,11 +63,13 @@ describe("<Login />", () => {
           updateUser: () => {},
         }}
       >
-        <Login
-          history={testProps.history}
-          location={testProps.location}
-          match={testProps.match}
-        />
+        <MemoryRouter>
+          <Login
+            history={testProps.history}
+            location={testProps.location}
+            match={testProps.match}
+          />
+        </MemoryRouter>
       </UserContext.Provider>
     );
 
