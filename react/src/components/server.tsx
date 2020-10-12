@@ -197,6 +197,110 @@ export function makeServer({ environment = "development" } = {}) {
         },
         { timing: 2000 } // mock delay - helps visualise loading for user
       );
+
+      this.get(
+        "/leaderboard",
+        () => {
+          let body = [
+            {
+              rank: 1,
+              user: {
+                username: "kleung",
+                display_name: "Kevin Leung",
+              },
+              score: 42,
+            },
+            {
+              rank: 2,
+              user: {
+                username: "jsmith",
+                display_name: "John Smith",
+              },
+              score: 35,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+            {
+              rank: 3,
+              user: {
+                username: "benjohn",
+                display_name: "Ben Johnston",
+              },
+              score: 10,
+            },
+          ];
+
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 2000 } // mock delay - helps visualise loading for user
+      );
+
+      this.get(
+        "/leaderboard/me",
+        () => {
+          let body = {
+            rank: 1,
+            score: 35,
+          };
+
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 2000 } // mock delay - helps visualise loading for user
+      );
     },
   });
 

@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LeaderboardUser /> should render correctly 1`] = `
+<WithStyles(ForwardRef(Grid))
+  container={true}
+  direction="row"
+>
+  <WithStyles(ForwardRef(Grid))
+    id="leaderboardItem"
+    item={true}
+    xs={3}
+  >
+    <WithStyles(ForwardRef(Typography))>
+      1
+    </WithStyles(ForwardRef(Typography))>
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="leaderboardItem"
+    item={true}
+    xs={3}
+  >
+    <WithStyles(ForwardRef(Typography))>
+      Kevin
+    </WithStyles(ForwardRef(Typography))>
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="leaderboardItem"
+    item={true}
+    xs={3}
+  >
+    <WithStyles(ForwardRef(Typography))>
+      69
+    </WithStyles(ForwardRef(Typography))>
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="leaderboardItem"
+    item={true}
+    xs={3}
+  >
+    <WithStyles(ForwardRef(Avatar))
+      id="leaderboardUserAvatar"
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "justifyContent": "center",
+        }
+      }
+    >
+      K
+    </WithStyles(ForwardRef(Avatar))>
+  </WithStyles(ForwardRef(Grid))>
+</WithStyles(ForwardRef(Grid))>
+`;
