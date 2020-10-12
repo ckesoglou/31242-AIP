@@ -115,7 +115,7 @@ class IouFavourSingle extends React.Component<IouFavourSingleProps, IouFavourSin
                   }}
                 >
                 <Typography id="favourAvatarText">
-                  {this.props.recieverDisplayName}
+                  {this.props.recieverDisplayName === "?" ? "Favour not completed by anyone yet!" : this.props.recieverDisplayName}
                 </Typography>
               </Popover>
             </div>

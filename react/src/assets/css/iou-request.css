@@ -273,7 +273,11 @@
 }
 
 #requestAddContainer {
-    margin-top:2px;
+    margin-top:4px;
+}
+
+#requestPopUpText {
+    margin-bottom:4px;
 }
 
 @-webkit-keyframes fadeIn {
@@ -297,6 +301,10 @@
 
 #infoTable {
     width:75%;
+}
+
+#requestInfoRewards {
+    margin-bottom: 5px;
 }
 
 #requestDetailsTable {

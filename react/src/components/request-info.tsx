@@ -132,7 +132,7 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
                             </Table>
                         </TableContainer>
                         </DialogContent>
-                        <DialogContent>
+                        <DialogContent id="requestInfoRewards">
                         <DialogContentText variant="h6">
                             {"Rewards"}
                         </DialogContentText>
