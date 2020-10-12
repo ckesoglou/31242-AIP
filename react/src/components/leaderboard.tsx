@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
-import { UserContext } from "../components/user-context";
 import LeaderboardUser from "./leaderboardUser";
 
 type LeaderboardUser = {
