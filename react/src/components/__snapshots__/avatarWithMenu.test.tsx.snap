@@ -1,0 +1,174 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AvatarWithMenu /> should render correctly 1`] = `
+<div>
+  <WithStyles(ForwardRef(Avatar))
+    id="avatar"
+    onClick={[Function]}
+  >
+    BJ
+  </WithStyles(ForwardRef(Avatar))>
+  <WithStyles(Component)
+    anchorEl={null}
+    id="customized-menu"
+    keepMounted={true}
+    onClose={[Function]}
+    open={false}
+  >
+    <WithStyles(ForwardRef(Link))
+      color="inherit"
+      component={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "displayName": "Link",
+          "propTypes": Object {
+            "innerRef": [Function],
+            "onClick": [Function],
+            "replace": [Function],
+            "target": [Function],
+            "to": [Function],
+          },
+          "render": [Function],
+        }
+      }
+      style={
+        Object {
+          "textDecoration": "none",
+        }
+      }
+      to="/"
+    >
+      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
+        <WithStyles(ForwardRef(ListItemIcon))>
+          <MeetingRoomIcon
+            fontSize="small"
+          />
+        </WithStyles(ForwardRef(ListItemIcon))>
+        <WithStyles(ForwardRef(ListItemText))
+          primary="Click here to go back!"
+        />
+      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
+    </WithStyles(ForwardRef(Link))>
+    <WithStyles(ForwardRef(Link))
+      color="inherit"
+      component={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "displayName": "Link",
+          "propTypes": Object {
+            "innerRef": [Function],
+            "onClick": [Function],
+            "replace": [Function],
+            "target": [Function],
+            "to": [Function],
+          },
+          "render": [Function],
+        }
+      }
+      id="favoursLink"
+      style={
+        Object {
+          "textDecoration": "none",
+        }
+      }
+      to={
+        Object {
+          "pathname": "/user",
+          "state": Object {
+            "tabIndex": 1,
+          },
+        }
+      }
+    >
+      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
+        <WithStyles(ForwardRef(ListItemIcon))>
+          <ThumbsUpDownIcon
+            fontSize="small"
+          />
+        </WithStyles(ForwardRef(ListItemIcon))>
+        <WithStyles(ForwardRef(ListItemText))
+          primary="My Favours"
+        />
+      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
+    </WithStyles(ForwardRef(Link))>
+    <WithStyles(ForwardRef(Link))
+      color="inherit"
+      component={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "displayName": "Link",
+          "propTypes": Object {
+            "innerRef": [Function],
+            "onClick": [Function],
+            "replace": [Function],
+            "target": [Function],
+            "to": [Function],
+          },
+          "render": [Function],
+        }
+      }
+      id="requestLink"
+      style={
+        Object {
+          "textDecoration": "none",
+        }
+      }
+      to={
+        Object {
+          "pathname": "/user",
+          "state": Object {
+            "tabIndex": 2,
+          },
+        }
+      }
+    >
+      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
+        <WithStyles(ForwardRef(ListItemIcon))>
+          <PeopleOutlineIcon
+            fontSize="small"
+          />
+        </WithStyles(ForwardRef(ListItemIcon))>
+        <WithStyles(ForwardRef(ListItemText))
+          primary="My Requests"
+        />
+      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
+    </WithStyles(ForwardRef(Link))>
+    <WithStyles(ForwardRef(MenuItem)) />
+    <WithStyles(ForwardRef(Link))
+      color="inherit"
+      component={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "displayName": "Link",
+          "propTypes": Object {
+            "innerRef": [Function],
+            "onClick": [Function],
+            "replace": [Function],
+            "target": [Function],
+            "to": [Function],
+          },
+          "render": [Function],
+        }
+      }
+      id="logOutLink"
+      style={
+        Object {
+          "textDecoration": "none",
+        }
+      }
+      to="/login"
+    >
+      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
+        <WithStyles(ForwardRef(ListItemIcon))>
+          <ExitToAppIcon
+            fontSize="small"
+          />
+        </WithStyles(ForwardRef(ListItemIcon))>
+        <WithStyles(ForwardRef(ListItemText))
+          primary="Log Out"
+        />
+      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
+    </WithStyles(ForwardRef(Link))>
+  </WithStyles(Component)>
+</div>
+`;
