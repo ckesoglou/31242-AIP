@@ -1,15 +1,13 @@
 import React from "react";
-import ReactDOM from 'react-dom';
 import "../assets/css/iou-request.css";
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import { imageEndpoint} from "../api/endpoints";
+import { KeyboardArrowRight as Connector } from '@material-ui/icons';
 import {
   Avatar,
   Popover,
   Typography, 
 } from "@material-ui/core";
 
-type itemInterface = {
+type Item = {
   id: string;
   display_name: string;
 }
@@ -17,7 +15,7 @@ type itemInterface = {
 type IouFavourSingleProps = {
   giverDisplayName: string;
   recieverDisplayName: string;
-  item: itemInterface;
+  item: Item;
 }
 
 type IouFavourSingleState = {
@@ -47,7 +45,7 @@ class IouFavourSingle extends React.Component<IouFavourSingleProps, IouFavourSin
 
   render() {
       return (
-          <div>
+          <div id="requestItem">
             <div id="favourAvatarContainer">
               <Avatar
                 onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -78,7 +76,7 @@ class IouFavourSingle extends React.Component<IouFavourSingleProps, IouFavourSin
                 </Typography>
               </Popover>
             </div>
-            <KeyboardArrowRightIcon
+            <Connector
               color="primary"
               id="favourArrow"
             />
@@ -87,7 +85,7 @@ class IouFavourSingle extends React.Component<IouFavourSingleProps, IouFavourSin
                   {this.props.item.display_name}
               </Avatar>
             </div>
-            <KeyboardArrowRightIcon
+            <Connector
               color="primary"
               id="favourArrow"
             />

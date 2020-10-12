@@ -7,11 +7,7 @@ import UserProfile from "../pages/userprofile";
 import Home from "../pages/home";
 import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
-import IouComplete from "./iou-complete";
-import IouTask from "./iou-task";
-import IouProof from "./iou-proof";
-import IouFavour from "./iou-single-favour";
-import RequestRewards from "./request-rewards"
+import Request from "./request";
 
 
 type AppState = {
@@ -38,11 +34,39 @@ class App extends React.Component {
             ></ProtectedRoute>
             <ProtectedRoute path="/home">
               <h1>You've reached the next page!</h1>
-              <IouProof imagePK="1"/>
-              <IouTask taskDescription="Give me a hug?"/>
-              <IouComplete IOUCompleter='John' IOUtimestamp="Completed on: 02/02/2020" taskCompleted={true} requestID="1"/>
-              <IouFavour giverDisplayName="James Lee" recieverDisplayName="Kevin" item={{id:"2", display_name:"Coffee"}}/>
-              <RequestRewards items={[{id:"2", display_name:"Coffee"}]}/>
+              <Request request={{
+                id: "1",
+                author: {username:"James", display_name: "James"},
+                completed_by: {username:"Kevin", display_name: "Kevin"},
+                proof_of_completion: "",
+                rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
+                details: "Clean the fridge",
+                created_time: "02/02/2020",
+                comletion_time: "02/02/2020",
+                is_completed: false,
+              }}/>
+              <Request request={{
+                id: "1",
+                author: {username:"James", display_name: "James"},
+                completed_by: {username:"Kevin", display_name: "Kevin"},
+                proof_of_completion: "",
+                rewards: [{id:"1", display_name:"Hug"}],
+                details: "Clean the fridge",
+                created_time: "02/02/2020",
+                comletion_time: "02/02/2020",
+                is_completed: false,
+              }}/>
+              <Request request={{
+                id: "1",
+                author: {username:"James", display_name: "James"},
+                completed_by: {username:"Kevin", display_name: "Kevin"},
+                proof_of_completion: "",
+                rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
+                details: "Clean the fridge",
+                created_time: "02/02/2020",
+                comletion_time: "02/02/2020",
+                is_completed: true,
+              }}/>
             </ProtectedRoute>
             {/* <ProtectedRoute path="/home" component={Home} /> */}
             <Route path="/signup" component={SignUp} />

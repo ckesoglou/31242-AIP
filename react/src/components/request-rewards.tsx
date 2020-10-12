@@ -1,33 +1,67 @@
 import React from "react";
-import ReactDOM from 'react-dom';
 import "../assets/css/iou-request.css";
+import {requestsEndpoint} from "../api/endpoints";
+import RequestReward from "./request-reward";
 import {
-    Avatar,
     Popover,
-    Typography,
+    Button,
 } from "@material-ui/core";
-import { AvatarGroup } from '@material-ui/lab';
 
-type itemInterface = {
+type Item = {
     id: string;
     display_name: string;
   }
 
-type requestRewardsProps = {
-    items: itemInterface[];
+type RequestRewardsProps = {
+    requestID: string;
+    items: Item[];
+    rewards: Item[];
   }
 
-type requestRewardState = {
+type RequestRewardState = {
     anchorEl: HTMLElement | null;
+    selectedReward: string;
+
 }
 
-class RequestRewards extends React.Component<requestRewardsProps, requestRewardState> {
-
-    state: requestRewardState = {
+class RequestRewards extends React.Component<RequestRewardsProps, RequestRewardState> {
+    state: RequestRewardState = {
         anchorEl: null,
+        selectedReward: ""
     }
 
-    renderItem(item: itemInterface) {
+    fetchPotentialRewards() {
+      //TODO
+    }
+
+    postReward() {
+      fetch(`${requestsEndpoint.concat(this.props.requestID)}/rewards`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          item: this.state.selectedReward,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((body) => {
+          console.log("Success:", body);
+        })
+        .catch((exception) => {
+          console.error("Error:", exception);
+        });
+    }
+
+    renderRewardElement(item: Item) {
+      return(
+        <RequestReward key={item.id} itemId={item.id} display_name={item.display_name} setSelectedReward={(itemId: string) => this.setState({selectedReward: itemId})}/>
+      )
+    }
+
+    renderItem(item: Item) {
         return(
           <div className="circle multipleItemCircle">
             {item.display_name}
@@ -74,10 +108,10 @@ class RequestRewards extends React.Component<requestRewardsProps, requestRewardS
 
     render() {
         return(
-            <div>
+            <div id="requestItem">
                 {this.renderItems()}
                 <Popover
-                  id="favourAvatarPopover"
+                  id="requestRewardPopover"
                   open={Boolean(this.state.anchorEl)}
                   anchorEl={this.state.anchorEl}
                   onClose={() => this.setState({anchorEl: null})}
@@ -89,10 +123,12 @@ class RequestRewards extends React.Component<requestRewardsProps, requestRewardS
                     vertical: 'top',
                     horizontal: 'center',
                   }}
-                >
-                    <Typography id="favourAvatarText">
-                        ???????
-                    </Typography>
+                > <div id="requestRewardPopUp">
+                    {this.props.rewards.map((item) => this.renderRewardElement(item))}
+                    <Button variant="contained" color="primary" id="addRewardButton" onClick={() => this.postReward()}>
+                      Add Reward?
+                    </Button>
+                  </div>
                 </Popover>
             </div>
         );

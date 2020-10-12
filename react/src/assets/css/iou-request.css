@@ -17,8 +17,9 @@
 }
 
 #inputProof{
-    text-align: center;
-    width:50%;
+    /* text-align: center;
+    width:50%; */
+    display: none;
 }
 
 #completeProofFileInfo{
@@ -31,12 +32,12 @@
 }
 
 #incompleteIouContainer{
-    width:125px;
+    width:6.25rem;
     cursor: pointer;
 }
 
 #completeIouContainer{
-    width:260px;
+    width:15rem;
 }
 
 #IouTaskComplete{
@@ -57,6 +58,7 @@
 
 #task{
     font-size: 20px;
+    display:inline-block;
 }
 
 #proofImage{
@@ -77,11 +79,12 @@
     height: 4.5rem;
     width: 4.5rem;
     background-color: #86c232;
+    cursor: pointer;
   }
 
 #favourAvatarPopover {
     margin-top: 10px;
-  }
+}
   
 #favourAvatarText {
     padding: 10px;
@@ -229,7 +232,39 @@
 
 .thirdCircle {
     z-index: -2;
+}
 
+.popUpCircle {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 50px;
+    border: white solid 0.3125rem;
+    background-color: #222629;
+    font-size: 12px;
+    margin:2px;
+    cursor:pointer;
+}
+
+.popUpCircle:hover{
+    background-color: #86c232;
+}
+
+#requestRewardPopover{
+    margin-top:10px;
+}
+
+#requestRewardPopUp {
+    padding: 10px;
+}
+
+#addRewardButton {
+    display: inline-block;
+    margin-left: 10px;
 }
 
 @-webkit-keyframes fadeIn {
@@ -237,7 +272,45 @@
     to {opacity: 1;}
   }
   
-  @keyframes fadeIn {
+@keyframes fadeIn {
     from {opacity: 0;}
     to {opacity:1 ;}
-  }
+}
+
+.infoTableCell {
+    width:50%;
+}
+
+#infoTableTitle{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#infoTable {
+    width:75%;
+}
+
+#requestDetailsTable {
+    min-height:240px;    
+}
+
+#completeDetailsTable {
+    min-height:230px;
+}
+
+#completePopUpRewards {
+    max-height:300px;
+}
+
+#requestItem {
+    display:inline-block;
+}
+
+#requestContainer {
+    width:1000px;
+}
+
+#requestContainer > *{
+    margin-left: 15px;
+    vertical-align: middle;
+}
