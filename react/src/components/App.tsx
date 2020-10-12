@@ -51,7 +51,7 @@ class App extends React.Component {
                 completed_by: {username:"Kevin", display_name: "Kevin"},
                 proof_of_completion: "",
                 rewards: [{id:"1", display_name:"Hug"}],
-                details: "Clean the fridge",
+                details: "Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Sentence",
                 created_time: "02/02/2020",
                 comletion_time: "02/02/2020",
                 is_completed: false,

@@ -306,11 +306,11 @@
     display:inline-block;
 }
 
-#requestContainer {
-    width:1000px;
+#requestItemContainer {
+    align-self: center;
+    text-align: center;
 }
 
-#requestContainer > *{
-    margin-left: 15px;
-    vertical-align: middle;
+.i {
+    background-color: red;
 }
