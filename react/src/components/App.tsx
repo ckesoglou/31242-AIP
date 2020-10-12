@@ -44,7 +44,7 @@ class App extends React.Component {
                 details: "Clean the fridge",
                 created_time: "02/02/2020",
                 comletion_time: "02/02/2020",
-                is_completed: false,
+                is_completed: true,
               }}/>
               <Request request={{
                 id: "1",

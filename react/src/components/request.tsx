@@ -45,7 +45,7 @@ class Request extends React.Component<RequestProps> {
                     <Grid item xs={1} id="requestItemContainer">
                         <IouProof imagePK={this.props.request.proof_of_completion}/>
                     </Grid>
-                    <Grid item xs={2} id="requestProofContainer">
+                    <Grid item xs={'auto'} id="requestProofContainer">
                         <IouComplete request={this.props.request}/>
                     </Grid>
                     <Grid item xs={1} id="requestItemContainer">
