@@ -848,7 +848,7 @@ paths:
   /api/image/{imagePK}:
     summary: Image endpoint.
     parameters:
-      - in: query
+      - in: path
         name: imagePK
         schema:
           type: string
