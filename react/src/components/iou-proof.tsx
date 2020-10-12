@@ -18,9 +18,6 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
     fetchImage(){
       fetch(`${imageEndpoint + this.props.imagePK}`, {
         method: "GET",
-        headers: {
-          'Accept':'image/*'
-        },  
       })
         .then((res) => {
           return res.json();
