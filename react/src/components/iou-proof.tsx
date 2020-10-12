@@ -29,18 +29,23 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
         });
     }
 
-    convertbase64Image(): string{
-      return 'data:image/jpeg;base64,' + this.state.resImage;
-    }
-
-    componentDidMount() {
-        // this.fetchImage();
+    renderImage(){
+      if (this.props.imagePK == ""){
+        this.fetchImage();
+        return (
+          <img src={'data:image/jpeg;base64,' + this.state.resImage} id="proofImage" alt="Proof of Completion"/>
+        );
+      } else {
+        return(
+          <p>No Proof Yet</p>
+        );
+      }
     }
 
     render() {
         return (
             <div id="requestItem">
-              <img src={this.convertbase64Image()} id="proofImage" alt="Proof of Completion"/>
+              {this.renderImage()}
             </div>
           );
     }
