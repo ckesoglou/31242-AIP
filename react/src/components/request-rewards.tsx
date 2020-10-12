@@ -5,6 +5,8 @@ import RequestReward from "./request-reward";
 import {
     Popover,
     Button,
+    Typography,
+    Divider,
 } from "@material-ui/core";
 
 type Item = {
@@ -123,11 +125,20 @@ class RequestRewards extends React.Component<RequestRewardsProps, RequestRewardS
                     vertical: 'top',
                     horizontal: 'center',
                   }}
-                > <div id="requestRewardPopUp">
-                    {this.props.rewards.map((item) => this.renderRewardElement(item))}
+                > 
+                  <div id="requestRewardPopUp">
+                    <div id="requestPopUpContent">
+                      <Typography id="requestPopUpText">
+                        Choose a reward to add
+                      </Typography>
+                      <Divider/>
+                      <div id="requestAddContainer">
+                        {this.props.rewards.map((item) => this.renderRewardElement(item))}
+                      </div>
                     <Button variant="contained" color="primary" id="addRewardButton" onClick={() => this.postReward()}>
                       Add Reward?
                     </Button>
+                    </div>
                   </div>
                 </Popover>
             </div>
@@ -136,26 +147,3 @@ class RequestRewards extends React.Component<RequestRewardsProps, RequestRewardS
  }
  
  export default RequestRewards;
- 
- 
- 
- 
- // renderItems() {
-  //   return(
-  //     <div id="itemsContainer">
-  //       <div id="itemsContainerArrow">
-  //       </div>
-  //       {this.props.items.map((item) => this.renderItem(item)) }
-  //     </div>
-  //   );
-  // }
-
-  // displayMultipleItems() {
-  //   if (this.state.multipleItemView){
-  //     this.setState({ multipleItemView: false });
-  //     this.itemView = null;
-  //   } else {
-  //     this.setState({ multipleItemView: true })
-  //     this.itemView = this.renderItems();
-  //   }
-  // }

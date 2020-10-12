@@ -260,11 +260,20 @@
 
 #requestRewardPopUp {
     padding: 10px;
+    text-align: center;
 }
 
 #addRewardButton {
+    margin-top:5px;
     display: inline-block;
-    margin-left: 10px;
+}
+
+#requestPopUpContent {
+    display: inline-block;
+}
+
+#requestAddContainer {
+    margin-top:2px;
 }
 
 @-webkit-keyframes fadeIn {
