@@ -97,7 +97,7 @@ class Home extends React.Component {
               </Paper>
             </Grid>
             <Grid item xs={4}>
-              <Leaderboard />
+              <Leaderboard renderMe={this.context.user.name !== "?"} />
             </Grid>
           </Grid>
         </div>
