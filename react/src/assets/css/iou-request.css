@@ -5,7 +5,7 @@
   }
 
 #completeIconSize{
-    font-size: 5.625rem;
+    font-size: 4rem;
 }
 
 #completeForm{
@@ -311,6 +311,6 @@
     text-align: center;
 }
 
-.i {
-    background-color: red;
+#requestProofContainer {
+    align-self:center;
 }

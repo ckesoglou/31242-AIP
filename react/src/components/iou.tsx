@@ -3,13 +3,15 @@ import IouComplete from "./iou-complete";
 import IouProof from "./iou-proof";
 import IouFavour from "./iou-single-favour"
 import RequestInfo from "./request-info";
+import {
+    Grid,
+  } from "@material-ui/core";
 
 type Item = {
     id: string;
     display_name: string;
 }
 
-//???????????????????
 type RequestObj = {
     id: string;
     author: {username:string, display_name: string};
@@ -34,7 +36,25 @@ class IOU extends React.Component<RequestProps> {
     render() {
         return(
             <div>
-
+                <Grid container xs={8}>
+                    <Grid item xs={'auto'} id="requestItemContainer">
+                        <IouFavour giverDisplayName={this.props.request.author.display_name} recieverDisplayName={"?"} item={this.props.request.rewards[0]}/>
+                    </Grid>
+                    <Grid item xs={2} id="requestItemContainer">
+                        <div id="task">
+                            <p>{this.props.request.details}</p>
+                        </div>
+                    </Grid>
+                    <Grid item xs={1} id="requestItemContainer">
+                        <IouProof imagePK={this.props.request.proof_of_completion}/>
+                    </Grid>
+                    <Grid item xs={2} id="requestProofContainer">
+                        <IouComplete request={this.props.request}/>
+                    </Grid>
+                    <Grid item xs={1} id="requestItemContainer">
+                        <RequestInfo request={this.props.request}/>
+                    </Grid>
+                </Grid>    
             </div>
         );
     }

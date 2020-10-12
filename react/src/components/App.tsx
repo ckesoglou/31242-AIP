@@ -8,6 +8,7 @@ import Home from "../pages/home";
 import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
 import Request from "./request";
+import IOU from "./iou";
 
 
 type AppState = {
@@ -56,7 +57,7 @@ class App extends React.Component {
                 comletion_time: "02/02/2020",
                 is_completed: false,
               }}/>
-              <Request request={{
+              <IOU request={{
                 id: "1",
                 author: {username:"James", display_name: "James"},
                 completed_by: {username:"Kevin", display_name: "Kevin"},
