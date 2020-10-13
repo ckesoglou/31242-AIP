@@ -75,7 +75,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box>
+        <Box p={4}>
           <CircularProgress
             ref={props.loadingRef}
             size={35}
@@ -200,8 +200,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   render() {
     return (
-      // <Container component="main" maxWidth={false}>
-      <Box pl={20} pr={20}>
+      <Container component="main" maxWidth="lg">
         <div className="paper">
           <Grid container spacing={8}>
             <Grid item xs={12}>
@@ -391,7 +390,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             </Grid>
           </Grid>
         </div>
-      </Box>
+      </Container>
     );
   }
 }

@@ -32,12 +32,12 @@
 }
 
 #incompleteIouContainer{
-    width: 4.375rem;
+    width:100%;
     cursor: pointer;
 }
 
 #completeIouContainer{
-    width:13.125rem;
+    width:100%;
 }
 
 #IouTaskComplete{
@@ -225,7 +225,7 @@
     vertical-align: middle;
     line-height: 4.0625rem;
     border: white solid 0.3125rem;
-    background-color:#6e31c2;
+    background-color:#3186c2;
     margin-left:-25px;
     z-index: 5;
     position: relative;
@@ -234,7 +234,6 @@
 
 .thirdCircle {
     z-index: 4;
-    background-color: #31c2b6;
 }
 
 .popUpCircle {
@@ -324,7 +323,12 @@
 
 #requestItem {
     display:inline-block;
-    text-align:left;
+}
+
+#completeRequestItem {
+    display: inline-block;
+    text-align: left;
+    background-color: red;
 }
 
 #requestItemContainer {
