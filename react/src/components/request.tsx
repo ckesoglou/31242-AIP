@@ -33,8 +33,8 @@ class Request extends React.Component<RequestProps> {
     render() {
         return(
             <div>
-                <Grid container xs={8}>
-                    <Grid item xs={2} id="requestItemContainer">
+                <Grid container xs={12}>
+                    <Grid item xs={4} id="requestItemContainer">
                         <RequestRewards requestID={this.props.request.id} items={this.props.request.rewards} rewards={[{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}, {id:"3", display_name:"Food"}]}/>
                     </Grid>
                     <Grid item xs={2} id="requestItemContainer">
@@ -42,10 +42,10 @@ class Request extends React.Component<RequestProps> {
                             <p>{this.props.request.details}</p>
                         </div>
                     </Grid>
-                    <Grid item xs={1} id="requestItemContainer">
+                    <Grid item xs={2} id="requestItemContainer">
                         <IouProof imagePK={this.props.request.proof_of_completion}/>
                     </Grid>
-                    <Grid item xs={'auto'} id="requestProofContainer">
+                    <Grid item xs={3} id="requestProofContainer">
                         <IouComplete request={this.props.request}/>
                     </Grid>
                     <Grid item xs={1} id="requestItemContainer">

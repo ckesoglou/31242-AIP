@@ -47,7 +47,7 @@
 }
 
 #taskCompleter{
-    font-size: 40px;
+    font-size: 20px;
     margin:0px;
 }
 
@@ -57,7 +57,7 @@
 }
 
 #task{
-    font-size: 20px;
+    font-size: 16px;
     display:inline-block;
 }
 
@@ -209,8 +209,10 @@
     vertical-align: middle;
     line-height: 4.0625rem;
     border: white solid 0.3125rem;
-    background-color: #222629;
+    background-color:#3186c2;
     font-size: 16px;
+    z-index: 6;
+    position: relative;
 }
 
 .secondCircle{
@@ -223,15 +225,16 @@
     vertical-align: middle;
     line-height: 4.0625rem;
     border: white solid 0.3125rem;
-    background-color: #222629;
+    background-color:#6e31c2;
     margin-left:-25px;
-    z-index: -1;
+    z-index: 5;
     position: relative;
     font-size: 16px;
 }
 
 .thirdCircle {
-    z-index: -2;
+    z-index: 4;
+    background-color: #31c2b6;
 }
 
 .popUpCircle {
@@ -321,6 +324,7 @@
 
 #requestItem {
     display:inline-block;
+    text-align:left;
 }
 
 #requestItemContainer {

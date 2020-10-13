@@ -33,7 +33,7 @@ class App extends React.Component {
               path="/user"
               component={UserProfile}
             ></ProtectedRoute>
-            <ProtectedRoute path="/home">
+            {/* <ProtectedRoute path="/home">
               <h1>You've reached the next page!</h1>
               <Request request={{
                 id: "1",
@@ -49,13 +49,13 @@ class App extends React.Component {
               <Request request={{
                 id: "1",
                 author: {username:"James", display_name: "James"},
-                completed_by: {username:"Kevin", display_name: "Kevin"},
+                completed_by: {username:"Kevin", display_name: "123456781"},
                 proof_of_completion: "",
                 rewards: [{id:"1", display_name:"Hug"}],
                 details: "Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Sentence",
                 created_time: "02/02/2020",
                 comletion_time: "02/02/2020",
-                is_completed: false,
+                is_completed: true,
               }}/>
               <IOU request={{
                 id: "1",
@@ -68,8 +68,8 @@ class App extends React.Component {
                 comletion_time: "02/02/2020",
                 is_completed: true,
               }}/>
-            </ProtectedRoute>
-            {/* <ProtectedRoute path="/home" component={Home} /> */}
+            </ProtectedRoute> */}
+            <ProtectedRoute path="/home" component={Home} />
             <Route path="/signup" component={SignUp} />
             <Route path="/" component={Login} />
           </Switch>

@@ -168,7 +168,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                     />
                     {this.props.request.is_completed && 
                         <div id="IouTaskComplete">  
-                            <p id="taskCompleter">({this.props.request.completed_by.display_name})</p>
+                            <p id="taskCompleter">{this.props.request.completed_by.display_name}</p>
                             <p id="taskTimeStamp">{this.props.request.comletion_time}</p>
                         </div>
                     }

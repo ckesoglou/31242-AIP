@@ -26,6 +26,7 @@ import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
+import IOU from "../components/iou";
 
 type UserProfileState = {
   tabIndex: number;
@@ -74,7 +75,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box p={4}>
+        <Box>
           <CircularProgress
             ref={props.loadingRef}
             size={35}
@@ -199,7 +200,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   render() {
     return (
-      <Container component="main" maxWidth="lg">
+      // <Container component="main" maxWidth={false}>
+      <Box pl={20} pr={20}>
         <div className="paper">
           <Grid container spacing={8}>
             <Grid item xs={12}>
@@ -357,6 +359,17 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   index={0}
                 >
                   {this.state.owed}
+                  <IOU request={{
+                id: "1",
+                author: {username:"James", display_name: "James"},
+                completed_by: {username:"Kevin", display_name: "Kevin"},
+                proof_of_completion: "",
+                rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
+                details: "Clean the fridge",
+                created_time: "02/02/2020",
+                comletion_time: "02/02/2020",
+                is_completed: true,
+              }}/>
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -378,7 +391,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             </Grid>
           </Grid>
         </div>
-      </Container>
+      </Box>
     );
   }
 }
