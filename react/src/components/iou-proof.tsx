@@ -1,6 +1,7 @@
 import React from "react";
 import "../assets/css/iou-request.css";
 import { imageEndpoint} from "../api/endpoints";
+import ClearIcon from '@material-ui/icons/Clear';
 
 type IouProofProps = {
   imagePK: string;
@@ -38,7 +39,7 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
         );
       } else {
         return(
-          <p>No Proof Yet</p>
+          <ClearIcon id="noProofIcon"/>
         );
       }
     }

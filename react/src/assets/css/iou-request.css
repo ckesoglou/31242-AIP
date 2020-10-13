@@ -349,3 +349,7 @@
 #requestProofContainer {
     align-self:center;
 }
+
+#noProofIcon {
+    color: rgb(233, 64, 64);
+}
