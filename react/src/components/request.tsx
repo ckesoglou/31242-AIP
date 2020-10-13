@@ -33,7 +33,7 @@ class Request extends React.Component<RequestProps> {
     render() {
         return(
             <div>
-                <Grid container xs={12}>
+                <Grid container xs={12} spacing={4}>
                     <Grid item xs={4} id="requestItemContainer">
                         <RequestRewards requestID={this.props.request.id} items={this.props.request.rewards} rewards={[{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}, {id:"3", display_name:"Food"}]}/>
                     </Grid>
