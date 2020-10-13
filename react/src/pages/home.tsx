@@ -114,7 +114,7 @@ class Home extends React.Component {
               }}/><Request request={{
                 id: "1",
                 author: {username:"James", display_name: "James"},
-                completed_by: {username:"Kevin", display_name: "Kevin"},
+                completed_by: {username:"Kevin", display_name: "James Lee"},
                 proof_of_completion: "",
                 rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
                 details: "Clean the fridge",

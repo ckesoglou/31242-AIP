@@ -42,6 +42,7 @@
 
 #IouTaskComplete{
     display:inline-block;
+    width:3.75rem;
     vertical-align: middle;
     text-align: center;
 }
@@ -49,6 +50,9 @@
 #taskCompleter{
     font-size: 20px;
     margin:0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #taskTimeStamp{
@@ -328,7 +332,7 @@
 #completeRequestItem {
     display: inline-block;
     text-align: left;
-    background-color: red;
+    width:100%;
 }
 
 #requestItemContainer {
