@@ -117,7 +117,7 @@ class Home extends React.Component {
                 completed_by: {username:"Kevin", display_name: "James Lee"},
                 proof_of_completion: "",
                 rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
-                details: "Clean the fridge",
+                details: "Clean the fridge asdf sadf asdf asdf sdaf dsaf sadf sadf sadf sdaf sadf sdaf sadf asdf",
                 created_time: "02/02/2020",
                 comletion_time: "02/02/2020",
                 is_completed: false,

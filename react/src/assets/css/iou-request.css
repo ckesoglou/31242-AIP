@@ -32,7 +32,6 @@
 }
 
 #incompleteIouContainer{
-    width:100%;
     cursor: pointer;
 }
 
@@ -61,8 +60,15 @@
 }
 
 #task{
+    width:100%;
     font-size: 16px;
     display:inline-block;
+}
+
+#task > * {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #proofImage{
