@@ -3,13 +3,12 @@ import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
 import Joi, { ObjectSchema } from "joi";
 import { getAuthenticatedUser } from "@shared/Authenticate";
 import {
-  getIousOwed,
   createIouOwed,
   completeIouOwed,
-  getIousOwe,
   createIouOwe,
   completeIouOwe,
   iouExists,
+  getIous,
 } from "@daos/Ious";
 
 // Init shared
@@ -46,7 +45,7 @@ const IouOweCompletePUT: ObjectSchema<IIouOweCompletePUT> = Joi.object({
 router.get("/owed", async (req: Request, res: Response) => {
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIousOwed(user.username);
+    const iou = await getIous({ receiver: user.username, is_claimed: false });
     return res.status(OK).json({ iou });
   } else {
     return res.status(401).json({
@@ -127,7 +126,7 @@ router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
 router.get("/owe", async (req: Request, res: Response) => {
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIousOwe(user.username);
+    const iou = await getIous({ giver: user.username, is_claimed: false });
     return res.status(OK).json({ iou });
   } else {
     return res.status(401).json({

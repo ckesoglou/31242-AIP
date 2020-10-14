@@ -50,9 +50,14 @@ Iou.init(
   },
   { sequelize: db, tableName: "ious", timestamps: false }
 );
+export interface IIouFilter {
+  giver?: string;
+  receiver?: string;
+  is_claimed?: boolean;
+}
 
-export async function getIousOwed(
-  username: string,
+export async function getIous(
+  filter?: IIouFilter,
   start: number = 0,
   limit: number = 25
 ) {
@@ -60,10 +65,7 @@ export async function getIousOwed(
     offset: start,
     limit: limit,
     subQuery: false,
-    where: {
-      receiver: username,
-      is_claimed: false,
-    },
+    where: filter,
   });
 }
 
@@ -72,7 +74,7 @@ export async function createIouOwed(
   receiver: string,
   item: string,
   proof: string
-): Promise<Object> {
+) {
   const ious = await Iou.create({
     id: uuid(),
     item: item,
@@ -88,14 +90,11 @@ export async function createIouOwed(
   return ious.id;
 }
 
-export async function iouExists(iouID: string): Promise<boolean> {
+export async function iouExists(iouID: string) {
   return (await Iou.findByPk(iouID)) ? true : false;
 }
 
-export async function completeIouOwed(
-  iouID: string,
-  receiver: string
-): Promise<boolean> {
+export async function completeIouOwed(iouID: string, receiver: string) {
   // user that completes must be receiver
   const iou = await Iou.findOne({ where: { id: iouID, receiver: receiver } });
   if (iou === null) {
@@ -110,28 +109,11 @@ export async function completeIouOwed(
   return true;
 }
 
-export async function getIousOwe(
-  username: string,
-  start: number = 0,
-  limit: number = 25
-): Promise<IIouAttributes[]> {
-  const ious = await Iou.findAll({
-    offset: start,
-    limit: limit,
-    subQuery: false,
-    where: {
-      giver: username,
-      is_claimed: false,
-    },
-  });
-  return ious;
-}
-
 export async function createIouOwe(
   giver: string,
   receiver: string,
   item: string
-): Promise<Object> {
+) {
   const ious = await Iou.create({
     id: uuid(),
     item: item,
@@ -151,7 +133,7 @@ export async function completeIouOwe(
   iouID: string,
   giver: string,
   proof: string
-): Promise<boolean> {
+) {
   // user that completes must be receiver
   const iou = await Iou.findOne({ where: { id: iouID, giver: giver } });
   if (iou === null) {
