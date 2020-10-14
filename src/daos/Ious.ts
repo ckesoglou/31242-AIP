@@ -45,6 +45,7 @@ Iou.init(
     is_claimed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
   },
   { sequelize: db, tableName: "ious", timestamps: false }
