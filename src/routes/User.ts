@@ -7,15 +7,12 @@ import User from "@entities/User";
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const localUser = await getAuthenticatedUser(req, res);
-  if (localUser) {
-    const user = await getUser(localUser.username);
-    if (!user) {
-      return res.status(401).json({
-        error: ["User no longer exists"],
-      });
-    }
-    return res.status(OK).json({ user });
+  const user = await getAuthenticatedUser(req, res);
+  if (user) {
+    return res.status(OK).json({
+      username: user.username,
+      display_name: user.display_name,
+    });
   } else {
     return res.status(401).json({
       errors: ["Not authenticated."],
