@@ -58,7 +58,7 @@ class IouFavourSingle extends React.Component<IouFavourSingleProps, IouFavourSin
                 {this.nameToUpperInitials(this.props.giverDisplayName)}
               </Avatar>
               <Popover
-                  id="favourAvatarPopover"
+                  id="popUpMargin"
                   open={Boolean(this.state.giverAnchorEl)}
                   anchorEl={this.state.giverAnchorEl}
                   onClose={() => this.setState({giverAnchorEl: null})}
@@ -101,7 +101,7 @@ class IouFavourSingle extends React.Component<IouFavourSingleProps, IouFavourSin
                 {this.nameToUpperInitials(this.props.recieverDisplayName)}
               </Avatar>
               <Popover
-                  id="favourAvatarPopover"
+                  id="popUpMargin"
                   open={Boolean(this.state.recieverAnchorEl)}
                   anchorEl={this.state.recieverAnchorEl}
                   onClose={() => this.setState({recieverAnchorEl: null})}

@@ -3,6 +3,7 @@ import IouComplete from "./iou-complete";
 import IouProof from "./iou-proof";
 import RequestRewards from "./request-rewards"
 import RequestInfo from "./request-info";
+import IouTask from "./iou-task";
 import {
     Grid,
   } from "@material-ui/core";
@@ -38,9 +39,7 @@ class Request extends React.Component<RequestProps> {
                         <RequestRewards requestID={this.props.request.id} items={this.props.request.rewards} rewards={[{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}, {id:"3", display_name:"Food"}]}/>
                     </Grid>
                     <Grid item xs={3} id="requestItemContainer">
-                        <div id="task">
-                            <p>{this.props.request.details}</p>
-                        </div>
+                       <IouTask details={this.props.request.details}/>
                     </Grid>
                     <Grid item xs={1} id="requestItemContainer">
                         <IouProof imagePK={this.props.request.proof_of_completion}/>

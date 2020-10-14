@@ -65,10 +65,11 @@
     display:inline-block;
 }
 
-#task > * {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+#clickableTask {
+    width:100%;
+    font-size: 16px;
+    display:inline-block;
+    cursor: pointer;
 }
 
 #proofImage{
@@ -92,7 +93,7 @@
     cursor: pointer;
   }
 
-#favourAvatarPopover {
+#popUpMargin {
     margin-top: 10px;
 }
   
@@ -352,4 +353,17 @@
 
 #noProofIcon {
     color: rgb(233, 64, 64);
+}
+
+#taskDetailPopUp {
+    border: white solid 3px;
+    border-radius: 5%;
+    text-align: center;
+    width:200px;
+    padding:10px;
+}
+
+#taskPopUpDivider {
+    margin-top:5px;
+    margin-bottom: 5px;
 }
