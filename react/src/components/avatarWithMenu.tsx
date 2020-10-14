@@ -1,5 +1,6 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import "../assets/css/avatarWithMenu.css";
 import {
   Avatar,
   Link,
@@ -16,6 +17,7 @@ import {
   ExitToApp,
   AssignmentInd,
   PersonAdd,
+  AccountCircle,
 } from "@material-ui/icons";
 import { UserContext } from "./user-context";
 
@@ -92,121 +94,135 @@ class AvatarWithMenu extends React.Component<
   render() {
     return (
       <div>
-        <Avatar
-          onClick={(event: React.MouseEvent<HTMLElement>) => {
-            this.setState({
-              userMenu: true,
-              anchorEl: event.currentTarget,
-            });
-          }}
-          id="avatar"
-        >
-          {nameToUpperInitials(this.props.fullName)}
-        </Avatar>
         {this.props.loggedIn && (
-          <StyledMenu
-            id="customized-menu"
-            anchorEl={this.state.anchorEl}
-            keepMounted
-            open={this.state.userMenu}
-            onClose={() => {
-              this.setState({
-                userMenu: false,
-                anchorEl: null,
-              });
-            }}
-          >
-            <Link
-              id="favoursLink"
-              color="inherit"
-              component={RouterLink}
-              to={{ pathname: "/user", state: { tabIndex: 1 } }}
-              style={{ textDecoration: "none" }}
-            >
-              <StyledMenuItem>
-                <ListItemIcon>
-                  <ThumbsUpDown fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="My Favours" />
-              </StyledMenuItem>
-            </Link>
-            <Link
-              id="requestLink"
-              color="inherit"
-              component={RouterLink}
-              to={{ pathname: "/user", state: { tabIndex: 2 } }}
-              style={{ textDecoration: "none" }}
-            >
-              <StyledMenuItem>
-                <ListItemIcon>
-                  <PeopleOutline fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="My Requests" />
-              </StyledMenuItem>
-            </Link>
-            <MenuItem />
-            <Link
-              id="logOutLink"
-              color="inherit"
-              component={RouterLink}
-              to="/home"
-              onClick={() => {
-                this.context.updateUser({ name: "?" });
+          <div>
+            <Avatar
+              onClick={(event: React.MouseEvent<HTMLElement>) => {
+                this.setState({
+                  userMenu: true,
+                  anchorEl: event.currentTarget,
+                });
               }}
-              style={{ textDecoration: "none" }}
+              id="avatar"
             >
-              <StyledMenuItem>
-                <ListItemIcon>
-                  <ExitToApp fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Log Out" />
-              </StyledMenuItem>
-            </Link>
-          </StyledMenu>
+              {nameToUpperInitials(this.props.fullName)}
+            </Avatar>
+            <StyledMenu
+              id="customized-menu"
+              anchorEl={this.state.anchorEl}
+              keepMounted
+              open={this.state.userMenu}
+              onClose={() => {
+                this.setState({
+                  userMenu: false,
+                  anchorEl: null,
+                });
+              }}
+            >
+              <Link
+                id="favoursLink"
+                color="inherit"
+                component={RouterLink}
+                to={{ pathname: "/user", state: { tabIndex: 1 } }}
+                style={{ textDecoration: "none" }}
+              >
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <ThumbsUpDown fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="My Favours" />
+                </StyledMenuItem>
+              </Link>
+              <Link
+                id="requestLink"
+                color="inherit"
+                component={RouterLink}
+                to={{ pathname: "/user", state: { tabIndex: 2 } }}
+                style={{ textDecoration: "none" }}
+              >
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <PeopleOutline fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="My Requests" />
+                </StyledMenuItem>
+              </Link>
+              <MenuItem />
+              <Link
+                id="logOutLink"
+                color="inherit"
+                component={RouterLink}
+                to="/home"
+                onClick={() => {
+                  this.context.updateUser({ name: "?" });
+                }}
+                style={{ textDecoration: "none" }}
+              >
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <ExitToApp fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Log Out" />
+                </StyledMenuItem>
+              </Link>
+            </StyledMenu>
+          </div>
         )}
         {!this.props.loggedIn && (
-          <StyledMenu
-            id="customized-menu"
-            anchorEl={this.state.anchorEl}
-            keepMounted
-            open={this.state.userMenu}
-            onClose={() => {
-              this.setState({
-                userMenu: false,
-                anchorEl: null,
-              });
-            }}
-          >
-            <Link
-              id="favoursLink"
-              color="inherit"
-              component={RouterLink}
-              to={{ pathname: "/login", state: { tabIndex: 1 } }}
-              style={{ textDecoration: "none" }}
+          <div>
+            <Avatar
+              onClick={(event: React.MouseEvent<HTMLElement>) => {
+                this.setState({
+                  userMenu: true,
+                  anchorEl: event.currentTarget,
+                });
+              }}
+              id="avatar"
             >
-              <StyledMenuItem>
-                <ListItemIcon>
-                  <AssignmentInd fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Login" />
-              </StyledMenuItem>
-            </Link>
-            <Link
-              id="requestLink"
-              color="inherit"
-              component={RouterLink}
-              to={{ pathname: "/signup", state: { tabIndex: 2 } }}
-              style={{ textDecoration: "none" }}
+              <AccountCircle id="accountCircle" />
+            </Avatar>
+            <StyledMenu
+              id="customized-menu"
+              anchorEl={this.state.anchorEl}
+              keepMounted
+              open={this.state.userMenu}
+              onClose={() => {
+                this.setState({
+                  userMenu: false,
+                  anchorEl: null,
+                });
+              }}
             >
-              <StyledMenuItem>
-                <ListItemIcon>
-                  <PersonAdd fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Sign Up" />
-              </StyledMenuItem>
-            </Link>
-            <MenuItem />
-          </StyledMenu>
+              <Link
+                id="favoursLink"
+                color="inherit"
+                component={RouterLink}
+                to={{ pathname: "/login", state: { tabIndex: 1 } }}
+                style={{ textDecoration: "none" }}
+              >
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <AssignmentInd fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Login" />
+                </StyledMenuItem>
+              </Link>
+              <Link
+                id="requestLink"
+                color="inherit"
+                component={RouterLink}
+                to={{ pathname: "/signup", state: { tabIndex: 2 } }}
+                style={{ textDecoration: "none" }}
+              >
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <PersonAdd fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Sign Up" />
+                </StyledMenuItem>
+              </Link>
+            </StyledMenu>
+          </div>
         )}
       </div>
     );
