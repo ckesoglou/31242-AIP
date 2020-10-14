@@ -2,104 +2,107 @@
 
 exports[`<AvatarWithMenu /> should render correctly 1`] = `
 <div>
-  <WithStyles(ForwardRef(Avatar))
-    id="avatar"
-    onClick={[Function]}
-  >
-    BJ
-  </WithStyles(ForwardRef(Avatar))>
-  <WithStyles(Component)
-    anchorEl={null}
-    id="customized-menu"
-    keepMounted={true}
-    onClose={[Function]}
-    open={false}
-  >
-    <WithStyles(ForwardRef(Link))
-      color="inherit"
-      component={
-        Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "displayName": "Link",
-          "propTypes": Object {
-            "innerRef": [Function],
-            "onClick": [Function],
-            "replace": [Function],
-            "target": [Function],
-            "to": [Function],
-          },
-          "render": [Function],
-        }
-      }
-      id="favoursLink"
-      style={
-        Object {
-          "textDecoration": "none",
-        }
-      }
-      to={
-        Object {
-          "pathname": "/login",
-          "state": Object {
-            "tabIndex": 1,
-          },
-        }
-      }
+  <div>
+    <WithStyles(ForwardRef(Avatar))
+      id="avatar"
+      onClick={[Function]}
     >
-      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
-        <WithStyles(ForwardRef(ListItemIcon))>
-          <AssignmentIndIcon
-            fontSize="small"
-          />
-        </WithStyles(ForwardRef(ListItemIcon))>
-        <WithStyles(ForwardRef(ListItemText))
-          primary="Login"
-        />
-      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
-    </WithStyles(ForwardRef(Link))>
-    <WithStyles(ForwardRef(Link))
-      color="inherit"
-      component={
-        Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "displayName": "Link",
-          "propTypes": Object {
-            "innerRef": [Function],
-            "onClick": [Function],
-            "replace": [Function],
-            "target": [Function],
-            "to": [Function],
-          },
-          "render": [Function],
-        }
-      }
-      id="requestLink"
-      style={
-        Object {
-          "textDecoration": "none",
-        }
-      }
-      to={
-        Object {
-          "pathname": "/signup",
-          "state": Object {
-            "tabIndex": 2,
-          },
-        }
-      }
+      <AccountCircleIcon
+        id="accountCircle"
+      />
+    </WithStyles(ForwardRef(Avatar))>
+    <WithStyles(Component)
+      anchorEl={null}
+      id="customized-menu"
+      keepMounted={true}
+      onClose={[Function]}
+      open={false}
     >
-      <WithStyles(WithStyles(ForwardRef(MenuItem)))>
-        <WithStyles(ForwardRef(ListItemIcon))>
-          <PersonAddIcon
-            fontSize="small"
+      <WithStyles(ForwardRef(Link))
+        color="inherit"
+        component={
+          Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "displayName": "Link",
+            "propTypes": Object {
+              "innerRef": [Function],
+              "onClick": [Function],
+              "replace": [Function],
+              "target": [Function],
+              "to": [Function],
+            },
+            "render": [Function],
+          }
+        }
+        id="favoursLink"
+        style={
+          Object {
+            "textDecoration": "none",
+          }
+        }
+        to={
+          Object {
+            "pathname": "/login",
+            "state": Object {
+              "tabIndex": 1,
+            },
+          }
+        }
+      >
+        <WithStyles(WithStyles(ForwardRef(MenuItem)))>
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <AssignmentIndIcon
+              fontSize="small"
+            />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Login"
           />
-        </WithStyles(ForwardRef(ListItemIcon))>
-        <WithStyles(ForwardRef(ListItemText))
-          primary="Sign Up"
-        />
-      </WithStyles(WithStyles(ForwardRef(MenuItem)))>
-    </WithStyles(ForwardRef(Link))>
-    <WithStyles(ForwardRef(MenuItem)) />
-  </WithStyles(Component)>
+        </WithStyles(WithStyles(ForwardRef(MenuItem)))>
+      </WithStyles(ForwardRef(Link))>
+      <WithStyles(ForwardRef(Link))
+        color="inherit"
+        component={
+          Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "displayName": "Link",
+            "propTypes": Object {
+              "innerRef": [Function],
+              "onClick": [Function],
+              "replace": [Function],
+              "target": [Function],
+              "to": [Function],
+            },
+            "render": [Function],
+          }
+        }
+        id="requestLink"
+        style={
+          Object {
+            "textDecoration": "none",
+          }
+        }
+        to={
+          Object {
+            "pathname": "/signup",
+            "state": Object {
+              "tabIndex": 2,
+            },
+          }
+        }
+      >
+        <WithStyles(WithStyles(ForwardRef(MenuItem)))>
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <PersonAddIcon
+              fontSize="small"
+            />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Sign Up"
+          />
+        </WithStyles(WithStyles(ForwardRef(MenuItem)))>
+      </WithStyles(ForwardRef(Link))>
+    </WithStyles(Component)>
+  </div>
 </div>
 `;
