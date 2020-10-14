@@ -15,11 +15,11 @@ Iou.init(
       allowNull: false,
     },
     giver: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(16),
       allowNull: false,
     },
     receiver: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(16),
       allowNull: true,
     },
     parent_request: {
@@ -54,8 +54,8 @@ export async function getIousOwed(
   username: string,
   start: number = 0,
   limit: number = 25
-): Promise<IIouAttributes[]> {
-  const ious = await Iou.findAll({
+) {
+  return Iou.findAll({
     offset: start,
     limit: limit,
     subQuery: false,
@@ -64,7 +64,6 @@ export async function getIousOwed(
       is_claimed: false,
     },
   });
-  return ious;
 }
 
 export async function createIouOwed(
