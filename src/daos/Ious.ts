@@ -6,12 +6,12 @@ import { v4 as uuid } from "uuid";
 Iou.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
     item: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUIDV4,
       allowNull: false,
     },
     giver: {
@@ -23,15 +23,15 @@ Iou.init(
       allowNull: true,
     },
     parent_request: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUIDV4,
       allowNull: true,
     },
     proof_of_debt: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUIDV4,
       allowNull: true,
     },
     proof_of_completion: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUIDV4,
       allowNull: true,
     },
     created_time: {
