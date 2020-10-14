@@ -50,11 +50,13 @@ describe("SignUp", () => {
   it("button should not be clickable on load", () => {
     const spy = jest.spyOn(SignUp.prototype, "handleSignUp");
     const wrapper = mount(
-      <SignUp
-        history={testProps.history}
-        location={testProps.location}
-        match={testProps.match}
-      />
+      <MemoryRouter>
+        <SignUp
+          history={testProps.history}
+          location={testProps.location}
+          match={testProps.match}
+        />
+      </MemoryRouter>
     );
 
     let button = wrapper.find("button");
@@ -67,11 +69,13 @@ describe("SignUp", () => {
   it("should handle sign up if button is clicked and information is filled", () => {
     const spy = jest.spyOn(SignUp.prototype, "handleSignUp");
     const wrapper = mount(
-      <SignUp
-        history={testProps.history}
-        location={testProps.location}
-        match={testProps.match}
-      />
+      <MemoryRouter>
+        <SignUp
+          history={testProps.history}
+          location={testProps.location}
+          match={testProps.match}
+        />
+      </MemoryRouter>
     );
 
     wrapper
