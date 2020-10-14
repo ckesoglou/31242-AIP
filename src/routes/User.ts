@@ -18,7 +18,7 @@ router.get("/", async (req: Request, res: Response) => {
     return res.status(OK).json({ user });
   } else {
     return res.status(401).json({
-      error: ["Invalid session"],
+      errors: ["Not authenticated."],
     });
   }
 });
