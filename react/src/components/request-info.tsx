@@ -91,19 +91,20 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
                <InfoIcon
                     color="primary"
                     fontSize="large"
-                    id="infoIcon"
+                    className="cursorPointer"
                     onClick={() => this.setState({infoModal: true})}
                />
                <Dialog
                     maxWidth="xs"
                     fullWidth={true}
                     open={this.state.infoModal}
+                    scroll="body"
                     TransitionComponent={Grow}
                     onClose={() => this.setState({ infoModal: false})}
                     id="completeForm"
                 >
                     <DialogTitle disableTypography={true}>
-                        <Typography variant="h5">
+                        <Typography variant="h5" id="modalTitle">
                             {"Request Details"}
                         </Typography>
                     </DialogTitle>

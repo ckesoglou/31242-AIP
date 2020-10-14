@@ -44,7 +44,7 @@ class IouTask extends React.Component<IouTaskProps, IouTaskState> {
 
     render() {
         return(
-            <div id={this.props.details.length > 55 ? "clickableTask" : "task"}>
+            <div className={this.props.details.length > 55 ? "cursorPointer" : ""} id="task">
                 {this.checkDetailLength()}
                 <Popover
                   id="popUpMargin"

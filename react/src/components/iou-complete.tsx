@@ -15,7 +15,8 @@ import {
     Table,
     TableBody,
     TableRow,
-    TableCell
+    TableCell,
+    Popover
   } from "@material-ui/core";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
@@ -49,12 +50,15 @@ type IouCompleteState = {
     submittedProof: any;
     snackMessage: string;
     completeSnack: boolean;
+    AnchorEl: HTMLElement | null; 
 }
 
 class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     private tempRewardDisplayName: string;
+
     constructor(props: IouCompleteProps) {
         super(props);
+
         this.tempRewardDisplayName = "";
         this.openCompleteForm = this.openCompleteForm.bind(this);
     }
@@ -64,6 +68,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
         submittedProof: null,
         snackMessage: "",
         completeSnack: false,
+        AnchorEl: null,
     }
 
     openCompleteForm() {
@@ -145,6 +150,21 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
         );
     }
 
+    renderTaskCompleter() {
+        if (this.props.request.completed_by.display_name.length > 9) {
+            return(
+                <p id="taskCompleter" className="cursorPointer" onClick={(event: React.MouseEvent<HTMLElement>) => this.setState({AnchorEl: event.currentTarget})}> 
+                    {this.props.request.completed_by.display_name}
+                </p>
+            );
+        }
+        return (
+            <p id="taskCompleter"> 
+                {this.props.request.completed_by.display_name}
+            </p>    
+        );
+    }
+
     render() {
         return(
             <div id="completeRequestItem">
@@ -152,7 +172,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                     if (!this.props.request.is_completed) {
                         this.setState({ completeIOU: true})
                         }}} 
-                        id={(this.props.request.is_completed) ? "completeIouContainer" : "incompleteIouContainer"}>
+                        className={(this.props.request.is_completed) ? "" : "cursorPointer"}>
                     <Checkbox
                         checked={this.props.request.is_completed}
                         color="primary"
@@ -168,7 +188,27 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                     />
                     {this.props.request.is_completed && 
                         <div id="IouTaskComplete">  
-                            <p id="taskCompleter">{this.props.request.completed_by.display_name}</p>
+                            {this.renderTaskCompleter()}
+                            <Popover
+                                id="popUpMargin"
+                                open={Boolean(this.state.AnchorEl)}
+                                anchorEl={this.state.AnchorEl}
+                                onClose={() => this.setState({AnchorEl: null})}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'center',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'center',
+                                }}
+                                >
+                                <Typography id="taskDetailPopUp">
+                                {"Full Display Name"}
+                                <Divider id="taskPopUpDivider"/>
+                                {this.props.request.completed_by.display_name}
+                                </Typography>
+                            </Popover>
                             <p id="taskTimeStamp">{this.props.request.comletion_time}</p>
                         </div>
                     }
@@ -176,14 +216,14 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                 <Dialog
                     maxWidth="xs"
                     fullWidth={true}
-                    scroll="paper"
+                    scroll="body"
                     open={this.state.completeIOU}
                     TransitionComponent={Grow}
                     onClose={() => this.setState({ completeIOU: false, submittedProof: null })}
                     id="completeForm"
                 >
                     <DialogTitle disableTypography={true}>
-                        <Typography variant="h5">
+                        <Typography variant="h5" id="modalTitle">
                             {"IOU Proof Submission"}
                         </Typography>
                     </DialogTitle>

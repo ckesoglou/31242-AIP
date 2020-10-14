@@ -5,7 +5,7 @@
   }
 
 #completeIconSize{
-    font-size: 4rem;
+    font-size: 3.5rem;
 }
 
 #completeForm{
@@ -31,17 +31,9 @@
     max-height: 60%;
 }
 
-#incompleteIouContainer{
-    cursor: pointer;
-}
-
-#completeIouContainer{
-    width:100%;
-}
-
 #IouTaskComplete{
     display:inline-block;
-    width:3.75rem;
+    width:5.625rem;
     vertical-align: middle;
     text-align: center;
 }
@@ -63,13 +55,6 @@
     width:100%;
     font-size: 16px;
     display:inline-block;
-}
-
-#clickableTask {
-    width:100%;
-    font-size: 16px;
-    display:inline-block;
-    cursor: pointer;
 }
 
 #proofImage{
@@ -317,6 +302,7 @@
 }
 
 #requestInfoRewards {
+    text-align: center;
     margin-bottom: 5px;
 }
 
@@ -330,6 +316,7 @@
 
 #completePopUpRewards {
     max-height:300px;
+    text-align: center;
 }
 
 #requestItem {
@@ -366,4 +353,12 @@
 #taskPopUpDivider {
     margin-top:5px;
     margin-bottom: 5px;
+}
+
+.cursorPointer {
+    cursor: pointer;
+}
+
+#modalTitle {
+    text-align: center;
 }
