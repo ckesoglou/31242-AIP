@@ -142,12 +142,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "New request created!" });
+        this.setState({ requestSnack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
+        this.setState({ snackMessage: exception });
+        this.setState({ requestSnack: true });
       });
-    this.setState({ requestSnack: true });
   }
 
   fetchAllTabs(): void {
@@ -187,7 +188,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
+        this.setLoading(false);
+        this.setState({ snackMessage: exception });
         this.setState({ requestSnack: true });
       });
   }
