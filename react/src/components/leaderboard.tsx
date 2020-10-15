@@ -107,6 +107,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ error: exception });
+        this.setLoading(false);
       });
   }
 

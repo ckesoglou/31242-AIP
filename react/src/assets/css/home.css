@@ -21,8 +21,12 @@
   align-items: center;
   width: auto;
 }
-#filter-text {
-  margin-right: 3rem;
+#search-icon {
+  font-size: 28px;
+}
+#filter-menu {
+  margin-right: 2rem;
+  margin-left: 1rem;
 }
 #filter-button {
   margin-left: 3rem;
@@ -32,6 +36,6 @@
   width: 4rem;
   background-color: #86c232;
 }
-#loading {
+#homeLoading {
   display: none;
 }
