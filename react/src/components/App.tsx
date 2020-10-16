@@ -12,8 +12,6 @@ import UserProfile from "../pages/userprofile";
 import Home from "../pages/home";
 import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
-import Request from "./request";
-import IOU from "./iou";
 
 
 type AppState = {

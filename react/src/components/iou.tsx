@@ -29,10 +29,6 @@ type RequestProps = {
 }
 
 class IOU extends React.Component<RequestProps> {
-    constructor(props: RequestProps) {
-        super(props);
-    }
-
     render() {
         return(
             <div>

@@ -15,9 +15,6 @@ type IouTaskState = {
   }
 
 class IouTask extends React.Component<IouTaskProps, IouTaskState> {
-    constructor(props: IouTaskProps) {
-        super(props);
-    }
 
     state:IouTaskState = {
         AnchorEl: null,
