@@ -32,3 +32,11 @@
 #header {
   padding-bottom: 1rem;
 }
+#goBack {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+#goSign {
+  text-align: right;
+}

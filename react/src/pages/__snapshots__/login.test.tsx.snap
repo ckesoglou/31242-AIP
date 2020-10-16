@@ -64,10 +64,11 @@ exports[`<Login /> should render correctly 1`] = `
       </WithStyles(ForwardRef(Button))>
       <WithStyles(ForwardRef(Grid))
         container={true}
+        spacing={1}
       >
         <WithStyles(ForwardRef(Grid))
           item={true}
-          xs={true}
+          xs={7}
         >
           <WithStyles(ForwardRef(Link))
             href="#"
@@ -77,12 +78,59 @@ exports[`<Login /> should render correctly 1`] = `
         </WithStyles(ForwardRef(Grid))>
         <WithStyles(ForwardRef(Grid))
           item={true}
+          xs={5}
         >
           <WithStyles(ForwardRef(Link))
-            href="/signup"
+            component={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "displayName": "Link",
+                "propTypes": Object {
+                  "innerRef": [Function],
+                  "onClick": [Function],
+                  "replace": [Function],
+                  "target": [Function],
+                  "to": [Function],
+                },
+                "render": [Function],
+              }
+            }
+            to="/signup"
           >
             Don't have an account? Sign Up
           </WithStyles(ForwardRef(Link))>
+        </WithStyles(ForwardRef(Grid))>
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+          xs={true}
+        >
+          <div
+            id="goBack"
+          >
+            <MeetingRoomIcon
+              color="primary"
+              fontSize="small"
+            />
+            <WithStyles(ForwardRef(Link))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "displayName": "Link",
+                  "propTypes": Object {
+                    "innerRef": [Function],
+                    "onClick": [Function],
+                    "replace": [Function],
+                    "target": [Function],
+                    "to": [Function],
+                  },
+                  "render": [Function],
+                }
+              }
+              to="/home"
+            >
+              Head back to home
+            </WithStyles(ForwardRef(Link))>
+          </div>
         </WithStyles(ForwardRef(Grid))>
       </WithStyles(ForwardRef(Grid))>
     </WithStyles(ForwardRef(FormControl))>

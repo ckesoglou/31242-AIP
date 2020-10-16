@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Leaderboard /> should render correctly 1`] = `
-<Leaderboard>
+<Leaderboard
+  renderMe={true}
+>
   <WithStyles(ForwardRef(Paper))
     className="content"
     elevation={3}

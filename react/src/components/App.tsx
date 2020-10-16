@@ -1,6 +1,11 @@
 import React from "react";
 import "../assets/css/App.css";
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  BrowserRouter as Router,
+  Redirect,
+} from "react-router-dom";
 import Login from "../pages/login";
 import SignUp from "../pages/signup";
 import UserProfile from "../pages/userprofile";
@@ -18,7 +23,7 @@ type AppState = {
 
 class App extends React.Component {
   state: AppState = {
-    user: {},
+    user: { name: "?" },
     updateUser: (newUser: Object) => {
       this.setState({ user: newUser });
     },
@@ -33,45 +38,13 @@ class App extends React.Component {
               path="/user"
               component={UserProfile}
             ></ProtectedRoute>
-            {/* <ProtectedRoute path="/home">
-              <h1>You've reached the next page!</h1>
-              <Request request={{
-                id: "1",
-                author: {username:"James", display_name: "James"},
-                completed_by: {username:"Kevin", display_name: "Kevin"},
-                proof_of_completion: "",
-                rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
-                details: "Clean the fridge",
-                created_time: "02/02/2020",
-                comletion_time: "02/02/2020",
-                is_completed: true,
-              }}/>
-              <Request request={{
-                id: "1",
-                author: {username:"James", display_name: "James"},
-                completed_by: {username:"Kevin", display_name: "123456781"},
-                proof_of_completion: "",
-                rewards: [{id:"1", display_name:"Hug"}],
-                details: "Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Sentence",
-                created_time: "02/02/2020",
-                comletion_time: "02/02/2020",
-                is_completed: true,
-              }}/>
-              <IOU request={{
-                id: "1",
-                author: {username:"James", display_name: "James"},
-                completed_by: {username:"Kevin", display_name: "Kevin"},
-                proof_of_completion: "",
-                rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
-                details: "Clean the fridge",
-                created_time: "02/02/2020",
-                comletion_time: "02/02/2020",
-                is_completed: true,
-              }}/>
-            </ProtectedRoute> */}
             <ProtectedRoute path="/home" component={Home} />
             <Route path="/signup" component={SignUp} />
-            <Route path="/" component={Login} />
+            <Route path="/login" component={Login} />
+            <Route path="/home" component={Home} />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
           </Switch>
         </UserContext.Provider>
       </Router>
