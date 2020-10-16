@@ -33,7 +33,7 @@ class RequestRewards extends React.Component<RequestRewardsProps, RequestRewardS
     }
 
     fetchPotentialRewards() {
-      //TODO
+      //TODO: Waiting for rewards endpoint to be created. Will just pass rewards through props right now.
     }
 
     postReward() {
