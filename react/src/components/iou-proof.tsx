@@ -43,8 +43,8 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
         //this.fetchImage();
         return (
           <div>
-            <div onClick={(event: React.MouseEvent<HTMLElement>) => {this.setState({AnchorEl: event.currentTarget})}}>
-            <ImageIcon color="primary"/>
+            <div className="cursorPointer" onClick={(event: React.MouseEvent<HTMLElement>) => {this.setState({AnchorEl: event.currentTarget})}}>
+            <ImageIcon color="primary" id="proofIcon"/>
             </div>
             <Popover
                   id="popUpMargin"

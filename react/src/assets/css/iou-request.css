@@ -73,8 +73,8 @@
 }
 
 #favourAvatar {
-    height: 4.5rem;
-    width: 4.5rem;
+    height: 4rem;
+    width: 4rem;
     background-color: #86c232;
     cursor: pointer;
   }
@@ -88,8 +88,8 @@
 }
 
 #rewardAvatar {
-    height: 4.8125rem;
-    width: 4.8125rem;
+    height: 70px;
+    width: 70px;
     background-color: #222629;
     color:white;
     font-size: 16px;

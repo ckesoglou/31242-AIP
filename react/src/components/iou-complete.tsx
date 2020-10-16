@@ -85,7 +85,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
             },
             body: JSON.stringify({
                 // requestID: ???,
-                // proof: this.state.submittedProof 
+                // proof: this.state.submittedProof ???
             }),
           })
             .then((res) => {

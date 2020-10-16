@@ -36,14 +36,9 @@ class IOU extends React.Component<RequestProps> {
     render() {
         return(
             <div>
-                <Grid container xs={12} spacing={2}>
-                    <Grid item xs={4} id="requestItemContainer">
+                <Grid container xs={12} spacing={1}>
+                    <Grid item xs={6} id="requestItemContainer">
                         <IouFavour giverDisplayName={this.props.request.author.display_name} recieverDisplayName={"?"} item={this.props.request.rewards[0]}/>
-                    </Grid>
-                    <Grid item xs={3} id="requestItemContainer">
-                        <div id="task">
-                            <p>{this.props.request.details}</p>
-                        </div>
                     </Grid>
                     <Grid item xs={1} id="requestItemContainer">
                         <IouProof imagePK={this.props.request.proof_of_completion}/>

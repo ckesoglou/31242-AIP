@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IouFavour /> should render correctly 1`] = `
+<div
+  id="requestItem"
+>
+  <div
+    id="favourAvatarContainer"
+  >
+    <WithStyles(ForwardRef(Avatar))
+      id="favourAvatar"
+      onClick={[Function]}
+    >
+      J
+    </WithStyles(ForwardRef(Avatar))>
+    <WithStyles(ForwardRef(Popover))
+      anchorEl={null}
+      anchorOrigin={
+        Object {
+          "horizontal": "center",
+          "vertical": "bottom",
+        }
+      }
+      id="popUpMargin"
+      onClose={[Function]}
+      open={false}
+      transformOrigin={
+        Object {
+          "horizontal": "center",
+          "vertical": "top",
+        }
+      }
+    >
+      <WithStyles(ForwardRef(Typography))
+        id="favourAvatarText"
+      >
+        James
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(Popover))>
+  </div>
+  <KeyboardArrowRightIcon
+    color="primary"
+    id="favourArrow"
+  />
+  <div
+    id="rewardContainer"
+  >
+    <WithStyles(ForwardRef(Avatar))
+      id="rewardAvatar"
+    >
+      Coffee
+    </WithStyles(ForwardRef(Avatar))>
+  </div>
+  <KeyboardArrowRightIcon
+    color="primary"
+    id="favourArrow"
+  />
+  <div
+    id="favourAvatarContainer"
+  >
+    <WithStyles(ForwardRef(Avatar))
+      id="favourAvatar"
+      onClick={[Function]}
+    >
+      K
+    </WithStyles(ForwardRef(Avatar))>
+    <WithStyles(ForwardRef(Popover))
+      anchorEl={null}
+      anchorOrigin={
+        Object {
+          "horizontal": "center",
+          "vertical": "bottom",
+        }
+      }
+      id="popUpMargin"
+      onClose={[Function]}
+      open={false}
+      transformOrigin={
+        Object {
+          "horizontal": "center",
+          "vertical": "top",
+        }
+      }
+    >
+      <WithStyles(ForwardRef(Typography))
+        id="favourAvatarText"
+      >
+        Kevin
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(Popover))>
+  </div>
+</div>
+`;

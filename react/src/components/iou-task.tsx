@@ -26,13 +26,13 @@ class IouTask extends React.Component<IouTaskProps, IouTaskState> {
     checkDetailLength() {
         if (this.props.details.length > 55) {
             return(
-                <Typography onClick={(event: React.MouseEvent<HTMLElement>) => {
+                <div id="taskDetailShort" onClick={(event: React.MouseEvent<HTMLElement>) => {
                     this.setState({
                         AnchorEl: event.currentTarget,
                     }); 
                   }}>
                     {this.props.details.substring(0, this.props.details.length - (this.props.details.length - 55)- 3).concat("...")}
-                </Typography>
+                </div>
             );
         }
         return(

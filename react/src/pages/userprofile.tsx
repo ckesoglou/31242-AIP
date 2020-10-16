@@ -217,7 +217,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 <AvatarWithMenu fullName={this.context.user.name} />
               </div>
             </Grid>
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
               <Paper elevation={3}>
                 <div className="section">
                   <h2>
@@ -239,8 +239,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   </Typography>
                 </div>
               </Paper>
-            </Grid>
-            <Grid item xs={8}>
+            </Grid> */}
+            <Grid item xs={12}>
               <Paper elevation={3} className="content">
                 <Tabs
                   value={this.state.tabIndex}
