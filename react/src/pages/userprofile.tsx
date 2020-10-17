@@ -457,7 +457,11 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                               this.setState({ userDropOpen: false });
                             }}
                             loading={this.state.userDropLoading}
-                            getOptionLabel={(option) => option.username}
+                            getOptionLabel={(option) =>
+                              option.display_name
+                                .concat("   #")
+                                .concat(option.username)
+                            }
                             getOptionSelected={(option, value) =>
                               option.username === value.username
                             }
