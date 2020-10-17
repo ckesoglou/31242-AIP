@@ -24,20 +24,13 @@ interface IIouOwePOST {
   username: string;
   item: string;
 }
-interface IIouOweCompletePUT {
-  proof: string;
-}
 const IouOwedPOST: ObjectSchema<IIouOwedPOST> = Joi.object({
   username: Joi.string(),
   item: Joi.string(),
-  // proof: Joi.string(),
 }).options({ presence: "required" });
 const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
   username: Joi.string(),
   item: Joi.string(),
-}).options({ presence: "required" });
-const IouOweCompletePUT: ObjectSchema<IIouOweCompletePUT> = Joi.object({
-  proof: Joi.string(),
 }).options({ presence: "required" });
 
 /******************************************************************************
@@ -175,45 +168,43 @@ router.post("/owe", async (req: Request, res: Response) => {
  *                       Mark an IOU as completed - "PUT /api/iou/owe/{iouID}/complete"
  ******************************************************************************/
 
-router.put("/owe/:iouID/complete", async (req: Request, res: Response) => {
-  // Validate request format
-  const { error, value } = IouOweCompletePUT.validate(req.body);
-  if (error) {
-    return res.status(BAD_REQUEST).json({
-      error: [error.message],
-    });
-  }
-  // Get authenticated user
-  const user = await getAuthenticatedUser(req, res);
-  // if logged in
-  if (user) {
-    const iouID = req.params.iouID;
-    const requestBody = value as IIouOweCompletePUT;
-    // if IOU exists
-    if (await iouExists(iouID)) {
-      // if users is receiver of IOU
-      if (
-        (await completeIouOwe(iouID, user.username, requestBody.proof)) == true
-      ) {
-        return res.status(OK).end();
+router.put(
+  "/owe/:iouID/complete",
+  upload.single("proof"),
+  async (req: Request, res: Response) => {
+    console.log(req.file);
+    // Get authenticated user
+    const user = await getAuthenticatedUser(req, res);
+    // if logged in
+    if (user) {
+      const iouID = req.params.iouID;
+      // if IOU exists
+      if (await iouExists(iouID)) {
+        // if users is receiver of IOU
+        if (
+          (await completeIouOwe(iouID, user.username, req.file.filename)) ==
+          true
+        ) {
+          return res.status(OK).end();
+        } else {
+          return res.status(403).json({
+            errors: [
+              "Not authorised to complete this request (you are not the owner of it)",
+            ],
+          });
+        }
       } else {
-        return res.status(403).json({
-          errors: [
-            "Not authorised to complete this request (you are not the owner of it)",
-          ],
+        return res.status(404).json({
+          errors: ["Not found (did you mean to use the /owed endpoint)"],
         });
       }
     } else {
-      return res.status(404).json({
-        errors: ["Not found (did you mean to use the /owed endpoint)"],
+      return res.status(401).json({
+        errors: ["Not authenticated"],
       });
     }
-  } else {
-    return res.status(401).json({
-      errors: ["Not authenticated"],
-    });
   }
-});
+);
 
 /******************************************************************************
  *                                     Export
