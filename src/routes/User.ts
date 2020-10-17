@@ -26,7 +26,7 @@ router.get("/users", async (req: Request, res: Response) => {
   }
 
   let usersQuery = value as IUsersFilter;
-  const users = await getUsers(usersQuery);
+  const users = await getUsers(usersQuery, false);
 
   return res.status(OK).json(users).end();
 });

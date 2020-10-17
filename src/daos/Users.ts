@@ -35,8 +35,17 @@ export interface IUsersFilter {
   search?: string;
 }
 
-export async function getUsers(filter: IUsersFilter) {
+export async function getUsers(
+  filter: IUsersFilter,
+  includePasswordHash: boolean = false
+) {
+  let attributes = ["username", "display_name"];
+  if (includePasswordHash) {
+    attributes.push("password_hash");
+  }
+
   return User.findAll({
+    attributes: attributes,
     where: filter.search // if search is provided
       ? {
           // search for string contained in username OR display_name
