@@ -134,6 +134,69 @@ Attempts to create a user with the provided username, display name, and password
 This operation does not require authentication
 </aside>
 
+<h1 id="ioweyou-tech-item">Item</h1>
+
+## get__api_items
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/items',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/items`
+
+Retrieve list of available items.
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+    "display_name": "Coffee"
+  }
+]
+```
+
+<h3 id="get__api_items-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned array of available items.|Inline|
+
+<h3 id="get__api_items-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[Item](#schemaitem)]|false|none|none|
+|» id|string|false|none|Unique identifier of the item.|
+|» display_name|string|false|none|Current display name of the item.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="ioweyou-tech-user">User</h1>
 
 ## get__api_user
