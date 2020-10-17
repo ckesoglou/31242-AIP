@@ -1,7 +1,14 @@
 import React, { ChangeEvent } from "react";
 import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
 import "../assets/css/userprofile.css";
-import { userProfileEndpoint, requestsNewEndpoint } from "../api/endpoints";
+import {
+  userProfileEndpoint,
+  requestsNewEndpoint,
+  iouOweEndpoint,
+  iouOwedEndpoint,
+  itemEndpoint,
+  usersEndpoint,
+} from "../api/endpoints";
 import {
   Container,
   Typography,
@@ -21,11 +28,23 @@ import {
   CircularProgress,
   Snackbar,
 } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 import IOU from "../components/iou";
+// import { optional } from "joi";
+
+type ItemObj = {
+  id: string;
+  display_name: string;
+};
+
+type UserObj = {
+  username: string;
+  display_name: string;
+};
 
 type UserProfileState = {
   tabIndex: number;
@@ -35,8 +54,14 @@ type UserProfileState = {
   requests: string;
   newRequestFavour: string;
   newRequestReward: string;
+  newRequestProof: any;
   requestSnack: boolean;
   snackMessage: string;
+  potentialItems: ItemObj[];
+  selectedUser: string;
+  selectetableUsers: UserObj[];
+  userDropOpen: boolean;
+  userDropLoading: boolean;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -107,8 +132,14 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     requests: "",
     newRequestFavour: "",
     newRequestReward: "",
+    newRequestProof: "",
     requestSnack: false,
     snackMessage: "",
+    potentialItems: [],
+    selectedUser: "",
+    selectetableUsers: [],
+    userDropOpen: false,
+    userDropLoading: false,
   };
 
   static contextType: React.Context<{
@@ -123,6 +154,28 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   componentDidMount() {
     this.fetchAllTabs();
+    this.setState({
+      userDropLoading:
+        this.state.userDropOpen && this.state.selectetableUsers.length == 0,
+    });
+  }
+
+  fetchItems(): void {
+    fetch(`${itemEndpoint}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((body) => {
+        console.log("Success:", body);
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+      });
   }
 
   fetchNewRequest(): void {
@@ -148,6 +201,59 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         this.setState({ snackMessage: `${exception}` });
       });
     this.setState({ requestSnack: true });
+  }
+
+  fetchNewOwe(): void {
+    fetch(`${iouOweEndpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: this.context.user.name,
+        // item: ,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((body) => {
+        console.log("Success:", body);
+        this.setState({ snackMessage: "New IOU created!" });
+        this.setState({ requestSnack: true });
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ snackMessage: exception });
+        this.setState({ requestSnack: true });
+      });
+  }
+
+  fetchNewOwed(): void {
+    fetch(`${iouOwedEndpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: this.context.user.name,
+        // item: ,
+        // proof: ,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((body) => {
+        console.log("Success:", body);
+        this.setState({ snackMessage: "New IOU created!" });
+        this.setState({ requestSnack: true });
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ snackMessage: exception });
+        this.setState({ requestSnack: true });
+      });
   }
 
   fetchAllTabs(): void {
@@ -189,6 +295,31 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
         this.setState({ requestSnack: true });
+      });
+  }
+
+  fetchSearchedUsers(searchUser: string) {
+    this.setState({ userDropLoading: true });
+
+    fetch(`${usersEndpoint.concat("?search=").concat(searchUser)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((body) => {
+        console.log("Success:", body);
+        this.setState({ selectetableUsers: body });
+        this.setState({ userDropLoading: false });
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ snackMessage: `${exception}` });
+        this.setState({ requestSnack: true });
+        this.setState({ userDropLoading: false });
       });
   }
 
@@ -273,12 +404,80 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 >
                   <DialogTitle disableTypography={true} id="requestFormTitle">
                     <Typography component="h5" variant="h5">
-                      {"Creating a new request..."}
+                      {this.state.tabIndex == 2
+                        ? "Creating a new request..."
+                        : this.state.tabIndex == 1
+                        ? "Creating a new owing IOU..."
+                        : "Creating a new owed IOU..."}
                     </Typography>
                   </DialogTitle>
                   <DialogContent dividers className="content">
+                    {this.state.tabIndex == 2 ? null : this.state.tabIndex ==
+                      1 ? (
+                      <Container>
+                        <DialogContentText id="requestFormQuestion">
+                          {"Who do you owe?"}
+                        </DialogContentText>
+                        <Autocomplete
+                          id="testAutoComplete"
+                          style={{ width: 300 }}
+                          open={this.state.userDropOpen}
+                          onOpen={() => {
+                            this.setState({ userDropOpen: true });
+                          }}
+                          onClose={() => {
+                            this.setState({ userDropOpen: false });
+                          }}
+                          loading={this.state.userDropLoading}
+                          getOptionLabel={(option) => option.username}
+                          getOptionSelected={(option, value) =>
+                            option.username === value.username
+                          }
+                          onChange={(event, value) => {
+                            this.setState({
+                              selectedUser:
+                                value?.username == null ? "" : value.username,
+                            });
+                          }}
+                          onInputChange={(event, value) => {
+                            this.fetchSearchedUsers(value);
+                          }}
+                          options={this.state.selectetableUsers}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Enter a username here!"
+                              variant="outlined"
+                              InputProps={{
+                                ...params.InputProps,
+                                endAdornment: (
+                                  <React.Fragment>
+                                    {this.state.userDropLoading ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endAdornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                            />
+                          )}
+                        />
+                      </Container>
+                    ) : (
+                      <DialogContentText id="requestFormQuestion">
+                        {"Who owes you?"}
+                      </DialogContentText>
+                    )}
+
                     <DialogContentText id="requestFormQuestion">
-                      {"Lets start with what you'd like..."}
+                      {this.state.tabIndex == 2
+                        ? "Lets start with what you'd like..."
+                        : this.state.tabIndex == 1
+                        ? "Lets start with what you owe..."
+                        : "Lets start with you're owed..."}
                     </DialogContentText>
                     <TextField
                       autoFocus
