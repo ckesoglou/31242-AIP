@@ -3,6 +3,7 @@ import Iou, { IIouAttributes } from "../entities/Iou";
 import db from "./DBInstance";
 import { v4 as uuid } from "uuid";
 import { getBasicUser } from "./Users";
+import { getItem } from "./Items";
 
 Iou.init(
   {
@@ -70,6 +71,7 @@ export async function getIous(
   });
   // detail user
   for (let iou of ious) {
+    iou.item = (await getItem(iou.item as string)) as Object;
     iou.giver = await getBasicUser(iou.giver as string);
     iou.receiver = await getBasicUser(iou.receiver as string);
   }
