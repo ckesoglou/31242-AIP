@@ -62,6 +62,7 @@ type UserProfileState = {
   selectetableUsers: UserObj[];
   userDropOpen: boolean;
   userDropLoading: boolean;
+  rewardDropOpen: boolean;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -140,6 +141,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     selectetableUsers: [],
     userDropOpen: false,
     userDropLoading: false,
+    rewardDropOpen: false,
   };
 
   static contextType: React.Context<{
@@ -158,6 +160,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       userDropLoading:
         this.state.userDropOpen && this.state.selectetableUsers.length == 0,
     });
+    this.fetchItems();
   }
 
   fetchItems(): void {
@@ -172,9 +175,12 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       })
       .then((body) => {
         console.log("Success:", body);
+        this.setState({ potentialItems: body });
       })
       .catch((exception) => {
         console.error("Error:", exception);
+        this.setState({ snackMessage: `${exception}` });
+        this.setState({ requestSnack: true });
       });
   }
 
@@ -210,8 +216,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: this.context.user.name,
-        // item: ,
+        username: this.state.selectedUser,
+        item: this.state.newRequestReward,
       }),
     })
       .then((res) => {
@@ -236,9 +242,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: this.context.user.name,
-        // item: ,
-        // proof: ,
+        username: this.state.selectedUser,
+        item: this.state.newRequestReward,
+        proof: this.state.newRequestProof,
       }),
     })
       .then((res) => {
@@ -300,7 +306,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   fetchSearchedUsers(searchUser: string) {
     this.setState({ userDropLoading: true });
-
     fetch(`${usersEndpoint.concat("?search=").concat(searchUser)}`, {
       method: "GET",
       headers: {
@@ -326,6 +331,30 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   handleTabsChange(event: ChangeEvent<{}> | undefined, index: number): void {
     this.setState({ tabIndex: index });
     // This method may be needed in the future
+  }
+
+  fileContent() {
+    if (this.state.newRequestProof) {
+      return (
+        <div id="completeProofFileInfo">
+          <DialogContentText variant="body2">
+            {"Image Preview: "}
+          </DialogContentText>
+          <img
+            src={URL.createObjectURL(this.state.newRequestProof)}
+            alt={this.state.newRequestProof.name}
+            id="completeProofImage"
+          />
+        </div>
+        //Need to discuss how submitted images should be formatted (Size, Encode Format)
+      );
+    } else {
+      return (
+        <DialogContentText variant="body2" id="completeProofFileInfo">
+          {"Upload an image (JPEG/PNG) before pressing the 'Create' button"}
+        </DialogContentText>
+      );
+    }
   }
 
   render() {
@@ -418,93 +447,189 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         <DialogContentText id="requestFormQuestion">
                           {"Who do you owe?"}
                         </DialogContentText>
-                        <Autocomplete
-                          id="testAutoComplete"
-                          style={{ width: 300 }}
-                          open={this.state.userDropOpen}
-                          onOpen={() => {
-                            this.setState({ userDropOpen: true });
-                          }}
-                          onClose={() => {
-                            this.setState({ userDropOpen: false });
-                          }}
-                          loading={this.state.userDropLoading}
-                          getOptionLabel={(option) => option.username}
-                          getOptionSelected={(option, value) =>
-                            option.username === value.username
-                          }
-                          onChange={(event, value) => {
-                            this.setState({
-                              selectedUser:
-                                value?.username == null ? "" : value.username,
-                            });
-                          }}
-                          onInputChange={(event, value) => {
-                            this.fetchSearchedUsers(value);
-                          }}
-                          options={this.state.selectetableUsers}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label="Enter a username here!"
-                              variant="outlined"
-                              InputProps={{
-                                ...params.InputProps,
-                                endAdornment: (
-                                  <React.Fragment>
-                                    {this.state.userDropLoading ? (
-                                      <CircularProgress
-                                        color="inherit"
-                                        size={20}
-                                      />
-                                    ) : null}
-                                    {params.InputProps.endAdornment}
-                                  </React.Fragment>
-                                ),
-                              }}
-                            />
-                          )}
-                        />
+                        <Container id="autoCompleteField">
+                          <Autocomplete
+                            open={this.state.userDropOpen}
+                            onOpen={() => {
+                              this.setState({ userDropOpen: true });
+                            }}
+                            onClose={() => {
+                              this.setState({ userDropOpen: false });
+                            }}
+                            loading={this.state.userDropLoading}
+                            getOptionLabel={(option) => option.username}
+                            getOptionSelected={(option, value) =>
+                              option.username === value.username
+                            }
+                            onChange={(event, value) => {
+                              this.setState({
+                                selectedUser:
+                                  value?.username == null ? "" : value.username,
+                              });
+                            }}
+                            onInputChange={(event, value) => {
+                              this.fetchSearchedUsers(value);
+                            }}
+                            options={this.state.selectetableUsers}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Enter a username here!"
+                                variant="outlined"
+                                InputProps={{
+                                  ...params.InputProps,
+                                  endAdornment: (
+                                    <React.Fragment>
+                                      {this.state.userDropLoading ? (
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
+                                      ) : null}
+                                      {params.InputProps.endAdornment}
+                                    </React.Fragment>
+                                  ),
+                                }}
+                              />
+                            )}
+                          />
+                        </Container>
                       </Container>
                     ) : (
-                      <DialogContentText id="requestFormQuestion">
-                        {"Who owes you?"}
-                      </DialogContentText>
+                      <Container>
+                        <DialogContentText id="requestFormQuestion">
+                          {"Who owes you?"}
+                        </DialogContentText>
+                        <Container id="autoCompleteField">
+                          <Autocomplete
+                            open={this.state.userDropOpen}
+                            onOpen={() => {
+                              this.setState({ userDropOpen: true });
+                            }}
+                            onClose={() => {
+                              this.setState({ userDropOpen: false });
+                            }}
+                            loading={this.state.userDropLoading}
+                            getOptionLabel={(option) => option.username}
+                            getOptionSelected={(option, value) =>
+                              option.username === value.username
+                            }
+                            onChange={(event, value) => {
+                              this.setState({
+                                selectedUser:
+                                  value?.username == null ? "" : value.username,
+                              });
+                            }}
+                            onInputChange={(event, value) => {
+                              this.fetchSearchedUsers(value);
+                            }}
+                            options={this.state.selectetableUsers}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Enter a username here!"
+                                variant="outlined"
+                                InputProps={{
+                                  ...params.InputProps,
+                                  endAdornment: (
+                                    <React.Fragment>
+                                      {this.state.userDropLoading ? (
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
+                                      ) : null}
+                                      {params.InputProps.endAdornment}
+                                    </React.Fragment>
+                                  ),
+                                }}
+                              />
+                            )}
+                          />
+                        </Container>
+                      </Container>
                     )}
-
+                    {this.state.tabIndex == 2 && (
+                      <Container>
+                        <DialogContentText id="requestFormQuestion">
+                          {"Lets start with what you'd like..."}
+                        </DialogContentText>
+                        <TextField
+                          autoFocus
+                          id="favourText"
+                          label="Favour"
+                          type="text"
+                          variant="outlined"
+                          margin="normal"
+                          required
+                          onChange={(e) => {
+                            this.setState({ newRequestFavour: e.target.value });
+                          }}
+                        />
+                      </Container>
+                    )}
                     <DialogContentText id="requestFormQuestion">
                       {this.state.tabIndex == 2
-                        ? "Lets start with what you'd like..."
+                        ? "Next, what would you like to offer in return?"
                         : this.state.tabIndex == 1
-                        ? "Lets start with what you owe..."
-                        : "Lets start with you're owed..."}
+                        ? "Next, what do you owe?"
+                        : "Next, what do they owe you?"}
                     </DialogContentText>
-                    <TextField
-                      autoFocus
-                      id="favourText"
-                      label="Favour"
-                      type="text"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      onChange={(e) => {
-                        this.setState({ newRequestFavour: e.target.value });
-                      }}
-                    />
-                    <DialogContentText id="requestFormQuestion">
-                      {"Next, what would you like to offer in return?"}
-                    </DialogContentText>
-                    <TextField
-                      id="rewardText"
-                      label="Reward"
-                      type="text"
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      onChange={(e) => {
-                        this.setState({ newRequestReward: e.target.value });
-                      }}
-                    />
+                    <Container id="autoCompleteField">
+                      <Autocomplete
+                        open={this.state.rewardDropOpen}
+                        onOpen={() => {
+                          this.setState({ rewardDropOpen: true });
+                        }}
+                        onClose={() => {
+                          this.setState({ rewardDropOpen: false });
+                        }}
+                        getOptionLabel={(option) => option.display_name}
+                        getOptionSelected={(option, value) =>
+                          option.id === value.id
+                        }
+                        onChange={(event, value) => {
+                          this.setState({
+                            newRequestReward: value?.id == null ? "" : value.id,
+                          });
+                        }}
+                        options={this.state.potentialItems}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Find a reward here!"
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </Container>
+                    {this.state.tabIndex == 0 && (
+                      <Container>
+                        <DialogContentText>{"Upload proof?"}</DialogContentText>
+                        <input
+                          type="file"
+                          onChange={(e) => {
+                            if (e.target.files) {
+                              this.setState({
+                                newRequestProof: e.target.files[0],
+                              });
+                            }
+                          }}
+                          accept="image/*"
+                          id="inputProof"
+                        />
+                        <label htmlFor="inputProof">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            component="span"
+                          >
+                            {this.state.newRequestProof ? "CHANGE" : "UPLOAD"}
+                          </Button>
+                        </label>
+                        {this.fileContent()}
+                      </Container>
+                    )}
                   </DialogContent>
                   <DialogActions>
                     <Button
@@ -512,7 +637,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                       size="large"
                       color="primary"
                       onClick={() => {
-                        this.fetchNewRequest();
+                        if (this.state.tabIndex == 2) {
+                          this.fetchNewRequest();
+                        } else if (this.state.tabIndex == 1) {
+                          this.fetchNewOwe();
+                        } else {
+                          this.fetchNewOwed();
+                        }
                         this.setState({
                           newRequestDialog: false,
                         });
