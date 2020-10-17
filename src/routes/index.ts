@@ -2,7 +2,7 @@ import { Router } from "express";
 import LoginRouter from "./Login";
 import SignUpRouter from "./SignUp";
 import UserRouter from "./User";
-import ItemRouter from './Item';
+import ItemRouter from "./Item";
 
 // Init router and path
 const router = Router();
@@ -10,7 +10,7 @@ const router = Router();
 // Add sub-routes
 router.use("/login", LoginRouter);
 router.use("/signup", SignUpRouter);
-router.use("/user", UserRouter);
+router.use(UserRouter);
 router.use(ItemRouter);
 
 // Export the base-router
