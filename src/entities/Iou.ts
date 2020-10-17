@@ -3,8 +3,8 @@ import { Model } from "sequelize";
 export interface IIouAttributes {
   id: string;
   item: string;
-  giver: string;
-  receiver?: string;
+  giver: Object;
+  receiver?: Object;
   parent_request?: string;
   proof_of_debt?: string;
   proof_of_completion?: string;
@@ -16,8 +16,8 @@ export interface IIouAttributes {
 class Iou extends Model<IIouAttributes> implements IIouAttributes {
   public id!: string;
   public item!: string;
-  public giver!: string;
-  public receiver: string | undefined;
+  public giver!: Object;
+  public receiver: Object | undefined;
   public parent_request!: string;
   public proof_of_debt: string | undefined;
   public proof_of_completion: string | undefined;

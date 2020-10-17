@@ -2,6 +2,7 @@ import { DataTypes } from "sequelize";
 import Iou, { IIouAttributes } from "../entities/Iou";
 import db from "./DBInstance";
 import { v4 as uuid } from "uuid";
+import { getBasicUser } from "./Users";
 
 Iou.init(
   {
@@ -61,12 +62,18 @@ export async function getIous(
   start: number = 0,
   limit: number = 25
 ) {
-  return Iou.findAll({
+  const ious = await Iou.findAll({
     offset: start,
     limit: limit,
     subQuery: false,
     where: filter,
   });
+  // detail user
+  for (let iou of ious) {
+    iou.giver = await getBasicUser(iou.giver as string);
+    iou.receiver = await getBasicUser(iou.receiver as string);
+  }
+  return ious;
 }
 
 export async function createIouOwed(
