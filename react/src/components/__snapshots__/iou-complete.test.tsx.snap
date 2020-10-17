@@ -28,11 +28,11 @@ exports[`<IouComplete /> should render correctly 1`] = `
     <div
       id="IouTaskComplete"
     >
-      <p
+      <WithStyles(ForwardRef(Typography))
         id="taskCompleter"
       >
         Kevin
-      </p>
+      </WithStyles(ForwardRef(Typography))>
       <WithStyles(ForwardRef(Popover))
         anchorEl={null}
         anchorOrigin={
@@ -61,11 +61,11 @@ exports[`<IouComplete /> should render correctly 1`] = `
           Kevin
         </WithStyles(ForwardRef(Typography))>
       </WithStyles(ForwardRef(Popover))>
-      <p
+      <WithStyles(ForwardRef(Typography))
         id="taskTimeStamp"
       >
         02/02/2020
-      </p>
+      </WithStyles(ForwardRef(Typography))>
     </div>
   </div>
   <WithStyles(ForwardRef(Dialog))

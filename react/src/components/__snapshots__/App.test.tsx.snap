@@ -17,10 +17,6 @@ exports[`<App /> should render correctly 1`] = `
         component={[Function]}
         path="/user"
       />
-      <ProtectedRoute
-        component={[Function]}
-        path="/home"
-      />
       <Route
         component={[Function]}
         path="/signup"
