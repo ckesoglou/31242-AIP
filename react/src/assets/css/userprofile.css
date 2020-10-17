@@ -33,4 +33,17 @@
 }
 #loading {
   display: none;
+  margin:auto;
+}
+
+#simple-tabpanel-0 {
+  width:65%;
+}
+
+#simple-tabpanel-1 {
+  width:65%;
+}
+
+#simple-tabpanel-2 {
+  width:65%;
 }

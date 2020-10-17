@@ -83,6 +83,21 @@ paths:
           description: Returned when the username is already taken.
       tags:
         - Authentication
+  /api/items:
+    summary: Endpoint to receive 
+    get:
+      description: Retrieve list of available items.
+      responses:
+        "200":
+          description: Returned array of available items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+      tags:
+        - Item
   /api/users:
     summary: Endpoint to retieve multiple user details.
     get:
@@ -107,11 +122,7 @@ paths:
       responses:
         "200":
           description: Returned list of matched users.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
+
                   $ref: "#/components/schemas/User"
         "400":
           description: The request was invalid or incorrectly formatted.

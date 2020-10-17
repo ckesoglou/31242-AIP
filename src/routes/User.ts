@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
-import { BAD_REQUEST, OK, UNAUTHORIZED } from "http-status-codes";
+import { BAD_REQUEST, OK } from "http-status-codes";
+import { getAuthenticatedUser } from "@shared/Authenticate";
 import { getUsers, IUsersFilter } from "../daos/Users";
 import Joi, { ObjectSchema } from "joi";
 
@@ -28,6 +29,24 @@ router.get("/users", async (req: Request, res: Response) => {
   const users = await getUsers(usersQuery);
 
   return res.status(OK).json(users).end();
+});
+
+/**
+ * GET: /user
+ */
+
+router.get("/user", async (req: Request, res: Response) => {
+  const user = await getAuthenticatedUser(req, res);
+  if (user) {
+    return res.status(OK).json({
+      username: user.username,
+      display_name: user.display_name,
+    });
+  } else {
+    return res.status(401).json({
+      errors: ["Not authenticated."],
+    });
+  }
 });
 
 export default router;
