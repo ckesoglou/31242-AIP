@@ -60,7 +60,7 @@ router.get("/owed", async (req: Request, res: Response) => {
       iousQuery.start,
       iousQuery.limit
     );
-    return res.status(OK).json(iou);
+    return res.status(OK).json({ id: iou });
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
@@ -157,7 +157,7 @@ router.get("/owe", async (req: Request, res: Response) => {
       iousQuery.start,
       iousQuery.limit
     );
-    return res.status(OK).json(iou);
+    return res.status(OK).json({ id: iou });
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
