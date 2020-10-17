@@ -78,41 +78,22 @@ export function makeServer({ environment = "development" } = {}) {
       );
 
       this.get(
-        "/user/:id/owed",
+        "/iou/owed/",
         () => {
           let body = [
             {
-              id: 0,
+              id: "510ab12d-1689-4b2c-8a8d-275376f11077",
               item: {
-                id: 0,
+                id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
                 display_name: "Coffee",
               },
               giver: {
                 username: "jsmith",
                 display_name: "John Smith",
               },
-              receiver: {
-                username: "jsmith",
-                display_name: "John Smith",
-              },
-              parent_request: {
-                id: 0,
-                author: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                completed_by: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                proof_of_completion: 0,
-                details: "Clean the fridge",
-                created_time: "2020-03-09T22:18:26.625Z",
-                completion_time: "2020-03-09T22:18:26.625Z",
-                is_completed: false,
-              },
-              proof_of_debt: 0,
-              proof_of_completion: 0,
+              parent_request: "510ab12d-1689-4b2c-8a8d-275376f11078",
+              proof_of_debt: "510ab12d-1689-4b2c-8a8d-275376f11079",
+              proof_of_completion: "510ab12d-1689-4b2c-8a8d-275376f11076",
               created_time: "2020-03-09T22:18:26.625Z",
               claimed_time: "2020-03-09T22:18:26.625Z",
               is_claimed: false,
@@ -125,71 +106,25 @@ export function makeServer({ environment = "development" } = {}) {
       );
 
       this.get(
-        "/user/:id/owe",
+        "/iou/owe/",
         () => {
           let body = [
             {
-              id: 0,
+              id: "510ab12d-1689-4b2c-8a8d-275376f11077",
               item: {
-                id: 0,
+                id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
                 display_name: "Coffee",
-              },
-              giver: {
-                username: "jsmith",
-                display_name: "John Smith",
               },
               receiver: {
                 username: "jsmith",
                 display_name: "John Smith",
               },
-              parent_request: {
-                id: 0,
-                author: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                completed_by: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                proof_of_completion: 0,
-                details: "Clean the fridge",
-                created_time: "2020-03-09T22:18:26.625Z",
-                completion_time: "2020-03-09T22:18:26.625Z",
-                is_completed: false,
-              },
-              proof_of_debt: 0,
-              proof_of_completion: 0,
+              parent_request: "510ab12d-1689-4b2c-8a8d-275376f11078",
+              proof_of_debt: "510ab12d-1689-4b2c-8a8d-275376f11079",
+              proof_of_completion: "510ab12d-1689-4b2c-8a8d-275376f11076",
               created_time: "2020-03-09T22:18:26.625Z",
               claimed_time: "2020-03-09T22:18:26.625Z",
               is_claimed: false,
-            },
-          ];
-
-          return new Response(200, jsonHeader, body);
-        },
-        { timing: 2000 } // mock delay - helps visualise loading for user
-      );
-
-      this.get(
-        "/user/:id/requests",
-        () => {
-          let body = [
-            {
-              id: 0,
-              author: {
-                username: "jsmith",
-                display_name: "John Smith",
-              },
-              completed_by: {
-                username: "jsmith",
-                display_name: "John Smith",
-              },
-              proof_of_completion: 0,
-              details: "Clean the fridge",
-              created_time: "2020-03-09T22:18:26.625Z",
-              completion_time: "2020-03-09T22:18:26.625Z",
-              is_completed: false,
             },
           ];
 

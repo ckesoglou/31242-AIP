@@ -1,7 +1,11 @@
 import React, { ChangeEvent } from "react";
 import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
 import "../assets/css/userprofile.css";
-import { userProfileEndpoint, requestsNewEndpoint } from "../api/endpoints";
+import {
+  requestsNewEndpoint,
+  iouEndpoint,
+  requestsEndpoint,
+} from "../api/endpoints";
 import {
   Container,
   Typography,
@@ -27,39 +31,34 @@ import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 import IOU from "../components/iou";
 
-type Request = {
-  id: string;
-  author: {
-    username: string;
-    display_name: string;
-  };
-  completed_by: {
-    username: string;
-    display_name: string;
-  };
-  proof_of_completion: string; // UUID
-  rewards: [
-    {
-      id: string; // UUID;
-      display_name: string;
-    }
-  ];
-  details: string;
-  created_time: string;
-  completion_time: string;
-  is_completed: boolean;
-};
+// type IouType = {
+//   id: string;
+//   item: {
+//     id: string;
+//     display_name: string;
+//   };
+//   giver: {
+//     username: string;
+//     display_name: string;
+//   };
+//   parent_request: string;
+//   proof_of_debt: string;
+//   proof_of_completion: string;
+//   created_time: string;
+//   claimed_time: string;
+//   is_claimed: boolean;
+// };
 
 type UserProfileState = {
   tabIndex: number;
   newRequestDialog: boolean;
-  owed: Request[];
-  owe: Request[];
+  // owed: IouType[];
+  // owe: IouType[];
   requests: Request[];
   newRequestFavour: string;
   newRequestReward: string;
-  requestSnack: boolean;
-  snackMessage: string;
+  snack: boolean;
+  snackMessage: any;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -125,19 +124,16 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   state: UserProfileState = {
     tabIndex: this.props.location.state.tabIndex ?? 0,
     newRequestDialog: false,
-    owed: [],
-    owe: [],
+    // owed: [],
+    // owe: [],
     requests: [],
     newRequestFavour: "",
     newRequestReward: "",
-    requestSnack: false,
+    snack: false,
     snackMessage: "",
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
@@ -165,12 +161,12 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "New request created!" });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
@@ -180,15 +176,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     };
     this.setLoading(true);
     Promise.all([
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owe`, {
+      fetch(`${iouEndpoint}/owed`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owed`, {
+      fetch(`${iouEndpoint}/owe`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/requests`, {
+      fetch(`${requestsEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
@@ -198,8 +194,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           ([owedResult, oweResult, requestsResult]) => {
             this.setLoading(false);
             this.setState({
-              owed: owedResult,
-              owe: oweResult,
+              // owed: owedResult,
+              // owe: oweResult,
               requests: requestsResult,
             });
             console.log("Success:", owedResult, oweResult, requestsResult);
@@ -209,8 +205,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setLoading(false);
-        this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        // this.setState({ snackMessage: exception, snack: true });
       });
   }
 
@@ -237,10 +232,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 <Typography component="h1" variant="h4">
                   {"Profile"}
                 </Typography>
-                <AvatarWithMenu
-                  loggedIn={this.context.user.name !== "?"}
-                  fullName={this.context.user.name}
-                />
+                <AvatarWithMenu />
               </div>
             </Grid>
             {/* <Grid item xs={4}>
@@ -363,9 +355,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     horizontal: "left",
                   }}
                   message={this.state.snackMessage}
-                  open={this.state.requestSnack}
+                  open={this.state.snack}
                   onClose={() => {
-                    this.setState({ requestSnack: false });
+                    this.setState({ snack: false });
                   }}
                   autoHideDuration={5000}
                 />
@@ -375,9 +367,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={0}
                 >
-                  {this.state.owed.map((owe, i) => {
-                    return <IOU request={owe} key={i} />;
-                  })}
+                  {/* {this.state.owed.map((owed, i) => {
+                    return <IOU request={owed} key={i} />;
+                  })} */}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -385,9 +377,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={1}
                 >
-                  {this.state.owe.map((owe, i) => {
+                  {/* {this.state.owe.map((owe, i) => {
                     return <IOU request={owe} key={i} />;
-                  })}
+                  })} */}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -395,9 +387,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={2}
                 >
-                  {this.state.requests.map((owe, i) => {
-                    return <IOU request={owe} key={i} />;
-                  })}
+                  {/* {this.state.requests.map((request, i) => {
+                    return <IOU request={request} key={i} />;
+                  })} */}
                 </TabPanel>
               </Paper>
             </Grid>

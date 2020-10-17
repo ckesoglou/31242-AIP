@@ -54,11 +54,6 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-type AvatarWithMenuProps = {
-  fullName: string;
-  loggedIn: boolean;
-};
-
 type AvatarWithMenuState = {
   userMenu: boolean;
   anchorEl: HTMLElement | null;
@@ -77,24 +72,18 @@ function nameToUpperInitials(fullName: string) {
       .toUpperCase()}`;
 }
 
-class AvatarWithMenu extends React.Component<
-  AvatarWithMenuProps,
-  AvatarWithMenuState
-> {
+class AvatarWithMenu extends React.Component {
   state: AvatarWithMenuState = {
     userMenu: false,
     anchorEl: null,
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   render() {
     return (
       <div>
-        {this.props.loggedIn && (
+        {this.context.user.name !== "?" && (
           <div>
             <Avatar
               onClick={(event: React.MouseEvent<HTMLElement>) => {
@@ -105,7 +94,7 @@ class AvatarWithMenu extends React.Component<
               }}
               id="avatar"
             >
-              {nameToUpperInitials(this.props.fullName)}
+              {nameToUpperInitials(this.context.user.name)}
             </Avatar>
             <StyledMenu
               id="customized-menu"
@@ -169,7 +158,7 @@ class AvatarWithMenu extends React.Component<
             </StyledMenu>
           </div>
         )}
-        {!this.props.loggedIn && (
+        {this.context.user.name === "?" && (
           <div>
             <Avatar
               onClick={(event: React.MouseEvent<HTMLElement>) => {

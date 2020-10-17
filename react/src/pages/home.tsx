@@ -21,6 +21,7 @@ import { AvatarWithMenu } from "../components/avatarWithMenu";
 import Leaderboard from "../components/leaderboard";
 import { Search, Clear } from "@material-ui/icons";
 import RequestComponent from "../components/request";
+import { requestsEndpoint } from "../api/endpoints";
 
 type Request = {
   id: string;
@@ -71,10 +72,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
     rewardItems: [],
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
@@ -103,16 +101,17 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
         })
         .then((body) => {
           console.log("Success:", body);
-          this.setState({ requests: body });
-          this.setState({ snackMessage: "Fetched filtered requests!" });
+          this.setState({
+            snackMessage: "Fetched filtered requests!",
+            snack: true,
+            requests: body,
+          });
           this.setLoading(false);
-          this.setState({ snack: true });
         })
         .catch((exception) => {
           console.error("Error:", exception);
-          this.setState({ snackMessage: exception });
+          this.setState({ snackMessage: exception, snack: true });
           this.setLoading(false);
-          this.setState({ snack: true });
         });
     } else {
       this.fetchRequests();
@@ -122,7 +121,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
   fetchRequests() {
     this.setLoading(true);
     this.setState({ requests: [] });
-    fetch("/api/requests", {
+    fetch(`${requestsEndpoint}`, {
       method: "GET",
     })
       .then((res) => {
@@ -182,10 +181,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                 <Typography component="h1" variant="h4">
                   {"Home"}
                 </Typography>
-                <AvatarWithMenu
-                  loggedIn={this.context.user.name !== "?"}
-                  fullName={this.context.user.name}
-                />
+                <AvatarWithMenu />
               </div>
             </Grid>
             <Grid item xs={8}>
@@ -341,7 +337,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
               </Paper>
             </Grid>
             <Grid item xs={4}>
-              <Leaderboard renderMe={this.context.user.name !== "?"} />
+              <Leaderboard />
             </Grid>
           </Grid>
         </div>
