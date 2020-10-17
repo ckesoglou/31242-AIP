@@ -21,7 +21,7 @@ User.init(
   {
     sequelize: db,
     tableName: "users",
-    timestamps: false
+    timestamps: false,
   }
 );
 
@@ -37,6 +37,6 @@ export async function createUser(
   return User.create({
     username: username,
     display_name: display_name,
-    password_hash: password_hash
+    password_hash: password_hash,
   });
 }

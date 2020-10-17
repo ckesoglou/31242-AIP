@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RequestRewards /> should render correctly 1`] = `
+<div
+  id="requestItem"
+>
+  <div
+    id="multipleItemsContainer"
+    onClick={[Function]}
+  >
+    <div
+      className="firstCircle"
+    >
+      Hug
+    </div>
+    <div
+      className="secondCircle"
+    >
+      Coffee
+    </div>
+    <div
+      className="secondCircle thirdCircle"
+    >
+      +
+    </div>
+  </div>
+  <WithStyles(ForwardRef(Popover))
+    anchorEl={null}
+    anchorOrigin={
+      Object {
+        "horizontal": "center",
+        "vertical": "bottom",
+      }
+    }
+    id="requestRewardPopover"
+    onClose={[Function]}
+    open={false}
+    transformOrigin={
+      Object {
+        "horizontal": "center",
+        "vertical": "top",
+      }
+    }
+  >
+    <div
+      id="requestRewardPopUp"
+    >
+      <div
+        id="requestPopUpContent"
+      >
+        <WithStyles(ForwardRef(Typography))
+          id="requestPopUpText"
+        >
+          Choose a reward to add
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Divider)) />
+        <div
+          id="requestAddContainer"
+        >
+          <RequestReward
+            display_name="Hug"
+            itemId="1"
+            key="1"
+            setSelectedReward={[Function]}
+          />
+          <RequestReward
+            display_name="Coffee"
+            itemId="2"
+            key="2"
+            setSelectedReward={[Function]}
+          />
+          <RequestReward
+            display_name="Food"
+            itemId="3"
+            key="3"
+            setSelectedReward={[Function]}
+          />
+        </div>
+        <WithStyles(ForwardRef(Button))
+          color="primary"
+          id="addRewardButton"
+          onClick={[Function]}
+          variant="contained"
+        >
+          Add Reward?
+        </WithStyles(ForwardRef(Button))>
+      </div>
+    </div>
+  </WithStyles(ForwardRef(Popover))>
+</div>
+`;

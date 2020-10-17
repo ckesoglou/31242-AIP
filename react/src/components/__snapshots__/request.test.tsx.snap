@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Request /> should render correctly 1`] = `
+<div>
+  <WithStyles(ForwardRef(Grid))
+    container={true}
+    spacing={4}
+    xs={12}
+  >
+    <WithStyles(ForwardRef(Grid))
+      id="requestItemContainer"
+      item={true}
+      xs={4}
+    >
+      <RequestRewards
+        items={
+          Array [
+            Object {
+              "display_name": "Hug",
+              "id": "1",
+            },
+            Object {
+              "display_name": "Coffee",
+              "id": "2",
+            },
+          ]
+        }
+        requestID="1"
+        rewards={
+          Array [
+            Object {
+              "display_name": "Hug",
+              "id": "1",
+            },
+            Object {
+              "display_name": "Coffee",
+              "id": "2",
+            },
+            Object {
+              "display_name": "Food",
+              "id": "3",
+            },
+          ]
+        }
+      />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      id="requestItemContainer"
+      item={true}
+      xs={3}
+    >
+      <IouTask
+        details="Clean the fridge"
+      />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      id="requestItemContainer"
+      item={true}
+      xs={1}
+    >
+      <IouProof
+        imagePK="Some ID"
+      />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      id="requestProofContainer"
+      item={true}
+      xs={3}
+    >
+      <IouComplete
+        request={
+          Object {
+            "author": Object {
+              "display_name": "James",
+              "username": "James",
+            },
+            "comletion_time": "02/02/2020",
+            "completed_by": Object {
+              "display_name": "Kevin",
+              "username": "Kevin",
+            },
+            "created_time": "02/02/2020",
+            "details": "Clean the fridge",
+            "id": "1",
+            "is_completed": true,
+            "proof_of_completion": "Some ID",
+            "rewards": Array [
+              Object {
+                "display_name": "Hug",
+                "id": "1",
+              },
+              Object {
+                "display_name": "Coffee",
+                "id": "2",
+              },
+            ],
+          }
+        }
+      />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      id="requestItemContainer"
+      item={true}
+      xs={1}
+    >
+      <RequestInfo
+        request={
+          Object {
+            "author": Object {
+              "display_name": "James",
+              "username": "James",
+            },
+            "comletion_time": "02/02/2020",
+            "completed_by": Object {
+              "display_name": "Kevin",
+              "username": "Kevin",
+            },
+            "created_time": "02/02/2020",
+            "details": "Clean the fridge",
+            "id": "1",
+            "is_completed": true,
+            "proof_of_completion": "Some ID",
+            "rewards": Array [
+              Object {
+                "display_name": "Hug",
+                "id": "1",
+              },
+              Object {
+                "display_name": "Coffee",
+                "id": "2",
+              },
+            ],
+          }
+        }
+      />
+    </WithStyles(ForwardRef(Grid))>
+  </WithStyles(ForwardRef(Grid))>
+</div>
+`;
