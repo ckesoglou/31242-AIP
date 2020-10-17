@@ -83,6 +83,21 @@ paths:
           description: Returned when the username is already taken.
       tags:
         - Authentication
+  /api/items:
+    summary: Endpoint to receive 
+    get:
+      description: Retrieve list of available items.
+      responses:
+        "200":
+          description: Returned array of available items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+      tags:
+        - Item
   /api/user:
     summary: Endpoint to view a user.
     get:
