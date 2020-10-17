@@ -95,7 +95,7 @@ router.post(
         requestBody.item,
         req.file.filename
       );
-      return res.status(OK).json(iou);
+      return res.status(OK).json({ id: iou });
     } else {
       return res.status(401).json({
         errors: ["Not authenticated"],
@@ -186,7 +186,7 @@ router.post("/owe", async (req: Request, res: Response) => {
       requestBody.username,
       requestBody.item
     );
-    return res.status(OK).json(iou);
+    return res.status(OK).json({ id: iou });
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
