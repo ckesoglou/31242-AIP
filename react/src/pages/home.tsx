@@ -18,7 +18,7 @@ import { UserContext } from "../components/user-context";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import Leaderboard from "../components/leaderboard";
 import { Search } from "@material-ui/icons";
-import Request from "../components/request";
+import RequestComponent from "../components/request";
 
 type Request = {
   id: string;
@@ -215,7 +215,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                   </Box>
                 </Box>
                 <Box>
-                  {/* {JSON.stringify(this.state.requests)} */}
+                  {JSON.stringify(this.state.requests)}
                   <CircularProgress
                     ref={this.loadingRef}
                     size={35}
