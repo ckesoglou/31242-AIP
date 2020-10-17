@@ -134,7 +134,140 @@ Attempts to create a user with the provided username, display name, and password
 This operation does not require authentication
 </aside>
 
+<h1 id="ioweyou-tech-item">Item</h1>
+
+## get__api_items
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/items',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/items`
+
+Retrieve list of available items.
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+    "display_name": "Coffee"
+  }
+]
+```
+
+<h3 id="get__api_items-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned array of available items.|Inline|
+
+<h3 id="get__api_items-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[Item](#schemaitem)]|false|none|none|
+|» id|string|false|none|Unique identifier of the item.|
+|» display_name|string|false|none|Current display name of the item.|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="ioweyou-tech-user">User</h1>
+
+## get__api_users
+
+> Code samples
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/api/users',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+`GET /api/users`
+
+Retrieves list of usernames and display names of currently registered users.
+
+<h3 id="get__api_users-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|start|query|string|false|Starting row of the returned array. Default 0.|
+|limit|query|string|false|Maximum number of returned users. Default 25. Maximum 100.|
+|search|query|string|false|Filter for users whose username of display name contains the provided string.|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "username": "jsmith",
+    "display_name": "John Smith"
+  }
+]
+```
+
+<h3 id="get__api_users-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of matched users.|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+
+<h3 id="get__api_users-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[User](#schemauser)]|false|none|none|
+|» username|string|false|none|Unique username of the user|
+|» display_name|string|false|none|Current display name of the user|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
 
 ## get__api_user
 
