@@ -155,6 +155,7 @@ class AvatarWithMenu extends React.Component<
                 to="/home"
                 onClick={() => {
                   this.context.updateUser({ name: "?" });
+                  this.setState({ userMenu: false });
                 }}
                 style={{ textDecoration: "none" }}
               >

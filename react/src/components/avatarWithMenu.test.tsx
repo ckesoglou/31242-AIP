@@ -5,7 +5,9 @@ import { AvatarWithMenu } from "./avatarWithMenu";
 // Integration tests are on home.test.tsx
 describe("<AvatarWithMenu />", () => {
   it("should render correctly", () => {
-    const wrapper = shallow(<AvatarWithMenu fullName={"Ben Johnston"} />);
+    const wrapper = shallow(
+      <AvatarWithMenu loggedIn={true} fullName={"Ben Johnston"} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });

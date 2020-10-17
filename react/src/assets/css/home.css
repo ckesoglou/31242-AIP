@@ -24,12 +24,27 @@
 #search-icon {
   font-size: 28px;
 }
+#clear-icon {
+  font-size: 36px;
+}
+#clear-button {
+  font-size: 36px;
+  margin-left: 1rem;
+  border: 2px solid white;
+  border-radius: 15%;
+  height: 2.75rem;
+  width: 2.75rem;
+  vertical-align: middle;
+}
 #filter-menu {
   margin-right: 2rem;
   margin-left: 1rem;
 }
 #filter-button {
   margin-left: 3rem;
+}
+#filter-dropdown {
+  width: 11rem;
 }
 #avatar {
   height: 4rem;
@@ -38,8 +53,10 @@
 }
 #homeLoading {
   display: none;
+  margin: auto;
+  margin-top: 5rem;
 }
-
-#test {
-  padding-left: -2rem;
+#headerItem {
+  align-self: center;
+  text-align: center;
 }

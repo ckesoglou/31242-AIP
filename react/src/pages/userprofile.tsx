@@ -27,12 +27,35 @@ import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 import IOU from "../components/iou";
 
+type Request = {
+  id: string;
+  author: {
+    username: string;
+    display_name: string;
+  };
+  completed_by: {
+    username: string;
+    display_name: string;
+  };
+  proof_of_completion: string; // UUID
+  rewards: [
+    {
+      id: string; // UUID;
+      display_name: string;
+    }
+  ];
+  details: string;
+  created_time: string;
+  completion_time: string;
+  is_completed: boolean;
+};
+
 type UserProfileState = {
   tabIndex: number;
   newRequestDialog: boolean;
-  owed: string;
-  owe: string;
-  requests: string;
+  owed: Request[];
+  owe: Request[];
+  requests: Request[];
   newRequestFavour: string;
   newRequestReward: string;
   requestSnack: boolean;
@@ -102,9 +125,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   state: UserProfileState = {
     tabIndex: this.props.location.state.tabIndex ?? 0,
     newRequestDialog: false,
-    owed: "",
-    owe: "",
-    requests: "",
+    owed: [],
+    owe: [],
+    requests: [],
     newRequestFavour: "",
     newRequestReward: "",
     requestSnack: false,
@@ -174,13 +197,10 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         Promise.all([owed.json(), owe.json(), requests.json()]).then(
           ([owedResult, oweResult, requestsResult]) => {
             this.setLoading(false);
-            let owedRaw = JSON.stringify(owedResult);
-            let oweRaw = JSON.stringify(oweResult);
-            let requestsRaw = JSON.stringify(requestsResult);
             this.setState({
-              owed: owedRaw,
-              owe: oweRaw,
-              requests: requestsRaw,
+              owed: owedResult,
+              owe: oweResult,
+              requests: requestsResult,
             });
             console.log("Success:", owedResult, oweResult, requestsResult);
           }
@@ -355,26 +375,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={0}
                 >
-                  {this.state.owed}
-                  <IOU
-                    request={{
-                      id: "1",
-                      author: { username: "James", display_name: "James" },
-                      completed_by: {
-                        username: "Kevin",
-                        display_name: "Kevin",
-                      },
-                      proof_of_completion: "",
-                      rewards: [
-                        { id: "1", display_name: "Hug" },
-                        { id: "2", display_name: "Coffee" },
-                      ],
-                      details: "Clean the fridge",
-                      created_time: "02/02/2020",
-                      comletion_time: "02/02/2020",
-                      is_completed: true,
-                    }}
-                  />
+                  {this.state.owed.map((owe, i) => {
+                    return <IOU request={owe} key={i} />;
+                  })}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -382,7 +385,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={1}
                 >
-                  {this.state.owe}
+                  {this.state.owe.map((owe, i) => {
+                    return <IOU request={owe} key={i} />;
+                  })}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -390,7 +395,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={2}
                 >
-                  {this.state.requests}
+                  {this.state.requests.map((owe, i) => {
+                    return <IOU request={owe} key={i} />;
+                  })}
                 </TabPanel>
               </Paper>
             </Grid>
