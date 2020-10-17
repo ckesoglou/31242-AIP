@@ -94,12 +94,13 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "IOU Completion proof submitted!" });
+        this.setState({ completeSnack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
+        this.setState({ snackMessage: exception });
+        this.setState({ completeSnack: true });
       });
-    this.setState({ completeSnack: true });
   }
 
   fileContent() {
@@ -165,25 +166,6 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     );
   }
 
-  renderTaskCompleter() {
-    if (this.props.request.completed_by.display_name.length > 9) {
-      return (
-        <p
-          id="taskCompleter"
-          className="cursorPointer"
-          onClick={(event: React.MouseEvent<HTMLElement>) =>
-            this.setState({ AnchorEl: event.currentTarget })
-          }
-        >
-          {this.props.request.completed_by.display_name}
-        </p>
-      );
-    }
-    return (
-      <p id="taskCompleter">{this.props.request.completed_by.display_name}</p>
-    );
-  }
-
   render() {
     return (
       <div id="completeRequestItem">
@@ -208,7 +190,21 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           />
           {this.props.request.is_completed && (
             <div id="IouTaskComplete">
-              {this.renderTaskCompleter()}
+              {this.props.request.completed_by.display_name.length > 9 ? (
+                <Typography
+                  id="taskCompleter"
+                  className="cursorPointer"
+                  onClick={(event: React.MouseEvent<HTMLElement>) =>
+                    this.setState({ AnchorEl: event.currentTarget })
+                  }
+                >
+                  {this.props.request.completed_by.display_name}
+                </Typography>
+              ) : (
+                <Typography id="taskCompleter">
+                  {this.props.request.completed_by.display_name}
+                </Typography>
+              )}
               <Popover
                 id="popUpMargin"
                 open={Boolean(this.state.AnchorEl)}
@@ -229,7 +225,9 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                   {this.props.request.completed_by.display_name}
                 </Typography>
               </Popover>
-              <p id="taskTimeStamp">{this.props.request.comletion_time}</p>
+              <Typography id="taskTimeStamp">
+                {this.props.request.comletion_time}
+              </Typography>
             </div>
           )}
         </div>

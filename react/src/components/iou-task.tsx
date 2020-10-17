@@ -7,36 +7,13 @@ type IouTaskProps = {
 };
 
 type IouTaskState = {
-  AnchorEl: HTMLElement | null;
+  anchorEl: HTMLElement | null;
 };
 
 class IouTask extends React.Component<IouTaskProps, IouTaskState> {
   state: IouTaskState = {
-    AnchorEl: null,
+    anchorEl: null,
   };
-
-  checkDetailLength() {
-    if (this.props.details.length > 55) {
-      return (
-        <div
-          id="taskDetailShort"
-          onClick={(event: React.MouseEvent<HTMLElement>) => {
-            this.setState({
-              AnchorEl: event.currentTarget,
-            });
-          }}
-        >
-          {this.props.details
-            .substring(
-              0,
-              this.props.details.length - (this.props.details.length - 55) - 3
-            )
-            .concat("...")}
-        </div>
-      );
-    }
-    return <Typography>{this.props.details}</Typography>;
-  }
 
   render() {
     return (
@@ -44,12 +21,30 @@ class IouTask extends React.Component<IouTaskProps, IouTaskState> {
         className={this.props.details.length > 55 ? "cursorPointer" : ""}
         id="task"
       >
-        {this.checkDetailLength()}
+        {this.props.details.length > 55 ? (
+          <div
+            id="taskDetailShort"
+            onClick={(event: React.MouseEvent<HTMLElement>) => {
+              this.setState({
+                anchorEl: event.currentTarget,
+              });
+            }}
+          >
+            {this.props.details
+              .substring(
+                0,
+                this.props.details.length - (this.props.details.length - 55) - 3
+              )
+              .concat("...")}
+          </div>
+        ) : (
+          <Typography>{this.props.details}</Typography>
+        )}
         <Popover
           id="popUpMargin"
-          open={Boolean(this.state.AnchorEl)}
-          anchorEl={this.state.AnchorEl}
-          onClose={() => this.setState({ AnchorEl: null })}
+          open={Boolean(this.state.anchorEl)}
+          anchorEl={this.state.anchorEl}
+          onClose={() => this.setState({ anchorEl: null })}
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "center",

@@ -2,6 +2,7 @@ import React from "react";
 import "../assets/css/iou-request.css";
 import { KeyboardArrowRight as Connector } from "@material-ui/icons";
 import { Avatar, Popover, Typography } from "@material-ui/core";
+import { nameToUpperInitials } from "./avatarWithMenu";
 
 type Item = {
   id: string;
@@ -23,25 +24,14 @@ class IouFavourSingle extends React.Component<
   IouFavourSingleProps,
   IouFavourSingleState
 > {
-  private itemView: any;
-
   constructor(props: IouFavourSingleProps) {
     super(props);
-    this.itemView = null;
   }
 
   state: IouFavourSingleState = {
     giverAnchorEl: null,
     recieverAnchorEl: null,
   };
-
-  nameToUpperInitials(fullName: string): string {
-    const namesArray = fullName.split(" ");
-    let tempInitials = namesArray.map((word) => {
-      return word.charAt(0).toUpperCase();
-    });
-    return tempInitials.join("");
-  }
 
   render() {
     return (
@@ -55,7 +45,7 @@ class IouFavourSingle extends React.Component<
             }}
             id="favourAvatar"
           >
-            {this.nameToUpperInitials(this.props.giverDisplayName)}
+            {nameToUpperInitials(this.props.giverDisplayName)}
           </Avatar>
           <Popover
             id="popUpMargin"
@@ -90,7 +80,7 @@ class IouFavourSingle extends React.Component<
             }}
             id="favourAvatar"
           >
-            {this.nameToUpperInitials(this.props.recieverDisplayName)}
+            {nameToUpperInitials(this.props.recieverDisplayName)}
           </Avatar>
           <Popover
             id="popUpMargin"
