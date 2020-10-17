@@ -48,8 +48,8 @@ CREATE TABLE ious (
 	giver varchar(16) not null,
 	receiver varchar(16),
 	parent_request uniqueidentifier,
-	proof_of_debt uniqueidentifier UNIQUE,
-	proof_of_completion uniqueidentifier UNIQUE,
+	proof_of_debt varchar(30),
+	proof_of_completion varchar(30),
 	created_time datetime not null,
 	claimed_time datetime,
 	is_claimed bit not null default 0,
@@ -57,7 +57,5 @@ CREATE TABLE ious (
 	FOREIGN KEY (giver) REFERENCES users(username),
 	FOREIGN KEY (receiver) REFERENCES users(username),
 	FOREIGN KEY (parent_request) REFERENCES requests(id),
-	FOREIGN KEY (proof_of_debt) REFERENCES images(id),
-	FOREIGN KEY (proof_of_completion) REFERENCES images(id),
 	PRIMARY KEY (id)
 );

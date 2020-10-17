@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
 import Joi, { ObjectSchema } from "joi";
 import { getAuthenticatedUser } from "@shared/Authenticate";
+import upload from "../shared/ImageHandler";
 import {
   createIouOwed,
   completeIouOwed,
@@ -13,6 +14,7 @@ import {
 
 // Init shared
 const router = Router();
+
 interface IIouOwedPOST {
   username: string;
   item: string;
@@ -28,7 +30,7 @@ interface IIouOweCompletePUT {
 const IouOwedPOST: ObjectSchema<IIouOwedPOST> = Joi.object({
   username: Joi.string(),
   item: Joi.string(),
-  proof: Joi.string(),
+  // proof: Joi.string(),
 }).options({ presence: "required" });
 const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
   username: Joi.string(),
@@ -58,32 +60,37 @@ router.get("/owed", async (req: Request, res: Response) => {
  *                      Create IOU you are owed - "POST /api/iou/owed"
  ******************************************************************************/
 
-router.post("/owed", async (req: Request, res: Response) => {
-  // Validate request format
-  const { error, value } = IouOwedPOST.validate(req.body);
-  if (error) {
-    return res.status(BAD_REQUEST).json({
-      error: [error.message],
-    });
+router.post(
+  "/owed",
+  upload.single("proof"),
+  async (req: Request, res: Response) => {
+    console.log(req.file);
+    // Validate request format
+    const { error, value } = IouOwedPOST.validate(req.body);
+    if (error) {
+      return res.status(BAD_REQUEST).json({
+        error: [error.message],
+      });
+    }
+    // Get authenticated user
+    const user = await getAuthenticatedUser(req, res);
+    if (user) {
+      // Create new IOU
+      const requestBody = value as IIouOwedPOST;
+      const iou = await createIouOwed(
+        requestBody.username,
+        user.username,
+        requestBody.item,
+        req.file.filename
+      );
+      return res.status(OK).json({ iou });
+    } else {
+      return res.status(401).json({
+        errors: ["Not authenticated"],
+      });
+    }
   }
-  // Get authenticated user
-  const user = await getAuthenticatedUser(req, res);
-  if (user) {
-    // Create new IOU
-    const requestBody = value as IIouOwedPOST;
-    const iou = await createIouOwed(
-      requestBody.username,
-      user.username,
-      requestBody.item,
-      requestBody.proof
-    );
-    return res.status(OK).json({ iou });
-  } else {
-    return res.status(401).json({
-      errors: ["Not authenticated"],
-    });
-  }
-});
+);
 
 /******************************************************************************
  *                       Mark an IOU as completed - "PUT /api/iou/owed/{iouID}/complete"

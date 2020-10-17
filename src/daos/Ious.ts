@@ -27,11 +27,11 @@ Iou.init(
       allowNull: true,
     },
     proof_of_debt: {
-      type: DataTypes.UUIDV4,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     proof_of_completion: {
-      type: DataTypes.UUIDV4,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     created_time: {
