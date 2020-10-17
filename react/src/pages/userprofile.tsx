@@ -6,7 +6,6 @@ import {
   Container,
   Typography,
   Paper,
-  Link,
   Tabs,
   Tab,
   Box,
@@ -26,6 +25,7 @@ import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
+import IOU from "../components/iou";
 
 type UserProfileState = {
   tabIndex: number;
@@ -204,30 +204,27 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           <Grid container spacing={8}>
             <Grid item xs={12}>
               <div id="header">
-                <img
-                  width="120"
-                  height="80"
-                  alt="IOU Logo"
-                  src={process.env.PUBLIC_URL + "/iou-logo.png"}
-                />
+                <RouterLink to="/home">
+                  <img
+                    width="120"
+                    height="80"
+                    alt="IOU Logo"
+                    src={process.env.PUBLIC_URL + "/iou-logo.png"}
+                  />
+                </RouterLink>
                 <Typography component="h1" variant="h4">
                   {"Profile"}
                 </Typography>
-                <AvatarWithMenu fullName={this.context.user.name} />
+                <AvatarWithMenu
+                  loggedIn={this.context.user.name !== "?"}
+                  fullName={this.context.user.name}
+                />
               </div>
             </Grid>
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
               <Paper elevation={3}>
                 <div className="section">
-                  <h2>
-                    <p>
-                      Well well well.. look who it is - {this.context.user.name}
-                      !
-                    </p>
-                    <Link component={RouterLink} to="/home">
-                      Click here to go back!
-                    </Link>
-                  </h2>
+                  <h2> </h2>
                   <Typography component="h3" variant="h4">
                     {"Placeholder Image"}
                   </Typography>
@@ -238,8 +235,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   </Typography>
                 </div>
               </Paper>
-            </Grid>
-            <Grid item xs={8}>
+            </Grid> */}
+            <Grid item xs={12}>
               <Paper elevation={3} className="content">
                 <Tabs
                   value={this.state.tabIndex}
@@ -357,6 +354,25 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   index={0}
                 >
                   {this.state.owed}
+                  <IOU
+                    request={{
+                      id: "1",
+                      author: { username: "James", display_name: "James" },
+                      completed_by: {
+                        username: "Kevin",
+                        display_name: "Kevin",
+                      },
+                      proof_of_completion: "",
+                      rewards: [
+                        { id: "1", display_name: "Hug" },
+                        { id: "2", display_name: "Coffee" },
+                      ],
+                      details: "Clean the fridge",
+                      created_time: "02/02/2020",
+                      comletion_time: "02/02/2020",
+                      is_completed: true,
+                    }}
+                  />
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}

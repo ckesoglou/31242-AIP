@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
-import { UserContext } from "../components/user-context";
 import LeaderboardUser from "./leaderboardUser";
 
 type LeaderboardUser = {
@@ -34,7 +33,9 @@ type LeaderboardState = {
   pageNumber: number;
 };
 
-type LeaderboardProps = {};
+type LeaderboardProps = {
+  renderMe: boolean;
+};
 
 const numberOfItemsPerPage = 3;
 
@@ -58,17 +59,27 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
 
   componentDidMount() {
     this.fetchAllLeaderboard();
-    this.fetchMeLeaderboard();
+    this.fetchMeLeaderboardIfNeeded();
   }
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  componentDidUpdate() {
+    this.fetchMeLeaderboardIfNeeded();
+  }
+
+  fetchMeLeaderboardIfNeeded = () => {
+    if (this.props.renderMe) {
+      this.fetchMeLeaderboard();
+    } else {
+      this.showPersonalScore(false);
+    }
+  };
 
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
-    this.textRef.current!.style.display = value ? "none" : "block";
+  }
+
+  showPersonalScore(value: boolean): void {
+    this.textRef.current!.style.display = value ? "block" : "none";
   }
 
   setCountOfLeaderboard(): number {
@@ -108,6 +119,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       })
       .then((body) => {
         console.log("Success:", body);
+        this.showPersonalScore(true);
         this.setState({ me: body });
         this.setState({ error: "" });
       })
