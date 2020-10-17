@@ -1,365 +1,342 @@
 .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-#completeIconSize{
-    font-size: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#completeForm{
-    text-align: center;
+#completeIconSize {
+  font-size: 3.5rem;
 }
 
-#completeFormQuestion{
-    margin-top: 1rem;
+#completeForm {
+  text-align: center;
 }
 
-#inputProof{
-    /* text-align: center;
+#completeFormQuestion {
+  margin-top: 1rem;
+}
+
+#inputProof {
+  /* text-align: center;
     width:50%; */
-    display: none;
+  display: none;
 }
 
-#completeProofFileInfo{
-    margin-top: 1rem;
+#completeProofFileInfo {
+  margin-top: 1rem;
 }
 
-#completeProofImage{
-    max-width: 60%;
-    max-height: 60%;
+#completeProofImage {
+  max-width: 60%;
+  max-height: 60%;
 }
 
-#IouTaskComplete{
-    display:inline-block;
-    width:5.625rem;
-    vertical-align: middle;
-    text-align: center;
+#IouTaskComplete {
+  display: inline-block;
+  width: 5.625rem;
+  vertical-align: middle;
+  text-align: center;
 }
 
-#taskCompleter{
-    font-size: 20px;
-    margin:0px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+#taskCompleter {
+  font-size: 20px;
+  margin: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-#taskTimeStamp{
-    font-size:10px;
-    margin:0px;
+#taskTimeStamp {
+  font-size: 10px;
+  margin: 0px;
 }
 
-#task{
-    width:100%;
-    font-size: 16px;
-    display:inline-block;
+#task {
+  width: 100%;
+  font-size: 16px;
+  display: inline-block;
 }
 
-#proofImage{
-    margin-top: 10px;
-    height:75px;
-    width: 75px;
+#proofImage {
+  margin-top: 10px;
+  height: 75px;
+  width: 75px;
 }
 
-#favourArrow{
-    font-size:50px;
-    vertical-align: middle;
+#favourArrow {
+  font-size: 50px;
+  vertical-align: middle;
 }
 
-#favourAvatarContainer{
-    display:inline-block;
+#favourAvatarContainer {
+  display: inline-block;
 }
 
 #favourAvatar {
-    height: 4rem;
-    width: 4rem;
-    background-color: #86c232;
-    cursor: pointer;
-  }
+  height: 4rem;
+  width: 4rem;
+  background-color: #86c232;
+  cursor: pointer;
+}
 
 #popUpMargin {
-    margin-top: 10px;
+  margin-top: 10px;
 }
-  
+
 #favourAvatarText {
-    padding: 10px;
+  padding: 10px;
 }
 
 #rewardAvatar {
-    height: 70px;
-    width: 70px;
-    background-color: #222629;
-    color:white;
-    font-size: 16px;
-    border: white solid 0.3125rem;
+  height: 70px;
+  width: 70px;
+  background-color: #222629;
+  color: white;
+  font-size: 16px;
+  border: white solid 0.3125rem;
 }
 
 #rewardContainer {
-    display:inline-block;
+  display: inline-block;
 }
 
 #reqestRewardAvatar {
-    height: 4.8125rem;
-    width: 4.8125rem;
-    background-color: #222629;
-    color:white;
-    font-size: 16px;
-    border: white solid 0.3125rem;
-    display:inline-block;
-    line-height: 4.0625rem;
-    text-align: center;
+  height: 4.8125rem;
+  width: 4.8125rem;
+  background-color: #222629;
+  color: white;
+  font-size: 16px;
+  border: white solid 0.3125rem;
+  display: inline-block;
+  line-height: 4.0625rem;
+  text-align: center;
 }
 
 #requestRewardPlus {
-    height: 4.8125rem;
-    width: 4.8125rem;
-    background-color: #222629;
-    color:white;
-    border: white solid 0.3125rem;
-    display:inline-block;
-    line-height: 4.0625rem;
-    text-align: center;
-    font-size: 32px;
+  height: 4.8125rem;
+  width: 4.8125rem;
+  background-color: #222629;
+  color: white;
+  border: white solid 0.3125rem;
+  display: inline-block;
+  line-height: 4.0625rem;
+  text-align: center;
+  font-size: 32px;
 }
 
-
-/* #favourUserImage{   For when user and reward images are supported
-    height:75px;
-    width: 75px;
-    border-radius: 50%;
-    border: #000000 solid 5px;
-    vertical-align: middle;
+.circle {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 4.0625rem;
+  border: white solid 0.3125rem;
+  background-color: #222629;
 }
 
-#favourImageContainer{
-    display:inline-block;
-    height:75px;
-    width: 75px;
-    border-radius: 50%;
-    border: #000000 solid 5px;
-    vertical-align: middle;
-    text-align:center;
+#itemsContainer {
+  display: inline-block;
+  position: absolute;
+  background-color: #227ec5;
+  padding: 3px;
+  border-radius: 6px;
+  margin-top: -175px;
+  -webkit-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+  pointer-events: none;
 }
 
-#rewardImageContainer{
-    display: inline-block;
+#itemsContainerArrow {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0%;
+  margin-left: 40px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #227ec5 transparent transparent transparent;
 }
 
-#favourRewardImage{
-    height:75px;
-    width: 75px;
-    border-radius: 50%;
-    border: #3B60E9 solid 5px;
-    vertical-align: middle;
-} */
-
-.circle{
-    height: 4.8125rem;
-    width: 4.8125rem;
-    border-radius: 50%;
-    color: #fff;
-    text-align: center;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 4.0625rem;
-    border: white solid 0.3125rem;
-    background-color: #222629;
+#multipleItemsContainer {
+  display: inline-block;
+  cursor: pointer;
 }
 
-#itemsContainer{
-    display: inline-block;
-    position: absolute;
-    background-color: #227ec5;
-    padding: 3px;
-    border-radius: 6px;
-    margin-top: -175px;
-    -webkit-animation: fadeIn 0.5s;
-    animation: fadeIn 0.5s;
-    pointer-events:none;
+.firstCircle {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 4.0625rem;
+  border: white solid 0.3125rem;
+  background-color: #3186c2;
+  font-size: 16px;
+  z-index: 6;
+  position: relative;
 }
 
-#itemsContainerArrow{
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0%;
-    margin-left: 40px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #227ec5 transparent transparent transparent;
-}
-
-#multipleItemsContainer{
-    display:inline-block;
-    cursor: pointer;
-}
-
-.firstCircle{
-    height: 4.8125rem;
-    width: 4.8125rem;
-    border-radius: 50%;
-    color: #fff;
-    text-align: center;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 4.0625rem;
-    border: white solid 0.3125rem;
-    background-color:#3186c2;
-    font-size: 16px;
-    z-index: 6;
-    position: relative;
-}
-
-.secondCircle{
-    height: 4.8125rem;
-    width: 4.8125rem;
-    border-radius: 50%;
-    color: #fff;
-    text-align: center;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 4.0625rem;
-    border: white solid 0.3125rem;
-    background-color:#3186c2;
-    margin-left:-25px;
-    z-index: 5;
-    position: relative;
-    font-size: 16px;
+.secondCircle {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 4.0625rem;
+  border: white solid 0.3125rem;
+  background-color: #3186c2;
+  margin-left: -25px;
+  z-index: 5;
+  position: relative;
+  font-size: 16px;
 }
 
 .thirdCircle {
-    z-index: 4;
+  z-index: 4;
 }
 
 .popUpCircle {
-    height: 60px;
-    width: 60px;
-    border-radius: 50%;
-    color: #fff;
-    text-align: center;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 50px;
-    border: white solid 0.3125rem;
-    background-color: #222629;
-    font-size: 12px;
-    margin:2px;
-    cursor:pointer;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 50px;
+  border: white solid 0.3125rem;
+  background-color: #222629;
+  font-size: 12px;
+  margin: 2px;
+  cursor: pointer;
 }
 
-.popUpCircle:hover{
-    background-color: #86c232;
+.popUpCircle:hover {
+  background-color: #86c232;
 }
 
-#requestRewardPopover{
-    margin-top:10px;
+#requestRewardPopover {
+  margin-top: 10px;
 }
 
 #requestRewardPopUp {
-    padding: 10px;
-    text-align: center;
+  padding: 10px;
+  text-align: center;
 }
 
 #addRewardButton {
-    margin-top:5px;
-    display: inline-block;
+  margin-top: 5px;
+  display: inline-block;
 }
 
 #requestPopUpContent {
-    display: inline-block;
+  display: inline-block;
 }
 
 #requestAddContainer {
-    margin-top:4px;
+  margin-top: 4px;
 }
 
 #requestPopUpText {
-    margin-bottom:4px;
+  margin-bottom: 4px;
 }
 
 @-webkit-keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+  from {
+    opacity: 0;
   }
-  
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity:1 ;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .infoTableCell {
-    width:50%;
+  width: 50%;
 }
 
-#infoTableTitle{
-    font-weight: bold;
-    font-size: 15px;
+#infoTableTitle {
+  font-weight: bold;
+  font-size: 15px;
 }
 
 #infoTable {
-    width:75%;
+  width: 75%;
 }
 
 #requestInfoRewards {
-    text-align: center;
-    margin-bottom: 5px;
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 #requestDetailsTable {
-    min-height:240px;    
+  min-height: 240px;
 }
 
 #completeDetailsTable {
-    min-height:230px;
+  min-height: 230px;
 }
 
 #completePopUpRewards {
-    max-height:300px;
-    text-align: center;
+  max-height: 300px;
+  text-align: center;
 }
 
 #requestItem {
-    display:inline-block;
+  display: inline-block;
 }
 
 #completeRequestItem {
-    display: inline-block;
-    text-align: left;
-    width:100%;
+  display: inline-block;
+  text-align: left;
+  width: 100%;
 }
 
 #requestItemContainer {
-    align-self: center;
-    text-align: center;
+  align-self: center;
+  text-align: center;
 }
 
 #requestProofContainer {
-    align-self:center;
+  align-self: center;
 }
 
 #noProofIcon {
-    color: rgb(233, 64, 64);
+  color: rgb(233, 64, 64);
 }
 
 #taskDetailPopUp {
-    border: white solid 3px;
-    border-radius: 5%;
-    text-align: center;
-    width:200px;
-    padding:10px;
+  border: white solid 3px;
+  border-radius: 5%;
+  text-align: center;
+  width: 200px;
+  padding: 10px;
 }
 
 #taskPopUpDivider {
-    margin-top:5px;
-    margin-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .cursorPointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #modalTitle {
-    text-align: center;
+  text-align: center;
 }

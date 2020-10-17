@@ -13,7 +13,6 @@ import Home from "../pages/home";
 import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
 
-
 type AppState = {
   user: Object;
   updateUser: (newUser: Object) => void;
@@ -36,7 +35,6 @@ class App extends React.Component {
               path="/user"
               component={UserProfile}
             ></ProtectedRoute>
-            <ProtectedRoute path="/home" component={Home} />
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
             <Route path="/home" component={Home} />

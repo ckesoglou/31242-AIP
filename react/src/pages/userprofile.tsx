@@ -354,17 +354,25 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   index={0}
                 >
                   {this.state.owed}
-                  <IOU request={{
-                id: "1",
-                author: {username:"James", display_name: "James"},
-                completed_by: {username:"Kevin", display_name: "Kevin"},
-                proof_of_completion: "",
-                rewards: [{id:"1", display_name:"Hug"}, {id:"2", display_name:"Coffee"}],
-                details: "Clean the fridge",
-                created_time: "02/02/2020",
-                comletion_time: "02/02/2020",
-                is_completed: true,
-              }}/>
+                  <IOU
+                    request={{
+                      id: "1",
+                      author: { username: "James", display_name: "James" },
+                      completed_by: {
+                        username: "Kevin",
+                        display_name: "Kevin",
+                      },
+                      proof_of_completion: "",
+                      rewards: [
+                        { id: "1", display_name: "Hug" },
+                        { id: "2", display_name: "Coffee" },
+                      ],
+                      details: "Clean the fridge",
+                      created_time: "02/02/2020",
+                      comletion_time: "02/02/2020",
+                      is_completed: true,
+                    }}
+                  />
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
