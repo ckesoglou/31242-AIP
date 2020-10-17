@@ -32,16 +32,35 @@ const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
   username: Joi.string(),
   item: Joi.string(),
 }).options({ presence: "required" });
+interface IIousQuery {
+  start: number;
+  limit: number;
+}
+const IousQuery: ObjectSchema<IIousQuery> = Joi.object({
+  start: Joi.number().integer().min(0).default(0),
+  limit: Joi.number().integer().min(1).max(100).default(25),
+});
 
 /******************************************************************************
  *                      Get IOUs you are owed - "GET /api/iou/owed"
  ******************************************************************************/
 
 router.get("/owed", async (req: Request, res: Response) => {
+  const { error, value } = IousQuery.validate(req.query);
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+  const iousQuery = value as IIousQuery;
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIous({ receiver: user.username, is_claimed: false });
-    return res.status(OK).json({ iou });
+    const iou = await getIous(
+      { receiver: user.username, is_claimed: false },
+      iousQuery.start,
+      iousQuery.limit
+    );
+    return res.status(OK).json(iou);
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
@@ -76,7 +95,7 @@ router.post(
         requestBody.item,
         req.file.filename
       );
-      return res.status(OK).json({ iou });
+      return res.status(OK).json(iou);
     } else {
       return res.status(401).json({
         errors: ["Not authenticated"],
@@ -124,10 +143,21 @@ router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.get("/owe", async (req: Request, res: Response) => {
+  const { error, value } = IousQuery.validate(req.query);
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+  const iousQuery = value as IIousQuery;
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIous({ giver: user.username, is_claimed: false });
-    return res.status(OK).json({ iou });
+    const iou = await getIous(
+      { giver: user.username, is_claimed: false },
+      iousQuery.start,
+      iousQuery.limit
+    );
+    return res.status(OK).json(iou);
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
@@ -156,7 +186,7 @@ router.post("/owe", async (req: Request, res: Response) => {
       requestBody.username,
       requestBody.item
     );
-    return res.status(OK).json({ iou });
+    return res.status(OK).json(iou);
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
