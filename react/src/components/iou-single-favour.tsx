@@ -24,10 +24,6 @@ class IouFavourSingle extends React.Component<
   IouFavourSingleProps,
   IouFavourSingleState
 > {
-  constructor(props: IouFavourSingleProps) {
-    super(props);
-  }
-
   state: IouFavourSingleState = {
     giverAnchorEl: null,
     recieverAnchorEl: null,
