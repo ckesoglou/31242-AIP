@@ -552,9 +552,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                             onChange={(event, value) => {
                               this.setState({
                                 selectedUser:
-                                  value?.username === null
-                                    ? ""
-                                    : value.username,
+                                  value?.username == null ? "" : value.username,
                               });
                             }}
                             onInputChange={(event, value) => {
@@ -628,8 +626,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         }
                         onChange={(event, value) => {
                           this.setState({
-                            newRequestReward:
-                              value?.id === null ? "" : value.id,
+                            newRequestReward: value?.id == null ? "" : value.id,
                           });
                         }}
                         options={this.state.potentialItems}
