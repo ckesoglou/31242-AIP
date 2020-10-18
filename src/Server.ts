@@ -4,7 +4,7 @@ import path from "path";
 import helmet from "helmet";
 
 import express, { Request, Response, NextFunction } from "express";
-import { BAD_REQUEST } from "http-status-codes";
+import { BAD_REQUEST, NOT_FOUND } from "http-status-codes";
 import "express-async-errors";
 
 import BaseRouter from "./routes";
@@ -49,7 +49,11 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 const staticDir = path.join(__dirname, "../react/build/");
 app.use(express.static(staticDir));
 app.get("*", (req: Request, res: Response) => {
-  res.sendFile("index.html", { root: staticDir });
+  if (req.url.startsWith("/api")) {
+    res.status(NOT_FOUND).end();
+  } else {
+    res.sendFile("index.html", { root: staticDir });
+  }
 });
 
 // Export express instance
