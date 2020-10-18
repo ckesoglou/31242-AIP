@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import "../assets/css/login.css";
 import { signUpEndpoint } from "../api/endpoints";
-import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
@@ -18,6 +17,7 @@ import {
   Button,
   Grow,
   Paper,
+  Snackbar,
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import { MeetingRoom } from "@material-ui/icons";
@@ -32,6 +32,7 @@ type SignUpState = {
   showPasswordRequirements: boolean;
   passwordRequirements: PasswordRequirementsObject;
   validPassword: boolean | undefined;
+  snackMessage: string;
 };
 
 interface PasswordRequirementsObject {
@@ -87,6 +88,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       uppercaseCharacter: false,
     },
     validPassword: undefined,
+    snackMessage: "",
   };
 
   static contextType: React.Context<{
@@ -97,6 +99,11 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   setLoading(): void {
     this.signUpRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
+  }
+
+  stopLoading(): void {
+    this.signUpRef.current!.innerText = "Sign Up";
+    this.loadingRef.current!.style.display = "none";
   }
 
   hasUppercase = (str: string) => {
@@ -187,7 +194,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       method: "POST",
       body: JSON.stringify({
         username: this.state.username,
-        display_name: this.state.display_name,
+        displayName: this.state.display_name,
         password: this.state.password,
       }),
       headers: {
@@ -195,24 +202,24 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        // TODO: Only for development! To be deleted
-        Authentication.authenticate(() => {});
-        this.setState({ successfulSignUp: true }, () => {
-          this.context.updateUser({
-            name: this.state.username,
-            password: this.state.password,
+        if (res.status === 201) {
+          // Successful login 201
+          this.setState({ successfulSignUp: true }, () => {
+            this.context.updateUser({
+              name: this.state.username,
+              password: this.state.password,
+            });
           });
-        });
+        } else {
+          // Unsuccessful login (400 or 422)
+          this.stopLoading();
+          res
+            .json()
+            .then((body) => this.setState({ snackMessage: body.errors }));
+          this.setState({ submitted: !this.state.submitted });
+        }
       })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ error: exception });
-      });
-    return;
+      .catch(console.log);
   }
 
   render() {
@@ -338,6 +345,18 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               </Grid>
             </Grid>
           </FormControl>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            message={this.state.snackMessage}
+            open={this.state.snackMessage !== ""}
+            onClose={() => {
+              this.setState({ snackMessage: "" });
+            }}
+            autoHideDuration={5000}
+          />
         </div>
       </Container>
     );

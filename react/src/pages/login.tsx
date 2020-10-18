@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import "../assets/css/login.css";
 import { loginEndpoint } from "../api/endpoints";
-import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
@@ -16,6 +15,7 @@ import {
   Link,
   Grid,
   Button,
+  Snackbar,
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
@@ -26,6 +26,7 @@ type LoginState = {
   error: string;
   submitted: boolean;
   successfulLogin: boolean;
+  snackMessage: string;
 };
 
 interface ILoginProps extends RouteComponentProps {
@@ -58,6 +59,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
     error: "",
     submitted: false,
     successfulLogin: false,
+    snackMessage: "",
   };
 
   static contextType: React.Context<{
@@ -90,7 +92,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
     })
       .then((res) => {
         if (res.status === 200) {
-          // Successful login
+          // Successful login 200
           this.setState({ successfulLogin: true }, () => {
             this.context.updateUser({
               name: this.state.username,
@@ -98,32 +100,15 @@ class Login extends React.Component<ILoginProps, LoginState> {
             });
           });
         } else {
-          // Unsuccessful login (400 or 401 or something else)
+          // Unsuccessful login (400 or 401)
           this.stopLoading();
-          console.log("Incorrect something");
+          res
+            .json()
+            .then((body) => this.setState({ snackMessage: body.errors }));
           this.setState({ submitted: !this.state.submitted });
-          // TODO: Display error on SnackBAR - JAMES
         }
       })
       .catch(console.log);
-
-    // .then((res) => {
-    //   return res.json();
-    // })
-    // .then((body) => {
-    //   console.log("Success:", body);
-
-    //   this.setState({ successfulLogin: true }, () => {
-    //     this.context.updateUser({
-    //       name: this.state.username,
-    //       password: this.state.password,
-    //     });
-    //   });
-    // })
-    // .catch((exception) => {
-    //   console.error("Error:", exception);
-    //   this.setState({ error: exception });
-    // });
   }
 
   render() {
@@ -133,8 +118,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
     };
 
     if (this.state.successfulLogin) {
-      // TODO: Only for development! To be deleted
-      Authentication.authenticate(() => {});
       return <Redirect to={next} />;
     }
 
@@ -214,6 +197,18 @@ class Login extends React.Component<ILoginProps, LoginState> {
               </Grid>
             </Grid>
           </FormControl>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            message={this.state.snackMessage}
+            open={this.state.snackMessage !== ""}
+            onClose={() => {
+              this.setState({ snackMessage: "" });
+            }}
+            autoHideDuration={5000}
+          />
         </div>
       </Container>
     );
