@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Op, Sequelize } from "sequelize";
 import User from "../entities/User";
 import db from "./DBInstance";
 
@@ -38,6 +38,45 @@ export async function getBasicUser(username: string) {
     };
   }
   return {};
+}
+
+export interface IUsersFilter {
+  start: number;
+  limit: number;
+  search?: string;
+}
+
+export async function getUsers(
+  filter: IUsersFilter,
+  includePasswordHash: boolean = false
+) {
+  let attributes = ["username", "display_name"];
+  if (includePasswordHash) {
+    attributes.push("password_hash");
+  }
+
+  return User.findAll({
+    attributes: attributes,
+    where: filter.search // if search is provided
+      ? {
+          // search for string contained in username OR display_name
+          [Op.or]: [
+            {
+              username: {
+                [Op.substring]: filter.search,
+              },
+            },
+            {
+              display_name: {
+                [Op.substring]: filter.search,
+              },
+            },
+          ],
+        }
+      : undefined,
+    offset: filter.start,
+    limit: filter.limit,
+  });
 }
 
 export async function createUser(
