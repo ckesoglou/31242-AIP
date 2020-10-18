@@ -96,18 +96,36 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       method: "GET",
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ users: body });
-        this.setState({ error: "" });
-        this.setLoading(false);
+        if (res.status === 200) {
+          res.json().then((body) => {
+            this.setState({ users: body });
+            this.setState({ error: "" });
+            this.setLoading(false);
+          });
+        } else {
+          //Should be response code 400 handling
+          // TODO: Display error on SnackBAR
+          this.setLoading(false);
+        }
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ error: exception });
       });
+
+    // .then((res) => {
+    //   return res.json();
+    // })
+    // .then((body) => {
+    //   console.log("Success:", body);
+    //   this.setState({ users: body });
+    //   this.setState({ error: "" });
+    //   this.setLoading(false);
+    // })
+    // .catch((exception) => {
+    //   console.error("Error:", exception);
+    //   this.setState({ error: exception });
+    // });
   }
 
   fetchMeLeaderboard() {
@@ -115,13 +133,17 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       method: "GET",
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.showPersonalScore(true);
-        this.setState({ me: body });
-        this.setState({ error: "" });
+        if (res.status === 200) {
+          res.json().then((body) => {
+            this.showPersonalScore(true);
+            this.setState({ me: body });
+            this.setState({ error: "" });
+            this.setLoading(false);
+          });
+        } else {
+          //Should be response code 400 handling
+          // TODO: Display error on SnackBAR
+        }
       })
       .catch((exception) => {
         console.error("Error:", exception);

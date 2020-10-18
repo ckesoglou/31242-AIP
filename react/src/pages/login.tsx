@@ -65,13 +65,18 @@ class Login extends React.Component<ILoginProps, LoginState> {
     updateUser: (newUser: object) => void;
   }> = UserContext;
 
-  setLoading(): void {
+  startLoading(): void {
     this.signInRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
   }
 
+  stopLoading(): void {
+    this.signInRef.current!.innerText = "Sign In";
+    this.loadingRef.current!.style.display = "none";
+  }
+
   handleLogin(): void {
-    this.setLoading();
+    this.startLoading();
 
     fetch(`${loginEndpoint}`, {
       method: "POST",
@@ -84,21 +89,41 @@ class Login extends React.Component<ILoginProps, LoginState> {
       },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ successfulLogin: true }, () => {
-          this.context.updateUser({
-            name: this.state.username,
-            password: this.state.password,
+        if (res.status === 200) {
+          // Successful login
+          this.setState({ successfulLogin: true }, () => {
+            this.context.updateUser({
+              name: this.state.username,
+              password: this.state.password,
+            });
           });
-        });
+        } else {
+          // Unsuccessful login (400 or 401 or something else)
+          this.stopLoading();
+          console.log("Incorrect something");
+          this.setState({ submitted: !this.state.submitted });
+          // TODO: Display error on SnackBAR - JAMES
+        }
       })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ error: exception });
-      });
+      .catch(console.log);
+
+    // .then((res) => {
+    //   return res.json();
+    // })
+    // .then((body) => {
+    //   console.log("Success:", body);
+
+    //   this.setState({ successfulLogin: true }, () => {
+    //     this.context.updateUser({
+    //       name: this.state.username,
+    //       password: this.state.password,
+    //     });
+    //   });
+    // })
+    // .catch((exception) => {
+    //   console.error("Error:", exception);
+    //   this.setState({ error: exception });
+    // });
   }
 
   render() {
