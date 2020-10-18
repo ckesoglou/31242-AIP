@@ -158,8 +158,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     this.fetchAllTabs();
     this.setState({
       userDropLoading:
-        this.state.userDropOpen && this.state.selectetableUsers.length == 0,
+        this.state.userDropOpen && this.state.selectetableUsers.length === 0,
     });
+    this.fetchUsers();
     this.fetchItems();
   }
 
@@ -304,6 +305,30 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       });
   }
 
+  fetchUsers() {
+    this.setState({ userDropLoading: true });
+    fetch(`${usersEndpoint}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((body) => {
+        console.log("Success:", body);
+        this.setState({ selectetableUsers: body });
+        this.setState({ userDropLoading: false });
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+        this.setState({ snackMessage: `${exception}` });
+        this.setState({ requestSnack: true });
+        this.setState({ userDropLoading: false });
+      });
+  }
+
   fetchSearchedUsers(searchUser: string) {
     this.setState({ userDropLoading: true });
     fetch(`${usersEndpoint.concat("?search=").concat(searchUser)}`, {
@@ -405,7 +430,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 >
                   <Tab label="Owed" />
                   <Tab label="Owe" />
-                  <Tab label="Requests" />
+                  <Tab label="Requests" id="requestTab" />
                   {/* The following two icons are throwing some console errors
                   because they inherit the MUI tab props - see 
                   stackoverflow.com/questions/58103542/material-ui-button-in-a-tab-list */}
@@ -433,15 +458,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 >
                   <DialogTitle disableTypography={true} id="requestFormTitle">
                     <Typography component="h5" variant="h5">
-                      {this.state.tabIndex == 2
+                      {this.state.tabIndex === 2
                         ? "Creating a new request..."
-                        : this.state.tabIndex == 1
+                        : this.state.tabIndex === 1
                         ? "Creating a new owing IOU..."
                         : "Creating a new owed IOU..."}
                     </Typography>
                   </DialogTitle>
                   <DialogContent dividers className="content">
-                    {this.state.tabIndex == 2 ? null : this.state.tabIndex ==
+                    {this.state.tabIndex === 2 ? null : this.state.tabIndex ===
                       1 ? (
                       <Container>
                         <DialogContentText id="requestFormQuestion">
@@ -454,7 +479,10 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                               this.setState({ userDropOpen: true });
                             }}
                             onClose={() => {
-                              this.setState({ userDropOpen: false });
+                              this.setState({
+                                userDropOpen: false,
+                                userDropLoading: false,
+                              });
                             }}
                             loading={this.state.userDropLoading}
                             getOptionLabel={(option) =>
@@ -511,7 +539,10 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                               this.setState({ userDropOpen: true });
                             }}
                             onClose={() => {
-                              this.setState({ userDropOpen: false });
+                              this.setState({
+                                userDropOpen: false,
+                                userDropLoading: false,
+                              });
                             }}
                             loading={this.state.userDropLoading}
                             getOptionLabel={(option) => option.username}
@@ -521,7 +552,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                             onChange={(event, value) => {
                               this.setState({
                                 selectedUser:
-                                  value?.username == null ? "" : value.username,
+                                  value?.username === null
+                                    ? ""
+                                    : value.username,
                               });
                             }}
                             onInputChange={(event, value) => {
@@ -553,7 +586,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         </Container>
                       </Container>
                     )}
-                    {this.state.tabIndex == 2 && (
+                    {this.state.tabIndex === 2 && (
                       <Container>
                         <DialogContentText id="requestFormQuestion">
                           {"Lets start with what you'd like..."}
@@ -573,14 +606,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                       </Container>
                     )}
                     <DialogContentText id="requestFormQuestion">
-                      {this.state.tabIndex == 2
+                      {this.state.tabIndex === 2
                         ? "Next, what would you like to offer in return?"
-                        : this.state.tabIndex == 1
+                        : this.state.tabIndex === 1
                         ? "Next, what do you owe?"
                         : "Next, what do they owe you?"}
                     </DialogContentText>
                     <Container id="autoCompleteField">
                       <Autocomplete
+                        id="rewardAutoCompleteField"
                         open={this.state.rewardDropOpen}
                         onOpen={() => {
                           this.setState({ rewardDropOpen: true });
@@ -594,7 +628,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         }
                         onChange={(event, value) => {
                           this.setState({
-                            newRequestReward: value?.id == null ? "" : value.id,
+                            newRequestReward:
+                              value?.id === null ? "" : value.id,
                           });
                         }}
                         options={this.state.potentialItems}
@@ -607,7 +642,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         )}
                       />
                     </Container>
-                    {this.state.tabIndex == 0 && (
+                    {this.state.tabIndex === 0 && (
                       <Container>
                         <DialogContentText>{"Upload proof?"}</DialogContentText>
                         <input
@@ -641,9 +676,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                       size="large"
                       color="primary"
                       onClick={() => {
-                        if (this.state.tabIndex == 2) {
+                        if (this.state.tabIndex === 2) {
                           this.fetchNewRequest();
-                        } else if (this.state.tabIndex == 1) {
+                        } else if (this.state.tabIndex === 1) {
                           this.fetchNewOwe();
                         } else {
                           this.fetchNewOwed();
