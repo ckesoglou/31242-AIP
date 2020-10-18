@@ -83,6 +83,55 @@ paths:
           description: Returned when the username is already taken.
       tags:
         - Authentication
+  /api/items:
+    summary: Endpoint to receive 
+    get:
+      description: Retrieve list of available items.
+      responses:
+        "200":
+          description: Returned array of available items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+      tags:
+        - Item
+  /api/users:
+    summary: Endpoint to retieve multiple user details.
+    get:
+      description: Retrieves list of usernames and display names of currently registered users.
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: Starting row of the returned array. Default 0.
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Maximum number of returned users. Default 25. Maximum 100.
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Filter for users whose username of display name contains the provided string.
+          example: John
+      responses:
+        "200":
+          description: Returned list of matched users.
+
+                  $ref: "#/components/schemas/User"
+        "400":
+          description: The request was invalid or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/badRequest"
+      tags:
+        - User
   /api/user:
     summary: Endpoint to view a user.
     get:
@@ -848,7 +897,7 @@ paths:
   /api/image/{imagePK}:
     summary: Image endpoint.
     parameters:
-      - in: query
+      - in: path
         name: imagePK
         schema:
           type: string

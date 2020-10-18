@@ -1,5 +1,9 @@
 import React from "react";
-import { Redirect, RouteComponentProps } from "react-router-dom";
+import {
+  Redirect,
+  RouteComponentProps,
+  Link as RouterLink,
+} from "react-router-dom";
 import "../assets/css/login.css";
 import { loginEndpoint } from "../api/endpoints";
 import { Authentication } from "../components/protected-route";
@@ -14,6 +18,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
+import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 
 type LoginState = {
   username: string;
@@ -165,12 +170,22 @@ class Login extends React.Component<ILoginProps, LoginState> {
                 Sign In
               </label>
             </Button>
-            <Grid container>
-              <Grid item xs>
+            <Grid container spacing={1}>
+              <Grid item xs={7}>
                 <Link href="#">Forgot password?</Link>
               </Grid>
-              <Grid item>
-                <Link href="/signup">{"Don't have an account? Sign Up"}</Link>
+              <Grid item xs={5}>
+                <Link component={RouterLink} to="/signup">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+              <Grid item xs>
+                <div id="goBack">
+                  <MeetingRoomIcon fontSize="small" color="primary" />
+                  <Link component={RouterLink} to="/home">
+                    {"Head back to home"}
+                  </Link>
+                </div>
               </Grid>
             </Grid>
           </FormControl>
