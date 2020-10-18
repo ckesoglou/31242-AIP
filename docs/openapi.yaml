@@ -29,7 +29,7 @@ paths:
                 - username
                 - password
       responses:
-        "302":
+        "200":
           description: >-
             Returned when the login was successful. This will set a JSON Web
             Token as a httpOnly cookie (with access & refresh tokens) and redirect
@@ -84,7 +84,7 @@ paths:
       tags:
         - Authentication
   /api/items:
-    summary: Endpoint to receive 
+    summary: Endpoint to receive
     get:
       description: Retrieve list of available items.
       responses:
@@ -122,7 +122,11 @@ paths:
       responses:
         "200":
           description: Returned list of matched users.
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
                   $ref: "#/components/schemas/User"
         "400":
           description: The request was invalid or incorrectly formatted.
