@@ -4,6 +4,7 @@ import SignUpRouter from "./SignUp";
 import UserRouter from "./User";
 import IouRouter from "./Ious";
 import ItemRouter from "./Item";
+import LeaderboardRouter from "./Leaderboard";
 
 // Init router and path
 const router = Router();
@@ -12,6 +13,7 @@ const router = Router();
 router.use("/login", LoginRouter);
 router.use("/signup", SignUpRouter);
 router.use("/iou", IouRouter);
+router.use("/leaderboard", LeaderboardRouter);
 router.use(UserRouter);
 router.use(ItemRouter);
 
