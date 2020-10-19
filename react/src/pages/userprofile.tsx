@@ -29,7 +29,6 @@ import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
-import IOU from "../components/iou";
 
 // type IouType = {
 //   id: string;
