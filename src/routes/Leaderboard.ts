@@ -36,8 +36,8 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.get("/me", async (req: Request, res: Response) => {
-  const user = getAuthenticatedUser(req, res);
-  if (!user) {
+  const user = await getAuthenticatedUser(req, res);
+  if (user) {
     const scores = await getUserScores(user);
     if (scores) {
       return res.status(OK).json(scores).end();
@@ -47,8 +47,8 @@ router.get("/me", async (req: Request, res: Response) => {
       });
     }
   } else {
-    return res.status(BAD_REQUEST).json({
-      errors: ["User does not exist"],
+    return res.status(401).json({
+      errors: ["Not authenticated"],
     });
   }
 });
