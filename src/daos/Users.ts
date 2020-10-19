@@ -29,6 +29,17 @@ export async function getUser(username: string) {
   return User.findByPk(username);
 }
 
+export async function getBasicUser(username: string) {
+  const user = await getUser(username);
+  if (user) {
+    return {
+      username: user.username,
+      display_name: user.display_name,
+    };
+  }
+  return {};
+}
+
 export interface IUsersFilter {
   start: number;
   limit: number;
