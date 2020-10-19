@@ -7,14 +7,14 @@ import { configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { any } from "sequelize/types/lib/operators";
 
-global.document.createRange = () => ({
-  setStart: () => {},
-  setEnd: () => {},
-  //@ts-ignore
-  commonAncestorContainer: {
-    nodeName: "BODY",
-    ownerDocument: document,
-  },
-});
+// global.document.createRange = () => ({
+//   setStart: () => {},
+//   setEnd: () => {},
+//   //@ts-ignore
+//   commonAncestorContainer: {
+//     nodeName: "BODY",
+//     ownerDocument: document,
+//   },
+// });
 
 configure({ adapter: new Adapter() });
