@@ -16,6 +16,7 @@ import { UserContext } from "../components/user-context";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import Leaderboard from "../components/leaderboard";
 import { Search } from "@material-ui/icons";
+import Request from "../components/request";
 
 class Home extends React.Component {
   private loadingRef: React.RefObject<HTMLInputElement>;
@@ -86,14 +87,75 @@ class Home extends React.Component {
                     <label>Filter</label>
                   </Button>
                 </Box>
-                <Box>
+                <div>
+                  {/* <h2>
+                    Well well well.. look who it is - {this.context.user.name}!
+                  </h2> */}
+                  <Request
+                    request={{
+                      id: "1",
+                      author: { username: "James", display_name: "James" },
+                      completed_by: {
+                        username: "Kevin",
+                        display_name: "Kevin",
+                      },
+                      proof_of_completion: "",
+                      rewards: [
+                        { id: "1", display_name: "Hug" },
+                        { id: "2", display_name: "Coffee" },
+                      ],
+                      details: "Clean the fridge",
+                      created_time: "02/02/2020",
+                      comletion_time: "02/02/2020",
+                      is_completed: true,
+                    }}
+                  />
+                  <Request
+                    request={{
+                      id: "1",
+                      author: { username: "James", display_name: "James" },
+                      completed_by: {
+                        username: "Kevin",
+                        display_name: "James Lee",
+                      },
+                      proof_of_completion: "1",
+                      rewards: [
+                        { id: "1", display_name: "Hug" },
+                        { id: "2", display_name: "Coffee" },
+                      ],
+                      details:
+                        "Clean the fridge asdf sadf asdf asdf sdaf dsaf sadf sadf SOmething extra that shouldn't be seen",
+                      created_time: "02/02/2020",
+                      comletion_time: "02/02/2020",
+                      is_completed: false,
+                    }}
+                  />
+                  <Request
+                    request={{
+                      id: "1",
+                      author: { username: "James", display_name: "James" },
+                      completed_by: {
+                        username: "Kevin",
+                        display_name: "James Long Lee",
+                      },
+                      proof_of_completion: "",
+                      rewards: [
+                        { id: "1", display_name: "Hug" },
+                        { id: "2", display_name: "Coffee" },
+                      ],
+                      details: "Clean the fridge",
+                      created_time: "02/02/2020",
+                      comletion_time: "02/02/2020",
+                      is_completed: true,
+                    }}
+                  />
                   <CircularProgress
                     ref={this.loadingRef}
                     size={35}
                     color="inherit"
                     id="loading"
                   />
-                </Box>
+                </div>
               </Paper>
             </Grid>
             <Grid item xs={4}>

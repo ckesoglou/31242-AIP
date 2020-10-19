@@ -33,4 +33,36 @@
 }
 #loading {
   display: none;
+  margin: auto;
+}
+
+#simple-tabpanel-0 {
+  width: 65%;
+}
+
+#simple-tabpanel-1 {
+  width: 65%;
+}
+
+#simple-tabpanel-2 {
+  width: 65%;
+}
+
+#autoCompleteField {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 280px;
+}
+
+#completeProofFileInfo {
+  margin-top: 1rem;
+}
+
+#completeProofImage {
+  max-width: 60%;
+  max-height: 60%;
+}
+
+#inputProof {
+  display: none;
 }

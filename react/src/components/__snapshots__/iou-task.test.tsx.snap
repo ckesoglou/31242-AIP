@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IouTask /> should render correctly 1`] = `
+<div
+  className=""
+  id="task"
+>
+  <WithStyles(ForwardRef(Typography))>
+    Finish my homework for me
+  </WithStyles(ForwardRef(Typography))>
+  <WithStyles(ForwardRef(Popover))
+    anchorEl={null}
+    anchorOrigin={
+      Object {
+        "horizontal": "center",
+        "vertical": "bottom",
+      }
+    }
+    id="popUpMargin"
+    onClose={[Function]}
+    open={false}
+    transformOrigin={
+      Object {
+        "horizontal": "center",
+        "vertical": "top",
+      }
+    }
+  >
+    <WithStyles(ForwardRef(Typography))
+      id="taskDetailPopUp"
+    >
+      Task Description
+      <WithStyles(ForwardRef(Divider))
+        id="taskPopUpDivider"
+      />
+      Finish my homework for me
+    </WithStyles(ForwardRef(Typography))>
+  </WithStyles(ForwardRef(Popover))>
+</div>
+`;

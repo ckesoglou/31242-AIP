@@ -301,6 +301,42 @@ export function makeServer({ environment = "development" } = {}) {
         },
         { timing: 2000 } // mock delay - helps visualise loading for user
       );
+
+      this.get(
+        "/items",
+        () => {
+          let body = [
+            {
+              id: "1",
+              display_name: "Coffee",
+            },
+            {
+              id: "2",
+              display_name: "Hug",
+            },
+          ];
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 3000 }
+      );
+
+      this.get(
+        "/users",
+        () => {
+          let body = [
+            {
+              username: "JamesL",
+              display_name: "James Lee",
+            },
+            {
+              username: "KevinL",
+              display_name: "Kevin Leung",
+            },
+          ];
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 3000 }
+      );
     },
   });
 

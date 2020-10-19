@@ -90,6 +90,13 @@ const theme = createMuiTheme({
       default: backgroundColor(),
     },
   },
+  typography: {
+    fontFamily: [
+      'Poppins',
+      'Roboto',
+      'sans-serif'
+    ].join(','),
+  }
 });
 
 export default theme;

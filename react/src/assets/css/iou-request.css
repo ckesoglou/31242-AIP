@@ -1,0 +1,340 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#completeIconSize {
+  font-size: 3.5rem;
+}
+
+#completeForm {
+  text-align: center;
+}
+
+#completeFormQuestion {
+  margin-top: 1rem;
+}
+
+#inputProof {
+  display: none;
+}
+
+#completeProofFileInfo {
+  margin-top: 1rem;
+}
+
+#completeProofImage {
+  max-width: 60%;
+  max-height: 60%;
+}
+
+#IouTaskComplete {
+  display: inline-block;
+  width: 5.625rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+#taskCompleter {
+  font-size: 20px;
+  margin: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#taskTimeStamp {
+  font-size: 10px;
+  margin: 0px;
+}
+
+#task {
+  width: 100%;
+  font-size: 16px;
+  display: inline-block;
+}
+
+#proofImage {
+  margin-top: 10px;
+  height: 75px;
+  width: 75px;
+}
+
+#favourArrow {
+  font-size: 50px;
+  vertical-align: middle;
+}
+
+#favourAvatarContainer {
+  display: inline-block;
+}
+
+#favourAvatar {
+  height: 4rem;
+  width: 4rem;
+  background-color: #86c232;
+  cursor: pointer;
+}
+
+#popUpMargin {
+  margin-top: 10px;
+}
+
+#favourAvatarText {
+  padding: 10px;
+}
+
+#rewardAvatar {
+  height: 70px;
+  width: 70px;
+  background-color: #222629;
+  color: white;
+  font-size: 16px;
+  border: white solid 0.3125rem;
+}
+
+#rewardContainer {
+  display: inline-block;
+}
+
+#reqestRewardAvatar {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  background-color: #222629;
+  color: white;
+  font-size: 16px;
+  border: white solid 0.3125rem;
+  display: inline-block;
+  line-height: 4.0625rem;
+  text-align: center;
+}
+
+#requestRewardPlus {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  background-color: #222629;
+  color: white;
+  border: white solid 0.3125rem;
+  display: inline-block;
+  line-height: 4.0625rem;
+  text-align: center;
+  font-size: 32px;
+}
+
+.circle {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 4.0625rem;
+  border: white solid 0.3125rem;
+  background-color: #222629;
+}
+
+#itemsContainer {
+  display: inline-block;
+  position: absolute;
+  background-color: #227ec5;
+  padding: 3px;
+  border-radius: 6px;
+  margin-top: -175px;
+  -webkit-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+  pointer-events: none;
+}
+
+#itemsContainerArrow {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0%;
+  margin-left: 40px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #227ec5 transparent transparent transparent;
+}
+
+#multipleItemsContainer {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.firstCircle {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 4.0625rem;
+  border: white solid 0.3125rem;
+  background-color: #3186c2;
+  font-size: 16px;
+  z-index: 6;
+  position: relative;
+}
+
+.secondCircle {
+  height: 4.8125rem;
+  width: 4.8125rem;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 4.0625rem;
+  border: white solid 0.3125rem;
+  background-color: #3186c2;
+  margin-left: -25px;
+  z-index: 5;
+  position: relative;
+  font-size: 16px;
+}
+
+.thirdCircle {
+  z-index: 4;
+}
+
+.popUpCircle {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 50px;
+  border: white solid 0.3125rem;
+  background-color: #222629;
+  font-size: 12px;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.popUpCircle:hover {
+  background-color: #86c232;
+}
+
+#requestRewardPopover {
+  margin-top: 10px;
+}
+
+#requestRewardPopUp {
+  padding: 10px;
+  text-align: center;
+}
+
+#addRewardButton {
+  margin-top: 5px;
+  display: inline-block;
+}
+
+#requestPopUpContent {
+  display: inline-block;
+}
+
+#requestAddContainer {
+  margin-top: 4px;
+}
+
+#requestPopUpText {
+  margin-bottom: 4px;
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.infoTableCell {
+  width: 50%;
+}
+
+#infoTableTitle {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+#infoTable {
+  width: 75%;
+}
+
+#requestInfoRewards {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+#requestDetailsTable {
+  min-height: 240px;
+}
+
+#completeDetailsTable {
+  min-height: 230px;
+}
+
+#completePopUpRewards {
+  max-height: 300px;
+  text-align: center;
+}
+
+#requestItem {
+  display: inline-block;
+}
+
+#completeRequestItem {
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+}
+
+#requestItemContainer {
+  align-self: center;
+  text-align: center;
+}
+
+#requestProofContainer {
+  align-self: center;
+}
+
+#noProofIcon {
+  color: rgb(233, 64, 64);
+}
+
+#taskDetailPopUp {
+  border: white solid 3px;
+  border-radius: 5%;
+  text-align: center;
+  width: 200px;
+  padding: 10px;
+}
+
+#taskPopUpDivider {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+#modalTitle {
+  text-align: center;
+}
