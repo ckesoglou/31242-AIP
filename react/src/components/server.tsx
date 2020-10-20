@@ -2,7 +2,7 @@ import { Server, Response, Model } from "miragejs";
 import { baseUrl } from "../api/endpoints";
 
 export function makeServer({ environment = "development" } = {}) {
-  let server = new Server({
+  let server: any = new Server({
     environment,
     models: {
       // This may or may not be useful but keeping in case we need it
