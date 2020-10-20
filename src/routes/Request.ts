@@ -307,7 +307,7 @@ router.delete("/request/:requestID/reward/:rewardID", async (req: Request, res: 
   }
 
   const iou = await getIou(requestParams.rewardID);
-  const request = await getRequest(requestParams.rewardID);
+  const request = await getRequest(requestParams.requestID);
   if (!iou || !request || iou.parent_request != requestParams.requestID) {
     return res.status(NOT_FOUND).end();
   }
