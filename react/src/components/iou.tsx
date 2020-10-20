@@ -59,8 +59,14 @@ class IOU extends React.Component<IouProps> {
             />
           </Grid>
           <Grid item xs={2} id="requestItemContainer">
-            <IouProof imagePK={this.props.iou.proof_of_debt} />
-            <IouProof imagePK={this.props.iou.proof_of_completion} />
+            <IouProof
+              imagePK={this.props.iou.proof_of_debt}
+              proof_of_debt={true}
+            />
+            <IouProof
+              imagePK={this.props.iou.proof_of_completion}
+              proof_of_debt={false}
+            />
           </Grid>
           <Grid item xs={3} id="requestProofContainer">
             <IouComplete

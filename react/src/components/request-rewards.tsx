@@ -2,6 +2,7 @@ import React from "react";
 import "../assets/css/iou-request.css";
 import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
 import RequestReward from "./request-reward";
+import { Redirect } from "react-router-dom";
 import {
   Popover,
   Button,
@@ -26,6 +27,7 @@ type RequestRewardState = {
   selectedReward: string;
   potentialItems: Item[];
   snackMessage: string;
+  unauthRep: boolean;
 };
 
 class RequestRewards extends React.Component<
@@ -37,6 +39,7 @@ class RequestRewards extends React.Component<
     selectedReward: "",
     potentialItems: [],
     snackMessage: "",
+    unauthRep: false,
   };
 
   fetchPotentialRewards() {
@@ -73,6 +76,8 @@ class RequestRewards extends React.Component<
           this.setState({
             snackMessage: "Reward successfully added to the request!",
           });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 422)
           res
@@ -134,6 +139,20 @@ class RequestRewards extends React.Component<
   }
 
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: {
+              unauthenticated:
+                "Your session has expired! Please sign in again :)",
+            },
+          }}
+        />
+      );
+    }
+
     return (
       <div id="requestItem">
         {this.renderItems()}

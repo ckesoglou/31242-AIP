@@ -123,6 +123,8 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           // Successful login 200
           this.setState({ snackMessage: "IOU Completed!" });
           this.setState({ completeSnack: true });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400)
           res.json().then((body) =>
@@ -232,7 +234,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
             pathname: "/login",
             state: {
               unauthenticated:
-                "Your session has expired. Please sign in again.",
+                "Your session has expired! Please sign in again :)",
             },
           }}
         />

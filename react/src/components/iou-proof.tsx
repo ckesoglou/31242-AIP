@@ -7,6 +7,7 @@ import { Popover, Typography, Divider } from "@material-ui/core";
 
 type IouProofProps = {
   imagePK: string | null;
+  proof_of_debt: boolean;
 };
 
 type IouProofState = {
@@ -48,7 +49,9 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
               }}
             >
               <Typography id="taskDetailPopUp">
-                {"Proof"}
+                {this.props.proof_of_debt
+                  ? "Proof of Debt"
+                  : "Proof of Completion"}
                 <Divider id="taskPopUpDivider" />
                 <img
                   src={`${imageEndpoint}/${this.props.imagePK}`}

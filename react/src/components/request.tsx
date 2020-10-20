@@ -45,7 +45,10 @@ class Request extends React.Component<RequestProps> {
             <IouTask details={this.props.request.details} />
           </Grid>
           <Grid item xs={1} id="requestItemContainer">
-            <IouProof imagePK={this.props.request.proof_of_completion} />
+            <IouProof
+              imagePK={this.props.request.proof_of_completion}
+              proof_of_debt={false}
+            />
           </Grid>
           <Grid item xs={3} id="requestProofContainer">
             <IouComplete

@@ -104,20 +104,6 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
         this.setState({ error: exception });
         this.setLoading(false);
       });
-
-    // .then((res) => {
-    //   return res.json();
-    // })
-    // .then((body) => {
-    //   console.log("Success:", body);
-    //   this.setState({ users: body });
-    //   this.setState({ error: "" });
-    //   this.setLoading(false);
-    // })
-    // .catch((exception) => {
-    //   console.error("Error:", exception);
-    //   this.setState({ error: exception });
-    // });
   }
 
   fetchMeLeaderboard() {
