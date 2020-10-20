@@ -13,15 +13,15 @@ import { getItem } from '@daos/Items';
 const router = Router();
 
 async function formatRequest(request: IouRequest) {
-  const rewards = await getIous({ parent_request: request.id }, 0, 9999);
-    rewards.map(reward => { reward.item });
+  const ious = await getIous({ parent_request: request.id }, 0, 9999);
+  const rewardItems = ious.map(iou => { return iou.item });
 
-    return {
-      ...(request as any).dataValues,
-      author: await getBasicUser(request.author),
-      completed_by: await getBasicUser(request.completed_by),
-      rewards: rewards
-    }
+  return {
+    ...(request as any).dataValues,
+    author: await getBasicUser(request.author),
+    completed_by: await getBasicUser(request.completed_by),
+    rewards: rewardItems
+  }
 }
 
 /**
