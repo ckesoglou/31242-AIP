@@ -162,7 +162,7 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
 
   const request = await getRequest(requestParams.requestID);
 
-  return request ? res.status(OK).json(request).end() : res.status(404).end();
+  return request ? res.status(OK).json(await formatRequest(request)).end() : res.status(404).end();
 });
 
 export default router;
