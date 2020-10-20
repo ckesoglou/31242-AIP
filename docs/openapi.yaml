@@ -737,6 +737,8 @@ paths:
                 $ref: "#/components/schemas/badRequest"
         "401":
           description: Not authenticated.
+        "404":
+          description: The given request or reward ID was not found.
       tags:
         - Request
   /api/request/{requestID}/reward/{rewardID}:

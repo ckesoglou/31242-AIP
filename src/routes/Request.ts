@@ -9,6 +9,7 @@ import { Op } from "sequelize";
 import IouRequest from '@entities/IouRequest';
 import { getAuthenticatedUser } from '@shared/Authenticate';
 import { getItem } from '@daos/Items';
+import { getImagePath } from '@shared/ImageHandler';
 
 const router = Router();
 
@@ -189,6 +190,64 @@ router.get("/request/:requestID/rewards", async (req: Request, res: Response) =>
   const rewards = ious.map((iou) => { return {id: iou.id, giver: iou.giver, item: iou.item }})
 
   return res.status(OK).json(rewards).end();
+});
+
+/**
+ * POST: /request/{requestId}/rewards
+ */
+
+interface IRequestRewardsBody {
+  item: string;
+}
+
+const RequestRewardsBody: ObjectSchema<IRequestRewardsBody> = Joi.object({
+  item: Joi.string().guid({ version: "uuidv4" }).required(),
+})
+
+router.post("/request/:requestID/rewards", async (req: Request, res: Response) => {
+  var { error, value } = RequestParams.validate(req.params);
+
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+  
+  let requestParams = value as IRequestParams;
+
+  var { error, value } = RequestRewardsBody.validate(req.body);
+
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+
+  let requestBody = value as IRequestRewardsBody;
+
+  const user = await getAuthenticatedUser(req, res);
+  if (!user) {
+    return res.status(UNAUTHORIZED).json({
+      errors: ["Not authenticated."],
+    });
+  }
+
+  const request = await getRequest(requestParams.requestID);
+  const item = await getItem(requestBody.item);
+  if (!request || !item) {
+    return res.status(404).end();
+  }
+
+  const iou = await createIou({
+    id: uuid(),
+    item: requestBody.item,
+    giver: user.username,
+    parent_request: request.id,
+    created_time: new Date(),
+    is_claimed: false,
+  });
+
+  return res.status(OK).json({ id: iou.id }).end();
 });
 
 /**
