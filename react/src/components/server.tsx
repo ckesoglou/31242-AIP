@@ -367,6 +367,23 @@ export function makeServer({ environment = "development" } = {}) {
           return new Response(200, jsonHeader, body);
         },
         { timing: 2000 } // mock delay - helps visualise loading for user
+
+      this.get(
+        "/users",
+        () => {
+          let body = [
+            {
+              username: "JamesL",
+              display_name: "James Lee",
+            },
+            {
+              username: "KevinL",
+              display_name: "Kevin Leung",
+            },
+          ];
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 3000 }
       );
     },
   });
