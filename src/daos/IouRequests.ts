@@ -72,22 +72,15 @@ export async function getRequests(
 export async function createRequest(
   id: string,
   author: string,
-  completed_by: string,
-  proof_of_completion: string,
   details: string,
   created_time: Date,
-  completion_time: Date,
-  is_completed: boolean
 ) {
   return IouRequest.create({
     id: id,
     author: author,
-    completed_by: completed_by,
-    proof_of_completion: proof_of_completion,
     details: details,
     created_time: created_time,
-    completion_time: completion_time,
-    is_completed: is_completed,
+    is_completed: false,
   });
 }
 

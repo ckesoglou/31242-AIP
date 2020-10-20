@@ -3,11 +3,11 @@ import { Model } from "sequelize";
 interface IIouRequestAttributes {
   id: string;
   author: string;
-  completed_by: string;
-  proof_of_completion: string;
+  completed_by?: string;
+  proof_of_completion?: string;
   details: string;
   created_time: Date;
-  completion_time: Date;
+  completion_time?: Date;
   is_completed: boolean;
 }
 

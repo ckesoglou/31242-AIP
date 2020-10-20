@@ -1,11 +1,14 @@
 import { Request, Response, Router } from "express";
-import { BAD_REQUEST, OK } from "http-status-codes";
+import { BAD_REQUEST, CREATED, OK, UNAUTHORIZED } from "http-status-codes";
 import { getBasicUser } from "../daos/Users";
 import Joi, { ObjectSchema } from "joi";
-import { getRequest, getRequests } from "@daos/IouRequests";
-import { getIous } from "@daos/Ious";
+import { v4 as uuid } from "uuid";
+import { createRequest, deleteRequest, getRequest, getRequests } from "@daos/IouRequests";
+import { createIou, createIouOwe, getIous } from "@daos/Ious";
 import { Op } from "sequelize";
 import IouRequest from '@entities/IouRequest';
+import { getAuthenticatedUser } from '@shared/Authenticate';
+import { getItem } from '@daos/Items';
 
 const router = Router();
 
@@ -81,6 +84,58 @@ router.get("/requests", async (req: Request, res: Response) => {
 
   return res.status(OK).json(requestResponse).end();
 });
+
+/**
+ * POST: /requests
+ */
+
+ interface IRequestsPostBody {
+  details: string;
+  item: string;
+}
+
+const RequestsPostBody: ObjectSchema<IRequestsPostBody> = Joi.object({
+  details: Joi.string().min(2).max(50, "utf8"),
+  item: Joi.string().guid({ version: "uuidv4" }),
+}).options({ presence: "required" });
+
+router.post("/requests", async (req: Request, res: Response) => {
+  const { error, value } = RequestsPostBody.validate(req.body);
+
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+
+  const user = await getAuthenticatedUser(req, res);
+  if (!user) {
+    return res.status(UNAUTHORIZED).json({
+      errors: ["Not authenticated."],
+    });
+  }
+
+  let requestBody = value as IRequestsPostBody;
+
+  const reward = await getItem(requestBody.item);
+  if (!reward) {
+    return res.status(BAD_REQUEST).json({
+      errors: [ "Provided GUID does not match to any available item." ],
+    }).end();
+  }
+  const request = await createRequest(uuid(), user.username, requestBody.details, new Date());
+  await createIou({
+    id: uuid(),
+    item: reward.id,
+    giver: user.username,
+    parent_request: request.id,
+    created_time: new Date(),
+    is_claimed: false,
+  });
+  
+  return res.status(CREATED).json({ id: request.id }).end();
+});
+
 
 /**
  * GET: /request/{requestId}

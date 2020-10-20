@@ -124,6 +124,10 @@ export async function completeIouOwed(iouID: string, receiver: string) {
   return true;
 }
 
+export async function createIou(iou: IIouAttributes) {
+  return Iou.create(iou);
+}
+
 export async function createIouOwe(
   giver: string,
   receiver: string,
