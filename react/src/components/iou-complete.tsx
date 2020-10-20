@@ -230,7 +230,10 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
         <Redirect
           to={{
             pathname: "/login",
-            state: { unauthenticated: "You were too cool" },
+            state: {
+              unauthenticated:
+                "Your session has expired. Please sign in again.",
+            },
           }}
         />
       );
@@ -259,7 +262,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           />
           {this.props.is_completed && (
             <div id="IouTaskComplete">
-              {this.props.completed_by.length > 9 ? (
+              {this.props.completed_by.length >= 7 ? (
                 <Typography
                   id="taskCompleter"
                   className="cursorPointer"
@@ -270,9 +273,14 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                   {this.props.completed_by}
                 </Typography>
               ) : (
-                <Typography id="taskCompleter">
-                  {this.props.completed_by}
-                </Typography>
+                <div>
+                  <Typography id="taskCompleter">
+                    {this.props.completed_by}
+                  </Typography>
+                  <Typography id="taskTimeStamp">
+                    {this.props.claimed_time}
+                  </Typography>
+                </div>
               )}
               <Popover
                 id="popUpMargin"
@@ -294,9 +302,6 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                   {this.props.completed_by}
                 </Typography>
               </Popover>
-              <Typography id="taskTimeStamp">
-                {this.props.claimed_time}
-              </Typography>
             </div>
           )}
         </div>

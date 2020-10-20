@@ -4,6 +4,7 @@ import IouProof from "./iou-proof";
 import IouFavour from "./iou-single-favour";
 import RequestInfo from "./request-info";
 import { Grid } from "@material-ui/core";
+import { UserContext } from "../components/user-context";
 
 type Item = {
   id: string;
@@ -29,28 +30,46 @@ type IouProps = {
 };
 
 class IOU extends React.Component<IouProps> {
+  static contextType = UserContext;
+
+  getCompletor(): string {
+    if (this.props.iou.proof_of_completion !== null) {
+      return this.props.iou.giver.username;
+    } else {
+      return this.props.iou.receiver.username;
+    }
+  }
+  getAuthor(): string {
+    if (this.props.iou.proof_of_debt !== null) {
+      return this.props.iou.receiver.username;
+    } else {
+      return this.props.iou.giver.username;
+    }
+  }
+
   render() {
     return (
       <div>
         <Grid container xs={12} spacing={1}>
           <Grid item xs={7} id="requestItemContainer">
             <IouFavour
-              giverDisplayName={this.props.iou.giver.display_name}
-              recieverDisplayName={this.props.iou.receiver.display_name ?? "?"}
+              giverDisplayName={this.props.iou.giver.username}
+              recieverDisplayName={this.props.iou.receiver.username ?? "?"}
               item={this.props.iou.item}
             />
           </Grid>
-          <Grid item xs={1} id="requestItemContainer">
+          <Grid item xs={2} id="requestItemContainer">
+            <IouProof imagePK={this.props.iou.proof_of_debt} />
             <IouProof imagePK={this.props.iou.proof_of_completion} />
           </Grid>
-          <Grid item xs={4} id="requestProofContainer">
+          <Grid item xs={3} id="requestProofContainer">
             <IouComplete
               id={this.props.iou.id}
               is_completed={this.props.iou.is_claimed}
-              completed_by={this.props.iou.receiver?.display_name ?? ""} // TODO: check who completed by
+              completed_by={this.getCompletor()}
               claimed_time={this.props.iou.claimed_time}
               created_time={this.props.iou.created_time}
-              author={this.props.iou.giver.display_name ?? ""}
+              author={this.getAuthor()}
               rewards={[this.props.iou.item]}
               details=""
               iouType={this.props.iouType}

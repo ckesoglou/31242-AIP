@@ -1,5 +1,9 @@
 import React, { ChangeEvent } from "react";
-import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
+import {
+  RouteComponentProps,
+  Link as RouterLink,
+  Redirect,
+} from "react-router-dom";
 import "../assets/css/userprofile.css";
 import {
   requestsNewEndpoint,
@@ -79,6 +83,7 @@ type UserProfileState = {
   owedPages: number;
   owePages: number;
   requestPages: number;
+  unauthRep: boolean;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -163,6 +168,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     owedPages: 1,
     owePages: 1,
     requestPages: 1,
+    unauthRep: false,
   };
 
   static contextType = UserContext;
@@ -245,6 +251,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             snack: true,
             newRequestDialog: false,
           });
+        } else if (res.status === 401) {
         } else {
           // Unsuccessful login (400 or 401)
           res.json().then((body) =>
@@ -313,6 +320,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             snackMessage: "New IOU created!",
             snack: true,
             newRequestDialog: false,
+            newRequestProof: "",
           });
         } else {
           // Unsuccessful login (400 or 401)
@@ -321,6 +329,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               snackMessage: body.errors,
               snack: true,
               newRequestDialog: false,
+              newRequestProof: "",
             })
           );
         }
@@ -345,28 +354,27 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${iouOweEndpoint}`, {
-        method: "GET",
-        headers: headers,
-      }),
+      // fetch(`${iouOweEndpoint}`, {
+      //   method: "GET",
+      //   headers: headers,
+      // }),
     ])
-      .then(([owed, owe, requests]) => {
-        Promise.all([owed.json(), owe.json(), requests.json()]).then(
-          ([owedResult, oweResult, requestsResult]) => {
+      .then(([owed, owe]) => {
+        Promise.all([owed.json(), owe.json()]).then(
+          ([owedResult, oweResult]) => {
             this.setLoading(false);
             this.setState({
               owed: owedResult,
               owe: oweResult,
-              // requests: requestsResult,
             });
-            console.log("Success:", owedResult, oweResult, requestsResult);
+            console.log("Success:", owedResult, oweResult);
           }
         );
       })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.setLoading(false);
-        // this.setState({ snackMessage: exception, snack: true });
+      .catch(([owedException, oweException]) => {
+        console.error("Error:", owedException, oweException);
+        // this.setLoading(false);
+        this.setState({ unauthRep: true });
       });
   }
 
@@ -483,6 +491,20 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: {
+              unauthenticated:
+                "Your session has expired! Please sign in again :)",
+            },
+          }}
+        />
+      );
+    }
+
     return (
       <Container component="main" maxWidth="lg">
         <div className="paper">
@@ -527,7 +549,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 >
                   <Tab label="Owed" />
                   <Tab label="Owe" />
-                  <Tab label="Requests" id="requestTab" />
+                  {/* <Tab label="Requests" id="requestTab" /> */}
                   {/* The following two icons are throwing some console errors
                   because they inherit the MUI tab props - see 
                   stackoverflow.com/questions/58103542/material-ui-button-in-a-tab-list */}
@@ -805,24 +827,44 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={0}
                 >
-                  {this.state.owed.map((owed, i) => {
-                    return <IOU iou={owed} key={i} iouType={0} />;
-                  })}
-                  <Divider variant="middle" />
-                  <Pagination
-                    id="pagination"
-                    count={this.setCountOfOwed()}
-                    page={this.state.owedPages}
-                    onChange={(
-                      event: React.ChangeEvent<unknown>,
-                      value: number
-                    ) => {
-                      this.setState({ owedPages: value });
-                    }}
-                    defaultPage={1}
-                    siblingCount={0}
-                    color="primary"
-                  />
+                  <Grid item xs={12}>
+                    <Grid container direction="row">
+                      <Grid id="headerItem" item xs={6}>
+                        <Typography variant="h6">Favour</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Proof</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Completed</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  {this.state.owed
+                    .slice(
+                      (this.state.owedPages - 1) * numberOfItemsPerPage,
+                      this.state.owedPages * numberOfItemsPerPage
+                    )
+                    .map((owed, i) => {
+                      return <IOU iou={owed} key={i} iouType={0} />;
+                    })}
+                  <Box pt={3}>
+                    <Divider variant="middle" />
+                    <Pagination
+                      id="userPagination"
+                      count={this.setCountOfOwed()}
+                      page={this.state.owedPages}
+                      onChange={(
+                        event: React.ChangeEvent<unknown>,
+                        value: number
+                      ) => {
+                        this.setState({ owedPages: value });
+                      }}
+                      defaultPage={1}
+                      siblingCount={2}
+                      color="primary"
+                    />
+                  </Box>
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -830,12 +872,54 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={1}
                 >
-                  {this.state.owe.map((owe, i) => {
-                    return <IOU iou={owe} key={i} iouType={1} />;
-                  })}
-                  <Divider variant="middle" />
-                  <Pagination
-                    id="pagination"
+                  <Grid item xs={12}>
+                    <Grid container direction="row">
+                      <Grid id="headerItem" item xs={6}>
+                        <Typography variant="h6">Favour</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Proof</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Completed</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  {this.state.owe
+                    .slice(
+                      (this.state.owePages - 1) * numberOfItemsPerPage,
+                      this.state.owePages * numberOfItemsPerPage
+                    )
+                    .map((owe, i) => {
+                      return <IOU iou={owe} key={i} iouType={1} />;
+                    })}
+                  <Box pt={3}>
+                    <Divider variant="middle" />
+                    <Pagination
+                      id="userPagination"
+                      count={this.setCountOfOwe()}
+                      page={this.state.owePages}
+                      onChange={(
+                        event: React.ChangeEvent<unknown>,
+                        value: number
+                      ) => {
+                        this.setState({ owePages: value });
+                      }}
+                      defaultPage={1}
+                      siblingCount={2}
+                      color="primary"
+                    />
+                  </Box>
+                </TabPanel>
+                {/* <TabPanel
+                  value={this.state.tabIndex}
+                  loadingRef={this.loadingRef}
+                  textRef={this.textRef}
+                  index={2}
+                >
+                  <Divider variant="middle" /> */}
+                {/* <Pagination
+                    id="userPagination"
                     count={this.setCountOfOwe()}
                     page={this.state.owePages}
                     onChange={(
@@ -845,20 +929,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                       this.setState({ owePages: value });
                     }}
                     defaultPage={1}
-                    siblingCount={0}
+                    siblingCount={2}
                     color="primary"
-                  />
-                </TabPanel>
-                <TabPanel
-                  value={this.state.tabIndex}
-                  loadingRef={this.loadingRef}
-                  textRef={this.textRef}
-                  index={2}
-                >
-                  {/* {this.state.requests.map((request, i) => {
+                  /> */}
+                {/* {this.state.requests.map((request, i) => {
                     return <IOU request={request} key={i} />;
                   })} */}
-                </TabPanel>
+                {/* </TabPanel> */}
               </Paper>
             </Grid>
           </Grid>

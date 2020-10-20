@@ -5,7 +5,7 @@ import {
   Link as RouterLink,
 } from "react-router-dom";
 import "../assets/css/login.css";
-import { loginEndpoint } from "../api/endpoints";
+import { loginEndpoint, usersEndpoint } from "../api/endpoints";
 import {
   Container,
   Typography,
@@ -20,6 +20,7 @@ import {
 import { UserContext } from "../components/user-context";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import { Authentication } from "../components/protected-route";
+import UserProfile from "./userprofile";
 
 type LoginState = {
   username: string;
@@ -93,7 +94,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
         if (res.status === 200) {
           // Successful login 200
           // TODO: Only for development?! Handle frontend auth
-          Authentication.authenticate(() => {});
+          // Authentication.authenticate(() => {});
           this.setState({ successfulLogin: true }, () => {
             this.context.updateUser({
               name: this.state.username,

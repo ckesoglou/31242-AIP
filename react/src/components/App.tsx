@@ -31,10 +31,7 @@ class App extends React.Component {
       <Router>
         <UserContext.Provider value={this.state}>
           <Switch>
-            <ProtectedRoute
-              path="/user"
-              component={UserProfile}
-            ></ProtectedRoute>
+            <Route path="/user" component={UserProfile} />
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
             <Route path="/home" component={Home} />

@@ -15,6 +15,7 @@ import {
 import Pagination from "@material-ui/lab/Pagination";
 import LeaderboardUser from "./leaderboardUser";
 import { UserContext } from "./user-context";
+import { Redirect } from "react-router-dom";
 
 type LeaderboardUser = {
   rank: number;
@@ -31,6 +32,7 @@ type LeaderboardState = {
   showMe: boolean;
   error: string;
   pageNumber: number;
+  unauthRep: boolean;
 };
 
 type LeaderboardProps = {};
@@ -52,6 +54,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
     me: { rank: -1, score: -1 },
     showMe: false,
     pageNumber: 1,
+    unauthRep: false,
   };
 
   componentDidMount() {
@@ -91,9 +94,8 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
             this.setState({ error: "" });
             this.setLoading(false);
           });
-        } else {
-          //Should be response code 400 handling
-          // TODO: Display error on SnackBAR
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
           this.setLoading(false);
         }
       })
@@ -131,9 +133,10 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
             this.setState({ error: "" });
             console.log("Success:", body);
           });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+          this.setLoading(false);
         } else {
-          //Should be response code 400 handling
-          // TODO: Display error on SnackBAR
           res.json().then((body) => {
             console.error("Error:", body.errors);
             this.setState({ error: body.errors });
@@ -146,6 +149,20 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
   }
 
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: {
+              unauthenticated:
+                "Your session has expired! Please sign in again :)",
+            },
+          }}
+        />
+      );
+    }
+
     return (
       <Paper elevation={3} className="content">
         <Container id="leaderboardContainer" component="main" maxWidth="lg">

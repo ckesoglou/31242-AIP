@@ -111,6 +111,7 @@ export async function completeIouOwed(iouID: string, receiver: string) {
   } else {
     iou
       .update({
+        claimed_time: new Date(),
         is_claimed: true,
       })
       .then(async () => await Iou.sync({ alter: true }));
@@ -150,6 +151,7 @@ export async function completeIouOwe(
   } else {
     iou
       .update({
+        claimed_time: new Date(),
         is_claimed: true,
         proof_of_completion: proof,
       })

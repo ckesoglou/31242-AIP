@@ -51,10 +51,10 @@ class Request extends React.Component<RequestProps> {
             <IouComplete
               id={this.props.request.id}
               is_completed={this.props.request.is_completed}
-              completed_by={this.props.request.completed_by?.display_name ?? ""} // TODO: check who completed by
+              completed_by={this.props.request.completed_by?.username ?? ""} // TODO: check who completed by
               claimed_time={this.props.request.completion_time}
               created_time={this.props.request.created_time}
-              author={this.props.request.author.display_name ?? ""}
+              author={this.props.request.author.username ?? ""}
               rewards={this.props.request.rewards}
               details={this.props.request.details}
               iouType={this.props.iouType}
