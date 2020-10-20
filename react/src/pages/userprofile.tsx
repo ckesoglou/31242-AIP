@@ -168,7 +168,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   state: UserProfileState = {
-    tabIndex: this.props.location.state.tabIndex ?? 0,
+    tabIndex: this.props.location.state?.tabIndex ?? 0,
     newRequestDialog: false,
     owed: [],
     owe: [],
@@ -198,13 +198,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   componentDidMount() {
-    this.fetchAllTabs();
-    this.setState({
-      userDropLoading:
-        this.state.userDropOpen && this.state.selectetableUsers.length === 0,
-    });
-    this.fetchUsers();
-    this.fetchItems();
+    if (this.context.user.name !== "?") {
+      this.fetchAllTabs();
+      this.setState({
+        userDropLoading:
+          this.state.userDropOpen && this.state.selectetableUsers.length === 0,
+      });
+      this.fetchUsers();
+      this.fetchItems();
+    }
   }
 
   setCountOfOwed(): number {
@@ -393,7 +395,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${requestsEndpoint}`, {
+      fetch(`${requestsEndpoint}?author=${this.context.user.name}`, {
         method: "GET",
         headers: headers,
       }),
@@ -542,7 +544,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   render() {
-    if (this.state.unauthRep) {
+    if (this.state.unauthRep || this.context.user.name === "?") {
       return (
         <Redirect
           to={{
@@ -600,7 +602,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 >
                   <Tab label="Owed" />
                   <Tab label="Owe" />
-                  <Tab label="Requests" id="requestTab" />
+                  <Tab label="My Requests" id="requestTab" />
                   {/* The following two icons are throwing some console errors
                   because they inherit the MUI tab props - see 
                   stackoverflow.com/questions/58103542/material-ui-button-in-a-tab-list */}
@@ -766,7 +768,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         <TextField
                           autoFocus
                           id="favourText"
-                          label="Favour"
+                          label="Details"
                           type="text"
                           variant="outlined"
                           margin="normal"
@@ -843,6 +845,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   </DialogContent>
                   <DialogActions>
                     <Button
+                      size="large"
+                      color="primary"
+                      onClick={() => this.setState({ newRequestDialog: false })}
+                    >
+                      Nevermind
+                    </Button>
+                    <Button
                       id="createRequest"
                       size="large"
                       color="primary"
@@ -862,13 +871,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                       disabled={this.checkCreatButton()}
                     >
                       Create
-                    </Button>
-                    <Button
-                      size="large"
-                      color="primary"
-                      onClick={() => this.setState({ newRequestDialog: false })}
-                    >
-                      Nevermind
                     </Button>
                   </DialogActions>
                 </Dialog>
@@ -968,16 +970,39 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={2}
                 >
-                  {this.state.requests.map((request, i) => {
-                    return (
-                      <IouRequest
-                        request={request}
-                        potentialRewards={this.state.potentialItems}
-                        iouType={2}
-                        key={i}
-                      />
-                    );
-                  })}
+                  <Grid item xs={12}>
+                    <Grid container direction="row">
+                      <Grid id="headerItem" item xs={4}>
+                        <Typography variant="h6">Favour</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={2}>
+                        <Typography variant="h6">Task</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={2}>
+                        <Typography variant="h6">Proof</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Completed</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={1}>
+                        <Typography variant="h6">Info</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  {() => {
+                    if (this.state.requests) {
+                      this.state.requests.map((request, i) => {
+                        return (
+                          <IouRequest
+                            request={request}
+                            potentialRewards={this.state.potentialItems}
+                            iouType={2}
+                            key={i}
+                          />
+                        );
+                      });
+                    }
+                  }}
                   <Divider variant="middle" />
                   <Pagination
                     id="userPagination"

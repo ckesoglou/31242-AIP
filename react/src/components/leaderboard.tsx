@@ -163,13 +163,13 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
           >
             <Grid item xs={12}>
               <Grid container direction="row">
-                <Grid id="leaderboardItem" item xs={3}>
+                <Grid id="leaderboardItem" item xs={2}>
                   <Typography variant="subtitle1">Rank</Typography>
                 </Grid>
-                <Grid id="leaderboardItem" item xs={3}>
+                <Grid id="leaderboardItem" item xs={5}>
                   <Typography variant="subtitle1">Username</Typography>
                 </Grid>
-                <Grid id="leaderboardItem" item xs={3}>
+                <Grid id="leaderboardItem" item xs={2}>
                   <Typography variant="subtitle1">Score</Typography>
                 </Grid>
                 <Grid id="leaderboardItem" item xs={3}>

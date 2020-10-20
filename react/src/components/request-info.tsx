@@ -130,7 +130,9 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
                       className="infoTableCell"
                       id="infoTableContent"
                     >
-                      {this.props.request.author.display_name}
+                      {this.props.request.author.display_name +
+                        " #" +
+                        this.props.request.author.username}
                     </TableCell>
                   </TableRow>
                   <TableRow>

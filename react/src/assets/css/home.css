@@ -50,6 +50,7 @@
   height: 4rem;
   width: 4rem;
   background-color: #86c232;
+  cursor: pointer;
 }
 #homeLoading {
   display: none;
@@ -59,4 +60,8 @@
 #headerItem {
   align-self: center;
   text-align: center;
+}
+#homePagination {
+  margin: auto;
+  width: 50%;
 }

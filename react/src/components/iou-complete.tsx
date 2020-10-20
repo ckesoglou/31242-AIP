@@ -399,6 +399,15 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           <Divider />
           <DialogActions>
             <Button
+              size="large"
+              color="primary"
+              onClick={() =>
+                this.setState({ completeIOU: false, submittedProof: null })
+              }
+            >
+              Nevermind
+            </Button>
+            <Button
               id="createRequest"
               size="large"
               color="primary"
@@ -418,15 +427,6 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               disabled={this.checkSubmitButton()}
             >
               {"Submit & Complete"}
-            </Button>
-            <Button
-              size="large"
-              color="primary"
-              onClick={() =>
-                this.setState({ completeIOU: false, submittedProof: null })
-              }
-            >
-              Nevermind
             </Button>
           </DialogActions>
         </Dialog>

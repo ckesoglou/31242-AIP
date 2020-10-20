@@ -1,3 +1,6 @@
 #accountCircle {
   font-size: 50px;
 }
+#avatar {
+  cursor: pointer;
+}
