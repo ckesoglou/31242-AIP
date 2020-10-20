@@ -920,7 +920,7 @@ proof: string
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewards": [
+    "rewardItems": [
       {
         "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
         "display_name": "Coffee"
@@ -954,7 +954,7 @@ Status Code **200**
 |»» display_name|string|false|none|Current display name of the user|
 |» completed_by|[User](#schemauser)|false|none|none|
 |» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|» rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|» rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
 |»» id|string|false|none|Unique identifier of the item.|
 |»» display_name|string|false|none|Current display name of the item.|
 |» details|string|false|none|Details of the request (maximum 50 bytes).|
@@ -995,7 +995,7 @@ fetch('/api/requests',
 
 `GET /api/requests`
 
-Retrieve a list of requests, optionally matched to provided criteria.
+Retrieve a list of requests, optionally matched to provided criteria. *Author, Search & Reward filters are mutually exclusive.
 
 <h3 id="get__api_requests-parameters">Parameters</h3>
 
@@ -1003,15 +1003,9 @@ Retrieve a list of requests, optionally matched to provided criteria.
 |---|---|---|---|---|
 |start|query|string|false|Starting row of the returned array. Default 0.|
 |limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
-|author|query|string|false|Filter based on request author.|
-|search|query|string|false|Filter for requests whose details contain the provided string.|
-|rewards|query|array[string]|false|Filter for requests that contain all these items as rewards (array of item PK's).|
-|createdAfter|query|string|false|Filter for requests created after or on this date (YYYY-MM-DD).|
-|createdBefore|query|string|false|Filter for requests created before or on this date (YYYY-MM-DD).|
-|completedAfter|query|string|false|Filter for requests completed after or on this date (YYYY-MM-DD).|
-|completedBefore|query|string|false|Filter for requests completed before or on this date (YYYY-MM-DD).|
-|completed|query|boolean|false|Filter based on whether the request is completed or not.|
-|completedBy|query|string|false|Filter based on which user completed the request.|
+|author|query|string|false|Filter* based on request author.|
+|search|query|string|false|Filter* for requests whose details contain the provided string.|
+|reward|query|string|false|Filter* for requests that contain this item PK as one of the rewards.|
 
 > Example responses
 
@@ -1030,7 +1024,7 @@ Retrieve a list of requests, optionally matched to provided criteria.
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewards": [
+    "rewardItems": [
       {
         "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
         "display_name": "Coffee"
@@ -1064,7 +1058,7 @@ Status Code **200**
 |»» display_name|string|false|none|Current display name of the user|
 |» completed_by|[User](#schemauser)|false|none|none|
 |» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|» rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|» rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
 |»» id|string|false|none|Unique identifier of the item.|
 |»» display_name|string|false|none|Current display name of the item.|
 |» details|string|false|none|Details of the request (maximum 50 bytes).|
@@ -1205,7 +1199,7 @@ Retrieve details about a single request.
     "display_name": "John Smith"
   },
   "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-  "rewards": [
+  "rewardItems": [
     {
       "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
       "display_name": "Coffee"
@@ -1283,7 +1277,7 @@ Delete a single request.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request has been successfully deleted.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
-|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to delete this request (you are not the author of it).|None|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to delete this request (you are not the author of it, or it has already been completed).|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
 
 <aside class="success">
@@ -1355,6 +1349,7 @@ proof: string
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successfully marked as complete.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to complete this request (you are the owner of it or the only one offering rewards).|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
 
 <aside class="success">
@@ -1421,6 +1416,7 @@ Retrieve details about the request rewards on offer.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of rewards.|Inline|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request or reward ID was not found.|None|
 
 <h3 id="get__api_request_{requestid}_rewards-responseschema">Response Schema</h3>
 
@@ -1505,6 +1501,7 @@ Create a new reward for this request.
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Reward was successfully added.|Inline|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request or reward ID was not found.|None|
 
 <h3 id="post__api_request_{requestid}_rewards-responseschema">Response Schema</h3>
 
@@ -1888,7 +1885,7 @@ This operation does not require authentication
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewards": [
+    "rewardItems": [
       {
         "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
         "display_name": "Coffee"
@@ -1964,7 +1961,7 @@ This operation does not require authentication
     "display_name": "John Smith"
   },
   "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-  "rewards": [
+  "rewardItems": [
     {
       "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
       "display_name": "Coffee"
@@ -1986,7 +1983,7 @@ This operation does not require authentication
 |author|[User](#schemauser)|false|none|User who created the request.|
 |completed_by|[User](#schemauser)|false|none|User who completed the request.|
 |proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
 |details|string|false|none|Details of the request (maximum 50 bytes).|
 |created_time|string(date-time)|false|none|Timestamp of when the request was created.|
 |completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|

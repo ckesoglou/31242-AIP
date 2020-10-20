@@ -17,11 +17,11 @@ Iou.init(
       allowNull: false,
     },
     giver: {
-      type: DataTypes.STRING(16),
+      type: DataTypes.STRING(200),
       allowNull: false,
     },
     receiver: {
-      type: DataTypes.STRING(16),
+      type: DataTypes.STRING(200),
       allowNull: true,
     },
     parent_request: {
@@ -55,10 +55,27 @@ Iou.init(
 export interface IIouFilter {
   giver?: string;
   receiver?: string;
+  parent_request?: string;
   is_claimed?: boolean;
+  item?: string;
 }
 
+export async function getIou(pk: string) {
+  return Iou.findByPk(pk);
+}
 export async function getIous(
+  filter: IIouFilter,
+  start: number = 0,
+  limit: number = 25
+) {
+  return Iou.findAll({
+    where: filter,
+    offset: start,
+    limit: limit,
+  });
+}
+
+export async function getFormattedIous(
   filter?: IIouFilter,
   start: number = 0,
   limit: number = 25
@@ -72,8 +89,8 @@ export async function getIous(
   // detail user
   for (let iou of ious) {
     iou.item = (await getItem(iou.item as string)) as Object;
-    iou.giver = await getBasicUser(iou.giver as string);
-    iou.receiver = await getBasicUser(iou.receiver as string);
+    iou.giver = (await getBasicUser(iou.giver as string)) ?? {};
+    iou.receiver = (await getBasicUser(iou.receiver as string)) ?? undefined;
   }
   return ious;
 }
@@ -118,6 +135,10 @@ export async function completeIouOwed(iouID: string, receiver: string) {
   return true;
 }
 
+export async function createIou(iou: IIouAttributes) {
+  return Iou.create(iou);
+}
+
 export async function createIouOwe(
   giver: string,
   receiver: string,
@@ -156,4 +177,12 @@ export async function completeIouOwe(
       .then(async () => await Iou.sync({ alter: true }));
   }
   return true;
+}
+
+export async function updateIou(iou: Iou, attributes: IIouAttributes) {
+  return iou.update(attributes);
+}
+
+export async function deleteIou(iou: Iou) {
+  return iou.destroy();
 }
