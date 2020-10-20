@@ -32,7 +32,7 @@ import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
-// import IOU from "../components/iou";
+import IOU from "../components/iou";
 // import { optional } from "joi";
 
 type ItemObj = {
@@ -45,11 +45,24 @@ type UserObj = {
   display_name: string;
 };
 
+type IouObj = {
+  id: string;
+  item: ItemObj;
+  giver: { username: string; display_name: string };
+  receiver: { username: string; display_name: string };
+  parent_request: string | null;
+  proof_of_debt: string | null;
+  proof_of_completion: string | null;
+  created_time: string;
+  claimed_time: string | null;
+  is_claimed: boolean;
+};
+
 type UserProfileState = {
   tabIndex: number;
   newRequestDialog: boolean;
-  // owed: IouType[];
-  // owe: IouType[];
+  owed: IouObj[];
+  owe: IouObj[];
   requests: Request[];
   newRequestFavour: string;
   newRequestReward: string;
@@ -127,8 +140,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   state: UserProfileState = {
     tabIndex: this.props.location.state.tabIndex ?? 0,
     newRequestDialog: false,
-    // owed: [],
-    // owe: [],
+    owed: [],
+    owe: [],
     requests: [],
     newRequestFavour: "",
     newRequestReward: "",
@@ -196,7 +209,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           // Successful login 201
           this.setState({
             snackMessage: "New request created!",
-            requestSnack: true,
+            snack: true,
             newRequestDialog: false,
           });
         } else {
@@ -204,7 +217,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               newRequestDialog: false,
             })
           );
@@ -231,7 +244,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           // Successful login 201
           this.setState({
             snackMessage: "New IOU created!",
-            requestSnack: true,
+            snack: true,
             newRequestDialog: false,
           });
         } else {
@@ -239,7 +252,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               newRequestDialog: false,
             })
           );
@@ -267,7 +280,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           // Successful login 201
           this.setState({
             snackMessage: "New IOU created!",
-            requestSnack: true,
+            snack: true,
             newRequestDialog: false,
           });
         } else {
@@ -275,7 +288,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               newRequestDialog: false,
             })
           );
@@ -301,7 +314,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         method: "GET",
         headers: headers,
       }),
-      fetch(`insert here`, {
+      fetch(`${iouOweEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
@@ -311,9 +324,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           ([owedResult, oweResult, requestsResult]) => {
             this.setLoading(false);
             this.setState({
-              // owed: owedResult,
-              // owe: oweResult,
-              requests: requestsResult,
+              owed: owedResult,
+              owe: oweResult,
+              // requests: requestsResult,
             });
             console.log("Success:", owedResult, oweResult, requestsResult);
           }
@@ -347,7 +360,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               userDropLoading: false,
             })
           );
@@ -379,7 +392,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               userDropLoading: false,
             })
           );
@@ -753,9 +766,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={0}
                 >
-                  {/* {this.state.owed.map((owed, i) => {
-                    return <IOU request={owed} key={i} />;
-                  })} */}
+                  {this.state.owed.map((owed, i) => {
+                    return <IOU iou={owed} key={i} />;
+                  })}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -763,9 +776,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={1}
                 >
-                  {/* {this.state.owe.map((owe, i) => {
-                    return <IOU request={owe} key={i} />;
-                  })} */}
+                  {this.state.owe.map((owe, i) => {
+                    return <IOU iou={owe} key={i} />;
+                  })}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}

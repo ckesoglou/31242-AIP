@@ -125,26 +125,23 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       .then((res) => {
         if (res.status === 200) {
           res.json().then((body) => {
-            this.showPersonalScore(true);
-            this.setState({ me: body });
+            this.setState({ me: body }, () => {
+              this.setState({ showMe: true });
+            });
             this.setState({ error: "" });
-            this.setLoading(false);
+            console.log("Success:", body);
           });
         } else {
           //Should be response code 400 handling
           // TODO: Display error on SnackBAR
+          res.json().then((body) => {
+            console.error("Error:", body.errors);
+            this.setState({ error: body.errors });
+          });
         }
       })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ me: body }, () => {
-          this.setState({ showMe: true });
-        });
-        this.setState({ error: "" });
-      })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ error: exception });
+        console.log("Error:", exception);
       });
   }
 

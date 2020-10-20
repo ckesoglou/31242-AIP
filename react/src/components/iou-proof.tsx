@@ -6,7 +6,7 @@ import ImageIcon from "@material-ui/icons/Image";
 import { Popover, Typography, Divider } from "@material-ui/core";
 
 type IouProofProps = {
-  imagePK: string;
+  imagePK: string | null;
 };
 
 type IouProofState = {

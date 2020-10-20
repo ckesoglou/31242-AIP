@@ -29,20 +29,15 @@ type Item = {
   display_name: string;
 };
 
-type RequestObj = {
+type IouCompleteProps = {
   id: string;
-  author: { username: string; display_name: string };
-  completed_by: { username: string; display_name: string };
-  proof_of_completion: string;
+  is_completed: boolean;
+  author: string;
+  completed_by: string;
+  claimed_time: string | null;
+  created_time: string;
   rewards: Item[];
   details: string;
-  created_time: string;
-  completion_time: string;
-  is_completed: boolean;
-};
-
-type IouCompleteProps = {
-  request: RequestObj;
 };
 
 type IouCompleteState = {
@@ -70,7 +65,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   };
 
   openCompleteForm() {
-    if (!this.props.request.is_completed) {
+    if (!this.props.is_completed) {
       this.setState({ completeIOU: true });
     }
   }
@@ -157,7 +152,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   }
 
   renderPopUpRewards(item: Item) {
-    this.fetchRewardDetails(this.props.request.id, item.id);
+    this.fetchRewardDetails(this.props.id, item.id);
     return (
       <IouFavour
         key={item.id}
@@ -173,14 +168,14 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
       <div id="completeRequestItem">
         <div
           onClick={() => {
-            if (!this.props.request.is_completed) {
+            if (!this.props.is_completed) {
               this.setState({ completeIOU: true });
             }
           }}
-          className={this.props.request.is_completed ? "" : "cursorPointer"}
+          className={this.props.is_completed ? "" : "cursorPointer"}
         >
           <Checkbox
-            checked={this.props.request.is_completed}
+            checked={this.props.is_completed}
             color="primary"
             disabled={true}
             checkedIcon={
@@ -190,9 +185,9 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               <RadioButtonUncheckedIcon color="primary" id="completeIconSize" />
             }
           />
-          {this.props.request.is_completed && (
+          {this.props.is_completed && (
             <div id="IouTaskComplete">
-              {this.props.request.completed_by.display_name.length > 9 ? (
+              {this.props.completed_by.length > 9 ? (
                 <Typography
                   id="taskCompleter"
                   className="cursorPointer"
@@ -200,11 +195,11 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                     this.setState({ AnchorEl: event.currentTarget })
                   }
                 >
-                  {this.props.request.completed_by.display_name}
+                  {this.props.completed_by}
                 </Typography>
               ) : (
                 <Typography id="taskCompleter">
-                  {this.props.request.completed_by.display_name}
+                  {this.props.completed_by}
                 </Typography>
               )}
               <Popover
@@ -224,11 +219,11 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                 <Typography id="taskDetailPopUp">
                   {"Full Display Name"}
                   <Divider id="taskPopUpDivider" />
-                  {this.props.request.completed_by.display_name}
+                  {this.props.completed_by}
                 </Typography>
               </Popover>
               <Typography id="taskTimeStamp">
-                {this.props.request.completion_time}
+                {this.props.claimed_time}
               </Typography>
             </div>
           )}
@@ -268,7 +263,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                       className="infoTableCell"
                       id="infoTableContent"
                     >
-                      {this.props.request.author.display_name}
+                      {this.props.author}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -276,27 +271,31 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                       Created on:
                     </TableCell>
                     <TableCell align="center" id="infoTableContent">
-                      {this.props.request.created_time}
+                      {this.props.created_time}
                     </TableCell>
                   </TableRow>
-                  <TableRow>
-                    <TableCell align="center" id="infoTableTitle">
-                      Task:
-                    </TableCell>
-                    <TableCell align="center" id="infoTableContent">
-                      {this.props.request.details}
-                    </TableCell>
-                  </TableRow>
+                  {this.props.details != "" && (
+                    <TableRow>
+                      <TableCell align="center" id="infoTableTitle">
+                        Task:
+                      </TableCell>
+                      <TableCell align="center" id="infoTableContent">
+                        {this.props.details}
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           </DialogContent>
-          <DialogContent className="Content" id="completePopUpRewards">
-            <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
-            {this.props.request.rewards.map((item, index) => {
-              this.renderPopUpRewards(item);
-            })}
-          </DialogContent>
+          {this.props.details !== "" && (
+            <DialogContent className="Content" id="completePopUpRewards">
+              <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
+              {this.props.rewards.map((item, index) => {
+                this.renderPopUpRewards(item);
+              })}
+            </DialogContent>
+          )}
           <DialogContent className="content">
             <DialogContentText variant="h6">
               {"Upload proof?"}

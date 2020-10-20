@@ -10,42 +10,49 @@ type Item = {
   display_name: string;
 };
 
-type RequestObj = {
+type IouObj = {
   id: string;
-  author: { username: string; display_name: string };
-  completed_by: { username: string; display_name: string };
-  proof_of_completion: string;
-  rewards: Item[];
-  details: string;
+  item: Item;
+  giver: { username: string; display_name: string };
+  receiver: { username: string; display_name: string };
+  parent_request: string | null;
+  proof_of_debt: string | null;
+  proof_of_completion: string | null;
   created_time: string;
-  completion_time: string;
-  is_completed: boolean;
+  claimed_time: string | null;
+  is_claimed: boolean;
 };
 
-type RequestProps = {
-  request: RequestObj;
+type IouProps = {
+  iou: IouObj;
 };
 
-class IOU extends React.Component<RequestProps> {
+class IOU extends React.Component<IouProps> {
   render() {
     return (
       <div>
         <Grid container xs={12} spacing={1}>
-          <Grid item xs={6} id="requestItemContainer">
+          <Grid item xs={7} id="requestItemContainer">
             <IouFavour
-              giverDisplayName={this.props.request.author.display_name}
-              recieverDisplayName={"?"} //Check how the API sends back no name to change appropriately
-              item={this.props.request.rewards[0]}
+              giverDisplayName={this.props.iou.giver.display_name}
+              recieverDisplayName={this.props.iou.receiver.display_name ?? "?"}
+              item={this.props.iou.item}
             />
           </Grid>
           <Grid item xs={1} id="requestItemContainer">
-            <IouProof imagePK={this.props.request.proof_of_completion} />
+            <IouProof imagePK={this.props.iou.proof_of_completion} />
           </Grid>
-          <Grid item xs={3} id="requestProofContainer">
-            <IouComplete request={this.props.request} />
-          </Grid>
-          <Grid item xs={1} id="requestItemContainer">
-            <RequestInfo request={this.props.request} />
+          <Grid item xs={4} id="requestProofContainer">
+            <IouComplete
+              id={this.props.iou.id}
+              is_completed={this.props.iou.is_claimed}
+              completed_by={this.props.iou.receiver?.display_name ?? ""} // TODO: check who completed by
+              claimed_time={this.props.iou.claimed_time}
+              created_time={this.props.iou.created_time}
+              author={this.props.iou.giver.display_name ?? ""}
+              rewards={[this.props.iou.item]}
+              details=""
+            />
           </Grid>
         </Grid>
       </div>

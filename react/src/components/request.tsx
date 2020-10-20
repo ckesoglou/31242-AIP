@@ -50,7 +50,16 @@ class Request extends React.Component<RequestProps> {
             <IouProof imagePK={this.props.request.proof_of_completion} />
           </Grid>
           <Grid item xs={3} id="requestProofContainer">
-            <IouComplete request={this.props.request} />
+            <IouComplete
+              id={this.props.request.id}
+              is_completed={this.props.request.is_completed}
+              completed_by={this.props.request.completed_by?.display_name ?? ""} // TODO: check who completed by
+              claimed_time={this.props.request.completion_time}
+              created_time={this.props.request.created_time}
+              author={this.props.request.author.display_name ?? ""}
+              rewards={this.props.request.rewards}
+              details={this.props.request.details}
+            />
           </Grid>
           <Grid item xs={1} id="requestItemContainer">
             <RequestInfo request={this.props.request} />

@@ -114,7 +114,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
           this.setLoading(false);
         });
     } else {
-      this.fetchRequests();
+      // this.fetchRequests();
     }
   }
 
@@ -157,7 +157,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
   }
 
   componentDidMount() {
-    this.fetchRequests();
+    // this.fetchRequests();
     this.fetchRewards();
   }
 
@@ -308,7 +308,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                     {this.state.requests.map((requestProp, i) => {
                       return (
                         <Grid item xs={12}>
-                          <RequestComponent key={i} request={requestProp} />
+                          {/* <RequestComponent key={i} request={requestProp} /> */}
                         </Grid>
                       );
                     })}
