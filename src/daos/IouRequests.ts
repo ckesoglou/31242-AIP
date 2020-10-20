@@ -18,7 +18,7 @@ IouRequest.init(
       allowNull: true,
     },
     proof_of_completion: {
-      type: DataTypes.UUIDV4,
+      type: DataTypes.STRING(30),
       allowNull: true,
     },
     details: {
