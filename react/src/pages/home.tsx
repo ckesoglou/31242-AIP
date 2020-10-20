@@ -23,7 +23,7 @@ import { Search, Clear } from "@material-ui/icons";
 import RequestComponent from "../components/request";
 import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
 import { Pagination } from "@material-ui/lab";
-
+//
 type Request = {
   id: string;
   author: {
@@ -97,7 +97,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       let params: any =
         this.state.filterKey === "Keyword"
           ? { search: this.state.filterValue }
-          : { rewards: this.state.filterValue };
+          : { reward: this.state.filterValue };
       Object.keys(params).forEach((key) =>
         url.searchParams.append(key, params[key])
       );
@@ -267,10 +267,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                       >
                         {this.state.rewards.map((rewardItem, i) => {
                           return (
-                            <MenuItem
-                              key={i + 1}
-                              value={rewardItem.display_name}
-                            >
+                            <MenuItem key={i + 1} value={rewardItem.id}>
                               {rewardItem.display_name}
                             </MenuItem>
                           );
@@ -330,10 +327,10 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                   >
                     <Grid item xs={12}>
                       <Grid container direction="row">
-                        <Grid id="headerItem" item xs={4}>
+                        <Grid id="headerItem" item xs={3}>
                           <Typography variant="h6">Favour</Typography>
                         </Grid>
-                        <Grid id="headerItem" item xs={2}>
+                        <Grid id="headerItem" item xs={3}>
                           <Typography variant="h6">Task</Typography>
                         </Grid>
                         <Grid id="headerItem" item xs={2}>
@@ -348,18 +345,23 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                       </Grid>
                     </Grid>
                     <Divider variant="middle" />
-                    {this.state.requests.map((requestProp, i) => {
-                      return (
-                        <Grid item xs={12}>
-                          <RequestComponent
-                            key={i}
-                            request={requestProp}
-                            potentialRewards={this.state.rewards}
-                            iouType={2}
-                          />
-                        </Grid>
-                      );
-                    })}
+                    {this.state.requests
+                      .slice(
+                        (this.state.pageNumber - 1) * numberOfItemsPerPage,
+                        this.state.pageNumber * numberOfItemsPerPage
+                      )
+                      .map((requestProp, i) => {
+                        return (
+                          <Grid item xs={12}>
+                            <RequestComponent
+                              key={i}
+                              request={requestProp}
+                              potentialRewards={this.state.rewards}
+                              iouType={2}
+                            />
+                          </Grid>
+                        );
+                      })}
                   </Grid>
                   <CircularProgress
                     ref={this.loadingRef}
@@ -369,7 +371,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                   />
                   <Divider variant="middle" />
                   <Pagination
-                    id="pagination"
+                    id="homePagination"
                     count={this.setCountOfRequest()}
                     page={this.state.pageNumber}
                     onChange={(

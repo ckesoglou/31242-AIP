@@ -12,7 +12,6 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import {
-  PeopleOutline,
   ThumbsUpDown,
   ExitToApp,
   AssignmentInd,
@@ -61,15 +60,20 @@ type AvatarWithMenuState = {
 
 // most readable solution from https://stackoverflow.com/questions/33076177/getting-name-initials-using-js
 function nameToUpperInitials(fullName: string) {
-  const namesArray = fullName.split(" ");
-  if (namesArray.length === 1)
-    return `${namesArray[0].charAt(0).toUpperCase()}`;
-  else
-    return `${namesArray[0].charAt(0).toUpperCase()}${namesArray[
-      namesArray.length - 1
-    ]
-      .charAt(0)
-      .toUpperCase()}`;
+  const userrrr = window.localStorage.getItem("user");
+  if (userrrr) {
+    const user = JSON.parse(userrrr) ?? { name: "?" };
+
+    const namesArray = user.name.split(" ");
+    if (namesArray.length === 1)
+      return `${namesArray[0].charAt(0).toUpperCase()}`;
+    else
+      return `${namesArray[0].charAt(0).toUpperCase()}${namesArray[
+        namesArray.length - 1
+      ]
+        .charAt(0)
+        .toUpperCase()}`;
+  }
 }
 
 class AvatarWithMenu extends React.Component {
@@ -122,7 +126,7 @@ class AvatarWithMenu extends React.Component {
                   <ListItemText primary="My Favours" />
                 </StyledMenuItem>
               </Link>
-              <Link
+              {/* <Link
                 id="requestLink"
                 color="inherit"
                 component={RouterLink}
@@ -135,7 +139,7 @@ class AvatarWithMenu extends React.Component {
                   </ListItemIcon>
                   <ListItemText primary="My Requests" />
                 </StyledMenuItem>
-              </Link>
+              </Link> */}
               <MenuItem />
               <Link
                 id="logOutLink"
@@ -145,6 +149,11 @@ class AvatarWithMenu extends React.Component {
                 onClick={() => {
                   this.context.updateUser({ name: "?" });
                   this.setState({ userMenu: false });
+                  fetch(`/api/logout`, {
+                    method: "GET",
+                  }).catch((exception) => {
+                    console.error("Error:", exception);
+                  });
                 }}
                 style={{ textDecoration: "none" }}
               >

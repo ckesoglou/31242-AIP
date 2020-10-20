@@ -3,7 +3,10 @@ import { BAD_REQUEST, OK, UNAUTHORIZED } from "http-status-codes";
 import { getUser } from "../daos/Users";
 import Joi, { string, ObjectSchema } from "joi";
 import bcrypt from "bcrypt";
-import { generateNewAuthenticationTokens } from "@shared/Authenticate";
+import {
+  generateNewAuthenticationTokens,
+  getAuthenticatedUser,
+} from "@shared/Authenticate";
 
 const router = Router();
 
@@ -21,7 +24,7 @@ const LoginPOST: ObjectSchema<ILoginPOST> = Joi.object({
   password: Joi.string().min(1).max(72, "utf8"),
 }).options({ presence: "required" });
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
   const { error, value } = LoginPOST.validate(req.body);
 
   if (error) {
@@ -53,6 +56,14 @@ router.post("/", async (req: Request, res: Response) => {
   return res.status(UNAUTHORIZED).json({
     errors: ["Username or password was incorrect"], // We do not specify which for security reasons
   });
+});
+
+/**
+ * POST: /logout
+ */
+
+router.get("/logout", async (req: Request, res: Response) => {
+  return res.status(OK).clearCookie("access_tokens").end();
 });
 
 export default router;

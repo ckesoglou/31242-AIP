@@ -19,9 +19,10 @@ type AppState = {
 
 class App extends React.Component {
   state: AppState = {
-    user: { name: "?" },
+    user: window.localStorage.getItem("user") ?? { name: "?" },
     updateUser: (newUser: Object) => {
       this.setState({ user: newUser });
+      window.localStorage.setItem("user", JSON.stringify(newUser));
     },
   };
 

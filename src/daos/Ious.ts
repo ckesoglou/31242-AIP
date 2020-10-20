@@ -163,7 +163,7 @@ export async function getIous(
   return Iou.findAll({
     where: filter,
     offset: start,
-    limit: limit,
+    limit: 9999, // TODO limit,
   });
 }
 
@@ -174,7 +174,7 @@ export async function getFormattedIous(
 ) {
   const ious = await Iou.findAll({
     offset: start,
-    limit: limit,
+    limit: 9999, // TODO limit,
     subQuery: false,
     where: filter,
   });

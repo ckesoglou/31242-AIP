@@ -1,4 +1,4 @@
-import Iou from '@entities/Iou';
+import Iou from "@entities/Iou";
 import { DataTypes, Op, Sequelize } from "sequelize";
 import IouRequest, { IIouRequestAttributes } from "../entities/IouRequest";
 import db from "./DBInstance";
@@ -66,7 +66,7 @@ export async function getRequests(
     where: filter,
     order: [["created_time", "DESC"]],
     offset: start,
-    limit: limit,
+    limit: 9999, // TODO limit,
   });
 }
 
@@ -74,7 +74,10 @@ export async function createRequest(attributes: IIouRequestAttributes) {
   return IouRequest.create(attributes);
 }
 
-export async function updateRequest(request: IouRequest, attributes: IIouRequestAttributes) {
+export async function updateRequest(
+  request: IouRequest,
+  attributes: IIouRequestAttributes
+) {
   return request.update(attributes);
 }
 

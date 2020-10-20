@@ -11,7 +11,7 @@ import LeaderboardRouter from "./Leaderboard";
 const router = Router();
 
 // Add sub-routes
-router.use("/login", LoginRouter);
+router.use(LoginRouter);
 router.use("/signup", SignUpRouter);
 router.use("/iou", IouRouter);
 router.use(RequestRouter);

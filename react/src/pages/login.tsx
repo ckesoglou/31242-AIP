@@ -97,7 +97,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
           this.setState({ successfulLogin: true }, () => {
             this.context.updateUser({
               name: this.state.username,
-              password: this.state.password,
             });
           });
         } else {
