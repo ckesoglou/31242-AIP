@@ -20,7 +20,7 @@ async function formatRequest(request: IouRequest) {
     ...(request as any).dataValues,
     author: await getBasicUser(request.author),
     completed_by: await getBasicUser(request.completed_by),
-    rewards: rewardItems
+    rewardItems: rewardItems
   }
 }
 

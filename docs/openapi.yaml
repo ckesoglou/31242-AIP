@@ -974,7 +974,7 @@ components:
           type: string
           description: Unique identifier of the image proof of completion.
           example: 3533c832-2efa-4b37-be38-2f1c278704b8
-        rewards:
+        rewardItems:
           type: array
           items:
             $ref: "#/components/schemas/Item"

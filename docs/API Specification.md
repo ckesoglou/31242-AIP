@@ -920,7 +920,7 @@ proof: string
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewards": [
+    "rewardItems": [
       {
         "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
         "display_name": "Coffee"
@@ -954,7 +954,7 @@ Status Code **200**
 |»» display_name|string|false|none|Current display name of the user|
 |» completed_by|[User](#schemauser)|false|none|none|
 |» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|» rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|» rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
 |»» id|string|false|none|Unique identifier of the item.|
 |»» display_name|string|false|none|Current display name of the item.|
 |» details|string|false|none|Details of the request (maximum 50 bytes).|
@@ -1024,7 +1024,7 @@ Retrieve a list of requests, optionally matched to provided criteria. *Author, S
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewards": [
+    "rewardItems": [
       {
         "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
         "display_name": "Coffee"
@@ -1058,7 +1058,7 @@ Status Code **200**
 |»» display_name|string|false|none|Current display name of the user|
 |» completed_by|[User](#schemauser)|false|none|none|
 |» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|» rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|» rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
 |»» id|string|false|none|Unique identifier of the item.|
 |»» display_name|string|false|none|Current display name of the item.|
 |» details|string|false|none|Details of the request (maximum 50 bytes).|
@@ -1199,7 +1199,7 @@ Retrieve details about a single request.
     "display_name": "John Smith"
   },
   "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-  "rewards": [
+  "rewardItems": [
     {
       "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
       "display_name": "Coffee"
@@ -1883,7 +1883,7 @@ This operation does not require authentication
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewards": [
+    "rewardItems": [
       {
         "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
         "display_name": "Coffee"
@@ -1959,7 +1959,7 @@ This operation does not require authentication
     "display_name": "John Smith"
   },
   "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-  "rewards": [
+  "rewardItems": [
     {
       "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
       "display_name": "Coffee"
@@ -1981,7 +1981,7 @@ This operation does not require authentication
 |author|[User](#schemauser)|false|none|User who created the request.|
 |completed_by|[User](#schemauser)|false|none|User who completed the request.|
 |proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|rewards|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
 |details|string|false|none|Details of the request (maximum 50 bytes).|
 |created_time|string(date-time)|false|none|Timestamp of when the request was created.|
 |completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
