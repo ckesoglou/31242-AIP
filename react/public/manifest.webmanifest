@@ -1,9 +1,9 @@
 {
-	"name": "I Owe You",
-	"short_name": "IOU",
-	"display": "standalone",
-	"icons": [
-		{
+  "name": "I Owe You",
+  "short_name": "IOU",
+  "display": "standalone",
+  "icons": [
+    {
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
@@ -13,20 +13,20 @@
       "type": "image/png",
       "sizes": "512x512"
     } 
-	],
-	"start_url": "/",
-	"background_color":"#222629",
-	"theme_color": "#86C232",
-	"shortcuts ": [
-		{
+  ],
+  "start_url": "/",
+  "background_color":"#222629",
+  "theme_color": "#86C232",
+  "shortcuts ": [
+    {
       "name": "View Public Requests",
       "short_name": "Requests",
       "url": "/home"
-		},
-		{
+    },
+    {
       "name": "View my IOUs",
       "short_name": "IOUs",
       "url": "/user"
-		}
-	]
+    }
+  ]
 }
