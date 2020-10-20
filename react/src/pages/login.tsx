@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import "../assets/css/login.css";
 import { loginEndpoint } from "../api/endpoints";
-import { Authentication } from "../components/protected-route";
 import {
   Container,
   Typography,
@@ -16,9 +15,11 @@ import {
   Link,
   Grid,
   Button,
+  Snackbar,
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+// import UserProfile from "./userprofile";
 
 type LoginState = {
   username: string;
@@ -26,6 +27,7 @@ type LoginState = {
   error: string;
   submitted: boolean;
   successfulLogin: boolean;
+  snackMessage: string;
 };
 
 interface ILoginProps extends RouteComponentProps {
@@ -38,6 +40,7 @@ interface ILoginProps extends RouteComponentProps {
       next: {
         pathname: string;
       };
+      unauthenticated: string;
     };
   };
 }
@@ -58,17 +61,23 @@ class Login extends React.Component<ILoginProps, LoginState> {
     error: "",
     submitted: false,
     successfulLogin: false,
+    snackMessage: "",
   };
 
   static contextType = UserContext;
 
-  setLoading(): void {
+  startLoading(): void {
     this.signInRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
   }
 
+  stopLoading(): void {
+    this.signInRef.current!.innerText = "Sign In";
+    this.loadingRef.current!.style.display = "none";
+  }
+
   handleLogin(): void {
-    this.setLoading();
+    this.startLoading();
 
     fetch(`${loginEndpoint}`, {
       method: "POST",
@@ -81,20 +90,36 @@ class Login extends React.Component<ILoginProps, LoginState> {
       },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ successfulLogin: true }, () => {
-          this.context.updateUser({
-            name: this.state.username,
+        if (res.status === 200) {
+          // Successful login 200
+          // TODO: Only for development?! Handle frontend auth
+          // Authentication.authenticate(() => {});
+          this.setState({ successfulLogin: true }, () => {
+            this.context.updateUser({
+              name: this.state.username,
+              password: this.state.password,
+            });
           });
-        });
+        } else {
+          // Unsuccessful login (400 or 401)
+          this.stopLoading();
+          res
+            .json()
+            .then((body) => this.setState({ snackMessage: body.errors }));
+          this.setState({ submitted: !this.state.submitted });
+        }
       })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ error: exception });
-      });
+      .catch(console.log);
+  }
+
+  componentDidMount() {
+    if (this.props.location.state !== undefined) {
+      if (this.props.location.state.unauthenticated) {
+        this.setState({
+          snackMessage: this.props.location.state.unauthenticated,
+        });
+      }
+    }
   }
 
   render() {
@@ -104,8 +129,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
     };
 
     if (this.state.successfulLogin) {
-      // TODO: Only for development! To be deleted
-      Authentication.authenticate(() => {});
       return <Redirect to={next} />;
     }
 
@@ -168,23 +191,33 @@ class Login extends React.Component<ILoginProps, LoginState> {
             </Button>
             <Grid container spacing={1}>
               <Grid item xs={7}>
-                <Link href="#">Forgot password?</Link>
+                <div id="goBack">
+                  <MeetingRoomIcon fontSize="small" color="primary" />
+                  <Link component={RouterLink} to="/home">
+                    {"Home"}
+                  </Link>
+                </div>
               </Grid>
               <Grid item xs={5}>
                 <Link component={RouterLink} to="/signup">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-              <Grid item xs>
-                <div id="goBack">
-                  <MeetingRoomIcon fontSize="small" color="primary" />
-                  <Link component={RouterLink} to="/home">
-                    {"Head back to home"}
-                  </Link>
-                </div>
-              </Grid>
+              <Grid item xs></Grid>
             </Grid>
           </FormControl>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            message={this.state.snackMessage}
+            open={this.state.snackMessage !== ""}
+            onClose={() => {
+              this.setState({ snackMessage: "" });
+            }}
+            autoHideDuration={5000}
+          />
         </div>
       </Container>
     );

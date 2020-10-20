@@ -21,7 +21,8 @@ import { AvatarWithMenu } from "../components/avatarWithMenu";
 import Leaderboard from "../components/leaderboard";
 import { Search, Clear } from "@material-ui/icons";
 import RequestComponent from "../components/request";
-import { requestsEndpoint } from "../api/endpoints";
+import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
+import { Pagination } from "@material-ui/lab";
 
 type Request = {
   id: string;
@@ -41,9 +42,15 @@ type Request = {
   is_completed: boolean;
 };
 
+type Item = {
+  id: string;
+  display_name: string;
+};
+
 type RewardItem = {
   id: string; // UUID;
-  display_name: string;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type HomeState = {
@@ -52,8 +59,11 @@ type HomeState = {
   snack: boolean;
   snackMessage: string;
   requests: Request[];
-  rewardItems: RewardItem[];
+  rewards: Item[];
+  pageNumber: number;
 };
+
+const numberOfItemsPerPage = 5;
 
 class Home extends React.Component<RouteComponentProps, HomeState> {
   private loadingRef: React.RefObject<HTMLInputElement>;
@@ -69,7 +79,8 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
     snack: false,
     snackMessage: "",
     requests: [],
-    rewardItems: [],
+    rewards: [],
+    pageNumber: 1,
   };
 
   static contextType = UserContext;
@@ -97,20 +108,29 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
         },
       })
         .then((res) => {
-          return res.json();
-        })
-        .then((body) => {
-          console.log("Success:", body);
-          this.setState({
-            snackMessage: "Fetched filtered requests!",
-            snack: true,
-            requests: body,
-          });
-          this.setLoading(false);
+          if (res.status === 200) {
+            // Successful login 200
+            res.json().then((body) => {
+              console.log("Success:", body);
+              this.setState({
+                snackMessage: "Fetched filtered requests!",
+                snack: true,
+                requests: body,
+              });
+              this.setLoading(false);
+            });
+          } else {
+            res.json().then((body) => {
+              console.log(body.errors);
+              this.setState({ snackMessage: body.errors, snack: true });
+              this.setLoading(false);
+            });
+          }
         })
         .catch((exception) => {
           console.error("Error:", exception);
-          this.setState({ snackMessage: exception, snack: true });
+          this.setState({ snackMessage: `${exception}` });
+          this.setState({ snack: true });
           this.setLoading(false);
         });
     } else {
@@ -125,40 +145,60 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       method: "GET",
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ requests: body });
-        this.setLoading(false);
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) => {
+            this.setState({ requests: body });
+            console.log("requests " + JSON.stringify(body));
+            this.setLoading(false);
+          });
+        } else {
+          res.json().then((body) => {
+            console.log(body.errors);
+            this.setState({ snackMessage: body.errors, snack: true });
+            this.setLoading(false);
+          });
+        }
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ snackMessage: exception });
-        this.setLoading(false);
+        this.setState({ snackMessage: `${exception}` });
         this.setState({ snack: true });
+        this.setLoading(false);
       });
   }
 
-  fetchRewards() {
-    fetch("/api/items", {
+  fetchItems(): void {
+    fetch(`${itemEndpoint}`, {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Fetched reward items:", body);
-        this.setState({ rewardItems: body });
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) => this.setState({ rewards: body }));
+        }
       })
       .catch((exception) => {
-        console.error("Error fetching reward items:", exception);
+        console.error("Error:", exception);
+        this.setState({ snackMessage: `${exception}` });
+        this.setState({ snack: true });
       });
   }
 
   componentDidMount() {
     this.fetchRequests();
-    this.fetchRewards();
+    this.fetchItems();
+  }
+
+  setCountOfRequest(): number {
+    if (this.state.requests.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.requests.length / numberOfItemsPerPage);
+    } else {
+      return this.state.requests.length / numberOfItemsPerPage;
+    }
   }
 
   render() {
@@ -225,10 +265,13 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                           ),
                         }}
                       >
-                        {this.state.rewardItems.map((item, i) => {
+                        {this.state.rewards.map((rewardItem, i) => {
                           return (
-                            <MenuItem key={i + 1} value={item.display_name}>
-                              {item.display_name}
+                            <MenuItem
+                              key={i + 1}
+                              value={rewardItem.display_name}
+                            >
+                              {rewardItem.display_name}
                             </MenuItem>
                           );
                         })}
@@ -308,7 +351,12 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                     {this.state.requests.map((requestProp, i) => {
                       return (
                         <Grid item xs={12}>
-                          <RequestComponent key={i} request={requestProp} />
+                          <RequestComponent
+                            key={i}
+                            request={requestProp}
+                            potentialRewards={this.state.rewards}
+                            iouType={2}
+                          />
                         </Grid>
                       );
                     })}
@@ -318,6 +366,21 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                     size={35}
                     color="inherit"
                     id="homeLoading"
+                  />
+                  <Divider variant="middle" />
+                  <Pagination
+                    id="pagination"
+                    count={this.setCountOfRequest()}
+                    page={this.state.pageNumber}
+                    onChange={(
+                      event: React.ChangeEvent<unknown>,
+                      value: number
+                    ) => {
+                      this.setState({ pageNumber: value });
+                    }}
+                    defaultPage={1}
+                    siblingCount={0}
+                    color="primary"
                   />
                 </Box>
                 <Snackbar

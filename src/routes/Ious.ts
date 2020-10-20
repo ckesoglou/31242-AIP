@@ -57,7 +57,7 @@ router.get("/owed", async (req: Request, res: Response) => {
   const user = await getAuthenticatedUser(req, res);
   if (user) {
     const iou = await getFormattedIous(
-      { receiver: user.username, is_claimed: false },
+      { receiver: user.username },
       iousQuery.start,
       iousQuery.limit
     );
@@ -154,7 +154,7 @@ router.get("/owe", async (req: Request, res: Response) => {
   const user = await getAuthenticatedUser(req, res);
   if (user) {
     const iou = await getFormattedIous(
-      { giver: user.username, is_claimed: false },
+      { giver: user.username },
       iousQuery.start,
       iousQuery.limit
     );

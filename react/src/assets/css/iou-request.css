@@ -286,9 +286,9 @@
   min-height: 240px;
 }
 
-#completeDetailsTable {
-  min-height: 230px;
-}
+/* #completeDetailsTable {
+  
+} */
 
 #completePopUpRewards {
   max-height: 300px;
@@ -337,4 +337,12 @@
 
 #modalTitle {
   text-align: center;
+}
+
+#deleteIcon {
+  color: rgb(233, 64, 64);
+}
+
+#test {
+  display: inline-block;
 }

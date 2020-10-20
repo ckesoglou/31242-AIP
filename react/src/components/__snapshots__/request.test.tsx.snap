@@ -13,6 +13,7 @@ exports[`<Request /> should render correctly 1`] = `
       xs={4}
     >
       <RequestRewards
+        is_completed={true}
         items={
           Array [
             Object {
@@ -26,22 +27,6 @@ exports[`<Request /> should render correctly 1`] = `
           ]
         }
         requestID="1"
-        rewards={
-          Array [
-            Object {
-              "display_name": "Hug",
-              "id": "1",
-            },
-            Object {
-              "display_name": "Coffee",
-              "id": "2",
-            },
-            Object {
-              "display_name": "Food",
-              "id": "3",
-            },
-          ]
-        }
       />
     </WithStyles(ForwardRef(Grid))>
     <WithStyles(ForwardRef(Grid))
@@ -60,6 +45,7 @@ exports[`<Request /> should render correctly 1`] = `
     >
       <IouProof
         imagePK="Some ID"
+        proof_of_debt={false}
       />
     </WithStyles(ForwardRef(Grid))>
     <WithStyles(ForwardRef(Grid))
@@ -68,33 +54,23 @@ exports[`<Request /> should render correctly 1`] = `
       xs={3}
     >
       <IouComplete
-        request={
-          Object {
-            "author": Object {
-              "display_name": "James",
-              "username": "James",
+        author="James"
+        completed_by="Kevin"
+        created_time="02/02/2020"
+        details="Clean the fridge"
+        id="1"
+        is_completed={true}
+        rewards={
+          Array [
+            Object {
+              "display_name": "Hug",
+              "id": "1",
             },
-            "comletion_time": "02/02/2020",
-            "completed_by": Object {
-              "display_name": "Kevin",
-              "username": "Kevin",
+            Object {
+              "display_name": "Coffee",
+              "id": "2",
             },
-            "created_time": "02/02/2020",
-            "details": "Clean the fridge",
-            "id": "1",
-            "is_completed": true,
-            "proof_of_completion": "Some ID",
-            "rewards": Array [
-              Object {
-                "display_name": "Hug",
-                "id": "1",
-              },
-              Object {
-                "display_name": "Coffee",
-                "id": "2",
-              },
-            ],
-          }
+          ]
         }
       />
     </WithStyles(ForwardRef(Grid))>

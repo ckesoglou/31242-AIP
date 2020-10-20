@@ -1,10 +1,5 @@
 import { Request, Response, Router } from "express";
-import {
-  BAD_REQUEST,
-  CREATED,
-  OK,
-  UNPROCESSABLE_ENTITY,
-} from "http-status-codes";
+import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from "http-status-codes";
 import bcrypt from "bcrypt";
 import Joi, { ObjectSchema } from "joi";
 
@@ -60,7 +55,7 @@ router.post("/", async (req: Request, res: Response) => {
   const foundUser = await getUser(requestBody.username);
   if (foundUser) {
     return res.status(UNPROCESSABLE_ENTITY).json({
-      errors: ["Username already exists"],
+      errors: ["Username already taken."],
     });
   }
 
@@ -71,6 +66,7 @@ router.post("/", async (req: Request, res: Response) => {
     requestBody.displayName,
     passHash
   );
+
   await generateNewAuthenticationTokens(
     user,
     req.headers.host ?? "Unknown",
