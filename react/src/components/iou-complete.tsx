@@ -37,7 +37,7 @@ type RequestObj = {
   rewards: Item[];
   details: string;
   created_time: string;
-  comletion_time: string;
+  completion_time: string;
   is_completed: boolean;
 };
 
@@ -226,7 +226,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                 </Typography>
               </Popover>
               <Typography id="taskTimeStamp">
-                {this.props.request.comletion_time}
+                {this.props.request.completion_time}
               </Typography>
             </div>
           )}
