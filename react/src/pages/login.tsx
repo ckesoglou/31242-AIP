@@ -60,10 +60,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
     successfulLogin: false,
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   setLoading(): void {
     this.signInRef.current!.innerText = "";
@@ -91,7 +88,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
         this.setState({ successfulLogin: true }, () => {
           this.context.updateUser({
             name: this.state.username,
-            password: this.state.password,
           });
         });
       })
