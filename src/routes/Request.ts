@@ -217,9 +217,9 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
 });
 
 /**
- * PUT: /request/{requestId}
+ * PUT: /request/{requestId}/complete
  */
-router.put("/request/:requestID", upload.single("proof"), async (req: Request, res: Response) => {
+router.put("/request/:requestID/complete", upload.single("proof"), async (req: Request, res: Response) => {
   const { error, value } = RequestParams.validate(req.params);
 
   if (error || !req.file) {
