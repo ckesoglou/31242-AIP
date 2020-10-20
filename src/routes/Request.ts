@@ -17,7 +17,7 @@ async function formatRequest(request: IouRequest) {
     rewards.map(reward => { reward.item });
 
     return {
-      ...request,
+      ...(request as any).dataValues,
       author: await getBasicUser(request.author),
       completed_by: await getBasicUser(request.completed_by),
       rewards: rewards
