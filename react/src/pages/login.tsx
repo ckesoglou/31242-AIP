@@ -113,10 +113,12 @@ class Login extends React.Component<ILoginProps, LoginState> {
   }
 
   componentDidMount() {
-    if (this.props.location.state.unauthenticated) {
-      this.setState({
-        snackMessage: this.props.location.state.unauthenticated,
-      });
+    if (this.props.location.state !== undefined) {
+      if (this.props.location.state.unauthenticated) {
+        this.setState({
+          snackMessage: this.props.location.state.unauthenticated,
+        });
+      }
     }
   }
 

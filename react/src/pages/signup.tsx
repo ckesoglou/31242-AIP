@@ -338,7 +338,13 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
               </Grid>
               <Grid item xs={4}>
                 <div id="goSign">
-                  <Link component={RouterLink} to="/login">
+                  <Link
+                    component={RouterLink}
+                    to={{
+                      pathname: "/login",
+                      state: { unauthenticated: "" },
+                    }}
+                  >
                     {"Sign in instead"}
                   </Link>
                 </div>

@@ -229,7 +229,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
       return (
         <Redirect
           to={{
-            pathname: "/home",
+            pathname: "/login",
             state: { unauthenticated: "You were too cool" },
           }}
         />
