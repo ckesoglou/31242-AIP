@@ -2,7 +2,6 @@ import React, { ChangeEvent } from "react";
 import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
 import "../assets/css/userprofile.css";
 import {
-  userProfileEndpoint,
   requestsNewEndpoint,
   iouOweEndpoint,
   iouOwedEndpoint,
@@ -55,7 +54,7 @@ type UserProfileState = {
   newRequestFavour: string;
   newRequestReward: string;
   newRequestProof: any;
-  requestSnack: boolean;
+  snack: boolean;
   snackMessage: string;
   potentialItems: ItemObj[];
   selectedUser: string;
@@ -134,7 +133,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     newRequestFavour: "",
     newRequestReward: "",
     newRequestProof: "",
-    requestSnack: false,
+    snack: false,
     snackMessage: "",
     potentialItems: [],
     selectedUser: "",
@@ -178,7 +177,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
@@ -225,12 +224,12 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "New IOU created!" });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
@@ -252,12 +251,12 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "New IOU created!" });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
@@ -267,15 +266,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     };
     this.setLoading(true);
     Promise.all([
-      fetch(`${iouEndpoint}/owed`, {
+      fetch(`${iouOwedEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${iouEndpoint}/owe`, {
+      fetch(`${iouOweEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${requestsEndpoint}`, {
+      fetch(`insert here`, {
         method: "GET",
         headers: headers,
       }),
@@ -319,7 +318,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
         this.setState({ userDropLoading: false });
       });
   }
@@ -343,7 +342,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
         this.setState({ userDropLoading: false });
       });
   }

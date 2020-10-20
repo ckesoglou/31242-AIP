@@ -130,9 +130,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ requests: body });
-        this.setState({ snackMessage: "Fetched requests!" });
         this.setLoading(false);
-        this.setState({ snack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
