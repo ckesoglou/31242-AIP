@@ -995,7 +995,7 @@ fetch('/api/requests',
 
 `GET /api/requests`
 
-Retrieve a list of requests, optionally matched to provided criteria.
+Retrieve a list of requests, optionally matched to provided criteria. *Author, Search & Reward filters are mutually exclusive.
 
 <h3 id="get__api_requests-parameters">Parameters</h3>
 
@@ -1003,15 +1003,9 @@ Retrieve a list of requests, optionally matched to provided criteria.
 |---|---|---|---|---|
 |start|query|string|false|Starting row of the returned array. Default 0.|
 |limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
-|author|query|string|false|Filter based on request author.|
-|search|query|string|false|Filter for requests whose details contain the provided string.|
-|rewards|query|array[string]|false|Filter for requests that contain all these items as rewards (array of item PK's).|
-|createdAfter|query|string|false|Filter for requests created after or on this date (YYYY-MM-DD).|
-|createdBefore|query|string|false|Filter for requests created before or on this date (YYYY-MM-DD).|
-|completedAfter|query|string|false|Filter for requests completed after or on this date (YYYY-MM-DD).|
-|completedBefore|query|string|false|Filter for requests completed before or on this date (YYYY-MM-DD).|
-|completed|query|boolean|false|Filter based on whether the request is completed or not.|
-|completedBy|query|string|false|Filter based on which user completed the request.|
+|author|query|string|false|Filter* based on request author.|
+|search|query|string|false|Filter* for requests whose details contain the provided string.|
+|reward|query|string|false|Filter* for requests that contain this item PK as one of the rewards.|
 
 > Example responses
 
