@@ -320,6 +320,11 @@ router.delete("/request/:requestID/reward/:rewardID", async (req: Request, res: 
 
   await deleteIou(iou);
 
+  const remainingRewards = await getIous({ parent_request: request.id });
+  if (remainingRewards.length === 0) {
+    await deleteRequest(request);
+  }
+
   return res.status(OK).end();
 });
 
