@@ -2,7 +2,6 @@ import React, { ChangeEvent } from "react";
 import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
 import "../assets/css/userprofile.css";
 import {
-  userProfileEndpoint,
   requestsNewEndpoint,
   iouOweEndpoint,
   iouOwedEndpoint,
@@ -33,7 +32,7 @@ import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
-import IOU from "../components/iou";
+// import IOU from "../components/iou";
 // import { optional } from "joi";
 
 type ItemObj = {
@@ -49,13 +48,13 @@ type UserObj = {
 type UserProfileState = {
   tabIndex: number;
   newRequestDialog: boolean;
-  owed: string;
-  owe: string;
-  requests: string;
+  // owed: IouType[];
+  // owe: IouType[];
+  requests: Request[];
   newRequestFavour: string;
   newRequestReward: string;
   newRequestProof: any;
-  requestSnack: boolean;
+  snack: boolean;
   snackMessage: string;
   potentialItems: ItemObj[];
   selectedUser: string;
@@ -128,13 +127,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   state: UserProfileState = {
     tabIndex: this.props.location.state.tabIndex ?? 0,
     newRequestDialog: false,
-    owed: "",
-    owe: "",
-    requests: "",
+    // owed: [],
+    // owe: [],
+    requests: [],
     newRequestFavour: "",
     newRequestReward: "",
     newRequestProof: "",
-    requestSnack: false,
+    snack: false,
     snackMessage: "",
     potentialItems: [],
     selectedUser: "",
@@ -144,10 +143,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     rewardDropOpen: false,
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
@@ -181,7 +177,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
@@ -202,12 +198,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "New request created!" });
+        this.setState({ snack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
+        this.setState({ snackMessage: exception });
+        this.setState({ snack: true });
       });
-    this.setState({ requestSnack: true });
   }
 
   fetchNewOwe(): void {
@@ -227,12 +224,12 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "New IOU created!" });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
@@ -254,12 +251,12 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((body) => {
         console.log("Success:", body);
         this.setState({ snackMessage: "New IOU created!" });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       })
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
@@ -269,15 +266,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     };
     this.setLoading(true);
     Promise.all([
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owe`, {
+      fetch(`${iouOwedEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owed`, {
+      fetch(`${iouOweEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/requests`, {
+      fetch(`insert here`, {
         method: "GET",
         headers: headers,
       }),
@@ -286,13 +283,10 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         Promise.all([owed.json(), owe.json(), requests.json()]).then(
           ([owedResult, oweResult, requestsResult]) => {
             this.setLoading(false);
-            let owedRaw = JSON.stringify(owedResult);
-            let oweRaw = JSON.stringify(oweResult);
-            let requestsRaw = JSON.stringify(requestsResult);
             this.setState({
-              owed: owedRaw,
-              owe: oweRaw,
-              requests: requestsRaw,
+              // owed: owedResult,
+              // owe: oweResult,
+              requests: requestsResult,
             });
             console.log("Success:", owedResult, oweResult, requestsResult);
           }
@@ -300,8 +294,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setLoading(false);
+        // this.setState({ snackMessage: exception, snack: true });
       });
   }
 
@@ -324,7 +318,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
         this.setState({ userDropLoading: false });
       });
   }
@@ -348,7 +342,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
         this.setState({ userDropLoading: false });
       });
   }
@@ -400,10 +394,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 <Typography component="h1" variant="h4">
                   {"Profile"}
                 </Typography>
-                <AvatarWithMenu
-                  loggedIn={this.context.user.name !== "?"}
-                  fullName={this.context.user.name}
-                />
+                <AvatarWithMenu />
               </div>
             </Grid>
             {/* <Grid item xs={4}>
@@ -707,9 +698,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     horizontal: "left",
                   }}
                   message={this.state.snackMessage}
-                  open={this.state.requestSnack}
+                  open={this.state.snack}
                   onClose={() => {
-                    this.setState({ requestSnack: false });
+                    this.setState({ snack: false });
                   }}
                   autoHideDuration={5000}
                 />
@@ -719,26 +710,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={0}
                 >
-                  {this.state.owed}
-                  <IOU
-                    request={{
-                      id: "1",
-                      author: { username: "James", display_name: "James" },
-                      completed_by: {
-                        username: "Kevin",
-                        display_name: "Kevin",
-                      },
-                      proof_of_completion: "",
-                      rewards: [
-                        { id: "1", display_name: "Hug" },
-                        { id: "2", display_name: "Coffee" },
-                      ],
-                      details: "Clean the fridge",
-                      created_time: "02/02/2020",
-                      comletion_time: "02/02/2020",
-                      is_completed: true,
-                    }}
-                  />
+                  {/* {this.state.owed.map((owed, i) => {
+                    return <IOU request={owed} key={i} />;
+                  })} */}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -746,7 +720,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={1}
                 >
-                  {this.state.owe}
+                  {/* {this.state.owe.map((owe, i) => {
+                    return <IOU request={owe} key={i} />;
+                  })} */}
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -754,7 +730,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={2}
                 >
-                  {this.state.requests}
+                  {/* {this.state.requests.map((request, i) => {
+                    return <IOU request={request} key={i} />;
+                  })} */}
                 </TabPanel>
               </Paper>
             </Grid>

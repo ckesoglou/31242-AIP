@@ -2,7 +2,7 @@ import { Server, Response, Model } from "miragejs";
 import { baseUrl } from "../api/endpoints";
 
 export function makeServer({ environment = "development" } = {}) {
-  let server = new Server({
+  let server: any = new Server({
     environment,
     models: {
       // This may or may not be useful but keeping in case we need it
@@ -78,41 +78,22 @@ export function makeServer({ environment = "development" } = {}) {
       );
 
       this.get(
-        "/user/:id/owed",
+        "/iou/owed/",
         () => {
           let body = [
             {
-              id: 0,
+              id: "510ab12d-1689-4b2c-8a8d-275376f11077",
               item: {
-                id: 0,
+                id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
                 display_name: "Coffee",
               },
               giver: {
                 username: "jsmith",
                 display_name: "John Smith",
               },
-              receiver: {
-                username: "jsmith",
-                display_name: "John Smith",
-              },
-              parent_request: {
-                id: 0,
-                author: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                completed_by: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                proof_of_completion: 0,
-                details: "Clean the fridge",
-                created_time: "2020-03-09T22:18:26.625Z",
-                completion_time: "2020-03-09T22:18:26.625Z",
-                is_completed: false,
-              },
-              proof_of_debt: 0,
-              proof_of_completion: 0,
+              parent_request: "510ab12d-1689-4b2c-8a8d-275376f11078",
+              proof_of_debt: "510ab12d-1689-4b2c-8a8d-275376f11079",
+              proof_of_completion: "510ab12d-1689-4b2c-8a8d-275376f11076",
               created_time: "2020-03-09T22:18:26.625Z",
               claimed_time: "2020-03-09T22:18:26.625Z",
               is_claimed: false,
@@ -125,71 +106,25 @@ export function makeServer({ environment = "development" } = {}) {
       );
 
       this.get(
-        "/user/:id/owe",
+        "/iou/owe/",
         () => {
           let body = [
             {
-              id: 0,
+              id: "510ab12d-1689-4b2c-8a8d-275376f11077",
               item: {
-                id: 0,
+                id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
                 display_name: "Coffee",
-              },
-              giver: {
-                username: "jsmith",
-                display_name: "John Smith",
               },
               receiver: {
                 username: "jsmith",
                 display_name: "John Smith",
               },
-              parent_request: {
-                id: 0,
-                author: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                completed_by: {
-                  username: "jsmith",
-                  display_name: "John Smith",
-                },
-                proof_of_completion: 0,
-                details: "Clean the fridge",
-                created_time: "2020-03-09T22:18:26.625Z",
-                completion_time: "2020-03-09T22:18:26.625Z",
-                is_completed: false,
-              },
-              proof_of_debt: 0,
-              proof_of_completion: 0,
+              parent_request: "510ab12d-1689-4b2c-8a8d-275376f11078",
+              proof_of_debt: "510ab12d-1689-4b2c-8a8d-275376f11079",
+              proof_of_completion: "510ab12d-1689-4b2c-8a8d-275376f11076",
               created_time: "2020-03-09T22:18:26.625Z",
               claimed_time: "2020-03-09T22:18:26.625Z",
               is_claimed: false,
-            },
-          ];
-
-          return new Response(200, jsonHeader, body);
-        },
-        { timing: 2000 } // mock delay - helps visualise loading for user
-      );
-
-      this.get(
-        "/user/:id/requests",
-        () => {
-          let body = [
-            {
-              id: 0,
-              author: {
-                username: "jsmith",
-                display_name: "John Smith",
-              },
-              completed_by: {
-                username: "jsmith",
-                display_name: "John Smith",
-              },
-              proof_of_completion: 0,
-              details: "Clean the fridge",
-              created_time: "2020-03-09T22:18:26.625Z",
-              completion_time: "2020-03-09T22:18:26.625Z",
-              is_completed: false,
             },
           ];
 
@@ -307,17 +242,131 @@ export function makeServer({ environment = "development" } = {}) {
         () => {
           let body = [
             {
-              id: "1",
+              id: 1,
               display_name: "Coffee",
             },
             {
-              id: "2",
-              display_name: "Hug",
+              id: 2,
+              display_name: "Chris' lunch",
+            },
+            {
+              id: 3,
+              display_name: "James' lunch",
+            },
+            {
+              id: 4,
+              display_name: "Kevin's lunch",
             },
           ];
+
           return new Response(200, jsonHeader, body);
         },
-        { timing: 3000 }
+        { timing: 2000 } // mock delay - helps visualise loading for user
+      );
+
+      this.get(
+        "/requests",
+        (schema, request) => {
+          if (request.queryParams.search) {
+            var body;
+            body = [
+              {
+                id: "string",
+                author: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                completed_by: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                proof_of_completion: "3533c832-2efa-4b37-be38-2f1c278704b8",
+                rewards: [
+                  {
+                    id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+                    display_name: "Coffee",
+                  },
+                ],
+                details: "Clean the fridge",
+                created_time: "2020-03-09T22:18:26.625Z",
+                completion_time: "2020-03-09T22:18:26.625Z",
+                is_completed: false,
+              },
+            ];
+          } else {
+            body = [
+              {
+                id: "string",
+                author: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                completed_by: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                proof_of_completion: "3533c832-2efa-4b37-be38-2f1c278704b8",
+                rewards: [
+                  {
+                    id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+                    display_name: "Coffee",
+                  },
+                ],
+                details: "Clean the fridge",
+                created_time: "2020-03-09T22:18:26.625Z",
+                completion_time: "2020-03-09T22:18:26.625Z",
+                is_completed: false,
+              },
+              {
+                id: "string",
+                author: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                completed_by: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                proof_of_completion: "3533c832-2efa-4b37-be38-2f1c278704b8",
+                rewards: [
+                  {
+                    id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+                    display_name: "Coffee",
+                  },
+                ],
+                details: "Clean the fridge",
+                created_time: "2020-03-09T22:18:26.625Z",
+                completion_time: "2020-03-09T22:18:26.625Z",
+                is_completed: false,
+              },
+              {
+                id: "string",
+                author: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                completed_by: {
+                  username: "jsmith",
+                  display_name: "John Smith",
+                },
+                proof_of_completion: "3533c832-2efa-4b37-be38-2f1c278704b8",
+                rewards: [
+                  {
+                    id: "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+                    display_name: "Coffee",
+                  },
+                ],
+                details: "Clean the fridge",
+                created_time: "2020-03-09T22:18:26.625Z",
+                completion_time: "2020-03-09T22:18:26.625Z",
+                is_completed: false,
+              },
+            ];
+          }
+
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 2000 } // mock delay - helps visualise loading for user
       );
 
       this.get(
@@ -337,8 +386,8 @@ export function makeServer({ environment = "development" } = {}) {
         },
         { timing: 3000 }
       );
+
+      return server;
     },
   });
-
-  return server;
 }
