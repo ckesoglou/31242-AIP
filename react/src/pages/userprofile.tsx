@@ -353,7 +353,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 (body.hasOwnProperty("usersInParty")
                   ? " You and " +
                     body.usersInParty.splice(0, 1).join(", ") +
-                    " other users have a circular IOU party. We suggest you guys treat each other! :)"
+                    " have a circular IOU party. We suggest you guys treat each other! :)"
                   : ""),
               snack: true,
               newRequestDialog: false,
@@ -434,9 +434,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             body.forEach((user: UserObj) => {
               if (user.username === this.context.user.name) {
                 index = body.indexOf(user);
+                body.splice(index, index + 1);
               }
             });
-            body.splice(index, 1);
             this.setState({ selectetableUsers: body, userDropLoading: false });
           });
         } else {
@@ -471,13 +471,14 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         if (res.status === 200) {
           // Successful login 201
           res.json().then((body) => {
+            console.log(body);
             let index;
             body.forEach((user: UserObj) => {
               if (user.username === this.context.user.name) {
                 index = body.indexOf(user);
+                body.splice(index, index + 1);
               }
             });
-            body.splice(index, 1);
             this.setState({ selectetableUsers: body, userDropLoading: false });
           });
         } else {
