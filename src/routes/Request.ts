@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
-import { BAD_REQUEST, CREATED, OK, UNAUTHORIZED } from "http-status-codes";
+import { BAD_REQUEST, CREATED, FORBIDDEN, NOT_FOUND, OK, UNAUTHORIZED } from "http-status-codes";
 import { getBasicUser } from "../daos/Users";
 import Joi, { ObjectSchema } from "joi";
 import { v4 as uuid } from "uuid";
 import { createRequest, deleteRequest, getRequest, getRequests } from "@daos/IouRequests";
-import { createIou, createIouOwe, getIou, getIous } from "@daos/Ious";
+import { createIou, createIouOwe, deleteIou, getIou, getIous } from "@daos/Ious";
 import { Op } from "sequelize";
 import IouRequest from '@entities/IouRequest';
 import { getAuthenticatedUser } from '@shared/Authenticate';
@@ -163,7 +163,7 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
 
   const request = await getRequest(requestParams.requestID);
 
-  return request ? res.status(OK).json(await formatRequest(request)).end() : res.status(404).end();
+  return request ? res.status(OK).json(await formatRequest(request)).end() : res.status(NOT_FOUND).end();
 });
 
 /**
@@ -183,7 +183,7 @@ router.get("/request/:requestID/rewards", async (req: Request, res: Response) =>
 
   const request = await getRequest(requestParams.requestID);
   if (!request) {
-    return res.status(404).end();
+    return res.status(NOT_FOUND).end();
   }
 
   const ious = await getIous({ parent_request: request.id })
@@ -235,7 +235,7 @@ router.post("/request/:requestID/rewards", async (req: Request, res: Response) =
   const request = await getRequest(requestParams.requestID);
   const item = await getItem(requestBody.item);
   if (!request || !item) {
-    return res.status(404).end();
+    return res.status(NOT_FOUND).end();
   }
 
   const iou = await createIou({
@@ -276,12 +276,52 @@ router.get("/request/:requestID/reward/:rewardID", async (req: Request, res: Res
 
   const iou = await getIou(requestParams.rewardID);
   if (iou == null || iou.parent_request != requestParams.requestID) {
-    return res.status(404).end();
+    return res.status(NOT_FOUND).end();
   }
 
   const reward = {id: iou.id, giver: iou.giver, item: await getItem(iou.item as string) }
 
   return res.status(OK).json(reward).end();
 });
+
+/**
+ * DELETE: /request/{requestId}/reward/{rewardId}
+ */
+
+router.delete("/request/:requestID/reward/:rewardID", async (req: Request, res: Response) => {
+  const { error, value } = RequestRewardParams.validate(req.params);
+
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+
+  let requestParams = value as IRequestRewardParams;
+
+  const user = await getAuthenticatedUser(req, res);
+  if (!user) {
+    return res.status(UNAUTHORIZED).json({
+      errors: ["Not authenticated."],
+    });
+  }
+
+  const iou = await getIou(requestParams.rewardID);
+  const request = await getRequest(requestParams.rewardID);
+  if (!iou || !request || iou.parent_request != requestParams.requestID) {
+    return res.status(NOT_FOUND).end();
+  }
+
+  if (request.is_completed || iou.giver != user.username) {
+    return res.status(FORBIDDEN).json({
+      errors: ["Not authorised to delete this reward (you are not the one offering it, or the request is already complete)."],
+    });
+  }
+
+  await deleteIou(iou);
+
+  return res.status(OK).end();
+});
+
 
 export default router;

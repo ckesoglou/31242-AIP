@@ -167,3 +167,7 @@ export async function completeIouOwe(
   }
   return true;
 }
+
+export async function deleteIou(iou: Iou) {
+  return iou.destroy();
+}
