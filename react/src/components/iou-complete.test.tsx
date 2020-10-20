@@ -18,7 +18,7 @@ describe("<IouComplete />", () => {
           ],
           details: "Clean the fridge",
           created_time: "02/02/2020",
-          comletion_time: "02/02/2020",
+          completion_time: "02/02/2020",
           is_completed: true,
         }}
       />

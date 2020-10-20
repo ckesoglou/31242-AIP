@@ -92,10 +92,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     snackMessage: "",
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   setLoading(): void {
     this.signUpRef.current!.innerText = "";

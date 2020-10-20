@@ -33,7 +33,7 @@ type RequestObj = {
   rewards: Item[];
   details: string;
   created_time: string;
-  comletion_time: string;
+  completion_time: string;
   is_completed: boolean;
 };
 

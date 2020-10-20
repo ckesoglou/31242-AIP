@@ -63,10 +63,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
     snackMessage: "",
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   startLoading(): void {
     this.signInRef.current!.innerText = "";

@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Leaderboard /> should render correctly 1`] = `
-<Leaderboard
-  renderMe={true}
->
+<Leaderboard>
   <WithStyles(ForwardRef(Paper))
     className="content"
     elevation={3}
@@ -1540,72 +1538,6 @@ exports[`<Leaderboard /> should render correctly 1`] = `
                   />
                 </ForwardRef(Divider)>
               </WithStyles(ForwardRef(Divider))>
-              <div
-                id="meScore"
-              >
-                <WithStyles(ForwardRef(Typography))
-                  variant="h6"
-                >
-                  <ForwardRef(Typography)
-                    classes={
-                      Object {
-                        "alignCenter": "MuiTypography-alignCenter",
-                        "alignJustify": "MuiTypography-alignJustify",
-                        "alignLeft": "MuiTypography-alignLeft",
-                        "alignRight": "MuiTypography-alignRight",
-                        "body1": "MuiTypography-body1",
-                        "body2": "MuiTypography-body2",
-                        "button": "MuiTypography-button",
-                        "caption": "MuiTypography-caption",
-                        "colorError": "MuiTypography-colorError",
-                        "colorInherit": "MuiTypography-colorInherit",
-                        "colorPrimary": "MuiTypography-colorPrimary",
-                        "colorSecondary": "MuiTypography-colorSecondary",
-                        "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                        "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                        "displayBlock": "MuiTypography-displayBlock",
-                        "displayInline": "MuiTypography-displayInline",
-                        "gutterBottom": "MuiTypography-gutterBottom",
-                        "h1": "MuiTypography-h1",
-                        "h2": "MuiTypography-h2",
-                        "h3": "MuiTypography-h3",
-                        "h4": "MuiTypography-h4",
-                        "h5": "MuiTypography-h5",
-                        "h6": "MuiTypography-h6",
-                        "noWrap": "MuiTypography-noWrap",
-                        "overline": "MuiTypography-overline",
-                        "paragraph": "MuiTypography-paragraph",
-                        "root": "MuiTypography-root",
-                        "srOnly": "MuiTypography-srOnly",
-                        "subtitle1": "MuiTypography-subtitle1",
-                        "subtitle2": "MuiTypography-subtitle2",
-                      }
-                    }
-                    variant="h6"
-                  >
-                    <h6
-                      className="MuiTypography-root MuiTypography-h6"
-                    >
-                      And you are rank 
-                       with a score of
-                       
-                      !
-                    </h6>
-                  </ForwardRef(Typography)>
-                </WithStyles(ForwardRef(Typography))>
-                <img
-                  alt="Raising hands"
-                  height="40"
-                  src="/raising-hands.png"
-                  width="40"
-                />
-                <img
-                  alt="Party popper"
-                  height="40"
-                  src="/party-popper.png"
-                  width="40"
-                />
-              </div>
             </main>
           </ForwardRef(Container)>
         </WithStyles(ForwardRef(Container))>
