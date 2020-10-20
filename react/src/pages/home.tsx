@@ -22,6 +22,7 @@ import Leaderboard from "../components/leaderboard";
 import { Search, Clear } from "@material-ui/icons";
 import RequestComponent from "../components/request";
 import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
+import { Pagination } from "@material-ui/lab";
 
 type Request = {
   id: string;
@@ -53,7 +54,10 @@ type HomeState = {
   snackMessage: string;
   requests: Request[];
   rewardItems: RewardItem[];
+  pageNumber: number;
 };
+
+const numberOfItemsPerPage = 5;
 
 class Home extends React.Component<RouteComponentProps, HomeState> {
   private loadingRef: React.RefObject<HTMLInputElement>;
@@ -70,6 +74,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
     snackMessage: "",
     requests: [],
     rewardItems: [],
+    pageNumber: 1,
   };
 
   static contextType = UserContext;
@@ -163,6 +168,14 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
   componentDidMount() {
     // this.fetchRequests();
     this.fetchItems();
+  }
+
+  setCountOfRequest(): number {
+    if (this.state.requests.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.requests.length / numberOfItemsPerPage);
+    } else {
+      return this.state.requests.length / numberOfItemsPerPage;
+    }
   }
 
   render() {
@@ -322,6 +335,21 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                     size={35}
                     color="inherit"
                     id="homeLoading"
+                  />
+                  <Divider variant="middle" />
+                  <Pagination
+                    id="pagination"
+                    count={this.setCountOfRequest()}
+                    page={this.state.pageNumber}
+                    onChange={(
+                      event: React.ChangeEvent<unknown>,
+                      value: number
+                    ) => {
+                      this.setState({ pageNumber: value });
+                    }}
+                    defaultPage={1}
+                    siblingCount={0}
+                    color="primary"
                   />
                 </Box>
                 <Snackbar

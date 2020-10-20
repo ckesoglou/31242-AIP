@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import {
   Checkbox,
   Dialog,
@@ -22,7 +23,12 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import "../assets/css/iou-request.css";
 import IouFavour from "./iou-single-favour";
-import { imageEndpoint, requestsEndpoint } from "../api/endpoints";
+import {
+  imageEndpoint,
+  requestsEndpoint,
+  iouOweEndpoint,
+  iouOwedEndpoint,
+} from "../api/endpoints";
 
 type Item = {
   id: string;
@@ -47,6 +53,7 @@ type IouCompleteState = {
   snackMessage: string;
   completeSnack: boolean;
   AnchorEl: HTMLElement | null;
+  unauthRep: boolean;
 };
 
 class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
@@ -63,6 +70,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     snackMessage: "",
     completeSnack: false,
     AnchorEl: null,
+    unauthRep: false,
   };
 
   openCompleteForm() {
@@ -71,32 +79,80 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     }
   }
 
-  submitProof() {
-    //TO INTEGRATE WITH BACKEND
-    fetch(`${imageEndpoint}`, {
-      method: "POST",
+  completeIouOwe() {
+    fetch(`${iouOweEndpoint}`.concat("/" + this.props.id + "/complete"), {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // requestID: ???,
-        // proof: this.state.submittedProof ???
+        proof: this.state.submittedProof,
       }),
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ snackMessage: "IOU Completion proof submitted!" });
-        this.setState({ completeSnack: true });
+        if (res.status === 200) {
+          // Successful login 200
+          this.setState({
+            snackMessage: "IOU Proof Submitted & IOU Completed!",
+          });
+          this.setState({ completeSnack: true });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              completeSnack: true,
+            })
+          );
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: exception });
-        this.setState({ completeSnack: true });
+        console.log("Error:", exception);
       });
   }
+
+  completeIouOwed() {
+    fetch(`${iouOwedEndpoint}`.concat("/" + this.props.id + "/complete"), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // Successful login 200
+          this.setState({ snackMessage: "IOU Completed!" });
+          this.setState({ completeSnack: true });
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              completeSnack: true,
+            })
+          );
+        }
+      })
+      .catch((exception) => {
+        console.log("Error:", exception);
+      });
+  }
+
+  // completeRequest() {
+  //   // TO INTEGRATE WITH BACKEND
+  //   fetch(`${imageEndpoint}`, { //TO FIX
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       requestID: ???,
+  //       proof: this.state.submittedProof ???
+  //     }),
+  //   })
+  // }
 
   fileContent() {
     if (this.state.submittedProof) {
@@ -111,7 +167,6 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
             id="completeProofImage"
           />
         </div>
-        //Need to discuss how submitted images should be formatted (Size, Encode Format)
       );
     } else {
       return (
@@ -172,6 +227,17 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   }
 
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/home",
+            state: { unauthenticated: "You were too cool" },
+          }}
+        />
+      );
+    }
+
     return (
       <div id="completeRequestItem">
         <div
@@ -264,7 +330,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                       className="infoTableCell"
                       id="infoTableTitle"
                     >
-                      Created by:
+                      {this.props.iouType === 2 ? "Request" : "IOU"} created by:
                     </TableCell>
                     <TableCell
                       align="center"
@@ -276,7 +342,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                   </TableRow>
                   <TableRow>
                     <TableCell align="center" id="infoTableTitle">
-                      Created on:
+                      {this.props.iouType === 2 ? "Request" : "IOU"} Created on:
                     </TableCell>
                     <TableCell align="center" id="infoTableContent">
                       {this.props.created_time}
@@ -285,10 +351,18 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                   {this.props.details != "" && (
                     <TableRow>
                       <TableCell align="center" id="infoTableTitle">
-                        Task:
+                        {this.props.iouType === 2
+                          ? "Task:"
+                          : this.props.iouType === 1
+                          ? "Will be completed by:"
+                          : "Will be completed by:"}
                       </TableCell>
                       <TableCell align="center" id="infoTableContent">
-                        {this.props.details}
+                        {this.props.iouType === 2
+                          ? this.props.details
+                          : this.props.iouType === 1
+                          ? "Me :)"
+                          : this.props.completed_by}
                       </TableCell>
                     </TableRow>
                   )}
@@ -334,7 +408,13 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               size="large"
               color="primary"
               onClick={() => {
-                this.submitProof();
+                if (this.props.iouType === 0) {
+                  this.completeIouOwed();
+                } else if (this.props.iouType === 1) {
+                  this.completeIouOwe();
+                } else {
+                  //this.completeRequest();
+                }
                 this.setState({
                   completeIOU: false,
                 });
@@ -342,7 +422,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               autoFocus
               disabled={this.checkSubmitButton()}
             >
-              Submit
+              {"Submit & Complete"}
             </Button>
             <Button
               size="large"

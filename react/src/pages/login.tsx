@@ -40,6 +40,7 @@ interface ILoginProps extends RouteComponentProps {
       next: {
         pathname: string;
       };
+      unauthenticated: string;
     };
   };
 }
@@ -109,6 +110,14 @@ class Login extends React.Component<ILoginProps, LoginState> {
         }
       })
       .catch(console.log);
+  }
+
+  componentDidMount() {
+    if (this.props.location.state.unauthenticated) {
+      this.setState({
+        snackMessage: this.props.location.state.unauthenticated,
+      });
+    }
   }
 
   render() {

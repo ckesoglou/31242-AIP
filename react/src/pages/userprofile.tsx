@@ -26,8 +26,9 @@ import {
   TextField,
   CircularProgress,
   Snackbar,
+  Divider,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import { Autocomplete, Pagination } from "@material-ui/lab";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
@@ -75,6 +76,9 @@ type UserProfileState = {
   userDropOpen: boolean;
   userDropLoading: boolean;
   rewardDropOpen: boolean;
+  owedPages: number;
+  owePages: number;
+  requestPages: number;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -126,6 +130,8 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
+const numberOfItemsPerPage = 5;
+
 class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   private textRef: React.RefObject<HTMLLabelElement>;
   private loadingRef: React.RefObject<HTMLInputElement>;
@@ -154,6 +160,9 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     userDropOpen: false,
     userDropLoading: false,
     rewardDropOpen: false,
+    owedPages: 1,
+    owePages: 1,
+    requestPages: 1,
   };
 
   static contextType = UserContext;
@@ -171,6 +180,30 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     });
     this.fetchUsers();
     this.fetchItems();
+  }
+
+  setCountOfOwed(): number {
+    if (this.state.owed.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.owed.length / numberOfItemsPerPage);
+    } else {
+      return this.state.owed.length / numberOfItemsPerPage;
+    }
+  }
+
+  setCountOfOwe(): number {
+    if (this.state.owe.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.owe.length / numberOfItemsPerPage);
+    } else {
+      return this.state.owe.length / numberOfItemsPerPage;
+    }
+  }
+
+  setCountOfRequest(): number {
+    // if (this.state..length % numberOfItemsPerPage !== 0) {
+    //   return Math.ceil(this.state.users.length / numberOfItemsPerPage);
+    // } else {
+    //   return this.state.users.length / numberOfItemsPerPage;
+    // }
   }
 
   fetchItems(): void {
@@ -775,6 +808,21 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   {this.state.owed.map((owed, i) => {
                     return <IOU iou={owed} key={i} iouType={0} />;
                   })}
+                  <Divider variant="middle" />
+                  <Pagination
+                    id="pagination"
+                    count={this.setCountOfOwed()}
+                    page={this.state.owedPages}
+                    onChange={(
+                      event: React.ChangeEvent<unknown>,
+                      value: number
+                    ) => {
+                      this.setState({ owedPages: value });
+                    }}
+                    defaultPage={1}
+                    siblingCount={0}
+                    color="primary"
+                  />
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -785,6 +833,21 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   {this.state.owe.map((owe, i) => {
                     return <IOU iou={owe} key={i} iouType={1} />;
                   })}
+                  <Divider variant="middle" />
+                  <Pagination
+                    id="pagination"
+                    count={this.setCountOfOwe()}
+                    page={this.state.owePages}
+                    onChange={(
+                      event: React.ChangeEvent<unknown>,
+                      value: number
+                    ) => {
+                      this.setState({ owePages: value });
+                    }}
+                    defaultPage={1}
+                    siblingCount={0}
+                    color="primary"
+                  />
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
