@@ -853,9 +853,10 @@ paths:
                       type: number
                       description: Rank of this user.
                       example: 1
-                    user:
-                      $ref: "#/components/schemas/User"
-                      description: User for this position.
+                    username:
+                      type: string
+                      description: Unique username of the user
+                      example: jsmith
                     score:
                       type: number
                       description: Numeric leaderboard score of this user.

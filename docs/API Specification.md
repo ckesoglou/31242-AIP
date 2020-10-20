@@ -1688,10 +1688,7 @@ Retrieve the current leaderboard.
 [
   {
     "rank": 1,
-    "user": {
-      "username": "jsmith",
-      "display_name": "John Smith"
-    },
+    "username": "jsmith",
     "score": 35
   }
 ]
@@ -1711,9 +1708,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |» rank|number|false|none|Rank of this user.|
-|» user|[User](#schemauser)|false|none|none|
-|»» username|string|false|none|Unique username of the user|
-|»» display_name|string|false|none|Current display name of the user|
+|» username|string|false|none|Unique username of the user|
 |» score|number|false|none|Numeric leaderboard score of this user.|
 
 <aside class="success">

@@ -21,6 +21,7 @@ import {
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import { MeetingRoom } from "@material-ui/icons";
+import { Authentication } from "../components/protected-route";
 
 type SignUpState = {
   username: string;
@@ -203,7 +204,9 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     })
       .then((res) => {
         if (res.status === 201) {
-          // Successful login 201
+          // Successful sign up 201
+          // TODO: Only for development?! Handle frontend auth
+          Authentication.authenticate(() => {});
           this.setState({ successfulSignUp: true }, () => {
             this.context.updateUser({
               name: this.state.username,
@@ -211,7 +214,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
             });
           });
         } else {
-          // Unsuccessful login (400 or 422)
+          // Unsuccessful sign up (400 or 422)
           this.stopLoading();
           res
             .json()
