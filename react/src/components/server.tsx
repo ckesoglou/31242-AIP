@@ -367,6 +367,7 @@ export function makeServer({ environment = "development" } = {}) {
           return new Response(200, jsonHeader, body);
         },
         { timing: 2000 } // mock delay - helps visualise loading for user
+      );
 
       this.get(
         "/users",
@@ -385,8 +386,8 @@ export function makeServer({ environment = "development" } = {}) {
         },
         { timing: 3000 }
       );
+
+      return server;
     },
   });
-
-  return server;
 }
