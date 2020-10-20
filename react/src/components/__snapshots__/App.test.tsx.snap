@@ -13,7 +13,7 @@ exports[`<App /> should render correctly 1`] = `
     }
   >
     <Switch>
-      <ProtectedRoute
+      <Route
         component={[Function]}
         path="/user"
       />

@@ -15,10 +15,11 @@ import {
 import Pagination from "@material-ui/lab/Pagination";
 import LeaderboardUser from "./leaderboardUser";
 import { UserContext } from "./user-context";
+import { Redirect } from "react-router-dom";
 
 type LeaderboardUser = {
   rank: number;
-  user: { username: string; display_name: string };
+  username: string;
   score: number;
 };
 
@@ -31,6 +32,7 @@ type LeaderboardState = {
   showMe: boolean;
   error: string;
   pageNumber: number;
+  unauthRep: boolean;
 };
 
 type LeaderboardProps = {};
@@ -52,6 +54,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
     me: { rank: -1, score: -1 },
     showMe: false,
     pageNumber: 1,
+    unauthRep: false,
   };
 
   componentDidMount() {
@@ -85,13 +88,16 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       method: "GET",
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ users: body });
-        this.setState({ error: "" });
-        this.setLoading(false);
+        if (res.status === 200) {
+          res.json().then((body) => {
+            this.setState({ users: body });
+            this.setState({ error: "" });
+            this.setLoading(false);
+          });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+          this.setLoading(false);
+        }
       })
       .catch((exception) => {
         console.error("Error:", exception);
@@ -105,22 +111,44 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       method: "GET",
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ me: body }, () => {
-          this.setState({ showMe: true });
-        });
-        this.setState({ error: "" });
+        if (res.status === 200) {
+          res.json().then((body) => {
+            this.setState({ me: body }, () => {
+              this.setState({ showMe: true });
+            });
+            this.setState({ error: "" });
+            console.log("Success:", body);
+          });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+          this.setLoading(false);
+        } else {
+          res.json().then((body) => {
+            console.error("Error:", body.errors);
+            this.setState({ error: body.errors });
+          });
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ error: exception });
+        console.log("Error:", exception);
       });
   }
 
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: {
+              unauthenticated:
+                "Your session has expired! Please sign in again :)",
+            },
+          }}
+        />
+      );
+    }
+
     return (
       <Paper elevation={3} className="content">
         <Container id="leaderboardContainer" component="main" maxWidth="lg">
@@ -135,13 +163,13 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
           >
             <Grid item xs={12}>
               <Grid container direction="row">
-                <Grid id="leaderboardItem" item xs={3}>
+                <Grid id="leaderboardItem" item xs={2}>
                   <Typography variant="subtitle1">Rank</Typography>
                 </Grid>
-                <Grid id="leaderboardItem" item xs={3}>
+                <Grid id="leaderboardItem" item xs={5}>
                   <Typography variant="subtitle1">Username</Typography>
                 </Grid>
-                <Grid id="leaderboardItem" item xs={3}>
+                <Grid id="leaderboardItem" item xs={2}>
                   <Typography variant="subtitle1">Score</Typography>
                 </Grid>
                 <Grid id="leaderboardItem" item xs={3}>
@@ -169,7 +197,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
                     <LeaderboardUser
                       key={i}
                       rank={user.rank}
-                      username={user.user.username}
+                      username={user.username}
                       score={user.score}
                     />
                   </Grid>

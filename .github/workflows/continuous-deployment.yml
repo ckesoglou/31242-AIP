@@ -37,11 +37,9 @@ jobs:
           cd react
           npm install
           npm run build --if-present
-          npm run test --if-present
           cd ..
           npm install
           npm run build --if-present
-          npm run test --if-present
       - name: "Deploy to Azure WebApp"
         uses: azure/webapps-deploy@v2
         with:

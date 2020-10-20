@@ -10,16 +10,15 @@ type LeaderboardUserProps = {
 };
 
 function LeaderboardUser(props: LeaderboardUserProps) {
-
   return (
     <Grid container direction="row">
-      <Grid id="leaderboardItem" item xs={3}>
+      <Grid id="leaderboardItem" item xs={2}>
         <Typography>{props.rank}</Typography>
       </Grid>
-      <Grid id="leaderboardItem" item xs={3}>
+      <Grid id="leaderboardItem" item xs={5}>
         <Typography>{props.username}</Typography>
       </Grid>
-      <Grid id="leaderboardItem" item xs={3}>
+      <Grid id="leaderboardItem" item xs={2}>
         <Typography>{props.score}</Typography>
       </Grid>
       <Grid id="leaderboardItem" item xs={3}>

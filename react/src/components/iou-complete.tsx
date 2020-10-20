@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import {
   Checkbox,
   Dialog,
@@ -22,27 +23,33 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import "../assets/css/iou-request.css";
 import IouFavour from "./iou-single-favour";
-import { imageEndpoint, requestsEndpoint } from "../api/endpoints";
+import {
+  requestEndpoint,
+  iouOweEndpoint,
+  iouOwedEndpoint,
+} from "../api/endpoints";
 
 type Item = {
   id: string;
   display_name: string;
 };
 
-type RequestObj = {
-  id: string;
-  author: { username: string; display_name: string };
-  completed_by: { username: string; display_name: string };
-  proof_of_completion: string;
-  rewards: Item[];
-  details: string;
-  created_time: string;
-  completion_time: string;
-  is_completed: boolean;
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type IouCompleteProps = {
-  request: RequestObj;
+  id: string;
+  is_completed: boolean;
+  author: string;
+  completed_by: string;
+  claimed_time: string | null;
+  created_time: string;
+  rewards: RewardItem[];
+  details: string;
+  iouType: number;
 };
 
 type IouCompleteState = {
@@ -51,14 +58,13 @@ type IouCompleteState = {
   snackMessage: string;
   completeSnack: boolean;
   AnchorEl: HTMLElement | null;
+  unauthRep: boolean;
 };
 
 class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
-  private tempRewardDisplayName: string;
-
+  private tempRewardDisplayName: string; //Not in state because it'll cause everything to go into a render loop
   constructor(props: IouCompleteProps) {
     super(props);
-
     this.tempRewardDisplayName = "";
     this.openCompleteForm = this.openCompleteForm.bind(this);
   }
@@ -69,37 +75,103 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     snackMessage: "",
     completeSnack: false,
     AnchorEl: null,
+    unauthRep: false,
   };
 
   openCompleteForm() {
-    if (!this.props.request.is_completed) {
+    if (!this.props.is_completed) {
       this.setState({ completeIOU: true });
     }
   }
 
-  submitProof() {
-    fetch(`${imageEndpoint}`, {
-      method: "POST",
+  completeIouOwe() {
+    const formData = new FormData();
+    formData.append("proof", this.state.submittedProof);
+
+    fetch(`${iouOweEndpoint}`.concat("/" + this.props.id + "/complete"), {
+      method: "PUT",
+      body: formData,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // Successful login 200
+          this.setState({
+            snackMessage: "IOU Proof Submitted & IOU Completed!",
+          });
+          this.setState({ completeSnack: true });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              completeSnack: true,
+            })
+          );
+        }
+      })
+      .catch((exception) => {
+        console.log("Error:", exception);
+      });
+  }
+
+  completeIouOwed() {
+    fetch(`${iouOwedEndpoint}`.concat("/" + this.props.id + "/complete"), {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        // requestID: ???,
-        // proof: this.state.submittedProof ???
-      }),
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ snackMessage: "IOU Completion proof submitted!" });
-        this.setState({ completeSnack: true });
+        if (res.status === 200) {
+          // Successful login 200
+          this.setState({ snackMessage: "IOU Completed!" });
+          this.setState({ completeSnack: true });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              completeSnack: true,
+            })
+          );
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: exception });
-        this.setState({ completeSnack: true });
+        console.log("Error:", exception);
+      });
+  }
+
+  completeRequest() {
+    const formData = new FormData();
+    formData.append("proof", this.state.submittedProof);
+
+    fetch(`${requestEndpoint}`.concat("/" + this.props.id + "/complete"), {
+      method: "PUT",
+      body: formData,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // Successful login 200
+          this.setState({ snackMessage: "Request Completed!" });
+          this.setState({ completeSnack: true });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              completeSnack: true,
+            })
+          );
+        }
+      })
+      .catch((exception) => {
+        console.log("Error:", exception);
       });
   }
 
@@ -116,7 +188,6 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
             id="completeProofImage"
           />
         </div>
-        //Need to discuss how submitted images should be formatted (Size, Encode Format)
       );
     } else {
       return (
@@ -127,58 +198,51 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     }
   }
 
-  fetchRewardDetails(requestID: string, rewardID: string) {
-    fetch(
-      `${requestsEndpoint
-        .concat(requestID)
-        .concat("/reward/")
-        .concat(rewardID)}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.tempRewardDisplayName = body.giver.display_name;
-      })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.tempRewardDisplayName = "Could not find user display name";
-      });
-  }
-
-  renderPopUpRewards(item: Item) {
-    //this.fetchRewardDetails(this.props.request.id, item.id);
-    this.tempRewardDisplayName = "James Lee";
+  renderPopUpRewards(reward: RewardItem) {
     return (
       <IouFavour
-        key={item.id}
-        giverDisplayName={this.tempRewardDisplayName}
+        key={reward.item.id}
+        giverDisplayName={reward.giver.display_name}
         recieverDisplayName={"?"}
-        item={item}
+        item={reward.item}
       />
     );
   }
 
+  checkSubmitButton(): boolean {
+    if (this.props.iouType !== 0) {
+      return !this.state.submittedProof;
+    }
+    return false;
+  }
+
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: {
+              unauthenticated:
+                "Your session has expired! Please sign in again :)",
+            },
+          }}
+        />
+      );
+    }
+
     return (
       <div id="completeRequestItem">
         <div
           onClick={() => {
-            if (!this.props.request.is_completed) {
+            if (!this.props.is_completed) {
               this.setState({ completeIOU: true });
             }
           }}
-          className={this.props.request.is_completed ? "" : "cursorPointer"}
+          className={this.props.is_completed ? "" : "cursorPointer"}
         >
           <Checkbox
-            checked={this.props.request.is_completed}
+            checked={this.props.is_completed}
             color="primary"
             disabled={true}
             checkedIcon={
@@ -188,9 +252,9 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               <RadioButtonUncheckedIcon color="primary" id="completeIconSize" />
             }
           />
-          {this.props.request.is_completed && (
+          {this.props.is_completed && (
             <div id="IouTaskComplete">
-              {this.props.request.completed_by.display_name.length > 9 ? (
+              {this.props.completed_by.length >= 7 ? (
                 <Typography
                   id="taskCompleter"
                   className="cursorPointer"
@@ -198,12 +262,17 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                     this.setState({ AnchorEl: event.currentTarget })
                   }
                 >
-                  {this.props.request.completed_by.display_name}
+                  {this.props.completed_by}
                 </Typography>
               ) : (
-                <Typography id="taskCompleter">
-                  {this.props.request.completed_by.display_name}
-                </Typography>
+                <div>
+                  <Typography id="taskCompleter">
+                    {this.props.completed_by}
+                  </Typography>
+                  <Typography id="taskTimeStamp">
+                    {this.props.claimed_time}
+                  </Typography>
+                </div>
               )}
               <Popover
                 id="popUpMargin"
@@ -222,12 +291,9 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                 <Typography id="taskDetailPopUp">
                   {"Full Display Name"}
                   <Divider id="taskPopUpDivider" />
-                  {this.props.request.completed_by.display_name}
+                  {this.props.completed_by}
                 </Typography>
               </Popover>
-              <Typography id="taskTimeStamp">
-                {this.props.request.completion_time}
-              </Typography>
             </div>
           )}
         </div>
@@ -259,80 +325,79 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                       className="infoTableCell"
                       id="infoTableTitle"
                     >
-                      Created by:
+                      {this.props.iouType === 2 ? "Request" : "IOU"} created by:
                     </TableCell>
                     <TableCell
                       align="center"
                       className="infoTableCell"
                       id="infoTableContent"
                     >
-                      {this.props.request.author.display_name}
+                      {this.props.author}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell align="center" id="infoTableTitle">
-                      Created on:
+                      {this.props.iouType === 2 ? "Request" : "IOU"} Created on:
                     </TableCell>
                     <TableCell align="center" id="infoTableContent">
-                      {this.props.request.created_time}
+                      {this.props.created_time}
                     </TableCell>
                   </TableRow>
-                  <TableRow>
-                    <TableCell align="center" id="infoTableTitle">
-                      Task:
-                    </TableCell>
-                    <TableCell align="center" id="infoTableContent">
-                      {this.props.request.details}
-                    </TableCell>
-                  </TableRow>
+                  {this.props.details !== "" && (
+                    <TableRow>
+                      <TableCell align="center" id="infoTableTitle">
+                        {this.props.iouType === 2
+                          ? "Task:"
+                          : this.props.iouType === 1
+                          ? "Will be completed by:"
+                          : "Will be completed by:"}
+                      </TableCell>
+                      <TableCell align="center" id="infoTableContent">
+                        {this.props.iouType === 2
+                          ? this.props.details
+                          : this.props.iouType === 1
+                          ? "Me :)"
+                          : this.props.completed_by}
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           </DialogContent>
-          <DialogContent className="Content" id="completePopUpRewards">
-            <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
-            {this.props.request.rewards.map((item) =>
-              this.renderPopUpRewards(item)
-            )}
-          </DialogContent>
-          <DialogContent className="content">
-            <DialogContentText variant="h6">
-              {"Upload proof?"}
-            </DialogContentText>
-            <input
-              type="file"
-              onChange={(e) => {
-                if (e.target.files) {
-                  this.setState({ submittedProof: e.target.files[0] });
-                }
-              }}
-              accept="image/*"
-              id="inputProof"
-            />
-            <label htmlFor="inputProof">
-              <Button variant="contained" color="primary" component="span">
-                {this.state.submittedProof ? "CHANGE" : "UPLOAD"}
-              </Button>
-            </label>
-            {this.fileContent()}
-          </DialogContent>
+          {this.props.iouType === 2 && (
+            <DialogContent className="Content" id="completePopUpRewards">
+              <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
+              {this.props.rewards.forEach((reward) => {
+                this.renderPopUpRewards(reward);
+              })}
+            </DialogContent>
+          )}
+          {this.props.iouType !== 0 && (
+            <DialogContent className="content">
+              <DialogContentText variant="h6">
+                {"Upload proof?"}
+              </DialogContentText>
+              <input
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    this.setState({ submittedProof: e.target.files[0] });
+                  }
+                }}
+                accept="image/*"
+                id="inputProof"
+              />
+              <label htmlFor="inputProof">
+                <Button variant="contained" color="primary" component="span">
+                  {this.state.submittedProof ? "CHANGE" : "UPLOAD"}
+                </Button>
+              </label>
+              {this.fileContent()}
+            </DialogContent>
+          )}
           <Divider />
           <DialogActions>
-            <Button
-              id="createRequest"
-              size="large"
-              color="primary"
-              onClick={() => {
-                this.submitProof();
-                this.setState({
-                  completeIOU: false,
-                });
-              }}
-              autoFocus
-              disabled={!this.state.submittedProof}
-            >
-              Submit
-            </Button>
             <Button
               size="large"
               color="primary"
@@ -341,6 +406,27 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               }
             >
               Nevermind
+            </Button>
+            <Button
+              id="createRequest"
+              size="large"
+              color="primary"
+              onClick={() => {
+                if (this.props.iouType === 0) {
+                  this.completeIouOwed();
+                } else if (this.props.iouType === 1) {
+                  this.completeIouOwe();
+                } else {
+                  this.completeRequest();
+                }
+                this.setState({
+                  completeIOU: false,
+                });
+              }}
+              autoFocus
+              disabled={this.checkSubmitButton()}
+            >
+              {"Submit & Complete"}
             </Button>
           </DialogActions>
         </Dialog>

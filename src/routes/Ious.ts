@@ -11,7 +11,10 @@ import {
   iouExists,
   getIous,
   getFormattedIous,
+  partyDetection,
 } from "@daos/Ious";
+import Iou from "@entities/Iou";
+import { ConsoleTransportOptions } from "winston/lib/winston/transports";
 
 // Init shared
 const router = Router();
@@ -57,7 +60,7 @@ router.get("/owed", async (req: Request, res: Response) => {
   const user = await getAuthenticatedUser(req, res);
   if (user) {
     const iou = await getFormattedIous(
-      { receiver: user.username, is_claimed: false },
+      { receiver: user.username },
       iousQuery.start,
       iousQuery.limit
     );
@@ -96,7 +99,17 @@ router.post(
         requestBody.item,
         req.file.filename
       );
-      return res.status(OK).json({ id: iou });
+      const newIou = await Iou.findByPk(iou);
+
+      var party;
+      if (newIou) {
+        var partyResults = await partyDetection(newIou);
+        if (partyResults) {
+          party = partyResults;
+        }
+      }
+
+      return res.status(OK).json({ id: iou, usersInParty: party });
     } else {
       return res.status(401).json({
         errors: ["Not authenticated"],
@@ -154,7 +167,7 @@ router.get("/owe", async (req: Request, res: Response) => {
   const user = await getAuthenticatedUser(req, res);
   if (user) {
     const iou = await getFormattedIous(
-      { giver: user.username, is_claimed: false },
+      { giver: user.username },
       iousQuery.start,
       iousQuery.limit
     );
@@ -187,7 +200,18 @@ router.post("/owe", async (req: Request, res: Response) => {
       requestBody.username,
       requestBody.item
     );
-    return res.status(OK).json({ id: iou });
+
+    const newIou = await Iou.findByPk(iou);
+
+    var party;
+    if (newIou) {
+      var partyResults = await partyDetection(newIou);
+      if (partyResults) {
+        party = partyResults;
+      }
+    }
+
+    return res.status(OK).json({ id: iou, usersInParty: party });
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],

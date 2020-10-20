@@ -29,7 +29,7 @@ paths:
                 - username
                 - password
       responses:
-        "302":
+        "200":
           description: >-
             Returned when the login was successful. This will set a JSON Web
             Token as a httpOnly cookie (with access & refresh tokens) and redirect
@@ -823,9 +823,10 @@ paths:
                       type: number
                       description: Rank of this user.
                       example: 1
-                    user:
-                      $ref: "#/components/schemas/User"
-                      description: User for this position.
+                    username:
+                      type: string
+                      description: Unique username of the user
+                      example: jsmith
                     score:
                       type: number
                       description: Numeric leaderboard score of this user.
@@ -978,10 +979,10 @@ components:
           type: string
           description: Unique identifier of the image proof of completion.
           example: 3533c832-2efa-4b37-be38-2f1c278704b8
-        rewardItems:
+        rewards:
           type: array
           items:
-            $ref: "#/components/schemas/Item"
+            $ref: "#/components/schemas/Reward"
           description: Array of reward items being offered upon completion of this request.
         details:
           type: string
