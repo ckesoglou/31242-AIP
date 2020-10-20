@@ -18,7 +18,6 @@ import {
   DialogContentText,
 } from "@material-ui/core";
 import IouFavour from "./iou-single-favour";
-import { requestEndpoint } from "../api/endpoints";
 import DeleteRequestReward from "../components/request-reward-delete";
 import { UserContext } from "../components/user-context";
 

@@ -432,7 +432,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) => {
             let index;
             body.forEach((user: UserObj) => {
-              if (user.username == this.context.user.name) {
+              if (user.username === this.context.user.name) {
                 index = body.indexOf(user);
               }
             });
@@ -473,7 +473,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) => {
             let index;
             body.forEach((user: UserObj) => {
-              if (user.username == this.context.user.name) {
+              if (user.username === this.context.user.name) {
                 index = body.indexOf(user);
               }
             });

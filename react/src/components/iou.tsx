@@ -2,7 +2,6 @@ import React from "react";
 import IouComplete from "./iou-complete";
 import IouProof from "./iou-proof";
 import IouFavour from "./iou-single-favour";
-import RequestInfo from "./request-info";
 import { Grid } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 

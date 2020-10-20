@@ -18,14 +18,12 @@ import {
   TableRow,
   TableCell,
   Popover,
-  formatMs,
 } from "@material-ui/core";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import "../assets/css/iou-request.css";
 import IouFavour from "./iou-single-favour";
 import {
-  imageEndpoint,
   requestEndpoint,
   iouOweEndpoint,
   iouOwedEndpoint,
@@ -212,7 +210,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   }
 
   checkSubmitButton(): boolean {
-    if (this.props.iouType != 0) {
+    if (this.props.iouType !== 0) {
       return !this.state.submittedProof;
     }
     return false;
@@ -345,7 +343,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                       {this.props.created_time}
                     </TableCell>
                   </TableRow>
-                  {this.props.details != "" && (
+                  {this.props.details !== "" && (
                     <TableRow>
                       <TableCell align="center" id="infoTableTitle">
                         {this.props.iouType === 2
@@ -370,7 +368,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           {this.props.iouType === 2 && (
             <DialogContent className="Content" id="completePopUpRewards">
               <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
-              {this.props.rewards.map((reward, index) => {
+              {this.props.rewards.forEach((reward) => {
                 this.renderPopUpRewards(reward);
               })}
             </DialogContent>

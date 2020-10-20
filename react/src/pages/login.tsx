@@ -5,7 +5,7 @@ import {
   Link as RouterLink,
 } from "react-router-dom";
 import "../assets/css/login.css";
-import { loginEndpoint, usersEndpoint } from "../api/endpoints";
+import { loginEndpoint } from "../api/endpoints";
 import {
   Container,
   Typography,
@@ -19,8 +19,7 @@ import {
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import { Authentication } from "../components/protected-route";
-import UserProfile from "./userprofile";
+// import UserProfile from "./userprofile";
 
 type LoginState = {
   username: string;

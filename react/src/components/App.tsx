@@ -10,7 +10,6 @@ import Login from "../pages/login";
 import SignUp from "../pages/signup";
 import UserProfile from "../pages/userprofile";
 import Home from "../pages/home";
-import { ProtectedRoute } from "./protected-route";
 import { UserContext } from "./user-context";
 
 type AppState = {
