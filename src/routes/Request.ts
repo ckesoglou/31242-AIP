@@ -37,15 +37,20 @@ const router = Router();
 
 async function formatRequest(request: IouRequest) {
   const ious = await getIous({ parent_request: request.id }, 0, 9999);
-  const rewardItems = ious.map((iou) => {
-    return iou.item;
-  });
+  const rewards = [];
+  for (const iou of ious) {
+    rewards.push({
+      id: iou.id,
+      item: await getItem(iou.item as string),
+      giver: await getBasicUser(iou.giver as string),
+    });
+  }
 
   return {
     ...(request as any).dataValues,
     author: await getBasicUser(request.author),
     completed_by: await getBasicUser(request.completed_by),
-    rewardItems: rewardItems,
+    rewards: rewards,
   };
 }
 

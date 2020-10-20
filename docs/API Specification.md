@@ -920,10 +920,17 @@ proof: string
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewardItems": [
+    "rewards": [
       {
-        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
-        "display_name": "Coffee"
+        "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+        "giver": {
+          "username": "jsmith",
+          "display_name": "John Smith"
+        },
+        "item": {
+          "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+          "display_name": "Coffee"
+        }
       }
     ],
     "details": "Clean the fridge",
@@ -954,9 +961,12 @@ Status Code **200**
 |»» display_name|string|false|none|Current display name of the user|
 |» completed_by|[User](#schemauser)|false|none|none|
 |» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|» rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
-|»» id|string|false|none|Unique identifier of the item.|
-|»» display_name|string|false|none|Current display name of the item.|
+|» rewards|[[Reward](#schemareward)]|false|none|Array of reward items being offered upon completion of this request.|
+|»» id|string|false|none|Unique identifier of reward (also the ID of the IOU it becomes).|
+|»» giver|[User](#schemauser)|false|none|none|
+|»» item|[Item](#schemaitem)|false|none|none|
+|»»» id|string|false|none|Unique identifier of the item.|
+|»»» display_name|string|false|none|Current display name of the item.|
 |» details|string|false|none|Details of the request (maximum 50 bytes).|
 |» created_time|string(date-time)|false|none|Timestamp of when the request was created.|
 |» completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
@@ -1024,10 +1034,17 @@ Retrieve a list of requests, optionally matched to provided criteria. *Author, S
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewardItems": [
+    "rewards": [
       {
-        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
-        "display_name": "Coffee"
+        "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+        "giver": {
+          "username": "jsmith",
+          "display_name": "John Smith"
+        },
+        "item": {
+          "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+          "display_name": "Coffee"
+        }
       }
     ],
     "details": "Clean the fridge",
@@ -1058,9 +1075,12 @@ Status Code **200**
 |»» display_name|string|false|none|Current display name of the user|
 |» completed_by|[User](#schemauser)|false|none|none|
 |» proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|» rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
-|»» id|string|false|none|Unique identifier of the item.|
-|»» display_name|string|false|none|Current display name of the item.|
+|» rewards|[[Reward](#schemareward)]|false|none|Array of reward items being offered upon completion of this request.|
+|»» id|string|false|none|Unique identifier of reward (also the ID of the IOU it becomes).|
+|»» giver|[User](#schemauser)|false|none|none|
+|»» item|[Item](#schemaitem)|false|none|none|
+|»»» id|string|false|none|Unique identifier of the item.|
+|»»» display_name|string|false|none|Current display name of the item.|
 |» details|string|false|none|Details of the request (maximum 50 bytes).|
 |» created_time|string(date-time)|false|none|Timestamp of when the request was created.|
 |» completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
@@ -1199,10 +1219,17 @@ Retrieve details about a single request.
     "display_name": "John Smith"
   },
   "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-  "rewardItems": [
+  "rewards": [
     {
-      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
-      "display_name": "Coffee"
+      "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+      "giver": {
+        "username": "jsmith",
+        "display_name": "John Smith"
+      },
+      "item": {
+        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+        "display_name": "Coffee"
+      }
     }
   ],
   "details": "Clean the fridge",
@@ -1880,10 +1907,17 @@ This operation does not require authentication
       "display_name": "John Smith"
     },
     "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-    "rewardItems": [
+    "rewards": [
       {
-        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
-        "display_name": "Coffee"
+        "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+        "giver": {
+          "username": "jsmith",
+          "display_name": "John Smith"
+        },
+        "item": {
+          "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+          "display_name": "Coffee"
+        }
       }
     ],
     "details": "Clean the fridge",
@@ -1956,10 +1990,17 @@ This operation does not require authentication
     "display_name": "John Smith"
   },
   "proof_of_completion": "3533c832-2efa-4b37-be38-2f1c278704b8",
-  "rewardItems": [
+  "rewards": [
     {
-      "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
-      "display_name": "Coffee"
+      "id": "1ce5d3cc-cb15-4050-9f0f-95d089721ed8",
+      "giver": {
+        "username": "jsmith",
+        "display_name": "John Smith"
+      },
+      "item": {
+        "id": "a16ed6ef-c666-46d7-93b5-e4612cce923e",
+        "display_name": "Coffee"
+      }
     }
   ],
   "details": "Clean the fridge",
@@ -1978,7 +2019,7 @@ This operation does not require authentication
 |author|[User](#schemauser)|false|none|User who created the request.|
 |completed_by|[User](#schemauser)|false|none|User who completed the request.|
 |proof_of_completion|string|false|none|Unique identifier of the image proof of completion.|
-|rewardItems|[[Item](#schemaitem)]|false|none|Array of reward items being offered upon completion of this request.|
+|rewards|[[Reward](#schemareward)]|false|none|Array of reward items being offered upon completion of this request.|
 |details|string|false|none|Details of the request (maximum 50 bytes).|
 |created_time|string(date-time)|false|none|Timestamp of when the request was created.|
 |completion_time|string(date-time)|false|none|Timestamp of when the request was completed.|
