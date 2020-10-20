@@ -77,6 +77,7 @@ class DeleteRequestReward extends React.Component<
         onClick={() =>
           this.deleteReward(this.props.requestID, this.props.rewardID)
         }
+        id="requestItem"
       >
         <DeleteIcon id="deleteIcon" />
         <Snackbar
