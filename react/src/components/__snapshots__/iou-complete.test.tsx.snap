@@ -5,11 +5,10 @@ exports[`<IouComplete /> should render correctly 1`] = `
   id="completeRequestItem"
 >
   <div
-    className=""
+    className="cursorPointer"
     onClick={[Function]}
   >
     <WithStyles(ForwardRef(Checkbox))
-      checked={true}
       checkedIcon={
         <UNDEFINED
           color="primary"
@@ -25,48 +24,6 @@ exports[`<IouComplete /> should render correctly 1`] = `
         />
       }
     />
-    <div
-      id="IouTaskComplete"
-    >
-      <WithStyles(ForwardRef(Typography))
-        id="taskCompleter"
-      >
-        Kevin
-      </WithStyles(ForwardRef(Typography))>
-      <WithStyles(ForwardRef(Popover))
-        anchorEl={null}
-        anchorOrigin={
-          Object {
-            "horizontal": "center",
-            "vertical": "bottom",
-          }
-        }
-        id="popUpMargin"
-        onClose={[Function]}
-        open={false}
-        transformOrigin={
-          Object {
-            "horizontal": "center",
-            "vertical": "top",
-          }
-        }
-      >
-        <WithStyles(ForwardRef(Typography))
-          id="taskDetailPopUp"
-        >
-          Full Display Name
-          <WithStyles(ForwardRef(Divider))
-            id="taskPopUpDivider"
-          />
-          Kevin
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(Popover))>
-      <WithStyles(ForwardRef(Typography))
-        id="taskTimeStamp"
-      >
-        02/02/2020
-      </WithStyles(ForwardRef(Typography))>
-    </div>
   </div>
   <WithStyles(ForwardRef(Dialog))
     TransitionComponent={
@@ -127,79 +84,43 @@ exports[`<IouComplete /> should render correctly 1`] = `
                 className="infoTableCell"
                 id="infoTableTitle"
               >
-                Created by:
+                IOU
+                 created by:
               </WithStyles(ForwardRef(TableCell))>
               <WithStyles(ForwardRef(TableCell))
                 align="center"
                 className="infoTableCell"
                 id="infoTableContent"
-              >
-                James
-              </WithStyles(ForwardRef(TableCell))>
+              />
             </WithStyles(ForwardRef(TableRow))>
             <WithStyles(ForwardRef(TableRow))>
               <WithStyles(ForwardRef(TableCell))
                 align="center"
                 id="infoTableTitle"
               >
-                Created on:
+                IOU
+                 Created on:
               </WithStyles(ForwardRef(TableCell))>
               <WithStyles(ForwardRef(TableCell))
                 align="center"
                 id="infoTableContent"
-              >
-                02/02/2020
-              </WithStyles(ForwardRef(TableCell))>
+              />
             </WithStyles(ForwardRef(TableRow))>
             <WithStyles(ForwardRef(TableRow))>
               <WithStyles(ForwardRef(TableCell))
                 align="center"
                 id="infoTableTitle"
               >
-                Task:
+                Will be completed by:
               </WithStyles(ForwardRef(TableCell))>
               <WithStyles(ForwardRef(TableCell))
                 align="center"
                 id="infoTableContent"
-              >
-                Clean the fridge
-              </WithStyles(ForwardRef(TableCell))>
+              />
             </WithStyles(ForwardRef(TableRow))>
           </WithStyles(ForwardRef(TableBody))>
         </WithStyles(ForwardRef(Table))>
       </WithStyles(ForwardRef(TableContainer))>
-    </WithStyles(ForwardRef(DialogContent))>
-    <WithStyles(ForwardRef(DialogContent))
-      className="Content"
-      id="completePopUpRewards"
-    >
-      <WithStyles(ForwardRef(DialogContentText))
-        variant="h6"
-      >
-        Rewards
-      </WithStyles(ForwardRef(DialogContentText))>
-      <IouFavourSingle
-        giverDisplayName="James Lee"
-        item={
-          Object {
-            "display_name": "Hug",
-            "id": "1",
-          }
-        }
-        key="1"
-        recieverDisplayName="?"
-      />
-      <IouFavourSingle
-        giverDisplayName="James Lee"
-        item={
-          Object {
-            "display_name": "Coffee",
-            "id": "2",
-          }
-        }
-        key="2"
-        recieverDisplayName="?"
-      />
     </WithStyles(ForwardRef(DialogContent))>
     <WithStyles(ForwardRef(DialogContent))
       className="content"
@@ -243,7 +164,7 @@ exports[`<IouComplete /> should render correctly 1`] = `
         onClick={[Function]}
         size="large"
       >
-        Submit
+        Submit & Complete
       </WithStyles(ForwardRef(Button))>
       <WithStyles(ForwardRef(Button))
         color="primary"

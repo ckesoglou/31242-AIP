@@ -19,7 +19,7 @@ import {
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import { Authentication } from "../components/protected-route";
+// import UserProfile from "./userprofile";
 
 type LoginState = {
   username: string;
@@ -40,6 +40,7 @@ interface ILoginProps extends RouteComponentProps {
       next: {
         pathname: string;
       };
+      unauthenticated: string;
     };
   };
 }
@@ -63,10 +64,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
     snackMessage: "",
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   startLoading(): void {
     this.signInRef.current!.innerText = "";
@@ -95,7 +93,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
         if (res.status === 200) {
           // Successful login 200
           // TODO: Only for development?! Handle frontend auth
-          Authentication.authenticate(() => {});
+          // Authentication.authenticate(() => {});
           this.setState({ successfulLogin: true }, () => {
             this.context.updateUser({
               name: this.state.username,
@@ -112,6 +110,16 @@ class Login extends React.Component<ILoginProps, LoginState> {
         }
       })
       .catch(console.log);
+  }
+
+  componentDidMount() {
+    if (this.props.location.state !== undefined) {
+      if (this.props.location.state.unauthenticated) {
+        this.setState({
+          snackMessage: this.props.location.state.unauthenticated,
+        });
+      }
+    }
   }
 
   render() {
@@ -183,21 +191,19 @@ class Login extends React.Component<ILoginProps, LoginState> {
             </Button>
             <Grid container spacing={1}>
               <Grid item xs={7}>
-                <Link href="#">Forgot password?</Link>
+                <div id="goBack">
+                  <MeetingRoomIcon fontSize="small" color="primary" />
+                  <Link component={RouterLink} to="/home">
+                    {"Home"}
+                  </Link>
+                </div>
               </Grid>
               <Grid item xs={5}>
                 <Link component={RouterLink} to="/signup">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-              <Grid item xs>
-                <div id="goBack">
-                  <MeetingRoomIcon fontSize="small" color="primary" />
-                  <Link component={RouterLink} to="/home">
-                    {"Head back to home"}
-                  </Link>
-                </div>
-              </Grid>
+              <Grid item xs></Grid>
             </Grid>
           </FormControl>
           <Snackbar

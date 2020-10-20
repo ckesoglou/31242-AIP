@@ -6,7 +6,8 @@ import ImageIcon from "@material-ui/icons/Image";
 import { Popover, Typography, Divider } from "@material-ui/core";
 
 type IouProofProps = {
-  imagePK: string;
+  imagePK: string | null;
+  proof_of_debt: boolean;
 };
 
 type IouProofState = {
@@ -19,22 +20,6 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
     resImage: "",
     anchorEl: null,
   };
-
-  fetchImage() {
-    fetch(`${imageEndpoint + this.props.imagePK}`, {
-      method: "GET",
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          // Successful login 200
-          res.json().then((body) => this.setState({ resImage: body }));
-        } else {
-          // Unsuccessful login (404)
-          this.setState({ resImage: "" });
-        }
-      })
-      .catch(console.log);
-  }
 
   render() {
     return (
@@ -64,10 +49,12 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
               }}
             >
               <Typography id="taskDetailPopUp">
-                {"Proof"}
+                {this.props.proof_of_debt
+                  ? "Proof of Debt"
+                  : "Proof of Completion"}
                 <Divider id="taskPopUpDivider" />
                 <img
-                  src={"data:image/jpeg;base64," + this.state.resImage}
+                  src={`${imageEndpoint}/${this.props.imagePK}`}
                   id="proofImage"
                   alt="Proof of Completion"
                 />

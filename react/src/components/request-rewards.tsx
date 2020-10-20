@@ -1,7 +1,8 @@
 import React from "react";
 import "../assets/css/iou-request.css";
-import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
+import { requestEndpoint, itemEndpoint } from "../api/endpoints";
 import RequestReward from "./request-reward";
+import { Redirect } from "react-router-dom";
 import {
   Popover,
   Button,
@@ -17,8 +18,15 @@ type Item = {
 
 type RequestRewardsProps = {
   requestID: string;
-  items: Item[];
+  items: RewardItem[];
   rewards: Item[];
+  is_completed: boolean;
+};
+
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type RequestRewardState = {
@@ -26,6 +34,7 @@ type RequestRewardState = {
   selectedReward: string;
   potentialItems: Item[];
   snackMessage: string;
+  unauthRep: boolean;
 };
 
 class RequestRewards extends React.Component<
@@ -37,6 +46,7 @@ class RequestRewards extends React.Component<
     selectedReward: "",
     potentialItems: [],
     snackMessage: "",
+    unauthRep: false,
   };
 
   fetchPotentialRewards() {
@@ -58,7 +68,7 @@ class RequestRewards extends React.Component<
   }
 
   postReward() {
-    fetch(`${requestsEndpoint.concat(this.props.requestID)}/rewards`, {
+    fetch(`${requestEndpoint.concat("/" + this.props.requestID)}/rewards`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,11 +78,13 @@ class RequestRewards extends React.Component<
       }),
     })
       .then((res) => {
-        if (res.status === 201) {
+        if (res.status === 200) {
           // Successful login 200
           this.setState({
             snackMessage: "Reward successfully added to the request!",
           });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 422)
           res
@@ -111,8 +123,12 @@ class RequestRewards extends React.Component<
             });
           }}
         >
-          <div className="firstCircle">{this.props.items[0].display_name}</div>
-          <div className="secondCircle">{this.props.items[1].display_name}</div>
+          <div className="firstCircle">
+            {this.props.items[0].item.display_name}
+          </div>
+          <div className="secondCircle">
+            {this.props.items[1].item.display_name}
+          </div>
           <div className="secondCircle thirdCircle">+</div>
         </div>
       );
@@ -126,7 +142,9 @@ class RequestRewards extends React.Component<
             });
           }}
         >
-          <div className="firstCircle">{this.props.items[0].display_name}</div>
+          <div className="firstCircle">
+            {this.props.items[0].item.display_name}
+          </div>
           <div className="secondCircle">+</div>
         </div>
       );
@@ -134,45 +152,61 @@ class RequestRewards extends React.Component<
   }
 
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: {
+              unauthenticated:
+                "Your session has expired! Please sign in again :)",
+            },
+          }}
+        />
+      );
+    }
+
     return (
       <div id="requestItem">
         {this.renderItems()}
-        <Popover
-          id="requestRewardPopover"
-          open={Boolean(this.state.anchorEl)}
-          anchorEl={this.state.anchorEl}
-          onClose={() => this.setState({ anchorEl: null })}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-        >
-          <div id="requestRewardPopUp">
-            <div id="requestPopUpContent">
-              <Typography id="requestPopUpText">
-                Choose a reward to add
-              </Typography>
-              <Divider />
-              <div id="requestAddContainer">
-                {this.props.rewards.map((item) =>
-                  this.renderRewardElement(item)
-                )}
+        {!this.props.is_completed && (
+          <Popover
+            id="requestRewardPopover"
+            open={Boolean(this.state.anchorEl)}
+            anchorEl={this.state.anchorEl}
+            onClose={() => this.setState({ anchorEl: null })}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+          >
+            <div id="requestRewardPopUp">
+              <div id="requestPopUpContent">
+                <Typography id="requestPopUpText">
+                  Choose a reward to add
+                </Typography>
+                <Divider />
+                <div id="requestAddContainer">
+                  {this.props.rewards.map((item) =>
+                    this.renderRewardElement(item)
+                  )}
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  id="addRewardButton"
+                  onClick={() => this.postReward()}
+                >
+                  Add Reward?
+                </Button>
               </div>
-              <Button
-                variant="contained"
-                color="primary"
-                id="addRewardButton"
-                onClick={() => this.postReward()}
-              >
-                Add Reward?
-              </Button>
             </div>
-          </div>
-        </Popover>
+          </Popover>
+        )}
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",

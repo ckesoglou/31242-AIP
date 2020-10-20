@@ -37,7 +37,7 @@ export async function getBasicUser(username: string) {
       display_name: user.display_name,
     };
   }
-  return {};
+  return null;
 }
 
 export interface IUsersFilter {

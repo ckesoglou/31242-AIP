@@ -92,10 +92,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     snackMessage: "",
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   setLoading(): void {
     this.signUpRef.current!.innerText = "";
@@ -335,13 +332,19 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
                 <div id="goBack">
                   <MeetingRoom fontSize="small" color="primary" />
                   <Link component={RouterLink} to="/home">
-                    {"Head back to home"}
+                    {"Home"}
                   </Link>
                 </div>
               </Grid>
               <Grid item xs={4}>
                 <div id="goSign">
-                  <Link component={RouterLink} to="/login">
+                  <Link
+                    component={RouterLink}
+                    to={{
+                      pathname: "/login",
+                      state: { unauthenticated: "" },
+                    }}
+                  >
                     {"Sign in instead"}
                   </Link>
                 </div>

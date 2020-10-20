@@ -17,6 +17,7 @@ const app = express();
  *                              Set basic express settings
  ***********************************************************************************/
 
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

@@ -18,11 +18,18 @@ import {
   DialogContentText,
 } from "@material-ui/core";
 import IouFavour from "./iou-single-favour";
-import { requestsEndpoint } from "../api/endpoints";
+import DeleteRequestReward from "../components/request-reward-delete";
+import { UserContext } from "../components/user-context";
 
 type Item = {
   id: string;
   display_name: string;
+};
+
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type RequestObj = {
@@ -30,10 +37,10 @@ type RequestObj = {
   author: { username: string; display_name: string };
   completed_by: { username: string; display_name: string };
   proof_of_completion: string;
-  rewards: Item[];
+  rewards: RewardItem[];
   details: string;
   created_time: string;
-  comletion_time: string;
+  completion_time: string;
   is_completed: boolean;
 };
 
@@ -56,49 +63,29 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
     infoModal: false,
   };
 
-  fetchRewardDetails(requestID: string, rewardID: string) {
-    fetch(
-      `${requestsEndpoint
-        .concat("/")
-        .concat(requestID)
-        .concat("/reward/")
-        .concat(rewardID)}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          // Successful login 200
-          res
-            .json()
-            .then(
-              (body) => (this.tempRewardDisplayName = body.giver.display_name)
-            );
-        } else {
-          // Unsuccessful login (400)
-          this.tempRewardDisplayName = "Could not find user display name";
-        }
-      })
-      .catch(console.log);
-  }
+  static contextType = UserContext;
 
-  renderPopUpRewards(item: Item) {
-    this.fetchRewardDetails(this.props.request.id, item.id);
+  renderPopUpRewards(reward: RewardItem) {
     return (
-      <IouFavour
-        key={item.id}
-        giverDisplayName={this.tempRewardDisplayName}
-        recieverDisplayName={
-          this.props.request.is_completed
-            ? this.props.request.completed_by.username
-            : "?"
-        }
-        item={item}
-      />
+      <div id="test">
+        <IouFavour
+          key={reward.item.id}
+          giverDisplayName={reward.giver.display_name}
+          recieverDisplayName={
+            this.props.request.is_completed
+              ? this.props.request.completed_by.username
+              : "?"
+          }
+          item={reward.item}
+        />
+        {reward.giver.username === this.context.user.name &&
+        !this.props.request.is_completed ? (
+          <DeleteRequestReward
+            requestID={this.props.request.id}
+            rewardID={reward.id}
+          />
+        ) : null}
+      </div>
     );
   }
 

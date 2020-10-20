@@ -142,7 +142,7 @@ exports[`SignUp should render correctly 1`] = `
               }
               to="/home"
             >
-              Head back to home
+              Home
             </WithStyles(ForwardRef(Link))>
           </div>
         </WithStyles(ForwardRef(Grid))>
@@ -168,7 +168,14 @@ exports[`SignUp should render correctly 1`] = `
                   "render": [Function],
                 }
               }
-              to="/login"
+              to={
+                Object {
+                  "pathname": "/login",
+                  "state": Object {
+                    "unauthenticated": "",
+                  },
+                }
+              }
             >
               Sign in instead
             </WithStyles(ForwardRef(Link))>
@@ -176,6 +183,18 @@ exports[`SignUp should render correctly 1`] = `
         </WithStyles(ForwardRef(Grid))>
       </WithStyles(ForwardRef(Grid))>
     </WithStyles(ForwardRef(FormControl))>
+    <WithStyles(ForwardRef(Snackbar))
+      anchorOrigin={
+        Object {
+          "horizontal": "left",
+          "vertical": "bottom",
+        }
+      }
+      autoHideDuration={5000}
+      message=""
+      onClose={[Function]}
+      open={false}
+    />
   </div>
 </WithStyles(ForwardRef(Container))>
 `;

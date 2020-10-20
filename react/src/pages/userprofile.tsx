@@ -1,9 +1,12 @@
 import React, { ChangeEvent } from "react";
-import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
+import {
+  RouteComponentProps,
+  Link as RouterLink,
+  Redirect,
+} from "react-router-dom";
 import "../assets/css/userprofile.css";
 import {
-  userProfileEndpoint,
-  requestsNewEndpoint,
+  requestsEndpoint,
   iouOweEndpoint,
   iouOwedEndpoint,
   itemEndpoint,
@@ -27,13 +30,15 @@ import {
   TextField,
   CircularProgress,
   Snackbar,
+  Divider,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import { Autocomplete, Pagination } from "@material-ui/lab";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 import IOU from "../components/iou";
+import IouRequest from "../components/request";
 // import { optional } from "joi";
 
 type ItemObj = {
@@ -46,16 +51,47 @@ type UserObj = {
   display_name: string;
 };
 
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
+};
+
+type IouObj = {
+  id: string;
+  item: ItemObj;
+  giver: { username: string; display_name: string };
+  receiver: { username: string; display_name: string };
+  parent_request: string | null;
+  proof_of_debt: string | null;
+  proof_of_completion: string | null;
+  created_time: string;
+  claimed_time: string | null;
+  is_claimed: boolean;
+};
+
+type RequestObj = {
+  id: string;
+  author: { username: string; display_name: string };
+  completed_by: { username: string; display_name: string };
+  proof_of_completion: string;
+  rewards: RewardItem[];
+  details: string;
+  created_time: string;
+  completion_time: string;
+  is_completed: boolean;
+};
+
 type UserProfileState = {
   tabIndex: number;
   newRequestDialog: boolean;
-  owed: string;
-  owe: string;
-  requests: string;
+  owed: IouObj[];
+  owe: IouObj[];
+  requests: RequestObj[];
   newRequestFavour: string;
   newRequestReward: string;
   newRequestProof: any;
-  requestSnack: boolean;
+  snack: boolean;
   snackMessage: string;
   potentialItems: ItemObj[];
   selectedUser: string;
@@ -63,6 +99,10 @@ type UserProfileState = {
   userDropOpen: boolean;
   userDropLoading: boolean;
   rewardDropOpen: boolean;
+  owedPages: number;
+  owePages: number;
+  requestPages: number;
+  unauthRep: boolean;
 };
 
 interface IUserProfileProps extends RouteComponentProps {
@@ -114,6 +154,8 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
+const numberOfItemsPerPage = 5;
+
 class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   private textRef: React.RefObject<HTMLLabelElement>;
   private loadingRef: React.RefObject<HTMLInputElement>;
@@ -128,13 +170,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   state: UserProfileState = {
     tabIndex: this.props.location.state.tabIndex ?? 0,
     newRequestDialog: false,
-    owed: "",
-    owe: "",
-    requests: "",
+    owed: [],
+    owe: [],
+    requests: [],
     newRequestFavour: "",
     newRequestReward: "",
     newRequestProof: "",
-    requestSnack: false,
+    snack: false,
     snackMessage: "",
     potentialItems: [],
     selectedUser: "",
@@ -142,12 +184,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     userDropOpen: false,
     userDropLoading: false,
     rewardDropOpen: false,
+    owedPages: 1,
+    owePages: 1,
+    requestPages: 1,
+    unauthRep: false,
   };
 
-  static contextType: React.Context<{
-    user: {};
-    updateUser: (newUser: object) => void;
-  }> = UserContext;
+  static contextType = UserContext;
 
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
@@ -162,6 +205,30 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     });
     this.fetchUsers();
     this.fetchItems();
+  }
+
+  setCountOfOwed(): number {
+    if (this.state.owed.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.owed.length / numberOfItemsPerPage);
+    } else {
+      return this.state.owed.length / numberOfItemsPerPage;
+    }
+  }
+
+  setCountOfOwe(): number {
+    if (this.state.owe.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.owe.length / numberOfItemsPerPage);
+    } else {
+      return this.state.owe.length / numberOfItemsPerPage;
+    }
+  }
+
+  setCountOfRequest(): number {
+    if (this.state.requests.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.requests.length / numberOfItemsPerPage);
+    } else {
+      return this.state.requests.length / numberOfItemsPerPage;
+    }
   }
 
   fetchItems(): void {
@@ -180,12 +247,12 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .catch((exception) => {
         console.error("Error:", exception);
         this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+        this.setState({ snack: true });
       });
   }
 
   fetchNewRequest(): void {
-    fetch(`${requestsNewEndpoint}`, {
+    fetch(`${requestsEndpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -200,15 +267,17 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           // Successful login 201
           this.setState({
             snackMessage: "New request created!",
-            requestSnack: true,
+            snack: true,
             newRequestDialog: false,
           });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 401)
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               newRequestDialog: false,
             })
           );
@@ -231,19 +300,29 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       }),
     })
       .then((res) => {
-        if (res.status === 201) {
-          // Successful login 201
-          this.setState({
-            snackMessage: "New IOU created!",
-            requestSnack: true,
-            newRequestDialog: false,
-          });
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) =>
+            this.setState({
+              snackMessage:
+                "New IOU created!" +
+                (body.hasOwnProperty("usersInParty")
+                  ? " You and " +
+                    body.usersInParty.splice(0, 1).join(", ") +
+                    " have a circular IOU party. We suggest you guys treat each other! ;)"
+                  : ""),
+              snack: true,
+              newRequestDialog: false,
+            })
+          );
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 401)
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               newRequestDialog: false,
             })
           );
@@ -255,32 +334,41 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   fetchNewOwed(): void {
+    const formData = new FormData();
+    formData.append("username", this.state.selectedUser);
+    formData.append("item", this.state.newRequestReward);
+    formData.append("proof", this.state.newRequestProof);
+
     fetch(`${iouOwedEndpoint}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: this.state.selectedUser,
-        item: this.state.newRequestReward,
-        proof: this.state.newRequestProof,
-      }),
+      body: formData,
     })
       .then((res) => {
-        if (res.status === 201) {
+        if (res.status === 200) {
           // Successful login 201
-          this.setState({
-            snackMessage: "New IOU created!",
-            requestSnack: true,
-            newRequestDialog: false,
-          });
+          res.json().then((body) =>
+            this.setState({
+              snackMessage:
+                "New IOU created!" +
+                (body.hasOwnProperty("usersInParty")
+                  ? " You and " +
+                    body.usersInParty.splice(0, 1).join(", ") +
+                    " other users have a circular IOU party. We suggest you guys treat each other! :)"
+                  : ""),
+              snack: true,
+              newRequestDialog: false,
+            })
+          );
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 401)
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               newRequestDialog: false,
+              newRequestProof: "",
             })
           );
         }
@@ -297,39 +385,36 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     };
     this.setLoading(true);
     Promise.all([
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owe`, {
+      fetch(`${iouOwedEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/owed`, {
+      fetch(`${iouOweEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
-      fetch(`${userProfileEndpoint.concat(this.context.user.name)}/requests`, {
+      fetch(`${requestsEndpoint}`, {
         method: "GET",
         headers: headers,
       }),
     ])
-      .then(([owed, owe, requests]) => {
-        Promise.all([owed.json(), owe.json(), requests.json()]).then(
-          ([owedResult, oweResult, requestsResult]) => {
+      .then(([owed, owe, request]) => {
+        Promise.all([owed.json(), owe.json(), request.json()]).then(
+          ([owedResult, oweResult, requestResult]) => {
             this.setLoading(false);
-            let owedRaw = JSON.stringify(owedResult);
-            let oweRaw = JSON.stringify(oweResult);
-            let requestsRaw = JSON.stringify(requestsResult);
             this.setState({
-              owed: owedRaw,
-              owe: oweRaw,
-              requests: requestsRaw,
+              owed: owedResult,
+              owe: oweResult,
+              requests: requestResult,
             });
-            console.log("Success:", owedResult, oweResult, requestsResult);
+            console.log("Success:", owedResult, oweResult, requestResult);
           }
         );
       })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
+      .catch(([owedException, oweException, requestException]) => {
+        console.error("Error:", owedException, oweException, requestException);
+        this.setLoading(false);
+        this.setState({ unauthRep: true });
       });
   }
 
@@ -344,17 +429,22 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 201
-          res
-            .json()
-            .then((body) =>
-              this.setState({ selectetableUsers: body, userDropLoading: false })
-            );
+          res.json().then((body) => {
+            let index;
+            body.forEach((user: UserObj) => {
+              if (user.username === this.context.user.name) {
+                index = body.indexOf(user);
+              }
+            });
+            body.splice(index, 1);
+            this.setState({ selectetableUsers: body, userDropLoading: false });
+          });
         } else {
           // Unsuccessful login (400)
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               userDropLoading: false,
             })
           );
@@ -367,7 +457,11 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   fetchSearchedUsers(searchUser: string) {
     this.setState({ userDropLoading: true });
-    fetch(`${usersEndpoint.concat("?search=").concat(searchUser)}`, {
+    let url = new URL(usersEndpoint, document.baseURI);
+    if (searchUser !== "") {
+      url.searchParams.append("search", searchUser);
+    }
+    fetch(url.href, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -376,17 +470,22 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 201
-          res
-            .json()
-            .then((body) =>
-              this.setState({ selectetableUsers: body, userDropLoading: false })
-            );
+          res.json().then((body) => {
+            let index;
+            body.forEach((user: UserObj) => {
+              if (user.username === this.context.user.name) {
+                index = body.indexOf(user);
+              }
+            });
+            body.splice(index, 1);
+            this.setState({ selectetableUsers: body, userDropLoading: false });
+          });
         } else {
           // Unsuccessful login (400)
           res.json().then((body) =>
             this.setState({
               snackMessage: body.errors,
-              requestSnack: true,
+              snack: true,
               userDropLoading: false,
             })
           );
@@ -404,6 +503,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   fileContent() {
     if (this.state.newRequestProof) {
+      console.log(this.state.newRequestProof);
       return (
         <div id="completeProofFileInfo">
           <DialogContentText variant="body2">
@@ -426,7 +526,35 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
+  checkCreatButton(): boolean {
+    if (this.state.tabIndex === 2) {
+      return !this.state.newRequestFavour || !this.state.newRequestReward;
+    } else if (this.state.tabIndex === 1) {
+      return !this.state.selectedUser || !this.state.newRequestReward;
+    } else {
+      return (
+        !this.state.selectedUser ||
+        !this.state.newRequestReward ||
+        !this.state.newRequestProof
+      );
+    }
+  }
+
   render() {
+    if (this.state.unauthRep) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: {
+              unauthenticated:
+                "Your session has expired! Please sign in again :)",
+            },
+          }}
+        />
+      );
+    }
+
     return (
       <Container component="main" maxWidth="lg">
         <div className="paper">
@@ -444,10 +572,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 <Typography component="h1" variant="h4">
                   {"Profile"}
                 </Typography>
-                <AvatarWithMenu
-                  loggedIn={this.context.user.name !== "?"}
-                  fullName={this.context.user.name}
-                />
+                <AvatarWithMenu />
               </div>
             </Grid>
             {/* <Grid item xs={4}>
@@ -589,7 +714,11 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                               });
                             }}
                             loading={this.state.userDropLoading}
-                            getOptionLabel={(option) => option.username}
+                            getOptionLabel={(option) =>
+                              option.display_name
+                                .concat("   #")
+                                .concat(option.username)
+                            }
                             getOptionSelected={(option, value) =>
                               option.username === value.username
                             }
@@ -729,10 +858,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         });
                       }}
                       autoFocus
-                      disabled={
-                        !this.state.newRequestFavour ||
-                        !this.state.newRequestReward
-                      }
+                      disabled={this.checkCreatButton()}
                     >
                       Create
                     </Button>
@@ -745,44 +871,50 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     </Button>
                   </DialogActions>
                 </Dialog>
-                <Snackbar
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  message={this.state.snackMessage}
-                  open={this.state.requestSnack}
-                  onClose={() => {
-                    this.setState({ requestSnack: false });
-                  }}
-                  autoHideDuration={5000}
-                />
                 <TabPanel
                   value={this.state.tabIndex}
                   loadingRef={this.loadingRef}
                   textRef={this.textRef}
                   index={0}
                 >
-                  {this.state.owed}
-                  <IOU
-                    request={{
-                      id: "1",
-                      author: { username: "James", display_name: "James" },
-                      completed_by: {
-                        username: "Kevin",
-                        display_name: "Kevin",
-                      },
-                      proof_of_completion: "",
-                      rewards: [
-                        { id: "1", display_name: "Hug" },
-                        { id: "2", display_name: "Coffee" },
-                      ],
-                      details: "Clean the fridge",
-                      created_time: "02/02/2020",
-                      comletion_time: "02/02/2020",
-                      is_completed: true,
-                    }}
-                  />
+                  <Grid item xs={12}>
+                    <Grid container direction="row">
+                      <Grid id="headerItem" item xs={6}>
+                        <Typography variant="h6">Favour</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Proof</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Completed</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  {this.state.owed
+                    .slice(
+                      (this.state.owedPages - 1) * numberOfItemsPerPage,
+                      this.state.owedPages * numberOfItemsPerPage
+                    )
+                    .map((owed, i) => {
+                      return <IOU iou={owed} key={i} iouType={0} />;
+                    })}
+                  <Box pt={3}>
+                    <Divider variant="middle" />
+                    <Pagination
+                      id="userPagination"
+                      count={this.setCountOfOwed()}
+                      page={this.state.owedPages}
+                      onChange={(
+                        event: React.ChangeEvent<unknown>,
+                        value: number
+                      ) => {
+                        this.setState({ owedPages: value });
+                      }}
+                      defaultPage={1}
+                      siblingCount={2}
+                      color="primary"
+                    />
+                  </Box>
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -790,7 +922,44 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={1}
                 >
-                  {this.state.owe}
+                  <Grid item xs={12}>
+                    <Grid container direction="row">
+                      <Grid id="headerItem" item xs={6}>
+                        <Typography variant="h6">Favour</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Proof</Typography>
+                      </Grid>
+                      <Grid id="headerItem" item xs={3}>
+                        <Typography variant="h6">Completed</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  {this.state.owe
+                    .slice(
+                      (this.state.owePages - 1) * numberOfItemsPerPage,
+                      this.state.owePages * numberOfItemsPerPage
+                    )
+                    .map((owe, i) => {
+                      return <IOU iou={owe} key={i} iouType={1} />;
+                    })}
+                  <Box pt={3}>
+                    <Divider variant="middle" />
+                    <Pagination
+                      id="userPagination"
+                      count={this.setCountOfOwe()}
+                      page={this.state.owePages}
+                      onChange={(
+                        event: React.ChangeEvent<unknown>,
+                        value: number
+                      ) => {
+                        this.setState({ owePages: value });
+                      }}
+                      defaultPage={1}
+                      siblingCount={2}
+                      color="primary"
+                    />
+                  </Box>
                 </TabPanel>
                 <TabPanel
                   value={this.state.tabIndex}
@@ -798,11 +967,47 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   textRef={this.textRef}
                   index={2}
                 >
-                  {this.state.requests}
+                  {this.state.requests.map((request, i) => {
+                    return (
+                      <IouRequest
+                        request={request}
+                        potentialRewards={this.state.potentialItems}
+                        iouType={2}
+                        key={i}
+                      />
+                    );
+                  })}
+                  <Divider variant="middle" />
+                  <Pagination
+                    id="userPagination"
+                    count={this.setCountOfOwe()}
+                    page={this.state.owePages}
+                    onChange={(
+                      event: React.ChangeEvent<unknown>,
+                      value: number
+                    ) => {
+                      this.setState({ owePages: value });
+                    }}
+                    defaultPage={1}
+                    siblingCount={2}
+                    color="primary"
+                  />
                 </TabPanel>
               </Paper>
             </Grid>
           </Grid>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            message={this.state.snackMessage}
+            open={this.state.snack}
+            onClose={() => {
+              this.setState({ snack: false });
+            }}
+            autoHideDuration={5000}
+          />
         </div>
       </Container>
     );

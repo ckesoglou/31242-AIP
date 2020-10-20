@@ -16,15 +16,23 @@ type RequestObj = {
   author: { username: string; display_name: string };
   completed_by: { username: string; display_name: string };
   proof_of_completion: string;
-  rewards: Item[];
+  rewards: RewardItem[];
   details: string;
   created_time: string;
-  comletion_time: string;
+  completion_time: string;
   is_completed: boolean;
+};
+
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type RequestProps = {
   request: RequestObj;
+  potentialRewards: Item[];
+  iouType: number;
 };
 
 class Request extends React.Component<RequestProps> {
@@ -36,21 +44,31 @@ class Request extends React.Component<RequestProps> {
             <RequestRewards
               requestID={this.props.request.id}
               items={this.props.request.rewards}
-              rewards={[
-                { id: "1", display_name: "Hug" },
-                { id: "2", display_name: "Coffee" },
-                { id: "3", display_name: "Food" },
-              ]}
+              rewards={this.props.potentialRewards}
+              is_completed={this.props.request.is_completed}
             />
           </Grid>
           <Grid item xs={3} id="requestItemContainer">
             <IouTask details={this.props.request.details} />
           </Grid>
           <Grid item xs={1} id="requestItemContainer">
-            <IouProof imagePK={this.props.request.proof_of_completion} />
+            <IouProof
+              imagePK={this.props.request.proof_of_completion}
+              proof_of_debt={false}
+            />
           </Grid>
           <Grid item xs={3} id="requestProofContainer">
-            <IouComplete request={this.props.request} />
+            <IouComplete
+              id={this.props.request.id}
+              is_completed={this.props.request.is_completed}
+              completed_by={this.props.request.completed_by?.username ?? ""} // TODO: check who completed by
+              claimed_time={this.props.request.completion_time}
+              created_time={this.props.request.created_time}
+              author={this.props.request.author.username ?? ""}
+              rewards={this.props.request.rewards}
+              details={this.props.request.details}
+              iouType={this.props.iouType}
+            />
           </Grid>
           <Grid item xs={1} id="requestItemContainer">
             <RequestInfo request={this.props.request} />

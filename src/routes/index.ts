@@ -1,6 +1,7 @@
 import { Router } from "express";
 import LoginRouter from "./Login";
 import SignUpRouter from "./SignUp";
+import RequestRouter from "./Request";
 import UserRouter from "./User";
 import IouRouter from "./Ious";
 import ItemRouter from "./Item";
@@ -13,6 +14,7 @@ const router = Router();
 router.use("/login", LoginRouter);
 router.use("/signup", SignUpRouter);
 router.use("/iou", IouRouter);
+router.use(RequestRouter);
 router.use("/leaderboard", LeaderboardRouter);
 router.use(UserRouter);
 router.use(ItemRouter);

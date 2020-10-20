@@ -10,6 +10,7 @@ import {
   completeIouOwe,
   iouExists,
   getIous,
+  getFormattedIous,
   partyDetection,
 } from "@daos/Ious";
 import Iou from "@entities/Iou";
@@ -58,8 +59,8 @@ router.get("/owed", async (req: Request, res: Response) => {
   const iousQuery = value as IIousQuery;
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIous(
-      { receiver: user.username, is_claimed: false },
+    const iou = await getFormattedIous(
+      { receiver: user.username },
       iousQuery.start,
       iousQuery.limit
     );
@@ -165,8 +166,8 @@ router.get("/owe", async (req: Request, res: Response) => {
   const iousQuery = value as IIousQuery;
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIous(
-      { giver: user.username, is_claimed: false },
+    const iou = await getFormattedIous(
+      { giver: user.username },
       iousQuery.start,
       iousQuery.limit
     );
