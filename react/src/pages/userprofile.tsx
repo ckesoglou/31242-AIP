@@ -252,6 +252,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             newRequestDialog: false,
           });
         } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 401)
           res.json().then((body) =>
@@ -280,13 +281,23 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       }),
     })
       .then((res) => {
-        if (res.status === 201) {
-          // Successful login 201
-          this.setState({
-            snackMessage: "New IOU created!",
-            snack: true,
-            newRequestDialog: false,
-          });
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) =>
+            this.setState({
+              snackMessage:
+                "New IOU created!" +
+                (body.hasOwnProperty("usersInParty")
+                  ? " You and " +
+                    body.usersInParty.splice(0, 1).join(", ") +
+                    " have a circular IOU party. We suggest you guys treat each other! ;)"
+                  : ""),
+              snack: true,
+              newRequestDialog: false,
+            })
+          );
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 401)
           res.json().then((body) =>
@@ -314,14 +325,23 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       body: formData,
     })
       .then((res) => {
-        if (res.status === 201) {
+        if (res.status === 200) {
           // Successful login 201
-          this.setState({
-            snackMessage: "New IOU created!",
-            snack: true,
-            newRequestDialog: false,
-            newRequestProof: "",
-          });
+          res.json().then((body) =>
+            this.setState({
+              snackMessage:
+                "New IOU created!" +
+                (body.hasOwnProperty("usersInParty")
+                  ? " You and " +
+                    body.usersInParty.splice(0, 1).join(", ") +
+                    " other users have a circular IOU party. We suggest you guys treat each other! :)"
+                  : ""),
+              snack: true,
+              newRequestDialog: false,
+            })
+          );
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
         } else {
           // Unsuccessful login (400 or 401)
           res.json().then((body) =>
@@ -389,11 +409,16 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 201
-          res
-            .json()
-            .then((body) =>
-              this.setState({ selectetableUsers: body, userDropLoading: false })
-            );
+          res.json().then((body) => {
+            let index;
+            body.forEach((user: UserObj) => {
+              if (user.username == this.context.user.name) {
+                index = body.indexOf(user);
+              }
+            });
+            body.splice(index, 1);
+            this.setState({ selectetableUsers: body, userDropLoading: false });
+          });
         } else {
           // Unsuccessful login (400)
           res.json().then((body) =>
@@ -425,11 +450,16 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 201
-          res
-            .json()
-            .then((body) =>
-              this.setState({ selectetableUsers: body, userDropLoading: false })
-            );
+          res.json().then((body) => {
+            let index;
+            body.forEach((user: UserObj) => {
+              if (user.username == this.context.user.name) {
+                index = body.indexOf(user);
+              }
+            });
+            body.splice(index, 1);
+            this.setState({ selectetableUsers: body, userDropLoading: false });
+          });
         } else {
           // Unsuccessful login (400)
           res.json().then((body) =>

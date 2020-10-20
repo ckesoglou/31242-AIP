@@ -102,20 +102,29 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
         },
       })
         .then((res) => {
-          return res.json();
-        })
-        .then((body) => {
-          console.log("Success:", body);
-          this.setState({
-            snackMessage: "Fetched filtered requests!",
-            snack: true,
-            requests: body,
-          });
-          this.setLoading(false);
+          if (res.status === 200) {
+            // Successful login 200
+            res.json().then((body) => {
+              console.log("Success:", body);
+              this.setState({
+                snackMessage: "Fetched filtered requests!",
+                snack: true,
+                requests: body,
+              });
+              this.setLoading(false);
+            });
+          } else {
+            res.json().then((body) => {
+              console.log(body.errors);
+              this.setState({ snackMessage: body.errors, snack: true });
+              this.setLoading(false);
+            });
+          }
         })
         .catch((exception) => {
           console.error("Error:", exception);
-          this.setState({ snackMessage: exception, snack: true });
+          this.setState({ snackMessage: `${exception}` });
+          this.setState({ snack: true });
           this.setLoading(false);
         });
     } else {
@@ -130,18 +139,25 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       method: "GET",
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ requests: body });
-        this.setLoading(false);
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) => {
+            this.setState({ requests: body });
+            this.setLoading(false);
+          });
+        } else {
+          res.json().then((body) => {
+            console.log(body.errors);
+            this.setState({ snackMessage: body.errors, snack: true });
+            this.setLoading(false);
+          });
+        }
       })
       .catch((exception) => {
         console.error("Error:", exception);
-        this.setState({ snackMessage: exception });
-        this.setLoading(false);
+        this.setState({ snackMessage: `${exception}` });
         this.setState({ snack: true });
+        this.setLoading(false);
       });
   }
 

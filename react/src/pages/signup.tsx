@@ -332,7 +332,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
                 <div id="goBack">
                   <MeetingRoom fontSize="small" color="primary" />
                   <Link component={RouterLink} to="/home">
-                    {"Head back to home"}
+                    {"Home"}
                   </Link>
                 </div>
               </Grid>

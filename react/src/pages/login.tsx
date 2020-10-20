@@ -192,21 +192,19 @@ class Login extends React.Component<ILoginProps, LoginState> {
             </Button>
             <Grid container spacing={1}>
               <Grid item xs={7}>
-                <Link href="#">Forgot password?</Link>
+                <div id="goBack">
+                  <MeetingRoomIcon fontSize="small" color="primary" />
+                  <Link component={RouterLink} to="/home">
+                    {"Home"}
+                  </Link>
+                </div>
               </Grid>
               <Grid item xs={5}>
                 <Link component={RouterLink} to="/signup">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-              <Grid item xs>
-                <div id="goBack">
-                  <MeetingRoomIcon fontSize="small" color="primary" />
-                  <Link component={RouterLink} to="/home">
-                    {"Head back to home"}
-                  </Link>
-                </div>
-              </Grid>
+              <Grid item xs></Grid>
             </Grid>
           </FormControl>
           <Snackbar
