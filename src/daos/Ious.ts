@@ -78,8 +78,8 @@ export async function getIous(
   // detail user
   for (let iou of ious) {
     iou.item = (await getItem(iou.item as string)) as Object;
-    iou.giver = await getBasicUser(iou.giver as string);
-    iou.receiver = await getBasicUser(iou.receiver as string);
+    iou.giver = await getBasicUser(iou.giver as string) ?? {};
+    iou.receiver = await getBasicUser(iou.receiver as string) ?? undefined;
   }
   return ious;
 }
