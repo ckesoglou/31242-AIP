@@ -64,7 +64,7 @@ CREATE VIEW leaderboard AS (
 	SELECT
 		users.username,
 		COALESCE(SUM(activityLog.points), 0) AS score,
-		ROW_NUMBER() OVER(ORDER BY COALESCE(SUM(activityLog.points), 0) DESC) AS position
+		ROW_NUMBER() OVER(ORDER BY COALESCE(SUM(activityLog.points), 0) DESC) AS rank
 	FROM
 		users
 

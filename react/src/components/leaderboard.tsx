@@ -17,7 +17,7 @@ import LeaderboardUser from "./leaderboardUser";
 
 type LeaderboardUser = {
   rank: number;
-  user: { username: string; display_name: string };
+  username: string;
   score: number;
 };
 
@@ -200,7 +200,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
                     <LeaderboardUser
                       key={i}
                       rank={user.rank}
-                      username={user.user.username}
+                      username={user.username}
                       score={user.score}
                     />
                   </Grid>
