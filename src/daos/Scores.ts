@@ -13,7 +13,7 @@ export async function getScores(start: number = 0, limit: number = 25) {
 
 export async function getUserScores(user: User) {
   const [scores, metadata] = await sequelize.query(
-    `SELECT rank, score from leaderboard WHERE username='${user.username}'`
+    `SELECT position, score from leaderboard WHERE username='${user.username}'`
   );
   return scores[0];
 }

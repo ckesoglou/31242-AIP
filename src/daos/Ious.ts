@@ -2,8 +2,100 @@ import { DataTypes } from "sequelize";
 import Iou, { IIouAttributes } from "../entities/Iou";
 import db from "./DBInstance";
 import { v4 as uuid } from "uuid";
-import { getBasicUser } from "./Users";
+import { getBasicUser, getUser } from "./Users";
 import { getItem } from "./Items";
+import User from "@entities/User";
+import { values } from "sequelize/types/lib/operators";
+import e from "express";
+
+interface vertexTrack {
+  [index: string]: boolean | string;
+}
+
+class UserNode {
+  name: string;
+  peopleOwing: UserNode[];
+  constructor(name: string) {
+    this.name = name;
+    this.peopleOwing = [];
+  }
+
+  addOwingUser(user: UserNode) {
+    this.peopleOwing.push(user);
+  }
+
+  getOwingUsers() {
+    return this.peopleOwing;
+  }
+}
+
+class IouGraph {
+  users: UserNode[];
+  usersInParty: string[];
+
+  constructor() {
+    this.users = [];
+    this.usersInParty = [];
+  }
+
+  dfs(newIou: Iou) {
+    const userNode = this.users.find(
+      (user) => user.name == newIou.giver.toString()
+    );
+    var visited: vertexTrack = {};
+    var recStack: any = {};
+
+    if (userNode) {
+      var result = this.detectCycleWithinGraph(userNode, visited, recStack);
+      if (result !== false) return result;
+    }
+
+    return false;
+  }
+
+  detectCycleWithinGraph(
+    userNode: UserNode,
+    visited: vertexTrack,
+    recStack: vertexTrack
+  ) {
+    if (!visited[userNode.name]) {
+      visited[userNode.name] = true;
+      recStack[userNode.name] = true;
+      this.usersInParty.push(userNode.name);
+      const nodeNeighbors = userNode.getOwingUsers();
+      for (let currentNode of nodeNeighbors) {
+        if (
+          !visited[currentNode.name] &&
+          this.detectCycleWithinGraph(currentNode, visited, recStack)
+        ) {
+          return this.usersInParty;
+        } else if (recStack[currentNode.name]) {
+          return this.usersInParty;
+        }
+      }
+    }
+    recStack[userNode.name] = false;
+    return false;
+  }
+
+  addUserNode(username: string) {
+    this.users.push(new UserNode(username));
+  }
+
+  getUserNode(username: string) {
+    return this.users.find((user) => user.name === username);
+  }
+
+  addEdge(giver: string, receiver: string) {
+    const giverUser = this.getUserNode(giver);
+    const receiverUser = this.getUserNode(receiver);
+    if (giverUser && receiverUser) giverUser.addOwingUser(receiverUser);
+  }
+
+  print() {
+    return this.users;
+  }
+}
 
 Iou.init(
   {
@@ -120,6 +212,44 @@ export async function iouExists(iouID: string) {
   return (await Iou.findByPk(iouID)) ? true : false;
 }
 
+export async function partyDetection(newIou: Iou) {
+  const graph = new IouGraph();
+
+  var ious = await Iou.findAll();
+
+  if (ious === null) {
+    return false;
+  } else {
+    for (let iou of ious) {
+      if (iou) {
+        var receiver;
+        var giver;
+        if (iou.receiver) {
+          receiver = iou.receiver.toString();
+          if (!graph.getUserNode(receiver)) {
+            graph.addUserNode(receiver);
+          }
+        }
+
+        giver = iou.giver.toString();
+        if (!graph.getUserNode(giver)) {
+          graph.addUserNode(giver);
+        }
+        if (receiver && giver) {
+          graph.addEdge(giver, receiver);
+        }
+      }
+    }
+    var cycleCheckResults = graph.dfs(newIou);
+
+    if (!cycleCheckResults) {
+      console.log("No party detected");
+    } else {
+      return cycleCheckResults;
+    }
+  }
+}
+
 export async function completeIouOwed(iouID: string, receiver: string) {
   // user that completes must be receiver
   const iou = await Iou.findOne({ where: { id: iouID, receiver: receiver } });
@@ -157,6 +287,7 @@ export async function createIouOwe(
     claimed_time: undefined,
     is_claimed: false,
   });
+
   return ious.id;
 }
 
