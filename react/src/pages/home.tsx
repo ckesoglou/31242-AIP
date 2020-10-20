@@ -21,7 +21,7 @@ import { AvatarWithMenu } from "../components/avatarWithMenu";
 import Leaderboard from "../components/leaderboard";
 import { Search, Clear } from "@material-ui/icons";
 import RequestComponent from "../components/request";
-import { requestsEndpoint } from "../api/endpoints";
+import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
 
 type Request = {
   id: string;
@@ -140,25 +140,29 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       });
   }
 
-  fetchRewards() {
-    fetch("/api/items", {
+  fetchItems(): void {
+    fetch(`${itemEndpoint}`, {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Fetched reward items:", body);
-        this.setState({ rewardItems: body });
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) => this.setState({ rewardItems: body }));
+        }
       })
       .catch((exception) => {
-        console.error("Error fetching reward items:", exception);
+        console.error("Error:", exception);
+        this.setState({ snackMessage: `${exception}` });
+        this.setState({ snack: true });
       });
   }
 
   componentDidMount() {
     // this.fetchRequests();
-    this.fetchRewards();
+    this.fetchItems();
   }
 
   render() {

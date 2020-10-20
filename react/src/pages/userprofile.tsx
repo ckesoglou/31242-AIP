@@ -373,7 +373,11 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   fetchSearchedUsers(searchUser: string) {
     this.setState({ userDropLoading: true });
-    fetch(`${usersEndpoint.concat("?search=").concat(searchUser)}`, {
+    let url = new URL(usersEndpoint, document.baseURI);
+    if (searchUser !== "") {
+      url.searchParams.append("search", searchUser);
+    }
+    fetch(url.href, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -428,6 +432,20 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         <DialogContentText variant="body2" id="completeProofFileInfo">
           {"Upload an image (JPEG/PNG) before pressing the 'Create' button"}
         </DialogContentText>
+      );
+    }
+  }
+
+  checkCreatButton(): boolean {
+    if (this.state.tabIndex === 2) {
+      return !this.state.newRequestFavour || !this.state.newRequestReward;
+    } else if (this.state.tabIndex === 1) {
+      return !this.state.selectedUser || !this.state.newRequestReward;
+    } else {
+      return (
+        !this.state.selectedUser ||
+        !this.state.newRequestReward ||
+        !this.state.newRequestProof
       );
     }
   }
@@ -732,10 +750,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         });
                       }}
                       autoFocus
-                      disabled={
-                        !this.state.newRequestFavour ||
-                        !this.state.newRequestReward
-                      }
+                      disabled={this.checkCreatButton()}
                     >
                       Create
                     </Button>

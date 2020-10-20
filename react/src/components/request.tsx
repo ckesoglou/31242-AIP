@@ -25,6 +25,7 @@ type RequestObj = {
 
 type RequestProps = {
   request: RequestObj;
+  potentialRewards: Item[];
 };
 
 class Request extends React.Component<RequestProps> {
@@ -36,11 +37,7 @@ class Request extends React.Component<RequestProps> {
             <RequestRewards
               requestID={this.props.request.id}
               items={this.props.request.rewards}
-              rewards={[
-                { id: "1", display_name: "Hug" },
-                { id: "2", display_name: "Coffee" },
-                { id: "3", display_name: "Food" },
-              ]}
+              rewards={this.props.potentialRewards}
             />
           </Grid>
           <Grid item xs={3} id="requestItemContainer">
