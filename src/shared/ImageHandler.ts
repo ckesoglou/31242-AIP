@@ -1,16 +1,19 @@
-import { fdatasync } from "fs";
+import { fdatasync, existsSync, mkdirSync } from "fs";
 import multer from "multer";
+
+const imagePath = "./uploads";
+if (!existsSync(imagePath)) {
+  mkdirSync(imagePath);
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./uploads/");
+    cb(null, imagePath + "/");
   },
   filename: (req, file, cb) => {
     cb(null, `${+new Date()}-${file.originalname.replace(/\s/g, "-")}`);
   },
 });
-
-export function getImagePath(req: Request) {}
 
 export default multer({
   storage: storage,
