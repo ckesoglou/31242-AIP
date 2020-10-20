@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 
-interface IRequestAttributes {
+interface IIouRequestAttributes {
   id: string;
   author: string;
   completed_by: string;
@@ -11,7 +11,7 @@ interface IRequestAttributes {
   is_completed: boolean;
 }
 
-class Request extends Model<IRequestAttributes> implements IRequestAttributes {
+class IouRequest extends Model<IIouRequestAttributes> implements IIouRequestAttributes {
   public id!: string;
   public author!: string;
   public completed_by!: string;
@@ -22,4 +22,4 @@ class Request extends Model<IRequestAttributes> implements IRequestAttributes {
   public is_completed!: boolean;
 }
 
-export default Request;
+export default IouRequest;

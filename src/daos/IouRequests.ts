@@ -1,8 +1,8 @@
 import { DataTypes, Op, Sequelize } from "sequelize";
-import Request from "../entities/Request";
+import IouRequest from "../entities/IouRequest";
 import db from "./DBInstance";
 
-Request.init(
+IouRequest.init(
   {
     id: {
       type: DataTypes.UUIDV4,
@@ -46,45 +46,26 @@ Request.init(
 );
 
 export async function getRequest(id: string) {
-  return Request.findByPk(id);
+  return IouRequest.findByPk(id);
 }
 
 export interface IRequestsFilter {
   author?: string;
-  search?: string;
-  rewards?: string[];
-  createdAfter?: Date;
-  createdBefore?: Date;
-  completedAfter?: Date;
-  completedBefore?: Date;
-  completed?: boolean;
-  completedBy?: string;
+  details?: {
+    [Op.substring]: string;
+  };
 }
 
 export async function getRequests(
-  start: number,
-  limit: number,
-  filter: IRequestsFilter
+  filter: IRequestsFilter,
+  start: number = 0,
+  limit: number = 25
 ) {
-  return Request.findAll({
-    where: {
-      author: filter.author ?? undefined,
-      details:
-        filter.search != null
-          ? {
-              [Op.like]: "%as",
-            }
-          : undefined,
-    },
-    order: Sequelize.col("created_time"),
-    offset: 0,
-    limit: 25,
-    include: [{
-      model: IOU,
-      where: {
-        id: 
-      }
-    }]
+  return IouRequest.findAll({
+    where: filter,
+    order: [["created_time", "DESC"]],
+    offset: start,
+    limit: limit,
   });
 }
 
@@ -98,7 +79,7 @@ export async function createRequest(
   completion_time: Date,
   is_completed: boolean
 ) {
-  return Request.create({
+  return IouRequest.create({
     id: id,
     author: author,
     completed_by: completed_by,
@@ -110,6 +91,6 @@ export async function createRequest(
   });
 }
 
-export async function deleteRequest(request: Request) {
+export async function deleteRequest(request: IouRequest) {
   return request.destroy();
 }

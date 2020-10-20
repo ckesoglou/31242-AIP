@@ -55,7 +55,13 @@ Iou.init(
 export interface IIouFilter {
   giver?: string;
   receiver?: string;
+  parent_request?: string;
   is_claimed?: boolean;
+  item?: string;
+}
+
+export async function getIou(pk: string) {
+  return Iou.findByPk(pk);
 }
 
 export async function getIous(
