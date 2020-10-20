@@ -1,5 +1,6 @@
+import Iou from '@entities/Iou';
 import { DataTypes, Op, Sequelize } from "sequelize";
-import IouRequest from "../entities/IouRequest";
+import IouRequest, { IIouRequestAttributes } from "../entities/IouRequest";
 import db from "./DBInstance";
 
 IouRequest.init(
@@ -18,7 +19,7 @@ IouRequest.init(
       allowNull: true,
     },
     proof_of_completion: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(200),
       allowNull: true,
     },
     details: {
@@ -69,19 +70,12 @@ export async function getRequests(
   });
 }
 
-export async function createRequest(
-  id: string,
-  author: string,
-  details: string,
-  created_time: Date,
-) {
-  return IouRequest.create({
-    id: id,
-    author: author,
-    details: details,
-    created_time: created_time,
-    is_completed: false,
-  });
+export async function createRequest(attributes: IIouRequestAttributes) {
+  return IouRequest.create(attributes);
+}
+
+export async function updateRequest(request: IouRequest, attributes: IIouRequestAttributes) {
+  return request.update(attributes);
 }
 
 export async function deleteRequest(request: IouRequest) {

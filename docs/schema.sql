@@ -31,14 +31,13 @@ CREATE TABLE requests (
 	id uniqueidentifier not null,
 	author varchar(16) not null,
 	completed_by varchar(16),
-	proof_of_completion uniqueidentifier UNIQUE,
+	proof_of_completion varchar(200),
 	details varchar(50) not null,
 	created_time datetime not null,
 	completion_time datetime,
 	is_completed bit not null default 0,
 	FOREIGN KEY (author) REFERENCES users(username),
 	FOREIGN KEY (completed_by) REFERENCES users(username),
-	FOREIGN KEY (proof_of_completion) REFERENCES images(id),
 	PRIMARY KEY (id)
 );
 
@@ -48,8 +47,8 @@ CREATE TABLE ious (
 	giver varchar(16) not null,
 	receiver varchar(16),
 	parent_request uniqueidentifier,
-	proof_of_debt varchar(30),
-	proof_of_completion varchar(30),
+	proof_of_debt varchar(200),
+	proof_of_completion varchar(200),
 	created_time datetime not null,
 	claimed_time datetime,
 	is_claimed bit not null default 0,

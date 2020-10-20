@@ -17,11 +17,11 @@ Iou.init(
       allowNull: false,
     },
     giver: {
-      type: DataTypes.STRING(16),
+      type: DataTypes.STRING(200),
       allowNull: false,
     },
     receiver: {
-      type: DataTypes.STRING(16),
+      type: DataTypes.STRING(200),
       allowNull: true,
     },
     parent_request: {
@@ -166,6 +166,10 @@ export async function completeIouOwe(
       .then(async () => await Iou.sync({ alter: true }));
   }
   return true;
+}
+
+export async function updateIou(iou: Iou, attributes: IIouAttributes) {
+  return iou.update(attributes);
 }
 
 export async function deleteIou(iou: Iou) {
