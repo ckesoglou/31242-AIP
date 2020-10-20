@@ -699,7 +699,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/badRequest"
         "404":
-          description: The given request ID was not found.
+          description: The given request or reward ID was not found.
       tags:
         - Request
     post:

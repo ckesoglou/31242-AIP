@@ -4,7 +4,7 @@ import { getBasicUser } from "../daos/Users";
 import Joi, { ObjectSchema } from "joi";
 import { v4 as uuid } from "uuid";
 import { createRequest, deleteRequest, getRequest, getRequests } from "@daos/IouRequests";
-import { createIou, createIouOwe, getIous } from "@daos/Ious";
+import { createIou, createIouOwe, getIou, getIous } from "@daos/Ious";
 import { Op } from "sequelize";
 import IouRequest from '@entities/IouRequest';
 import { getAuthenticatedUser } from '@shared/Authenticate';
@@ -189,6 +189,40 @@ router.get("/request/:requestID/rewards", async (req: Request, res: Response) =>
   const rewards = ious.map((iou) => { return {id: iou.id, giver: iou.giver, item: iou.item }})
 
   return res.status(OK).json(rewards).end();
+});
+
+/**
+ * GET: /request/{requestId}/reward/{rewardId}
+ */
+
+interface IRequestRewardParams extends IRequestParams{
+  rewardID: string;
+}
+
+const RequestRewardParams: ObjectSchema<IRequestRewardParams> = Joi.object({
+  requestID: Joi.string().guid({ version: "uuidv4" }).required(),
+  rewardID: Joi.string().guid({ version: "uuidv4" }).required(),
+})
+
+router.get("/request/:requestID/reward/:rewardID", async (req: Request, res: Response) => {
+  const { error, value } = RequestRewardParams.validate(req.params);
+
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+
+  let requestParams = value as IRequestRewardParams;
+
+  const iou = await getIou(requestParams.rewardID);
+  if (iou == null || iou.parent_request != requestParams.requestID) {
+    return res.status(404).end();
+  }
+
+  const reward = {id: iou.id, giver: iou.giver, item: await getItem(iou.item as string) }
+
+  return res.status(OK).json(reward).end();
 });
 
 export default router;
