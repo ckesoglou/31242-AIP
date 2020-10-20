@@ -1277,7 +1277,7 @@ Delete a single request.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request has been successfully deleted.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
-|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to delete this request (you are not the author of it).|None|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to delete this request (you are not the author of it, or it has already been completed).|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
 
 <aside class="success">

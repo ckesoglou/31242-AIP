@@ -167,6 +167,49 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
 });
 
 /**
+ * DELETE: /request/{requestId}
+ */
+
+router.delete("/request/:requestID", async (req: Request, res: Response) => {
+  const { error, value } = RequestParams.validate(req.params);
+
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+
+  let requestParams = value as IRequestParams;
+
+  const user = await getAuthenticatedUser(req, res);
+  if (!user) {
+    return res.status(UNAUTHORIZED).json({
+      errors: ["Not authenticated."],
+    });
+  }
+
+  const request = await getRequest(requestParams.requestID);
+  if (!request) {
+    return res.status(NOT_FOUND).end();
+  }
+
+  if (request.is_completed || request.author != user.username) {
+    return res.status(FORBIDDEN).json({
+      errors: ["Not authorised to delete this request (you are not the author of it, or it has already been completed)."],
+    });
+  }
+
+  const rewards = await getIous({ parent_request: request.id });
+  for (const iou of rewards) {
+    await deleteIou(iou);
+  }
+
+  await deleteRequest(request);
+  
+  return res.status(OK).end();
+});
+
+/**
  * GET: /request/{requestId}/rewards
  */
 

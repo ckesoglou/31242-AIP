@@ -628,7 +628,7 @@ paths:
         "401":
           description: Not authenticated.
         "403":
-          description: Not authorised to delete this request (you are not the author of it).
+          description: Not authorised to delete this request (you are not the author of it, or it has already been completed).
         "404":
           description: The given request ID was not found.
       tags:
