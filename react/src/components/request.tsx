@@ -26,6 +26,7 @@ type RequestObj = {
 type RequestProps = {
   request: RequestObj;
   potentialRewards: Item[];
+  iouType: number;
 };
 
 class Request extends React.Component<RequestProps> {
@@ -56,6 +57,7 @@ class Request extends React.Component<RequestProps> {
               author={this.props.request.author.display_name ?? ""}
               rewards={this.props.request.rewards}
               details={this.props.request.details}
+              iouType={this.props.iouType}
             />
           </Grid>
           <Grid item xs={1} id="requestItemContainer">

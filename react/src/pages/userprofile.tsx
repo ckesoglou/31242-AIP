@@ -264,16 +264,14 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   fetchNewOwed(): void {
+    const formData = new FormData();
+    formData.append("username", this.state.selectedUser);
+    formData.append("item", this.state.newRequestReward);
+    formData.append("proof", this.state.newRequestProof);
+
     fetch(`${iouOwedEndpoint}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: this.state.selectedUser,
-        item: this.state.newRequestReward,
-        proof: this.state.newRequestProof,
-      }),
+      body: formData,
     })
       .then((res) => {
         if (res.status === 201) {
@@ -414,6 +412,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   fileContent() {
     if (this.state.newRequestProof) {
+      console.log(this.state.newRequestProof);
       return (
         <div id="completeProofFileInfo">
           <DialogContentText variant="body2">
@@ -610,7 +609,11 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                               });
                             }}
                             loading={this.state.userDropLoading}
-                            getOptionLabel={(option) => option.username}
+                            getOptionLabel={(option) =>
+                              option.display_name
+                                .concat("   #")
+                                .concat(option.username)
+                            }
                             getOptionSelected={(option, value) =>
                               option.username === value.username
                             }
@@ -763,18 +766,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     </Button>
                   </DialogActions>
                 </Dialog>
-                <Snackbar
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  message={this.state.snackMessage}
-                  open={this.state.snack}
-                  onClose={() => {
-                    this.setState({ snack: false });
-                  }}
-                  autoHideDuration={5000}
-                />
                 <TabPanel
                   value={this.state.tabIndex}
                   loadingRef={this.loadingRef}
@@ -782,7 +773,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   index={0}
                 >
                   {this.state.owed.map((owed, i) => {
-                    return <IOU iou={owed} key={i} />;
+                    return <IOU iou={owed} key={i} iouType={0} />;
                   })}
                 </TabPanel>
                 <TabPanel
@@ -792,7 +783,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                   index={1}
                 >
                   {this.state.owe.map((owe, i) => {
-                    return <IOU iou={owe} key={i} />;
+                    return <IOU iou={owe} key={i} iouType={1} />;
                   })}
                 </TabPanel>
                 <TabPanel
@@ -808,6 +799,18 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               </Paper>
             </Grid>
           </Grid>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            message={this.state.snackMessage}
+            open={this.state.snack}
+            onClose={() => {
+              this.setState({ snack: false });
+            }}
+            autoHideDuration={5000}
+          />
         </div>
       </Container>
     );

@@ -38,6 +38,7 @@ type IouCompleteProps = {
   created_time: string;
   rewards: Item[];
   details: string;
+  iouType: number;
 };
 
 type IouCompleteState = {
@@ -161,6 +162,13 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
         item={item}
       />
     );
+  }
+
+  checkSubmitButton(): boolean {
+    if (this.props.iouType !== 0) {
+      return !this.state.submittedProof;
+    }
+    return true;
   }
 
   render() {
@@ -296,27 +304,29 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               })}
             </DialogContent>
           )}
-          <DialogContent className="content">
-            <DialogContentText variant="h6">
-              {"Upload proof?"}
-            </DialogContentText>
-            <input
-              type="file"
-              onChange={(e) => {
-                if (e.target.files) {
-                  this.setState({ submittedProof: e.target.files[0] });
-                }
-              }}
-              accept="image/*"
-              id="inputProof"
-            />
-            <label htmlFor="inputProof">
-              <Button variant="contained" color="primary" component="span">
-                {this.state.submittedProof ? "CHANGE" : "UPLOAD"}
-              </Button>
-            </label>
-            {this.fileContent()}
-          </DialogContent>
+          {this.props.iouType !== 0 && (
+            <DialogContent className="content">
+              <DialogContentText variant="h6">
+                {"Upload proof?"}
+              </DialogContentText>
+              <input
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    this.setState({ submittedProof: e.target.files[0] });
+                  }
+                }}
+                accept="image/*"
+                id="inputProof"
+              />
+              <label htmlFor="inputProof">
+                <Button variant="contained" color="primary" component="span">
+                  {this.state.submittedProof ? "CHANGE" : "UPLOAD"}
+                </Button>
+              </label>
+              {this.fileContent()}
+            </DialogContent>
+          )}
           <Divider />
           <DialogActions>
             <Button
@@ -330,7 +340,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                 });
               }}
               autoFocus
-              disabled={!this.state.submittedProof}
+              disabled={this.checkSubmitButton()}
             >
               Submit
             </Button>

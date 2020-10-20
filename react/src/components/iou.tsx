@@ -25,6 +25,7 @@ type IouObj = {
 
 type IouProps = {
   iou: IouObj;
+  iouType: number;
 };
 
 class IOU extends React.Component<IouProps> {
@@ -52,6 +53,7 @@ class IOU extends React.Component<IouProps> {
               author={this.props.iou.giver.display_name ?? ""}
               rewards={[this.props.iou.item]}
               details=""
+              iouType={this.props.iouType}
             />
           </Grid>
         </Grid>
