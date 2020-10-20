@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+import { Authentication } from "../components/protected-route";
 
 type LoginState = {
   username: string;
@@ -93,6 +94,8 @@ class Login extends React.Component<ILoginProps, LoginState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 200
+          // TODO: Only for development?! Handle frontend auth
+          Authentication.authenticate(() => {});
           this.setState({ successfulLogin: true }, () => {
             this.context.updateUser({
               name: this.state.username,

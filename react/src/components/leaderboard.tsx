@@ -67,7 +67,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
   }
 
   fetchMeLeaderboardIfNeeded = () => {
-    if (this.props.renderMe) {
+    if (this.props.renderMe && this.state.me === undefined) {
       this.fetchMeLeaderboard();
     } else {
       this.showPersonalScore(false);
