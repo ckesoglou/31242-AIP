@@ -10,6 +10,7 @@ import {
   completeIouOwe,
   iouExists,
   getIous,
+  getFormattedIous,
 } from "@daos/Ious";
 
 // Init shared
@@ -55,7 +56,7 @@ router.get("/owed", async (req: Request, res: Response) => {
   const iousQuery = value as IIousQuery;
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIous(
+    const iou = await getFormattedIous(
       { receiver: user.username, is_claimed: false },
       iousQuery.start,
       iousQuery.limit
@@ -152,7 +153,7 @@ router.get("/owe", async (req: Request, res: Response) => {
   const iousQuery = value as IIousQuery;
   const user = await getAuthenticatedUser(req, res);
   if (user) {
-    const iou = await getIous(
+    const iou = await getFormattedIous(
       { giver: user.username, is_claimed: false },
       iousQuery.start,
       iousQuery.limit

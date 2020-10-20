@@ -63,8 +63,19 @@ export interface IIouFilter {
 export async function getIou(pk: string) {
   return Iou.findByPk(pk);
 }
-
 export async function getIous(
+  filter: IIouFilter,
+  start: number = 0,
+  limit: number = 25
+) {
+  return Iou.findAll({
+    where: filter,
+    offset: start,
+    limit: limit,
+  });
+}
+
+export async function getFormattedIous(
   filter?: IIouFilter,
   start: number = 0,
   limit: number = 25
@@ -78,8 +89,8 @@ export async function getIous(
   // detail user
   for (let iou of ious) {
     iou.item = (await getItem(iou.item as string)) as Object;
-    iou.giver = await getBasicUser(iou.giver as string) ?? {};
-    iou.receiver = await getBasicUser(iou.receiver as string) ?? undefined;
+    iou.giver = (await getBasicUser(iou.giver as string)) ?? {};
+    iou.receiver = (await getBasicUser(iou.receiver as string)) ?? undefined;
   }
   return ious;
 }
