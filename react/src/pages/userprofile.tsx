@@ -172,11 +172,10 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ potentialItems: body });
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) => this.setState({ potentialItems: body }));
+        }
       })
       .catch((exception) => {
         console.error("Error:", exception);
@@ -192,22 +191,32 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        favour: this.state.newRequestFavour,
-        reward: this.state.newRequestReward,
+        details: this.state.newRequestFavour,
+        item: this.state.newRequestReward,
       }),
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ snackMessage: "New request created!" });
+        if (res.status === 201) {
+          // Successful login 201
+          this.setState({
+            snackMessage: "New request created!",
+            requestSnack: true,
+            newRequestDialog: false,
+          });
+        } else {
+          // Unsuccessful login (400 or 401)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              requestSnack: true,
+              newRequestDialog: false,
+            })
+          );
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
+        console.log("Error:", exception);
       });
-    this.setState({ requestSnack: true });
   }
 
   fetchNewOwe(): void {
@@ -222,17 +231,26 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       }),
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ snackMessage: "New IOU created!" });
-        this.setState({ requestSnack: true });
+        if (res.status === 201) {
+          // Successful login 201
+          this.setState({
+            snackMessage: "New IOU created!",
+            requestSnack: true,
+            newRequestDialog: false,
+          });
+        } else {
+          // Unsuccessful login (400 or 401)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              requestSnack: true,
+              newRequestDialog: false,
+            })
+          );
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        console.log("Error:", exception);
       });
   }
 
@@ -249,21 +267,31 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       }),
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ snackMessage: "New IOU created!" });
-        this.setState({ requestSnack: true });
+        if (res.status === 201) {
+          // Successful login 201
+          this.setState({
+            snackMessage: "New IOU created!",
+            requestSnack: true,
+            newRequestDialog: false,
+          });
+        } else {
+          // Unsuccessful login (400 or 401)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              requestSnack: true,
+              newRequestDialog: false,
+            })
+          );
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: exception });
-        this.setState({ requestSnack: true });
+        console.log("Error:", exception);
       });
   }
 
   fetchAllTabs(): void {
+    //NEEDS TO BE INTEGRATED??
     const headers = {
       "Content-Type": "application/json",
     };
@@ -314,18 +342,26 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ selectetableUsers: body });
-        this.setState({ userDropLoading: false });
+        if (res.status === 200) {
+          // Successful login 201
+          res
+            .json()
+            .then((body) =>
+              this.setState({ selectetableUsers: body, userDropLoading: false })
+            );
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              requestSnack: true,
+              userDropLoading: false,
+            })
+          );
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
-        this.setState({ userDropLoading: false });
+        console.log("Error:", exception);
       });
   }
 
@@ -338,18 +374,26 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       },
     })
       .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        console.log("Success:", body);
-        this.setState({ selectetableUsers: body });
-        this.setState({ userDropLoading: false });
+        if (res.status === 200) {
+          // Successful login 201
+          res
+            .json()
+            .then((body) =>
+              this.setState({ selectetableUsers: body, userDropLoading: false })
+            );
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              requestSnack: true,
+              userDropLoading: false,
+            })
+          );
+        }
       })
       .catch((exception) => {
-        console.error("Error:", exception);
-        this.setState({ snackMessage: `${exception}` });
-        this.setState({ requestSnack: true });
-        this.setState({ userDropLoading: false });
+        console.log("Error:", exception);
       });
   }
 

@@ -1,8 +1,14 @@
 import React from "react";
 import "../assets/css/iou-request.css";
-import { requestsEndpoint } from "../api/endpoints";
+import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
 import RequestReward from "./request-reward";
-import { Popover, Button, Typography, Divider } from "@material-ui/core";
+import {
+  Popover,
+  Button,
+  Typography,
+  Divider,
+  Snackbar,
+} from "@material-ui/core";
 
 type Item = {
   id: string;
@@ -18,6 +24,8 @@ type RequestRewardsProps = {
 type RequestRewardState = {
   anchorEl: HTMLElement | null;
   selectedReward: string;
+  potentialItems: Item[];
+  snackMessage: string;
 };
 
 class RequestRewards extends React.Component<
@@ -27,10 +35,26 @@ class RequestRewards extends React.Component<
   state: RequestRewardState = {
     anchorEl: null,
     selectedReward: "",
+    potentialItems: [],
+    snackMessage: "",
   };
 
   fetchPotentialRewards() {
-    //TODO: Waiting for rewards endpoint to be created. Will just pass rewards through props right now.
+    fetch(`${itemEndpoint}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // Successful login 200
+          res.json().then((body) => this.setState({ potentialItems: body }));
+        }
+      })
+      .catch((exception) => {
+        console.error("Error:", exception);
+      });
   }
 
   postReward() {
@@ -44,14 +68,19 @@ class RequestRewards extends React.Component<
       }),
     })
       .then((res) => {
-        return res.json();
+        if (res.status === 201) {
+          // Successful login 200
+          this.setState({
+            snackMessage: "Reward successfully added to the request!",
+          });
+        } else {
+          // Unsuccessful login (400 or 422)
+          res
+            .json()
+            .then((body) => this.setState({ snackMessage: body.errors }));
+        }
       })
-      .then((body) => {
-        console.log("Success:", body);
-      })
-      .catch((exception) => {
-        console.error("Error:", exception);
-      });
+      .catch(console.log);
   }
 
   renderRewardElement(item: Item) {
@@ -144,6 +173,18 @@ class RequestRewards extends React.Component<
             </div>
           </div>
         </Popover>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          message={this.state.snackMessage}
+          open={this.state.snackMessage !== ""}
+          onClose={() => {
+            this.setState({ snackMessage: "" });
+          }}
+          autoHideDuration={5000}
+        />
       </div>
     );
   }

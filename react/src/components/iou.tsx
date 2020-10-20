@@ -34,7 +34,7 @@ class IOU extends React.Component<RequestProps> {
           <Grid item xs={6} id="requestItemContainer">
             <IouFavour
               giverDisplayName={this.props.request.author.display_name}
-              recieverDisplayName={"?"}
+              recieverDisplayName={"?"} //Check how the API sends back no name to change appropriately
               item={this.props.request.rewards[0]}
             />
           </Grid>

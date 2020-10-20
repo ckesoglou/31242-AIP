@@ -59,6 +59,7 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
   fetchRewardDetails(requestID: string, rewardID: string) {
     fetch(
       `${requestsEndpoint
+        .concat("/")
         .concat(requestID)
         .concat("/reward/")
         .concat(rewardID)}`,
@@ -70,21 +71,23 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
       }
     )
       .then((res) => {
-        return res.json();
+        if (res.status === 200) {
+          // Successful login 200
+          res
+            .json()
+            .then(
+              (body) => (this.tempRewardDisplayName = body.giver.display_name)
+            );
+        } else {
+          // Unsuccessful login (400)
+          this.tempRewardDisplayName = "Could not find user display name";
+        }
       })
-      .then((body) => {
-        console.log("Success:", body);
-        this.tempRewardDisplayName = body.giver.display_name;
-      })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.tempRewardDisplayName = "Could not find user display name";
-      });
+      .catch(console.log);
   }
 
   renderPopUpRewards(item: Item) {
-    //this.fetchRewardDetails(this.props.request.id, item.id);
-    this.tempRewardDisplayName = "James Lee";
+    this.fetchRewardDetails(this.props.request.id, item.id);
     return (
       <IouFavour
         key={item.id}

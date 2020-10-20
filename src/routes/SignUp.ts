@@ -66,6 +66,7 @@ router.post("/", async (req: Request, res: Response) => {
     requestBody.displayName,
     passHash
   );
+
   await generateNewAuthenticationTokens(
     user,
     req.headers.host ?? "Unknown",

@@ -54,11 +54,9 @@ type IouCompleteState = {
 };
 
 class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
-  private tempRewardDisplayName: string;
-
+  private tempRewardDisplayName: string; //Not in state because it'll cause everything to go into a render loop
   constructor(props: IouCompleteProps) {
     super(props);
-
     this.tempRewardDisplayName = "";
     this.openCompleteForm = this.openCompleteForm.bind(this);
   }
@@ -78,6 +76,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   }
 
   submitProof() {
+    //TO INTEGRATE WITH BACKEND
     fetch(`${imageEndpoint}`, {
       method: "POST",
       headers: {
@@ -130,6 +129,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   fetchRewardDetails(requestID: string, rewardID: string) {
     fetch(
       `${requestsEndpoint
+        .concat("/")
         .concat(requestID)
         .concat("/reward/")
         .concat(rewardID)}`,
@@ -141,21 +141,23 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
       }
     )
       .then((res) => {
-        return res.json();
+        if (res.status === 200) {
+          // Successful login 200
+          res
+            .json()
+            .then(
+              (body) => (this.tempRewardDisplayName = body.giver.display_name)
+            );
+        } else {
+          // Unsuccessful login (400)
+          this.tempRewardDisplayName = "Could not find user display name";
+        }
       })
-      .then((body) => {
-        console.log("Success:", body);
-        this.tempRewardDisplayName = body.giver.display_name;
-      })
-      .catch((exception) => {
-        console.error("Error:", exception);
-        this.tempRewardDisplayName = "Could not find user display name";
-      });
+      .catch(console.log);
   }
 
   renderPopUpRewards(item: Item) {
-    //this.fetchRewardDetails(this.props.request.id, item.id);
-    this.tempRewardDisplayName = "James Lee";
+    this.fetchRewardDetails(this.props.request.id, item.id);
     return (
       <IouFavour
         key={item.id}
@@ -291,9 +293,9 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           </DialogContent>
           <DialogContent className="Content" id="completePopUpRewards">
             <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
-            {this.props.request.rewards.map((item) =>
-              this.renderPopUpRewards(item)
-            )}
+            {this.props.request.rewards.map((item, index) => {
+              this.renderPopUpRewards(item);
+            })}
           </DialogContent>
           <DialogContent className="content">
             <DialogContentText variant="h6">
