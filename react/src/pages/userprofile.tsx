@@ -198,13 +198,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
-  setCountOfRequest(): number {
-    // if (this.state..length % numberOfItemsPerPage !== 0) {
-    //   return Math.ceil(this.state.users.length / numberOfItemsPerPage);
-    // } else {
-    //   return this.state.users.length / numberOfItemsPerPage;
-    // }
-  }
+  // setCountOfRequest(): number {
+  // if (this.state..length % numberOfItemsPerPage !== 0) {
+  //   return Math.ceil(this.state.users.length / numberOfItemsPerPage);
+  // } else {
+  //   return this.state.users.length / numberOfItemsPerPage;
+  // }
+  // }
 
   fetchItems(): void {
     fetch(`${itemEndpoint}`, {

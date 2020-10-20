@@ -80,14 +80,12 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   }
 
   completeIouOwe() {
+    const formData = new FormData();
+    formData.append("proof", this.state.submittedProof);
+
     fetch(`${iouOweEndpoint}`.concat("/" + this.props.id + "/complete"), {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        proof: this.state.submittedProof,
-      }),
+      body: formData,
     })
       .then((res) => {
         if (res.status === 200) {
@@ -220,10 +218,10 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   }
 
   checkSubmitButton(): boolean {
-    if (this.props.iouType !== 0) {
+    if (this.props.iouType != 0) {
       return !this.state.submittedProof;
     }
-    return true;
+    return false;
   }
 
   render() {
