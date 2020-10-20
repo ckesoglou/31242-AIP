@@ -3,13 +3,14 @@ import { BAD_REQUEST, CREATED, FORBIDDEN, NOT_FOUND, OK, UNAUTHORIZED } from "ht
 import { getBasicUser } from "../daos/Users";
 import Joi, { ObjectSchema } from "joi";
 import { v4 as uuid } from "uuid";
-import { createRequest, deleteRequest, getRequest, getRequests } from "@daos/IouRequests";
-import { createIou, createIouOwe, deleteIou, getIou, getIous } from "@daos/Ious";
+import { createRequest, deleteRequest, getRequest, getRequests, updateRequest } from "@daos/IouRequests";
+import { createIou, createIouOwe, deleteIou, getIou, getIous, iouExists, updateIou } from "@daos/Ious";
 import { Op } from "sequelize";
 import IouRequest from '@entities/IouRequest';
 import { getAuthenticatedUser } from '@shared/Authenticate';
 import { getItem } from '@daos/Items';
-import { getImagePath } from '@shared/ImageHandler';
+import upload from "../shared/ImageHandler";
+import Iou from '@entities/Iou';
 
 const router = Router();
 
@@ -124,7 +125,13 @@ router.post("/requests", async (req: Request, res: Response) => {
       errors: [ "Provided GUID does not match to any available item." ],
     }).end();
   }
-  const request = await createRequest(uuid(), user.username, requestBody.details, new Date());
+  const request = await createRequest({
+    id: uuid(),
+    author: user.username,
+    details: requestBody.details,
+    created_time: new Date(),
+    is_completed: false
+  });
   await createIou({
     id: uuid(),
     item: reward.id,
@@ -205,9 +212,77 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
   }
 
   await deleteRequest(request);
-  
+
   return res.status(OK).end();
 });
+
+/**
+ * PUT: /request/{requestId}
+ */
+router.put("/request/:requestID", upload.single("proof"), async (req: Request, res: Response) => {
+  const { error, value } = RequestParams.validate(req.params);
+
+  if (error || !req.file) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error?.message ?? "Image was not provided or is too large (only png or jpeg up to 5 MB)."],
+    });
+  }
+
+  let requestParams = value as IRequestParams;
+
+  const user = await getAuthenticatedUser(req, res);
+  if (!user) {
+    return res.status(UNAUTHORIZED).json({
+      errors: ["Not authenticated."],
+    });
+  }
+
+  const request = await getRequest(requestParams.requestID);
+  if (!request) {
+    return res.status(NOT_FOUND).end();
+  }
+
+  if (request.author == user.username) {
+    return res.status(FORBIDDEN).json({
+      errors: [
+        "Not authorised to complete this request (you are the owner of it or the only one offering rewards).",
+      ],
+    }).end();
+  }
+
+  const rewards = await getIous({ parent_request: request.id });
+  const rewardsYouAreOffering = await getIous({ parent_request: request.id, giver: user.username });
+  if (rewardsYouAreOffering.length == rewards.length) {
+    return res.status(FORBIDDEN).json({
+      errors: [
+        "Not authorised to complete this request (you are the owner of it or the only one offering rewards).",
+      ],
+    }).end();
+  }
+
+  for (const iou of rewards) {
+    if (iou.receiver == user.username) {
+      await deleteIou(iou);
+    }
+    else {
+      await updateIou(iou, {
+        ...(iou as any).dataValues,
+        receiver: user.username,
+        proof_of_debt: req.file.filename
+      });
+    }
+  }
+
+  await updateRequest(request, {
+    ...(request as any).dataValues,
+    is_completed: true,
+    completion_time: new Date(),
+    proof_of_completion: req.file.filename
+  });
+
+  return res.status(OK).end();
+});
+
 
 /**
  * GET: /request/{requestId}/rewards

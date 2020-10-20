@@ -1349,6 +1349,7 @@ proof: string
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successfully marked as complete.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Not authenticated.|None|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|Not authorised to complete this request (you are the owner of it or the only one offering rewards).|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
 
 <aside class="success">

@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 
-interface IIouRequestAttributes {
+export interface IIouRequestAttributes {
   id: string;
   author: string;
   completed_by?: string;

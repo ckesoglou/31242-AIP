@@ -668,6 +668,8 @@ paths:
                 $ref: "#/components/schemas/badRequest"
         "401":
           description: Not authenticated.
+        "403":
+          description: Not authorised to complete this request (you are the owner of it or the only one offering rewards).
         "404":
           description: The given request ID was not found.
       tags:
