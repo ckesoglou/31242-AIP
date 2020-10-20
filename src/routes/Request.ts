@@ -348,6 +348,7 @@ router.put(
 
     await updateRequest(request, {
       ...(request as any).dataValues,
+      completed_by: user.username,
       is_completed: true,
       completion_time: new Date(),
       proof_of_completion: req.file.filename,

@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import "../assets/css/userprofile.css";
 import {
-  requestsNewEndpoint,
+  requestsEndpoint,
   iouOweEndpoint,
   iouOwedEndpoint,
   itemEndpoint,
@@ -38,6 +38,7 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 import IOU from "../components/iou";
+import IouRequest from "../components/request";
 // import { optional } from "joi";
 
 type ItemObj = {
@@ -48,6 +49,12 @@ type ItemObj = {
 type UserObj = {
   username: string;
   display_name: string;
+};
+
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type IouObj = {
@@ -63,12 +70,24 @@ type IouObj = {
   is_claimed: boolean;
 };
 
+type RequestObj = {
+  id: string;
+  author: { username: string; display_name: string };
+  completed_by: { username: string; display_name: string };
+  proof_of_completion: string;
+  rewards: RewardItem[];
+  details: string;
+  created_time: string;
+  completion_time: string;
+  is_completed: boolean;
+};
+
 type UserProfileState = {
   tabIndex: number;
   newRequestDialog: boolean;
   owed: IouObj[];
   owe: IouObj[];
-  requests: Request[];
+  requests: RequestObj[];
   newRequestFavour: string;
   newRequestReward: string;
   newRequestProof: any;
@@ -204,13 +223,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
-  // setCountOfRequest(): number {
-  // if (this.state..length % numberOfItemsPerPage !== 0) {
-  //   return Math.ceil(this.state.users.length / numberOfItemsPerPage);
-  // } else {
-  //   return this.state.users.length / numberOfItemsPerPage;
-  // }
-  // }
+  setCountOfRequest(): number {
+    if (this.state.requests.length % numberOfItemsPerPage !== 0) {
+      return Math.ceil(this.state.requests.length / numberOfItemsPerPage);
+    } else {
+      return this.state.requests.length / numberOfItemsPerPage;
+    }
+  }
 
   fetchItems(): void {
     fetch(`${itemEndpoint}`, {
@@ -233,7 +252,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   fetchNewRequest(): void {
-    fetch(`${requestsNewEndpoint}`, {
+    fetch(`${requestsEndpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -374,26 +393,27 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
         method: "GET",
         headers: headers,
       }),
-      // fetch(`${iouOweEndpoint}`, {
-      //   method: "GET",
-      //   headers: headers,
-      // }),
+      fetch(`${requestsEndpoint}`, {
+        method: "GET",
+        headers: headers,
+      }),
     ])
-      .then(([owed, owe]) => {
-        Promise.all([owed.json(), owe.json()]).then(
-          ([owedResult, oweResult]) => {
+      .then(([owed, owe, request]) => {
+        Promise.all([owed.json(), owe.json(), request.json()]).then(
+          ([owedResult, oweResult, requestResult]) => {
             this.setLoading(false);
             this.setState({
               owed: owedResult,
               owe: oweResult,
+              requests: requestResult,
             });
-            console.log("Success:", owedResult, oweResult);
+            console.log("Success:", owedResult, oweResult, requestResult);
           }
         );
       })
-      .catch(([owedException, oweException]) => {
-        console.error("Error:", owedException, oweException);
-        // this.setLoading(false);
+      .catch(([owedException, oweException, requestException]) => {
+        console.error("Error:", owedException, oweException, requestException);
+        this.setLoading(false);
         this.setState({ unauthRep: true });
       });
   }
@@ -579,7 +599,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 >
                   <Tab label="Owed" />
                   <Tab label="Owe" />
-                  {/* <Tab label="Requests" id="requestTab" /> */}
+                  <Tab label="Requests" id="requestTab" />
                   {/* The following two icons are throwing some console errors
                   because they inherit the MUI tab props - see 
                   stackoverflow.com/questions/58103542/material-ui-button-in-a-tab-list */}
@@ -941,14 +961,24 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     />
                   </Box>
                 </TabPanel>
-                {/* <TabPanel
+                <TabPanel
                   value={this.state.tabIndex}
                   loadingRef={this.loadingRef}
                   textRef={this.textRef}
                   index={2}
                 >
-                  <Divider variant="middle" /> */}
-                {/* <Pagination
+                  {this.state.requests.map((request, i) => {
+                    return (
+                      <IouRequest
+                        request={request}
+                        potentialRewards={this.state.potentialItems}
+                        iouType={2}
+                        key={i}
+                      />
+                    );
+                  })}
+                  <Divider variant="middle" />
+                  <Pagination
                     id="userPagination"
                     count={this.setCountOfOwe()}
                     page={this.state.owePages}
@@ -961,11 +991,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                     defaultPage={1}
                     siblingCount={2}
                     color="primary"
-                  /> */}
-                {/* {this.state.requests.map((request, i) => {
-                    return <IOU request={request} key={i} />;
-                  })} */}
-                {/* </TabPanel> */}
+                  />
+                </TabPanel>
               </Paper>
             </Grid>
           </Grid>

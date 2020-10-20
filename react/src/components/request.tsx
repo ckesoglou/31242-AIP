@@ -16,11 +16,17 @@ type RequestObj = {
   author: { username: string; display_name: string };
   completed_by: { username: string; display_name: string };
   proof_of_completion: string;
-  rewards: Item[];
+  rewards: RewardItem[];
   details: string;
   created_time: string;
   completion_time: string;
   is_completed: boolean;
+};
+
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type RequestProps = {
@@ -39,6 +45,7 @@ class Request extends React.Component<RequestProps> {
               requestID={this.props.request.id}
               items={this.props.request.rewards}
               rewards={this.props.potentialRewards}
+              is_completed={this.props.request.is_completed}
             />
           </Grid>
           <Grid item xs={3} id="requestItemContainer">

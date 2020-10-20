@@ -18,6 +18,7 @@ import {
   TableRow,
   TableCell,
   Popover,
+  formatMs,
 } from "@material-ui/core";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
@@ -25,7 +26,7 @@ import "../assets/css/iou-request.css";
 import IouFavour from "./iou-single-favour";
 import {
   imageEndpoint,
-  requestsEndpoint,
+  requestEndpoint,
   iouOweEndpoint,
   iouOwedEndpoint,
 } from "../api/endpoints";
@@ -35,6 +36,12 @@ type Item = {
   display_name: string;
 };
 
+type RewardItem = {
+  id: string; // UUID;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
+};
+
 type IouCompleteProps = {
   id: string;
   is_completed: boolean;
@@ -42,7 +49,7 @@ type IouCompleteProps = {
   completed_by: string;
   claimed_time: string | null;
   created_time: string;
-  rewards: Item[];
+  rewards: RewardItem[];
   details: string;
   iouType: number;
 };
@@ -140,19 +147,35 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
       });
   }
 
-  // completeRequest() {
-  //   // TO INTEGRATE WITH BACKEND
-  //   fetch(`${imageEndpoint}`, { //TO FIX
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       requestID: ???,
-  //       proof: this.state.submittedProof ???
-  //     }),
-  //   })
-  // }
+  completeRequest() {
+    const formData = new FormData();
+    formData.append("proof", this.state.submittedProof);
+
+    fetch(`${requestEndpoint}`.concat("/" + this.props.id + "/complete"), {
+      method: "PUT",
+      body: formData,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // Successful login 200
+          this.setState({ snackMessage: "Request Completed!" });
+          this.setState({ completeSnack: true });
+        } else if (res.status === 401) {
+          this.setState({ unauthRep: true });
+        } else {
+          // Unsuccessful login (400)
+          res.json().then((body) =>
+            this.setState({
+              snackMessage: body.errors,
+              completeSnack: true,
+            })
+          );
+        }
+      })
+      .catch((exception) => {
+        console.log("Error:", exception);
+      });
+  }
 
   fileContent() {
     if (this.state.submittedProof) {
@@ -177,44 +200,13 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     }
   }
 
-  fetchRewardDetails(requestID: string, rewardID: string) {
-    fetch(
-      `${requestsEndpoint
-        .concat("/")
-        .concat(requestID)
-        .concat("/reward/")
-        .concat(rewardID)}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          // Successful login 200
-          res
-            .json()
-            .then(
-              (body) => (this.tempRewardDisplayName = body.giver.display_name)
-            );
-        } else {
-          // Unsuccessful login (400)
-          this.tempRewardDisplayName = "Could not find user display name";
-        }
-      })
-      .catch(console.log);
-  }
-
-  renderPopUpRewards(item: Item) {
-    this.fetchRewardDetails(this.props.id, item.id);
+  renderPopUpRewards(reward: RewardItem) {
     return (
       <IouFavour
-        key={item.id}
-        giverDisplayName={this.tempRewardDisplayName}
+        key={reward.item.id}
+        giverDisplayName={reward.giver.display_name}
         recieverDisplayName={"?"}
-        item={item}
+        item={reward.item}
       />
     );
   }
@@ -375,11 +367,11 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
               </Table>
             </TableContainer>
           </DialogContent>
-          {this.props.details !== "" && (
+          {this.props.iouType === 2 && (
             <DialogContent className="Content" id="completePopUpRewards">
               <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
-              {this.props.rewards.map((item, index) => {
-                this.renderPopUpRewards(item);
+              {this.props.rewards.map((reward, index) => {
+                this.renderPopUpRewards(reward);
               })}
             </DialogContent>
           )}
@@ -418,7 +410,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
                 } else if (this.props.iouType === 1) {
                   this.completeIouOwe();
                 } else {
-                  //this.completeRequest();
+                  this.completeRequest();
                 }
                 this.setState({
                   completeIOU: false,

@@ -42,9 +42,15 @@ type Request = {
   is_completed: boolean;
 };
 
+type Item = {
+  id: string;
+  display_name: string;
+};
+
 type RewardItem = {
   id: string; // UUID;
-  display_name: string;
+  giver: { username: string; display_name: string };
+  item: { id: string; display_name: string };
 };
 
 type HomeState = {
@@ -53,7 +59,7 @@ type HomeState = {
   snack: boolean;
   snackMessage: string;
   requests: Request[];
-  rewardItems: RewardItem[];
+  rewards: Item[];
   pageNumber: number;
 };
 
@@ -73,7 +79,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
     snack: false,
     snackMessage: "",
     requests: [],
-    rewardItems: [],
+    rewards: [],
     pageNumber: 1,
   };
 
@@ -128,7 +134,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
           this.setLoading(false);
         });
     } else {
-      // this.fetchRequests();
+      this.fetchRequests();
     }
   }
 
@@ -143,6 +149,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
           // Successful login 200
           res.json().then((body) => {
             this.setState({ requests: body });
+            console.log("requests " + JSON.stringify(body));
             this.setLoading(false);
           });
         } else {
@@ -171,7 +178,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 200
-          res.json().then((body) => this.setState({ rewardItems: body }));
+          res.json().then((body) => this.setState({ rewards: body }));
         }
       })
       .catch((exception) => {
@@ -182,7 +189,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
   }
 
   componentDidMount() {
-    // this.fetchRequests();
+    this.fetchRequests();
     this.fetchItems();
   }
 
@@ -258,10 +265,13 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                           ),
                         }}
                       >
-                        {this.state.rewardItems.map((item, i) => {
+                        {this.state.rewards.map((rewardItem, i) => {
                           return (
-                            <MenuItem key={i + 1} value={item.display_name}>
-                              {item.display_name}
+                            <MenuItem
+                              key={i + 1}
+                              value={rewardItem.display_name}
+                            >
+                              {rewardItem.display_name}
                             </MenuItem>
                           );
                         })}
@@ -341,7 +351,12 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                     {this.state.requests.map((requestProp, i) => {
                       return (
                         <Grid item xs={12}>
-                          {/* <RequestComponent key={i} request={requestProp} /> */}
+                          <RequestComponent
+                            key={i}
+                            request={requestProp}
+                            potentialRewards={this.state.rewards}
+                            iouType={2}
+                          />
                         </Grid>
                       );
                     })}

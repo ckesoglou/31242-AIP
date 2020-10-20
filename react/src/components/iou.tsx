@@ -36,12 +36,15 @@ class IOU extends React.Component<IouProps> {
     if (this.props.iou.proof_of_completion !== null) {
       return this.props.iou.giver.username;
     } else {
-      return this.props.iou.receiver.username;
+      return this.props.iou.receiver?.username ?? "";
     }
   }
   getAuthor(): string {
-    if (this.props.iou.proof_of_debt !== null) {
-      return this.props.iou.receiver.username;
+    if (
+      this.props.iou.proof_of_debt !== null &&
+      this.props.iou.parent_request === null
+    ) {
+      return this.props.iou.receiver?.username ?? "";
     } else {
       return this.props.iou.giver.username;
     }
@@ -54,7 +57,7 @@ class IOU extends React.Component<IouProps> {
           <Grid item xs={7} id="requestItemContainer">
             <IouFavour
               giverDisplayName={this.props.iou.giver.username}
-              recieverDisplayName={this.props.iou.receiver.username ?? "?"}
+              recieverDisplayName={this.props.iou.receiver?.username ?? "?"}
               item={this.props.iou.item}
             />
           </Grid>
@@ -76,7 +79,19 @@ class IOU extends React.Component<IouProps> {
               claimed_time={this.props.iou.claimed_time}
               created_time={this.props.iou.created_time}
               author={this.getAuthor()}
-              rewards={[this.props.iou.item]}
+              rewards={[
+                {
+                  id: "",
+                  giver: {
+                    username: this.props.iou.giver.username,
+                    display_name: this.props.iou.giver.username,
+                  },
+                  item: {
+                    id: this.props.iou.item.id,
+                    display_name: this.props.iou.item.display_name,
+                  },
+                },
+              ]}
               details=""
               iouType={this.props.iouType}
             />

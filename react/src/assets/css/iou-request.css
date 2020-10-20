@@ -338,3 +338,11 @@
 #modalTitle {
   text-align: center;
 }
+
+#deleteIcon {
+  color: rgb(233, 64, 64);
+}
+
+#test {
+  display: inline-block;
+}
