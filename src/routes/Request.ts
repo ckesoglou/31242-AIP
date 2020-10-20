@@ -165,4 +165,30 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
   return request ? res.status(OK).json(await formatRequest(request)).end() : res.status(404).end();
 });
 
+/**
+ * GET: /request/{requestId}/rewards
+ */
+
+router.get("/request/:requestID/rewards", async (req: Request, res: Response) => {
+  const { error, value } = RequestParams.validate(req.params);
+
+  if (error) {
+    return res.status(BAD_REQUEST).json({
+      errors: [error.message],
+    });
+  }
+
+  let requestParams = value as IRequestParams;
+
+  const request = await getRequest(requestParams.requestID);
+  if (!request) {
+    return res.status(404).end();
+  }
+
+  const ious = await getIous({ parent_request: request.id })
+  const rewards = ious.map((iou) => { return {id: iou.id, giver: iou.giver, item: iou.item }})
+
+  return res.status(OK).json(rewards).end();
+});
+
 export default router;
