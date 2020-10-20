@@ -698,6 +698,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/badRequest"
+        "404":
+          description: The given request ID was not found.
       tags:
         - Request
     post:

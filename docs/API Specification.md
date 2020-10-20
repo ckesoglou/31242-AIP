@@ -1415,6 +1415,7 @@ Retrieve details about the request rewards on offer.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returned list of rewards.|Inline|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|The HTTP request was invalid or incorrectly formatted.|[badRequest](#schemabadrequest)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The given request ID was not found.|None|
 
 <h3 id="get__api_request_{requestid}_rewards-responseschema">Response Schema</h3>
 
