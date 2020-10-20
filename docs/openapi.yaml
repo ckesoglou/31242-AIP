@@ -495,7 +495,9 @@ paths:
   /api/requests:
     summary: Endpoint for retrieving multiple requests or creating a new request.
     get:
-      description: Retrieve a list of requests, optionally matched to provided criteria.
+      description: >-
+        Retrieve a list of requests, optionally matched to provided criteria.
+        *Author, Search & Reward filters are mutually exclusive.
       parameters:
         - in: query
           name: start
@@ -511,58 +513,20 @@ paths:
           name: author
           schema:
             type: string
-          description: Filter based on request author.
+          description: Filter* based on request author.
           example: jsmith
         - in: query
           name: search
           schema:
             type: string
-          description: Filter for requests whose details contain the provided string.
+          description: Filter* for requests whose details contain the provided string.
           example: clean fridge
         - in: query
-          name: rewards
-          schema:
-            type: array
-            items:
-              type: string
-          description: Filter for requests that contain all these items as rewards (array of item PK's).
-          example: "[b18743d5-eb4d-46bf-b1e6-1f31d90e7635,d74f1735-234b-44e0-98d1-e9b907073c78]"
-        - in: query
-          name: createdAfter
+          name: reward
           schema:
             type: string
-          description: Filter for requests created after or on this date (YYYY-MM-DD).
-          example: "2020-01-01"
-        - in: query
-          name: createdBefore
-          schema:
-            type: string
-          description: Filter for requests created before or on this date (YYYY-MM-DD).
-          example: "2020-06-30"
-        - in: query
-          name: completedAfter
-          schema:
-            type: string
-          description: Filter for requests completed after or on this date (YYYY-MM-DD).
-          example: "2020-07-01"
-        - in: query
-          name: completedBefore
-          schema:
-            type: string
-          description: Filter for requests completed before or on this date (YYYY-MM-DD).
-          example: "2020-12-31"
-        - in: query
-          name: completed
-          schema:
-            type: boolean
-          description: Filter based on whether the request is completed or not.
-          example: true
-        - in: query
-          name: completedBy
-          schema:
-            type: string
-          description: Filter based on which user completed the request.
-          example: hbaker
+          description: Filter* for requests that contain this item PK as one of the rewards.
+          example: "b18743d5-eb4d-46bf-b1e6-1f31d90e7635"
       responses:
         "200":
           description: Request was understood, and the matching requests are returned (if any).
@@ -664,7 +628,7 @@ paths:
         "401":
           description: Not authenticated.
         "403":
-          description: Not authorised to delete this request (you are not the author of it).
+          description: Not authorised to delete this request (you are not the author of it, or it has already been completed).
         "404":
           description: The given request ID was not found.
       tags:
@@ -704,6 +668,8 @@ paths:
                 $ref: "#/components/schemas/badRequest"
         "401":
           description: Not authenticated.
+        "403":
+          description: Not authorised to complete this request (you are the owner of it or the only one offering rewards).
         "404":
           description: The given request ID was not found.
       tags:
@@ -734,6 +700,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/badRequest"
+        "404":
+          description: The given request or reward ID was not found.
       tags:
         - Request
     post:
@@ -771,6 +739,8 @@ paths:
                 $ref: "#/components/schemas/badRequest"
         "401":
           description: Not authenticated.
+        "404":
+          description: The given request or reward ID was not found.
       tags:
         - Request
   /api/request/{requestID}/reward/{rewardID}:
@@ -1009,7 +979,7 @@ components:
           type: string
           description: Unique identifier of the image proof of completion.
           example: 3533c832-2efa-4b37-be38-2f1c278704b8
-        rewards:
+        rewardItems:
           type: array
           items:
             $ref: "#/components/schemas/Item"
