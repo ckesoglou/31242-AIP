@@ -304,19 +304,19 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 200
-          res.json().then((body) =>
+          res.json().then((body) => {
             this.setState({
               snackMessage:
                 "New IOU created!" +
-                (body.hasOwnProperty("usersInParty")
+                (body.usersInParty.length > 2
                   ? " You and " +
                     body.usersInParty.splice(0, 1).join(", ") +
                     " have a circular IOU party. We suggest you guys treat each other! ;)"
                   : ""),
               snack: true,
               newRequestDialog: false,
-            })
-          );
+            });
+          });
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
