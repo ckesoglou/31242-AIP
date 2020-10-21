@@ -215,7 +215,9 @@ export async function iouExists(iouID: string) {
 export async function partyDetection(newIou: Iou) {
   const graph = new IouGraph();
 
-  var ious = await Iou.findAll();
+  var ious = await Iou.findAll({
+    where: { is_claimed: false },
+  });
 
   if (ious === null) {
     return false;

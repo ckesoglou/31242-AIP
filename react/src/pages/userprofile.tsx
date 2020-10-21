@@ -304,19 +304,18 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 200
-          res.json().then((body) =>
+          res.json().then((body) => {
             this.setState({
               snackMessage:
                 "New IOU created!" +
-                (body.hasOwnProperty("usersInParty")
-                  ? " You and " +
-                    body.usersInParty.splice(0, 1).join(", ") +
+                (body.usersInParty.length > 2
+                  ? body.usersInParty.join(", ") +
                     " have a circular IOU party. We suggest you guys treat each other! ;)"
                   : ""),
               snack: true,
               newRequestDialog: false,
-            })
-          );
+            });
+          });
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
@@ -352,9 +351,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             this.setState({
               snackMessage:
                 "New IOU created!" +
-                (body.hasOwnProperty("usersInParty")
-                  ? " You and " +
-                    body.usersInParty.splice(0, 1).join(", ") +
+                (body.usersInParty.length > 2
+                  ? body.usersInParty.join(", ") +
                     " have a circular IOU party. We suggest you guys treat each other! :)"
                   : ""),
               snack: true,
@@ -409,14 +407,40 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               owe: oweResult,
               requests: requestResult,
             });
+            window.localStorage.setItem(
+              "lastOwedResult",
+              JSON.stringify(owedResult)
+            );
+            window.localStorage.setItem(
+              "lastOweResult",
+              JSON.stringify(oweResult)
+            );
+            window.localStorage.setItem(
+              "lastRequestResult",
+              JSON.stringify(requestResult)
+            );
             console.log("Success:", owedResult, oweResult, requestResult);
           }
         );
       })
-      .catch(([owedException, oweException, requestException]) => {
-        console.error("Error:", owedException, oweException, requestException);
+      .catch(() => {
+        console.error("Error");
         this.setLoading(false);
-        this.setState({ unauthRep: true });
+        const owedResult = JSON.parse(
+          window.localStorage.getItem("lastOwedResult") ?? "[]"
+        );
+        const oweResult = JSON.parse(
+          window.localStorage.getItem("lastOweResult") ?? "[]"
+        );
+        const requestResult = JSON.parse(
+          window.localStorage.getItem("lastRequestResult") ?? "[]"
+        );
+        this.setState({
+          owed: owedResult,
+          owe: oweResult,
+          requests: requestResult,
+        });
+        //this.setState({ unauthRep: true });
       });
   }
 
