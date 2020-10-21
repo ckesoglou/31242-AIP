@@ -71,7 +71,11 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
   };
 
   setLoading(value: boolean): void {
-    this.loadingRef.current!.style.display = value ? "block" : "none";
+    if (!this.loadingRef && !(this.loadingRef as any).current) {
+      (this.loadingRef as any).current!.style.display = value
+        ? "block"
+        : "none";
+    }
   }
 
   setCountOfLeaderboard(): number {
