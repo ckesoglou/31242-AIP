@@ -46,8 +46,12 @@ class IouGraph {
     var recStack: any = {};
 
     if (userNode) {
-      var result = this.detectCycleWithinGraph(userNode, visited, recStack);
-      if (result !== false) return result;
+      var cycleDetected = this.detectCycleWithinGraph(
+        userNode,
+        visited,
+        recStack
+      );
+      if (cycleDetected) return this.usersInParty;
     }
 
     return false;
@@ -68,9 +72,9 @@ class IouGraph {
           !visited[currentNode.name] &&
           this.detectCycleWithinGraph(currentNode, visited, recStack)
         ) {
-          return this.usersInParty;
+          return true;
         } else if (recStack[currentNode.name]) {
-          return this.usersInParty;
+          return true;
         }
       }
     }
