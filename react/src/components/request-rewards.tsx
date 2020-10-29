@@ -142,9 +142,11 @@ class RequestRewards extends React.Component<
             });
           }}
         >
-          <div className="firstCircle">
-            {this.props.items[0].item.display_name}
-          </div>
+          {this.props.items.length === 1 && (
+            <div className="firstCircle">
+              {this.props.items[0].item.display_name}
+            </div>
+          )}
           <div className="secondCircle">+</div>
         </div>
       );
