@@ -14,7 +14,9 @@ describe("<Home />", () => {
           updateUser: () => {},
         }}
       >
-        <Home />
+        <MemoryRouter initialEntries={["/home"]}>
+          <Route path="/home" component={Home} />
+        </MemoryRouter>
       </UserContext.Provider>
     );
     expect(wrapper).toMatchSnapshot();
@@ -56,12 +58,12 @@ describe("<Home />", () => {
           updateUser: () => {},
         }}
       >
-        <MemoryRouter>
+        <MemoryRouter initialEntries={["/home"]}>
           <Route path="/home" component={Home} />
         </MemoryRouter>
       </UserContext.Provider>
     );
-    let avatar = wrapper.find(Home).find("div#avatar");
+    let avatar = wrapper.find("Home").find("div#avatar");
 
     expect(avatar.text()).toEqual("KL");
   });

@@ -7,7 +7,7 @@ import { ThemeProvider, CssBaseline } from "@material-ui/core";
 import theme from "./components/theme";
 // import { makeServer } from "./components/server";
 
-//makeServer();
+// makeServer();
 
 ReactDOM.render(
   <React.StrictMode>
