@@ -39,7 +39,6 @@ import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 import IOU from "../components/iou";
 import IouRequest from "../components/request";
-// import { optional } from "joi";
 
 type ItemObj = {
   id: string;
@@ -542,7 +541,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             id="completeProofImage"
           />
         </div>
-        //Need to discuss how submitted images should be formatted (Size, Encode Format)
+        // Need to discuss how submitted images should be formatted (Size, Encode Format)
       );
     } else {
       return (
@@ -553,7 +552,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
-  checkCreatButton(): boolean {
+  checkCreateButton(): boolean {
     if (this.state.tabIndex === 2) {
       return !this.state.newRequestFavour || !this.state.newRequestReward;
     } else if (this.state.tabIndex === 1) {
@@ -892,7 +891,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         });
                       }}
                       autoFocus
-                      disabled={this.checkCreatButton()}
+                      disabled={this.checkCreateButton()}
                     >
                       Create
                     </Button>
