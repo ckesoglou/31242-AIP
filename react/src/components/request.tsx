@@ -24,7 +24,7 @@ type RequestObj = {
 };
 
 type RewardItem = {
-  id: string; // UUID;
+  id: string;
   giver: { username: string; display_name: string };
   item: { id: string; display_name: string };
 };
