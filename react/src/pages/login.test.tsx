@@ -69,6 +69,7 @@ describe("<Login />", () => {
         </MemoryRouter>
       </UserContext.Provider>
     );
+    
     wrapper
       .find("input#password")
       .simulate("change", { target: { value: "This is a valid password!" } });
@@ -76,6 +77,7 @@ describe("<Login />", () => {
       .find("input#username")
       .simulate("change", { target: { value: "This is a valid username!" } });
     wrapper.find("button").simulate("click");
+    
     expect(spy).toHaveBeenCalledTimes(1);
   });
 });

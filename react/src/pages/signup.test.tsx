@@ -18,6 +18,7 @@ describe("SignUp", () => {
         match={testProps.match}
       />
     );
+    
     expect(component).toMatchSnapshot();
   });
 
@@ -31,6 +32,7 @@ describe("SignUp", () => {
       </MemoryRouter>
     );
     let signUpComponent = wrapper.find("SignUp");
+
     signUpComponent.setState({
       username: "",
       display_name: "",
@@ -38,6 +40,7 @@ describe("SignUp", () => {
       error: "",
       successfulSignUp: true,
     });
+
     // @ts-ignore
     expect(wrapper.find("Router").prop("history").location.pathname).toEqual(
       "/home"
@@ -56,7 +59,9 @@ describe("SignUp", () => {
       </MemoryRouter>
     );
     let button = wrapper.find("button");
+
     button.simulate("click");
+
     expect(spy).toHaveBeenCalledTimes(0);
     expect(button.html().includes('disabled=""')).toBe(true);
   });
@@ -81,7 +86,9 @@ describe("SignUp", () => {
     wrapper.find("input#display_name").simulate("change", {
       target: { value: "This is a valid display name!" },
     });
+
     let button = wrapper.find("button");
+
     button.simulate("click");
   });
 });

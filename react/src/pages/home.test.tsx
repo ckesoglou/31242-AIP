@@ -57,10 +57,12 @@ describe("<Home />", () => {
         }}
       >
         <MemoryRouter>
-          <Home />
+          <Route path="/home" component={Home} />
         </MemoryRouter>
       </UserContext.Provider>
     );
     let avatar = wrapper.find(Home).find("div#avatar");
+
+    expect(avatar.text()).toEqual("KL");
   });
 });

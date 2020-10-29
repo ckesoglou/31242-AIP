@@ -63,7 +63,9 @@ describe("UserProfile", () => {
     wrapper
       .find("li#rewardAutoCompleteField-option-0")
       .simulate("change", { target: { ["aria-selected"]: "true" } });
+      
     wrapper.find("button#createRequest").simulate("click");
+
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
