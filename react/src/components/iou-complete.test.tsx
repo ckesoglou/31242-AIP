@@ -22,5 +22,6 @@ describe("<IouComplete />", () => {
           is_completed: true,
         }}
       />
+    );
   });
 });

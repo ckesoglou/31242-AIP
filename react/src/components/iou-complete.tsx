@@ -62,7 +62,7 @@ type IouCompleteState = {
 };
 
 class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
-  private tempRewardDisplayName: string; //Not in state because it'll cause everything to go into a render loop
+  private tempRewardDisplayName: string; // Not in state because it'll cause everything to go into a render loop
   constructor(props: IouCompleteProps) {
     super(props);
     this.tempRewardDisplayName = "";
