@@ -60,9 +60,9 @@ describe("UserProfile", () => {
     wrapper
       .find("input#rewardAutoCompleteField")
       .simulate("change", { target: { value: "coffee" } });
-    wrapper
-      .find("li#rewardAutoCompleteField-option-0")
-      .simulate("change", { target: { ["aria-selected"]: "true" } });
+    // wrapper - not sure what this means?
+    //   .find("li#rewardAutoCompleteField-option-0")
+    //   .simulate("change", { target: { ["aria-selected"]: "true" } });
 
     wrapper.find("button#createRequest").simulate("click");
 
