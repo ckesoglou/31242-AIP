@@ -49,24 +49,6 @@ class RequestRewards extends React.Component<
     unauthRep: false,
   };
 
-  fetchPotentialRewards() {
-    fetch(`${itemEndpoint}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          // Successful login 200
-          res.json().then((body) => this.setState({ potentialItems: body }));
-        }
-      })
-      .catch((exception) => {
-        console.error("Error:", exception);
-      });
-  }
-
   postReward() {
     fetch(`${requestEndpoint.concat("/" + this.props.requestID)}/rewards`, {
       method: "POST",
@@ -202,6 +184,7 @@ class RequestRewards extends React.Component<
                   color="primary"
                   id="addRewardButton"
                   onClick={() => this.postReward()}
+                  disabled={this.state.selectedReward == ""}
                 >
                   Add Reward?
                 </Button>
