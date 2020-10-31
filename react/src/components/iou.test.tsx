@@ -6,20 +6,19 @@ describe("<Iou />", () => {
   it("should render correctly", () => {
     const wrapper = shallow(
       <Iou
-        request={{
+        iou={{
           id: "1",
-          author: { username: "James", display_name: "James" },
-          completed_by: { username: "Kevin", display_name: "Kevin" },
+          item: { id: "201", display_name: "Coffee" },
+          giver: { username: "James", display_name: "James Lee" },
+          receiver: { username: "Kevin", display_name: "Kevin Lueng" },
+          parent_request: null,
+          proof_of_debt: "Some ID",
           proof_of_completion: "Some ID",
-          rewards: [
-            { id: "1", display_name: "Hug" },
-            { id: "2", display_name: "Coffee" },
-          ],
-          details: "Clean the fridge",
           created_time: "02/02/2020",
-          comletion_time: "02/02/2020",
-          is_completed: true,
+          claimed_time: "02/02/2020",
+          is_claimed: true,
         }}
+        iouType={0}
       />
     );
     expect(wrapper).toMatchSnapshot();
