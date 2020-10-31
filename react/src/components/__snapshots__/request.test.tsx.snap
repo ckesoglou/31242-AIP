@@ -16,16 +16,42 @@ exports[`<Request /> should render correctly 1`] = `
       items={
         Array [
           Object {
-            "display_name": "Hug",
+            "giver": Object {
+              "display_name": "James Lee",
+              "username": "James",
+            },
             "id": "1",
+            "item": Object {
+              "display_name": "Hug",
+              "id": "202",
+            },
           },
           Object {
-            "display_name": "Coffee",
+            "giver": Object {
+              "display_name": "Sean Tran",
+              "username": "Sean",
+            },
             "id": "2",
+            "item": Object {
+              "display_name": "Coffee",
+              "id": "201",
+            },
           },
         ]
       }
       requestID="1"
+      rewards={
+        Array [
+          Object {
+            "display_name": "Coffee",
+            "id": "201",
+          },
+          Object {
+            "display_name": "Hug",
+            "id": "202",
+          },
+        ]
+      }
     />
   </WithStyles(ForwardRef(Grid))>
   <WithStyles(ForwardRef(Grid))
@@ -54,20 +80,36 @@ exports[`<Request /> should render correctly 1`] = `
   >
     <IouComplete
       author="James"
+      claimed_time="02/02/2020"
       completed_by="Kevin"
-      created_time="02/02/2020"
+      created_time="01/01/2020"
       details="Clean the fridge"
       id="1"
+      iouType={2}
       is_completed={true}
       rewards={
         Array [
           Object {
-            "display_name": "Hug",
+            "giver": Object {
+              "display_name": "James Lee",
+              "username": "James",
+            },
             "id": "1",
+            "item": Object {
+              "display_name": "Hug",
+              "id": "202",
+            },
           },
           Object {
-            "display_name": "Coffee",
+            "giver": Object {
+              "display_name": "Sean Tran",
+              "username": "Sean",
+            },
             "id": "2",
+            "item": Object {
+              "display_name": "Coffee",
+              "id": "201",
+            },
           },
         ]
       }
@@ -82,27 +124,41 @@ exports[`<Request /> should render correctly 1`] = `
       request={
         Object {
           "author": Object {
-            "display_name": "James",
+            "display_name": "James Lee",
             "username": "James",
           },
-          "comletion_time": "02/02/2020",
           "completed_by": Object {
-            "display_name": "Kevin",
+            "display_name": "Kevin Leung",
             "username": "Kevin",
           },
-          "created_time": "02/02/2020",
+          "completion_time": "02/02/2020",
+          "created_time": "01/01/2020",
           "details": "Clean the fridge",
           "id": "1",
           "is_completed": true,
           "proof_of_completion": "Some ID",
           "rewards": Array [
             Object {
-              "display_name": "Hug",
+              "giver": Object {
+                "display_name": "James Lee",
+                "username": "James",
+              },
               "id": "1",
+              "item": Object {
+                "display_name": "Hug",
+                "id": "202",
+              },
             },
             Object {
-              "display_name": "Coffee",
+              "giver": Object {
+                "display_name": "Sean Tran",
+                "username": "Sean",
+              },
               "id": "2",
+              "item": Object {
+                "display_name": "Coffee",
+                "id": "201",
+              },
             },
           ],
         }
