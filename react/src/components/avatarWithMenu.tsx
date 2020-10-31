@@ -82,6 +82,7 @@ class AvatarWithMenu extends React.Component {
   render() {
     return (
       <div>
+        {/* If user is logged in */}
         {this.context.user.name !== "?" && (
           <div>
             <Avatar
@@ -142,6 +143,7 @@ class AvatarWithMenu extends React.Component {
                 component={RouterLink}
                 to="/home"
                 onClick={() => {
+                  {/* Clear user session */}
                   this.context.updateUser({ name: "?" });
                   this.setState({ userMenu: false });
                   fetch(`/api/logout`, {
@@ -162,6 +164,7 @@ class AvatarWithMenu extends React.Component {
             </StyledMenu>
           </div>
         )}
+        {/* User is not logged in */}
         {this.context.user.name === "?" && (
           <div>
             <Avatar

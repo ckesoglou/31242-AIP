@@ -19,7 +19,6 @@ import {
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-// import UserProfile from "./userprofile";
 
 type LoginState = {
   username: string;
@@ -66,6 +65,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
 
   static contextType = UserContext;
 
+  // Toggle loading circle for when async fetching
   startLoading(): void {
     this.signInRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
@@ -76,6 +76,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
     this.loadingRef.current!.style.display = "none";
   }
 
+  // Post info server-side to create new user
   handleLogin(): void {
     this.startLoading();
 
@@ -93,7 +94,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
         if (res.status === 200) {
           // Successful login 200
           // TODO: Only for development?! Handle frontend auth
-          // Authentication.authenticate(() => {});
           this.setState({ successfulLogin: true }, () => {
             this.context.updateUser({
               name: this.state.username,
@@ -112,6 +112,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
   }
 
   componentDidMount() {
+    // If redirected here elsewhere, check whether its because session was invalid
     if (this.props.location.state !== undefined) {
       if (this.props.location.state.unauthenticated) {
         this.setState({
@@ -122,11 +123,12 @@ class Login extends React.Component<ILoginProps, LoginState> {
   }
 
   render() {
-    // redirect to previous protected page if previously not authenticated
+    // Redirect to previous protected page if previously not authenticated
     const { next } = this.props.location.state || {
       next: { pathname: "/home" },
     };
 
+    // If successful, redirect to home/next page
     if (this.state.successfulLogin) {
       return <Redirect to={next} />;
     }

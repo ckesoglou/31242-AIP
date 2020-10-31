@@ -94,6 +94,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
 
   static contextType = UserContext;
 
+  // Toggle loading circle for when async fetching
   setLoading(): void {
     this.signUpRef.current!.innerText = "";
     this.loadingRef.current!.style.display = "block";
@@ -114,6 +115,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     return specialCharacters.test(str);
   };
 
+  // Load password requirements if password input is focused
   handlePasswordFocus(focus: boolean): void {
     this.setState({ showPasswordRequirements: focus });
     focus
@@ -124,7 +126,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   handlePasswordChange(currentPassword: string): void {
     this.setState({ password: currentPassword });
 
-    // validate character length
+    // Validate character length
     if (currentPassword.length >= 8) {
       this.setPasswordFieldState("characterLength", true);
     } else {
@@ -132,7 +134,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       this.setState({ validPassword: false });
     }
 
-    // validate upper case character exists
+    // Validate upper case character exists
     if (this.hasUppercase(currentPassword)) {
       this.setPasswordFieldState("uppercaseCharacter", true);
     } else {
@@ -140,7 +142,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
       this.setState({ validPassword: false });
     }
 
-    // validate special character exists
+    // Validate special character exists
     if (this.hasSpecialCharacter(currentPassword)) {
       this.setPasswordFieldState("specialCharacter", true);
     } else {
@@ -149,6 +151,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     }
   }
 
+  // Method to toggle requirements met or not as well as verify password is valid overall
   setPasswordFieldState(fieldName: string, value: boolean) {
     this.setState(
       (prevState) => {
@@ -184,7 +187,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
     );
   }
 
-  // handle Sign Up button click
+  // Handle Sign Up button click
   handleSignUp(): void {
     this.setLoading();
 
@@ -221,11 +224,12 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
   }
 
   render() {
-    // redirect to previous protected page if previously not authenticated
+    // Redirect to previous page or home if previously not authenticated
     const { next } = this.props.location.state || {
       next: { pathname: "/home" },
     };
 
+    // If successful, redirect to home/next page
     if (this.state.successfulSignUp) {
       return <Redirect to={next} />;
     }
