@@ -1,0 +1,210 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IouComplete /> should render correctly 1`] = `
+<div
+  id="completeRequestItem"
+>
+  <div
+    className=""
+    onClick={[Function]}
+  >
+    <WithStyles(ForwardRef(Checkbox))
+      checked={true}
+      checkedIcon={
+        <UNDEFINED
+          color="primary"
+          id="completeIconSize"
+        />
+      }
+      color="primary"
+      disabled={true}
+      icon={
+        <UNDEFINED
+          color="primary"
+          id="completeIconSize"
+        />
+      }
+    />
+    <div
+      id="IouTaskComplete"
+    >
+      <div>
+        <WithStyles(ForwardRef(Typography))
+          id="taskCompleter"
+        >
+          Kevin
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          id="taskTimeStamp"
+        >
+          01/06/2020
+        </WithStyles(ForwardRef(Typography))>
+      </div>
+      <WithStyles(ForwardRef(Popover))
+        anchorEl={null}
+        anchorOrigin={
+          Object {
+            "horizontal": "center",
+            "vertical": "bottom",
+          }
+        }
+        id="popUpMargin"
+        onClose={[Function]}
+        open={false}
+        transformOrigin={
+          Object {
+            "horizontal": "center",
+            "vertical": "top",
+          }
+        }
+      >
+        <WithStyles(ForwardRef(Typography))
+          id="taskDetailPopUp"
+        >
+          Full Display Name
+          <WithStyles(ForwardRef(Divider))
+            id="taskPopUpDivider"
+          />
+          Kevin
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(Popover))>
+    </div>
+  </div>
+  <WithStyles(ForwardRef(Dialog))
+    TransitionComponent={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "muiSupportAuto": true,
+        "propTypes": Object {
+          "children": [Function],
+          "disableStrictModeCompat": [Function],
+          "in": [Function],
+          "onEnter": [Function],
+          "onEntered": [Function],
+          "onEntering": [Function],
+          "onExit": [Function],
+          "onExited": [Function],
+          "onExiting": [Function],
+          "style": [Function],
+          "timeout": [Function],
+        },
+        "render": [Function],
+      }
+    }
+    fullWidth={true}
+    id="completeForm"
+    maxWidth="xs"
+    onClose={[Function]}
+    open={false}
+    scroll="body"
+  >
+    <WithStyles(ForwardRef(DialogTitle))
+      disableTypography={true}
+    >
+      <WithStyles(ForwardRef(Typography))
+        id="modalTitle"
+        variant="h5"
+      >
+        IOU Proof Submission
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(DialogTitle))>
+    <WithStyles(ForwardRef(Divider)) />
+    <WithStyles(ForwardRef(DialogContent))
+      className="content"
+      id="completeDetailsTable"
+    >
+      <WithStyles(ForwardRef(DialogContentText))
+        variant="h6"
+      >
+        IOU Details
+      </WithStyles(ForwardRef(DialogContentText))>
+      <WithStyles(ForwardRef(TableContainer))
+        id="infoTable"
+      >
+        <WithStyles(ForwardRef(Table))>
+          <WithStyles(ForwardRef(TableBody))>
+            <WithStyles(ForwardRef(TableRow))>
+              <WithStyles(ForwardRef(TableCell))
+                align="center"
+                className="infoTableCell"
+                id="infoTableTitle"
+              >
+                IOU
+                 created by:
+              </WithStyles(ForwardRef(TableCell))>
+              <WithStyles(ForwardRef(TableCell))
+                align="center"
+                className="infoTableCell"
+                id="infoTableContent"
+              >
+                James
+              </WithStyles(ForwardRef(TableCell))>
+            </WithStyles(ForwardRef(TableRow))>
+            <WithStyles(ForwardRef(TableRow))>
+              <WithStyles(ForwardRef(TableCell))
+                align="center"
+                id="infoTableTitle"
+              >
+                IOU
+                 Created on:
+              </WithStyles(ForwardRef(TableCell))>
+              <WithStyles(ForwardRef(TableCell))
+                align="center"
+                id="infoTableContent"
+              >
+                01/01/2020
+              </WithStyles(ForwardRef(TableCell))>
+            </WithStyles(ForwardRef(TableRow))>
+            <WithStyles(ForwardRef(TableRow))>
+              <WithStyles(ForwardRef(TableCell))
+                align="center"
+                id="infoTableTitle"
+              >
+                Will be completed by:
+              </WithStyles(ForwardRef(TableCell))>
+              <WithStyles(ForwardRef(TableCell))
+                align="center"
+                id="infoTableContent"
+              >
+                Kevin
+              </WithStyles(ForwardRef(TableCell))>
+            </WithStyles(ForwardRef(TableRow))>
+          </WithStyles(ForwardRef(TableBody))>
+        </WithStyles(ForwardRef(Table))>
+      </WithStyles(ForwardRef(TableContainer))>
+    </WithStyles(ForwardRef(DialogContent))>
+    <WithStyles(ForwardRef(Divider)) />
+    <WithStyles(ForwardRef(DialogActions))>
+      <WithStyles(ForwardRef(Button))
+        color="primary"
+        onClick={[Function]}
+        size="large"
+      >
+        Nevermind
+      </WithStyles(ForwardRef(Button))>
+      <WithStyles(ForwardRef(Button))
+        autoFocus={true}
+        color="primary"
+        disabled={false}
+        id="createRequest"
+        onClick={[Function]}
+        size="large"
+      >
+        Submit & Complete
+      </WithStyles(ForwardRef(Button))>
+    </WithStyles(ForwardRef(DialogActions))>
+  </WithStyles(ForwardRef(Dialog))>
+  <WithStyles(ForwardRef(Snackbar))
+    anchorOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "bottom",
+      }
+    }
+    autoHideDuration={5000}
+    message=""
+    onClose={[Function]}
+    open={false}
+  />
+</div>
+`;

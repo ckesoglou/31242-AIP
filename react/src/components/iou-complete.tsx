@@ -368,9 +368,9 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           {this.props.iouType === 2 && (
             <DialogContent className="Content" id="completePopUpRewards">
               <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
-              {this.props.rewards.forEach((reward) => {
-                this.renderPopUpRewards(reward);
-              })}
+              {this.props.rewards.map((reward) =>
+                this.renderPopUpRewards(reward)
+              )}
             </DialogContent>
           )}
           {this.props.iouType !== 0 && (
