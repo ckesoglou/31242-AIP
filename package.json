@@ -8,9 +8,10 @@
     "start": "node -r module-alias/register ./dist --env=production",
     "start:dev": "nodemon",
     "test": "jest",
-    "testwatch": "jest --watchAll --testTimeout=10000"
+    "testwatch": "jest --watchAll --testTimeout=20000"
   },
   "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     "moduleFileExtensions": [
       "js",
       "ts"
