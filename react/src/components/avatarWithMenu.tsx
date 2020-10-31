@@ -60,7 +60,7 @@ type AvatarWithMenuState = {
 
 // most readable solution from https://stackoverflow.com/questions/33076177/getting-name-initials-using-js
 function nameToUpperInitials(fullName: string) {
-  const namesArray = fullName?.split(" ") ?? [ "?" ];
+  const namesArray = fullName?.split(" ") ?? ["?"];
   if (namesArray.length === 1)
     return `${namesArray[0].charAt(0).toUpperCase()}`;
   else
@@ -142,8 +142,8 @@ class AvatarWithMenu extends React.Component {
                 color="inherit"
                 component={RouterLink}
                 to="/home"
+                // Clear user session
                 onClick={() => {
-                  {/* Clear user session */}
                   this.context.updateUser({ name: "?" });
                   this.setState({ userMenu: false });
                   fetch(`/api/logout`, {
