@@ -11,6 +11,7 @@ const TESTUSER = {
 };
 
 beforeAll(async () => {
+  // Delete test user from database
   await sequelize.query(
     `DELETE from tokens WHERE username='${TESTUSER.username}';
       DELETE from users WHERE username='${TESTUSER.username}';`

@@ -8,6 +8,7 @@ const TESTUSER = {
 };
 
 beforeAll(async () => {
+  // Create test user in database
   await request(APP)
     .post("/api/signup")
     .send({
