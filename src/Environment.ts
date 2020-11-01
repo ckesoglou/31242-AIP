@@ -8,4 +8,5 @@ export default {
   db_password: process.env.DB_PASSWORD ?? "",
   db_name: process.env.DB_NAME ?? "",
   jwt_secret: process.env.JWT_SECRET ?? "ioweyou.tech",
+  node_env: process.env.NODE_ENV
 };
