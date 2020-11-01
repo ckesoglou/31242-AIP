@@ -9,6 +9,7 @@ type LeaderboardUserProps = {
   score: number;
 };
 
+// Container component that holds rank, username and score in a horizontal grid
 function LeaderboardUser(props: LeaderboardUserProps) {
   return (
     <Grid container direction="row">

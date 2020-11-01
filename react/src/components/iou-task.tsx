@@ -17,6 +17,7 @@ class IouTask extends React.Component<IouTaskProps, IouTaskState> {
 
   render() {
     return (
+      // 55 is the limit of characters before there's too many lines
       <div
         className={this.props.details.length > 55 ? "cursorPointer" : ""}
         id="task"
@@ -30,6 +31,7 @@ class IouTask extends React.Component<IouTaskProps, IouTaskState> {
               });
             }}
           >
+            {/* For presentation, get rid of excessive characters and add ellipsis */}
             {this.props.details
               .substring(
                 0,
