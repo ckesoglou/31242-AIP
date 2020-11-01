@@ -49,6 +49,7 @@ class RequestRewards extends React.Component<
     unauthRep: false,
   };
 
+  // The rewards are populated via server-side
   fetchPotentialRewards() {
     fetch(`${itemEndpoint}`, {
       method: "GET",
@@ -68,7 +69,7 @@ class RequestRewards extends React.Component<
   }
 
   postReward() {
-    fetch(`${requestEndpoint.concat("/" + this.props.requestID)}/rewards`, {
+    fetch(`${requestEndpoint}/${this.props.requestID}/rewards`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -113,6 +114,7 @@ class RequestRewards extends React.Component<
   }
 
   renderItems() {
+    // If multiple rewards
     if (this.props.items.length > 1) {
       return (
         <div
@@ -133,6 +135,7 @@ class RequestRewards extends React.Component<
         </div>
       );
     } else {
+      // If no or one reward
       return (
         <div
           id="multipleItemsContainer"
@@ -152,6 +155,7 @@ class RequestRewards extends React.Component<
   }
 
   render() {
+    // If unauthorised response (e.g. expired token), redirect to login
     if (this.state.unauthRep) {
       return (
         <Redirect
@@ -169,6 +173,7 @@ class RequestRewards extends React.Component<
     return (
       <div id="requestItem">
         {this.renderItems()}
+        {/* If the request is not completed */}
         {!this.props.is_completed && (
           <Popover
             id="requestRewardPopover"

@@ -35,6 +35,7 @@ type RequestProps = {
   iouType: number;
 };
 
+// Container component that contains requests in a horizontal grid element 
 class Request extends React.Component<RequestProps> {
   render() {
     return (
@@ -61,7 +62,7 @@ class Request extends React.Component<RequestProps> {
             <IouComplete
               id={this.props.request.id}
               is_completed={this.props.request.is_completed}
-              completed_by={this.props.request.completed_by?.username ?? ""} // TODO: check who completed by
+              completed_by={this.props.request.completed_by?.username ?? ""}
               claimed_time={this.props.request.completion_time}
               created_time={this.props.request.created_time}
               author={this.props.request.author.username ?? ""}

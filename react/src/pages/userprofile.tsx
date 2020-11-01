@@ -128,6 +128,7 @@ interface TabPanelProps {
   textRef: any;
 }
 
+// kudos to https://material-ui.com/components/tabs/ - this has been modified for our purposes
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, loadingRef, textRef, ...other } = props;
 
@@ -192,11 +193,13 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
 
   static contextType = UserContext;
 
+  // Toggle loading circle for when async fetching
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
     this.textRef.current!.style.display = value ? "none" : "block";
   }
 
+  // On load, check if user is logged in
   componentDidMount() {
     if (this.context.user.name !== "?") {
       this.fetchAllTabs();
@@ -209,6 +212,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
+  // Calculate the number of pages required to hold the owed on userprofile with numberOfItemsPerPage per page
   setCountOfOwed(): number {
     if (this.state.owed.length % numberOfItemsPerPage !== 0) {
       return Math.ceil(this.state.owed.length / numberOfItemsPerPage);
@@ -217,6 +221,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
+  // Calculate the number of pages required to hold the owe on userprofile with numberOfItemsPerPage per page
   setCountOfOwe(): number {
     if (this.state.owe.length % numberOfItemsPerPage !== 0) {
       return Math.ceil(this.state.owe.length / numberOfItemsPerPage);
@@ -225,6 +230,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
+  // Calculate the number of pages required to hold the requests on userprofile with numberOfItemsPerPage per page
   setCountOfRequest(): number {
     if (this.state.requests.length % numberOfItemsPerPage !== 0) {
       return Math.ceil(this.state.requests.length / numberOfItemsPerPage);
@@ -253,6 +259,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       });
   }
 
+  // Send new request to be created
   fetchNewRequest(): void {
     fetch(`${requestsEndpoint}`, {
       method: "POST",
@@ -290,6 +297,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       });
   }
 
+  // Send new owe to be created
   fetchNewOwe(): void {
     fetch(`${iouOweEndpoint}`, {
       method: "POST",
@@ -334,6 +342,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       });
   }
 
+  // Send new owed to be created
   fetchNewOwed(): void {
     const formData = new FormData();
     formData.append("username", this.state.selectedUser);
@@ -378,8 +387,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       });
   }
 
+  // Fetch all information for tabs needed
   fetchAllTabs(): void {
-    //NEEDS TO BE INTEGRATED??
     const headers = {
       "Content-Type": "application/json",
     };
@@ -523,11 +532,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
       });
   }
 
-  handleTabsChange(event: ChangeEvent<{}> | undefined, index: number): void {
-    this.setState({ tabIndex: index });
-    // This method may be needed in the future
-  }
-
   fileContent() {
     if (this.state.newRequestProof) {
       console.log(this.state.newRequestProof);
@@ -542,7 +546,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             id="completeProofImage"
           />
         </div>
-        //Need to discuss how submitted images should be formatted (Size, Encode Format)
       );
     } else {
       return (
@@ -574,6 +577,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           to={{
             pathname: "/login",
             state: {
+              // This is just a pop up message on login page to signify session expired
               unauthenticated:
                 "Your session has expired! Please sign in again :)",
             },
@@ -621,7 +625,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               <Paper elevation={3} className="content">
                 <Tabs
                   value={this.state.tabIndex}
-                  onChange={(e, i) => this.handleTabsChange(e, i)}
+                  onChange={(e, i) => this.setState({ tabIndex: i })}
                   variant="fullWidth"
                 >
                   <Tab label="Owed" />

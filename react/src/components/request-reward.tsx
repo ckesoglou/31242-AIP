@@ -45,6 +45,7 @@ class RequestReward extends React.Component<
 
   render() {
     return (
+      // Really neat component courtesy of MUI - listens for when users click away from this component
       <ClickAwayListener onClickAway={this.handleClickAway}>
         <div
           className="popUpCircle"
