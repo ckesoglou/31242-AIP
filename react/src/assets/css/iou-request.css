@@ -314,10 +314,6 @@
   align-self: center;
 }
 
-#noProofIcon {
-  color: rgb(233, 64, 64);
-}
-
 #taskDetailPopUp {
   border: white solid 3px;
   border-radius: 5%;
