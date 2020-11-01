@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
+import { BAD_REQUEST, OK } from "http-status-codes";
 import Joi, { ObjectSchema } from "joi";
 import { getAuthenticatedUser } from "@shared/Authenticate";
 import upload from "../shared/ImageHandler";
@@ -9,12 +9,10 @@ import {
   createIouOwe,
   completeIouOwe,
   iouExists,
-  getIous,
   getFormattedIous,
   partyDetection,
 } from "@daos/Ious";
 import Iou from "@entities/Iou";
-import { ConsoleTransportOptions } from "winston/lib/winston/transports";
 
 // Init shared
 const router = Router();
