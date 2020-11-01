@@ -1,21 +1,20 @@
 /// <reference types="jest" />
-const request = require("supertest");
-const APP = "https://ioweyou.tech";
-const TESTUSER = {
-  username: "testunittestuser",
-  displayName: "testunittestuser",
-  password: "Testunittestuser!",
-};
+
+import {
+  request,
+  APP,
+  TESTUSER,
+  createTestUsers,
+  deleteTestUsers,
+} from "@shared/test.config";
 
 beforeAll(async () => {
-  // Create test user in database
-  await request(APP)
-    .post("/api/signup")
-    .send({
-      username: `${TESTUSER.username}`,
-      displayName: `${TESTUSER.displayName}`,
-      password: `${TESTUSER.password}`,
-    });
+  await deleteTestUsers();
+  await createTestUsers();
+});
+
+afterAll(async () => {
+  await deleteTestUsers();
 });
 
 describe("Login endpoint", () => {
@@ -113,5 +112,3 @@ describe("Login endpoint", () => {
     });
   });
 });
-
-export {};

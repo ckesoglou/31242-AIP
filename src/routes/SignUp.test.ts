@@ -2,20 +2,14 @@
 
 import sequelize from "@daos/DBInstance";
 
-const request = require("supertest");
-const APP = "https://ioweyou.tech";
-const TESTUSER = {
-  username: "testunittestuser",
-  displayName: "testunittestuser",
-  password: "Testunittestuser!",
-};
+import { request, APP, TESTUSER, deleteTestUsers } from "@shared/test.config";
 
 beforeAll(async () => {
-  // Delete test user from database
-  await sequelize.query(
-    `DELETE from tokens WHERE username='${TESTUSER.username}';
-      DELETE from users WHERE username='${TESTUSER.username}';`
-  );
+  await deleteTestUsers();
+});
+
+afterAll(async () => {
+  await deleteTestUsers();
 });
 
 describe("Signup endpoint", () => {
@@ -128,5 +122,3 @@ describe("Signup endpoint", () => {
     });
   });
 });
-
-export {};

@@ -8,7 +8,7 @@
     "start": "node -r module-alias/register ./dist --env=production",
     "start:dev": "nodemon",
     "test": "jest",
-    "testwatch": "jest --watchAll --testTimeout=20000"
+    "testwatch": "jest --watch --runInBand --testTimeout=30000"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
@@ -24,7 +24,7 @@
     "moduleNameMapper": {
       "^@shared(.*)$": "<rootDir>/src/shared$1.ts",
       "^@daos(.*)$": "<rootDir>/src/daos$1.ts",
-      "^@entities(.*)$": "<rootDir>/src/entities$1.ts"
+      "^@entities(.*)$": "<rootDir>/src/entities$1"
     }
   },
   "nodemonConfig": {
