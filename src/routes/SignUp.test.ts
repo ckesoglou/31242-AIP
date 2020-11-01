@@ -3,13 +3,7 @@
 import sequelize from "@daos/DBInstance";
 import { deleteAllUsers } from "@daos/Users";
 
-const request = require("supertest");
-const APP = "https://ioweyou.tech";
-const TESTUSER = {
-  username: "testunittestuser",
-  displayName: "testunittestuser",
-  password: "Testunittestuser!",
-};
+import { request, APP, TESTUSER, deleteTestUsers } from "@shared/test.config";
 
 beforeAll(async () => {
   await sequelize.drop();
@@ -134,5 +128,3 @@ describe("Signup endpoint", () => {
     });
   });
 });
-
-export {};

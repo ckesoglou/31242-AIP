@@ -130,5 +130,3 @@ describe("Login endpoint", () => {
     });
   });
 });
-
-export {};
