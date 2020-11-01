@@ -7,12 +7,25 @@
     "lint": "tslint --project \"tsconfig.json\"",
     "start": "node -r module-alias/register ./dist --env=production",
     "start:dev": "nodemon",
-    "test": "jest --passWithNoTests"
+    "test": "jest",
+    "testwatch": "jest --watch --testTimeout=30000"
   },
   "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "testEnvironment": "node",
     "modulePathIgnorePatterns": [
-      "/react/"
-    ]
+      "/react/",
+      "/node_modules/"
+    ],
+    "moduleNameMapper": {
+      "^@shared(.*)$": "<rootDir>/src/shared$1.ts",
+      "^@daos(.*)$": "<rootDir>/src/daos$1.ts",
+      "^@entities(.*)$": "<rootDir>/src/entities$1"
+    }
   },
   "nodemonConfig": {
     "watch": [
@@ -46,17 +59,21 @@
     "multer": "^1.4.2",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
+    "sqlite3": "^5.0.0",
     "tedious": "^9.2.1",
     "uuid": "^8.3.1",
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
     "@types/bcrypt": "^3.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.7",
     "@types/find": "^0.2.1",
     "@types/helmet": "0.0.47",
     "@types/jasmine": "^3.5.12",
+    "@types/jest": "^26.0.15",
     "@types/jsonfile": "^6.0.0",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/morgan": "^1.9.1",

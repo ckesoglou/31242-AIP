@@ -90,3 +90,7 @@ export async function createUser(
     password_hash: password_hash,
   });
 }
+
+export async function deleteAllUsers() {
+  return User.destroy({ truncate: true });
+}
