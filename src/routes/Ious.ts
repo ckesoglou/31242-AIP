@@ -45,9 +45,9 @@ const IousQuery: ObjectSchema<IIousQuery> = Joi.object({
   limit: Joi.number().integer().min(1).max(100).default(25),
 });
 
-/******************************************************************************
- *                      Get IOUs you are owed - "GET /api/iou/owed"
- ******************************************************************************/
+/**
+ * GET: /api/iou/owed (Get IOUs you are owed)
+ */
 
 router.get("/owed", async (req: Request, res: Response) => {
   // Validate request format
@@ -75,9 +75,9 @@ router.get("/owed", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                      Create IOU you are owed - "POST /api/iou/owed"
- ******************************************************************************/
+/**
+ * POST: /api/iou/owed (Create IOU you are owed)
+ */
 
 router.post(
   "/owed",
@@ -122,9 +122,9 @@ router.post(
   }
 );
 
-/******************************************************************************
- *                       Mark an IOU as completed - "PUT /api/iou/owed/{iouID}/complete"
- ******************************************************************************/
+/**
+ * PUT: /api/iou/owed/{iouID}/complete (Mark an IOU as completed)
+ */
 
 router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
   // Get authenticated user
@@ -156,9 +156,9 @@ router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                      Get IOUs you owe - "GET /api/iou/owe"
- ******************************************************************************/
+/**
+ * GET: /api/iou/owe (Get IOUs you owe)
+ */
 
 router.get("/owe", async (req: Request, res: Response) => {
   // Validate request format
@@ -186,9 +186,10 @@ router.get("/owe", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                      Create IOU you owe - "POST /api/iou/owe"
- ******************************************************************************/
+/**
+ * POST: /api/iou/owe (Create IOU you owe)
+ */
+
 router.post("/owe", async (req: Request, res: Response) => {
   // Validate request format
   const { error, value } = IouOwePOST.validate(req.body);
@@ -226,9 +227,9 @@ router.post("/owe", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                       Mark an IOU as completed - "PUT /api/iou/owe/{iouID}/complete"
- ******************************************************************************/
+/**
+ * PUT: /api/iou/owe/{iouID}/complete (Mark an IOU as completed)
+ */
 
 router.put(
   "/owe/:iouID/complete",
