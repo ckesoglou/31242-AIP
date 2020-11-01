@@ -122,20 +122,6 @@ class AvatarWithMenu extends React.Component {
                   <ListItemText primary="My Favours" />
                 </StyledMenuItem>
               </Link>
-              {/* <Link
-                id="requestLink"
-                color="inherit"
-                component={RouterLink}
-                to={{ pathname: "/user", state: { tabIndex: 2 } }}
-                style={{ textDecoration: "none" }}
-              >
-                <StyledMenuItem>
-                  <ListItemIcon>
-                    <PeopleOutline fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="My Requests" />
-                </StyledMenuItem>
-              </Link> */}
               <MenuItem />
               <Link
                 id="logOutLink"
