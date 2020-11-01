@@ -68,7 +68,7 @@ class IouProof extends React.Component<IouProofProps, IouProofState> {
                 this.setState({ anchorEl: event.currentTarget });
               }}
             >
-              <ImageIcon color="disabled" />
+              <ImageIcon id="noProofIcon" color="disabled" />
             </div>
             <Popover
               id="popUpMargin"
