@@ -50,6 +50,7 @@ const IousQuery: ObjectSchema<IIousQuery> = Joi.object({
  ******************************************************************************/
 
 router.get("/owed", async (req: Request, res: Response) => {
+  // Validate request format
   const { error, value } = IousQuery.validate(req.query);
   if (error) {
     return res.status(BAD_REQUEST).json({
@@ -57,8 +58,10 @@ router.get("/owed", async (req: Request, res: Response) => {
     });
   }
   const iousQuery = value as IIousQuery;
+  // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (user) {
+    // Get IOUs
     const iou = await getFormattedIous(
       { receiver: user.username },
       iousQuery.start,
@@ -101,6 +104,7 @@ router.post(
       );
       const newIou = await Iou.findByPk(iou);
 
+      // Party detection
       var party;
       if (newIou) {
         var partyResults = await partyDetection(newIou);
@@ -125,12 +129,12 @@ router.post(
 router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
   // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
-  // if logged in
+  // If logged in
   if (user) {
     const iouID = req.params.iouID;
-    // if IOU exists
+    // If IOU exists
     if (await iouExists(iouID)) {
-      // if users is receiver of IOU
+      // If user is receiver of IOU
       if ((await completeIouOwed(iouID, user.username)) == true) {
         return res.status(OK).end();
       } else {
@@ -157,6 +161,7 @@ router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.get("/owe", async (req: Request, res: Response) => {
+  // Validate request format
   const { error, value } = IousQuery.validate(req.query);
   if (error) {
     return res.status(BAD_REQUEST).json({
@@ -164,8 +169,10 @@ router.get("/owe", async (req: Request, res: Response) => {
     });
   }
   const iousQuery = value as IIousQuery;
+  // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (user) {
+    // Get IOUs
     const iou = await getFormattedIous(
       { giver: user.username },
       iousQuery.start,
@@ -200,9 +207,9 @@ router.post("/owe", async (req: Request, res: Response) => {
       requestBody.username,
       requestBody.item
     );
-
     const newIou = await Iou.findByPk(iou);
 
+    // Party detection
     var party;
     if (newIou) {
       var partyResults = await partyDetection(newIou);
