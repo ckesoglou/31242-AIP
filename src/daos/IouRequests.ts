@@ -84,3 +84,7 @@ export async function updateRequest(
 export async function deleteRequest(request: IouRequest) {
   return request.destroy();
 }
+
+export async function deleteAllRequests() {
+  return IouRequest.destroy({ truncate: true });
+}
