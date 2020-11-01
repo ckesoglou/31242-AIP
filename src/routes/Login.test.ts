@@ -1,4 +1,7 @@
 /// <reference types="jest" />
+
+import sequelize from "@daos/DBInstance";
+
 const request = require("supertest");
 const APP = "https://ioweyou.tech";
 const TESTUSER = {
@@ -8,6 +11,9 @@ const TESTUSER = {
 };
 
 beforeAll(async () => {
+  await sequelize.drop();
+  await sequelize.sync();
+
   // Create test user in database
   await request(APP)
     .post("/api/signup")
@@ -16,6 +22,10 @@ beforeAll(async () => {
       displayName: `${TESTUSER.displayName}`,
       password: `${TESTUSER.password}`,
     });
+});
+
+afterAll(async () => {
+  await sequelize.drop();
 });
 
 describe("Login endpoint", () => {
