@@ -1,6 +1,6 @@
 import React from "react";
 import "../assets/css/iou-request.css";
-import { requestEndpoint } from "../api/endpoints";
+import { itemEndpoint, requestEndpoint } from "../api/endpoints";
 import RequestReward from "./request-reward";
 import { Redirect } from "react-router-dom";
 import {
