@@ -184,7 +184,7 @@ class RequestRewards extends React.Component<
                   color="primary"
                   id="addRewardButton"
                   onClick={() => this.postReward()}
-                  disabled={this.state.selectedReward == ""}
+                  disabled={this.state.selectedReward === ""}
                 >
                   Add Reward?
                 </Button>
