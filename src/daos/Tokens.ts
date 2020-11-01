@@ -56,3 +56,7 @@ export async function createToken(
 export async function deleteToken(token: Token) {
   return token.destroy();
 }
+
+export async function deleteAllTokens() {
+  return Token.destroy({ truncate: true });
+}

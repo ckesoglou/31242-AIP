@@ -1,6 +1,8 @@
 /// <reference types="jest" />
 
 import sequelize from "@daos/DBInstance";
+import { deleteAllTokens } from "@daos/Tokens";
+import { deleteAllUsers } from "@daos/Users";
 
 const request = require("supertest");
 const APP = "https://ioweyou.tech";
@@ -22,6 +24,11 @@ beforeAll(async () => {
       displayName: `${TESTUSER.displayName}`,
       password: `${TESTUSER.password}`,
     });
+});
+
+afterEach(async () => {
+  await deleteAllTokens();
+  await deleteAllUsers();
 });
 
 afterAll(async () => {

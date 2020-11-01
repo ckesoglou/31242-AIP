@@ -1,6 +1,7 @@
 /// <reference types="jest" />
 
 import sequelize from "@daos/DBInstance";
+import { deleteAllUsers } from "@daos/Users";
 
 const request = require("supertest");
 const APP = "https://ioweyou.tech";
@@ -13,6 +14,10 @@ const TESTUSER = {
 beforeAll(async () => {
   await sequelize.drop();
   await sequelize.sync();
+});
+
+afterEach(async () => {
+  await deleteAllUsers();
 });
 
 afterAll(async () => {
