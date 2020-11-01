@@ -4,24 +4,23 @@ import Iou from "./iou";
 
 describe("<Iou />", () => {
   it("should render correctly", () => {
-    //   const wrapper = shallow(
-    //     <Iou
-    //       request={{
-    //         id: "1",
-    //         author: { username: "James", display_name: "James" },
-    //         completed_by: { username: "Kevin", display_name: "Kevin" },
-    //         proof_of_completion: "Some ID",
-    //         rewards: [
-    //           { id: "1", display_name: "Hug" },
-    //           { id: "2", display_name: "Coffee" },
-    //         ],
-    //         details: "Clean the fridge",
-    //         created_time: "02/02/2020",
-    //         comletion_time: "02/02/2020",
-    //         is_completed: true,
-    //       }}
-    //     />
-    //   );
-    //   expect(wrapper).toMatchSnapshot();
+    const wrapper = shallow(
+      <Iou
+        iou={{
+          id: "1",
+          item: { id: "201", display_name: "Coffee" },
+          giver: { username: "James", display_name: "James Lee" },
+          receiver: { username: "Kevin", display_name: "Kevin Lueng" },
+          parent_request: null,
+          proof_of_debt: "Some ID",
+          proof_of_completion: "Some ID",
+          created_time: "02/02/2020",
+          claimed_time: "02/02/2020",
+          is_claimed: true,
+        }}
+        iouType={0}
+      />
+    );
+    expect(wrapper).toMatchSnapshot();
   });
 });

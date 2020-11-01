@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Request /> should render correctly 1`] = `
+<ClickAwayListener
+  onClickAway={[Function]}
+>
+  <div
+    className="popUpCircle"
+    onClick={[Function]}
+  >
+    Coffee
+  </div>
+</ClickAwayListener>
+`;

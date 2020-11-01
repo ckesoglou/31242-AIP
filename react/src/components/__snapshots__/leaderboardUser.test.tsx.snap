@@ -8,7 +8,7 @@ exports[`<LeaderboardUser /> should render correctly 1`] = `
   <WithStyles(ForwardRef(Grid))
     id="leaderboardItem"
     item={true}
-    xs={3}
+    xs={2}
   >
     <WithStyles(ForwardRef(Typography))>
       1
@@ -17,7 +17,7 @@ exports[`<LeaderboardUser /> should render correctly 1`] = `
   <WithStyles(ForwardRef(Grid))
     id="leaderboardItem"
     item={true}
-    xs={3}
+    xs={5}
   >
     <WithStyles(ForwardRef(Typography))>
       Kevin
@@ -26,7 +26,7 @@ exports[`<LeaderboardUser /> should render correctly 1`] = `
   <WithStyles(ForwardRef(Grid))
     id="leaderboardItem"
     item={true}
-    xs={3}
+    xs={2}
   >
     <WithStyles(ForwardRef(Typography))>
       69

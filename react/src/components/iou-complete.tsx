@@ -62,7 +62,7 @@ type IouCompleteState = {
 };
 
 class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
-  private tempRewardDisplayName: string; //Not in state because it'll cause everything to go into a render loop
+  private tempRewardDisplayName: string; // Not in state because it'll cause everything to go into a render loop
   constructor(props: IouCompleteProps) {
     super(props);
     this.tempRewardDisplayName = "";
@@ -369,9 +369,9 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           {this.props.iouType === 2 && (
             <DialogContent className="Content" id="completePopUpRewards">
               <DialogContentText variant="h6">{"Rewards"}</DialogContentText>
-              {this.props.rewards.forEach((reward) => {
-                this.renderPopUpRewards(reward);
-              })}
+              {this.props.rewards.map((reward) =>
+                this.renderPopUpRewards(reward)
+              )}
             </DialogContent>
           )}
           {this.props.iouType !== 0 && (

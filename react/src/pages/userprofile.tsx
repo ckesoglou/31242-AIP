@@ -39,7 +39,6 @@ import { AvatarWithMenu } from "../components/avatarWithMenu";
 import { UserContext } from "../components/user-context";
 import IOU from "../components/iou";
 import IouRequest from "../components/request";
-// import { optional } from "joi";
 
 type ItemObj = {
   id: string;
@@ -552,6 +551,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             id="completeProofImage"
           />
         </div>
+        // TODO: Need to discuss how submitted images should be formatted (Size, Encode Format)
       );
     } else {
       return (
@@ -562,7 +562,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
     }
   }
 
-  checkCreatButton(): boolean {
+  checkCreateButton(): boolean {
     if (this.state.tabIndex === 2) {
       return !this.state.newRequestFavour || !this.state.newRequestReward;
     } else if (this.state.tabIndex === 1) {
@@ -612,21 +612,6 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                 <AvatarWithMenu />
               </div>
             </Grid>
-            {/* <Grid item xs={4}>
-              <Paper elevation={3}>
-                <div className="section">
-                  <h2> </h2>
-                  <Typography component="h3" variant="h4">
-                    {"Placeholder Image"}
-                  </Typography>
-                  <Typography>
-                    {
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-                    }
-                  </Typography>
-                </div>
-              </Paper>
-            </Grid> */}
             <Grid item xs={12}>
               <Paper elevation={3} className="content">
                 <Tabs
@@ -902,7 +887,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                         });
                       }}
                       autoFocus
-                      disabled={this.checkCreatButton()}
+                      disabled={this.checkCreateButton()}
                     >
                       Create
                     </Button>

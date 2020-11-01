@@ -94,7 +94,7 @@ class IouFavourSingle extends React.Component<
           >
             <Typography id="favourAvatarText">
               {this.props.recieverDisplayName === ""
-                ? "?"
+                ? "No Reciever"
                 : this.props.recieverDisplayName}
             </Typography>
           </Popover>

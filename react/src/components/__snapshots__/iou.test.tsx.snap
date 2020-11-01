@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Iou /> should render correctly 1`] = `
+<WithStyles(ForwardRef(Grid))
+  container={true}
+  spacing={1}
+  xs={12}
+>
+  <WithStyles(ForwardRef(Grid))
+    id="requestItemContainer"
+    item={true}
+    xs={7}
+  >
+    <IouFavourSingle
+      giverDisplayName="James"
+      item={
+        Object {
+          "display_name": "Coffee",
+          "id": "201",
+        }
+      }
+      recieverDisplayName="Kevin"
+    />
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="requestItemContainer"
+    item={true}
+    xs={2}
+  >
+    <IouProof
+      imagePK="Some ID"
+      proof_of_debt={true}
+    />
+    <IouProof
+      imagePK="Some ID"
+      proof_of_debt={false}
+    />
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="requestProofContainer"
+    item={true}
+    xs={3}
+  >
+    <IouComplete
+      author="Kevin"
+      claimed_time="02/02/2020"
+      completed_by="James"
+      created_time="02/02/2020"
+      details=""
+      id="1"
+      iouType={0}
+      is_completed={true}
+      rewards={
+        Array [
+          Object {
+            "giver": Object {
+              "display_name": "James",
+              "username": "James",
+            },
+            "id": "",
+            "item": Object {
+              "display_name": "Coffee",
+              "id": "201",
+            },
+          },
+        ]
+      }
+    />
+  </WithStyles(ForwardRef(Grid))>
+</WithStyles(ForwardRef(Grid))>
+`;
