@@ -93,7 +93,6 @@ class Login extends React.Component<ILoginProps, LoginState> {
       .then((res) => {
         if (res.status === 200) {
           // Successful login 200
-          // TODO: Only for development?! Handle frontend auth
           this.setState({ successfulLogin: true }, () => {
             this.context.updateUser({
               name: this.state.username,
