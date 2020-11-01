@@ -35,6 +35,7 @@ type RequestProps = {
   iouType: number;
 };
 
+// Container component that contains requests in a horizontal grid element 
 class Request extends React.Component<RequestProps> {
   render() {
     return (
