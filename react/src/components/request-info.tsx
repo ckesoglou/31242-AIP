@@ -91,12 +91,12 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
 
   render() {
     return (
-      <div id="requestItem">
+      <div id="requestItem" onClick={() => this.setState({ infoModal: true })}>
         <InfoIcon
           color="primary"
           fontSize="large"
           className="cursorPointer"
-          onClick={() => this.setState({ infoModal: true })}
+          id="infoIcon"
         />
         <Dialog
           maxWidth="xs"
