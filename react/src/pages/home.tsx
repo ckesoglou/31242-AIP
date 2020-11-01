@@ -74,7 +74,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
     this.loadingRef = React.createRef();
   }
   state: HomeState = {
-    filterKey: "",
+    filterKey: "Keyword",
     filterValue: "",
     snack: false,
     snackMessage: "",
