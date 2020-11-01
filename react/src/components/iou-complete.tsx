@@ -88,7 +88,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     const formData = new FormData();
     formData.append("proof", this.state.submittedProof);
 
-    fetch(`${iouOweEndpoint}`.concat("/" + this.props.id + "/complete"), {
+    fetch(`${iouOweEndpoint}/${this.props.id}/complete`, {
       method: "PUT",
       body: formData,
     })
@@ -117,7 +117,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   }
 
   completeIouOwed() {
-    fetch(`${iouOwedEndpoint}`.concat("/" + this.props.id + "/complete"), {
+    fetch(`${iouOwedEndpoint}/${this.props.id}/complete`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -149,7 +149,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     const formData = new FormData();
     formData.append("proof", this.state.submittedProof);
 
-    fetch(`${requestEndpoint}`.concat("/" + this.props.id + "/complete"), {
+    fetch(`${requestEndpoint}/${this.props.id}/complete`, {
       method: "PUT",
       body: formData,
     })
@@ -223,6 +223,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           to={{
             pathname: "/login",
             state: {
+              // This is just a pop up message on login page to signify session expired
               unauthenticated:
                 "Your session has expired! Please sign in again :)",
             },

@@ -85,6 +85,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
 
   static contextType = UserContext;
 
+  // Toggle loading circle for when async fetching
   setLoading(value: boolean): void {
     this.loadingRef.current!.style.display = value ? "block" : "none";
   }
@@ -94,6 +95,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       this.setLoading(true);
       this.setState({ requests: [] });
       let url = new URL("/api/requests", document.baseURI);
+      // Check whether filtering by keyword or reward and apply to fetch query accordingly
       let params: any =
         this.state.filterKey === "Keyword"
           ? { search: this.state.filterValue }
@@ -134,6 +136,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
           this.setLoading(false);
         });
     } else {
+      // Else fetch all requests if no input for filter entered
       this.fetchRequests();
     }
   }
@@ -189,10 +192,12 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
   }
 
   componentDidMount() {
+    // Fetch requests and items on load
     this.fetchRequests();
     this.fetchItems();
   }
 
+  // Calculate the number of pages required to hold the requests on home with numberOfItemsPerPage per page
   setCountOfRequest(): number {
     if (this.state.requests.length % numberOfItemsPerPage !== 0) {
       return Math.ceil(this.state.requests.length / numberOfItemsPerPage);
