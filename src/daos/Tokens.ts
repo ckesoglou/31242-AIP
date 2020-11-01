@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
-import Token from "../entities/Token";
-import db from "./DBInstance";
+import Token from "@entities/Token";
+import db from "@daos/DBInstance";
 
 Token.init(
   {
@@ -29,7 +29,7 @@ Token.init(
   {
     sequelize: db,
     tableName: "tokens",
-    timestamps: false
+    timestamps: false,
   }
 );
 
@@ -55,4 +55,8 @@ export async function createToken(
 
 export async function deleteToken(token: Token) {
   return token.destroy();
+}
+
+export async function deleteAllTokens() {
+  return Token.destroy({ truncate: true });
 }
