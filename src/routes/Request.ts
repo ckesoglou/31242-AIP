@@ -83,7 +83,7 @@ router.get("/requests", async (req: Request, res: Response) => {
     });
   }
 
-  let requestQuery = value as IRequestsQuery;
+  const requestQuery = value as IRequestsQuery;
 
   let matchedRequests: IouRequest[] = [];
 
@@ -119,7 +119,7 @@ router.get("/requests", async (req: Request, res: Response) => {
     );
   }
 
-  let requestResponse: any[] = [];
+  const requestResponse: any[] = [];
 
   for (const request of matchedRequests) {
     requestResponse.push(await formatRequest(request));
@@ -158,7 +158,7 @@ router.post("/requests", async (req: Request, res: Response) => {
     });
   }
 
-  let requestBody = value as IRequestsPostBody;
+  const requestBody = value as IRequestsPostBody;
 
   const reward = await getItem(requestBody.item);
   if (!reward) {
@@ -209,7 +209,7 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
     });
   }
 
-  let requestParams = value as IRequestParams;
+  const requestParams = value as IRequestParams;
 
   const request = await getRequest(requestParams.requestID);
 
@@ -234,7 +234,7 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
     });
   }
 
-  let requestParams = value as IRequestParams;
+  const requestParams = value as IRequestParams;
 
   const user = await getAuthenticatedUser(req, res);
   if (!user) {
@@ -284,7 +284,7 @@ router.put(
       });
     }
 
-    let requestParams = value as IRequestParams;
+    const requestParams = value as IRequestParams;
 
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
@@ -373,7 +373,7 @@ router.get(
       });
     }
 
-    let requestParams = value as IRequestParams;
+    const requestParams = value as IRequestParams;
 
     const request = await getRequest(requestParams.requestID);
     if (!request) {
@@ -417,7 +417,7 @@ router.post(
       });
     }
 
-    let requestParams = value as IRequestParams;
+    const requestParams = value as IRequestParams;
 
     var { error, value } = RequestRewardsBody.validate(req.body);
 
@@ -427,7 +427,7 @@ router.post(
       });
     }
 
-    let requestBody = value as IRequestRewardsBody;
+    const requestBody = value as IRequestRewardsBody;
 
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
@@ -479,7 +479,7 @@ router.get(
       });
     }
 
-    let requestParams = value as IRequestRewardParams;
+    const requestParams = value as IRequestRewardParams;
 
     const iou = await getIou(requestParams.rewardID);
     if (iou == null || iou.parent_request != requestParams.requestID) {
@@ -511,7 +511,7 @@ router.delete(
       });
     }
 
-    let requestParams = value as IRequestRewardParams;
+    const requestParams = value as IRequestRewardParams;
 
     const user = await getAuthenticatedUser(req, res);
     if (!user) {

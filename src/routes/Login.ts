@@ -33,7 +33,7 @@ router.post("/login", async (req: Request, res: Response) => {
     });
   }
 
-  let requestBody = value as ILoginPOST;
+  const requestBody = value as ILoginPOST;
   const user = await getUser(requestBody.username);
 
   if (user) {

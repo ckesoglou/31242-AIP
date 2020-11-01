@@ -101,9 +101,9 @@ router.post(
       );
       const newIou = await Iou.findByPk(iou);
 
-      var party;
+      let party;
       if (newIou) {
-        var partyResults = await partyDetection(newIou);
+        const partyResults = await partyDetection(newIou);
         if (partyResults) {
           party = partyResults;
         }
@@ -203,9 +203,9 @@ router.post("/owe", async (req: Request, res: Response) => {
 
     const newIou = await Iou.findByPk(iou);
 
-    var party;
+    let party;
     if (newIou) {
-      var partyResults = await partyDetection(newIou);
+      const partyResults = await partyDetection(newIou);
       if (partyResults) {
         party = partyResults;
       }
