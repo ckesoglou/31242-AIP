@@ -28,6 +28,7 @@ type IouProps = {
   iouType: number;
 };
 
+// Mainly a container component
 class IOU extends React.Component<IouProps> {
   static contextType = UserContext;
 
@@ -38,6 +39,7 @@ class IOU extends React.Component<IouProps> {
       return this.props.iou.receiver?.username ?? "";
     }
   }
+
   getAuthor(): string {
     if (
       this.props.iou.proof_of_debt !== null &&

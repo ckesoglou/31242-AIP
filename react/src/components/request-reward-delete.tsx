@@ -58,6 +58,7 @@ class DeleteRequestReward extends React.Component<
   }
 
   render() {
+    // If unauthorised response (e.g. expired token), redirect to login
     if (this.state.unauthRep) {
       return (
         <Redirect

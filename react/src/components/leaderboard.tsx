@@ -64,12 +64,14 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
 
   static contextType = UserContext;
 
+  // Determine whether user is logged in and fetch personal score if needed
   fetchMeLeaderboardIfNeeded = () => {
     if (this.context.user.name !== "?") {
       this.fetchMeLeaderboard();
     }
   };
 
+  // Toggle loading circle for when async fetching
   setLoading(value: boolean): void {
     if (!this.loadingRef && !(this.loadingRef as any).current) {
       (this.loadingRef as any).current!.style.display = value
@@ -78,6 +80,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
     }
   }
 
+  // Calculate the number of pages required to hold the users on the leaderboard with numberOfItemsPerPage per page
   setCountOfLeaderboard(): number {
     if (this.state.users.length % numberOfItemsPerPage !== 0) {
       return Math.ceil(this.state.users.length / numberOfItemsPerPage);
@@ -86,6 +89,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
     }
   }
 
+  // Fetch all the users on the leaderboard
   fetchAllLeaderboard() {
     this.setLoading(true);
     fetch(`${leaderboardAllEndpoint}`, {
@@ -110,6 +114,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
       });
   }
 
+  // Fetch personal score and rank for leaderboard
   fetchMeLeaderboard() {
     fetch(`${leaderboardMeEndpoint}`, {
       method: "GET",
@@ -139,6 +144,7 @@ class Leaderboard extends React.Component<LeaderboardProps, LeaderboardState> {
   }
 
   render() {
+    // If unauthorised response (e.g. expired token), redirect to login
     if (this.state.unauthRep) {
       return (
         <Redirect
