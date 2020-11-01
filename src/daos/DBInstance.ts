@@ -12,10 +12,11 @@ import env from "../Environment";
 
 const sequelize =
   env.node_env === "test"
-    ? new Sequelize("sqlite::memory:") // Database runs in memoery on test environments
+    ? new Sequelize("sqlite::memory:", { logging: false }) // Database runs in memoery on test environments
     : new Sequelize(env.db_name, env.db_username, env.db_password, {
         host: env.db_host,
         dialect: "mssql",
+        logging: false,
       });
 
 export default sequelize;
