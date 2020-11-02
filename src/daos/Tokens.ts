@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
-import Token from "@entities/Token";
-import db from "@daos/DBInstance";
+import Token from "../models/Token";
+import db from "./DBInstance";
+import User from "../models/User";
 
 Token.init(
   {
@@ -32,6 +33,15 @@ Token.init(
     timestamps: false,
   }
 );
+
+const UsernameForeignKey = {
+  foreignKey: {
+    name: "username",
+    allowNull: false,
+  },
+};
+Token.belongsTo(User, UsernameForeignKey);
+User.hasMany(Token, UsernameForeignKey);
 
 export async function getToken(refresh_token: string) {
   return Token.findByPk(refresh_token);

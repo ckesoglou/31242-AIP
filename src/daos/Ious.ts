@@ -1,12 +1,12 @@
 import { DataTypes } from "sequelize";
-import Iou, { IIouAttributes } from "../entities/Iou";
+import Iou, { IIouAttributes } from "../models/Iou";
 import db from "./DBInstance";
 import { v4 as uuid } from "uuid";
 import { getBasicUser, getUser } from "./Users";
 import { getItem } from "./Items";
-import User from "@entities/User";
-import { values } from "sequelize/types/lib/operators";
-import e from "express";
+import User from "../models/User";
+import Item from "../models/Item";
+import Offer from "../models/Offer";
 
 interface vertexTrack {
   [index: string]: boolean | string;
@@ -113,11 +113,11 @@ Iou.init(
       allowNull: false,
     },
     giver: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(16),
       allowNull: false,
     },
     receiver: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(16),
       allowNull: true,
     },
     parent_request: {
@@ -148,6 +148,43 @@ Iou.init(
   },
   { sequelize: db, tableName: "ious", timestamps: false }
 );
+
+const ItemForeignKey = {
+  foreignKey: {
+    name: "item",
+    allowNull: false,
+  },
+};
+Iou.belongsTo(Item, ItemForeignKey);
+Item.hasMany(Iou, ItemForeignKey);
+
+const GiverForeignKey = {
+  foreignKey: {
+    name: "giver",
+    allowNull: false,
+  },
+};
+Iou.belongsTo(User, GiverForeignKey);
+User.hasMany(Iou, GiverForeignKey);
+
+const ReceiverForeignKey = {
+  foreignKey: {
+    name: "receiver",
+    allowNull: true,
+  },
+};
+Iou.belongsTo(User, ReceiverForeignKey);
+User.hasMany(Iou, ReceiverForeignKey);
+
+const ParentRequestForeignKey = {
+  foreignKey: {
+    name: "parent_request",
+    allowNull: true,
+  },
+};
+Iou.belongsTo(Offer, ParentRequestForeignKey);
+Offer.hasMany(Iou, ParentRequestForeignKey);
+
 export interface IIouFilter {
   giver?: string;
   receiver?: string;
@@ -189,27 +226,6 @@ export async function getFormattedIous(
     iou.receiver = (await getBasicUser(iou.receiver as string)) ?? undefined;
   }
   return ious;
-}
-
-export async function createIouOwed(
-  giver: string,
-  receiver: string,
-  item: string,
-  proof: string
-) {
-  const ious = await Iou.create({
-    id: uuid(),
-    item: item,
-    giver: giver,
-    receiver: receiver,
-    parent_request: undefined,
-    proof_of_debt: proof,
-    proof_of_completion: undefined,
-    created_time: new Date(),
-    claimed_time: undefined,
-    is_claimed: false,
-  });
-  return ious.id;
 }
 
 export async function iouExists(iouID: string) {
@@ -274,27 +290,6 @@ export async function completeIouOwed(iouID: string, receiver: string) {
 
 export async function createIou(iou: IIouAttributes) {
   return Iou.create(iou);
-}
-
-export async function createIouOwe(
-  giver: string,
-  receiver: string,
-  item: string
-) {
-  const ious = await Iou.create({
-    id: uuid(),
-    item: item,
-    giver: giver,
-    receiver: receiver,
-    parent_request: undefined,
-    proof_of_debt: undefined,
-    proof_of_completion: undefined,
-    created_time: new Date(),
-    claimed_time: undefined,
-    is_claimed: false,
-  });
-
-  return ious.id;
 }
 
 export async function completeIouOwe(
