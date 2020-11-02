@@ -27,7 +27,7 @@ import upload from "../shared/ImageHandler";
 const router = Router();
 
 async function formatRequest(request: Offer) {
-  const ious = await getIous({ parent_request: request.id }, 0, 9999);
+  const ious = await getIous({ parent_offer: request.id }, 0, 9999);
   // Combine reward objects with IOU response
   const rewards = [];
   for (const iou of ious) {
@@ -98,7 +98,7 @@ router.get("/requests", async (req: Request, res: Response) => {
       requestQuery.limit
     );
     for (const iou of matchedIous) {
-      const parentRequest = await getOffer(iou.parent_request);
+      const parentRequest = await getOffer(iou.parent_offer);
       if (parentRequest) {
         matchedRequests.push(parentRequest);
       }
@@ -173,7 +173,7 @@ router.post("/requests", async (req: Request, res: Response) => {
     id: uuid(),
     item: reward.id,
     giver: user.username,
-    parent_request: request.id,
+    parent_offer: request.id,
     created_time: new Date(),
     is_claimed: false,
   });
@@ -249,7 +249,7 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
     });
   }
   // Remove rewards/IOUs associated with request
-  const rewards = await getIous({ parent_request: request.id });
+  const rewards = await getIous({ parent_offer: request.id });
   for (const iou of rewards) {
     await deleteIou(iou);
   }
@@ -311,9 +311,9 @@ router.put(
         })
         .end();
     }
-    const rewards = await getIous({ parent_request: request.id });
+    const rewards = await getIous({ parent_offer: request.id });
     const rewardsYouAreOffering = await getIous({
-      parent_request: request.id,
+      parent_offer: request.id,
       giver: user.username,
     });
     if (rewardsYouAreOffering.length == rewards.length) {
@@ -373,7 +373,7 @@ router.get(
       return res.status(NOT_FOUND).end();
     }
     // Get rewards associated with request
-    const ious = await getIous({ parent_request: request.id });
+    const ious = await getIous({ parent_offer: request.id });
     const rewards = [];
     for (const iou of ious) {
       rewards.push({
@@ -438,7 +438,7 @@ router.post(
       id: uuid(),
       item: requestBody.item,
       giver: user.username,
-      parent_request: request.id,
+      parent_offer: request.id,
       created_time: new Date(),
       is_claimed: false,
     });
@@ -474,7 +474,7 @@ router.get(
     let requestParams = value as IRequestRewardParams;
     // Get reward/IOU
     const iou = await getIou(requestParams.rewardID);
-    if (iou == null || iou.parent_request != requestParams.requestID) {
+    if (iou == null || iou.parent_offer != requestParams.requestID) {
       return res.status(NOT_FOUND).end();
     }
     // Format response
@@ -514,7 +514,7 @@ router.delete(
     // Get reward and request object
     const iou = await getIou(requestParams.rewardID);
     const request = await getOffer(requestParams.requestID);
-    if (!iou || !request || iou.parent_request != requestParams.requestID) {
+    if (!iou || !request || iou.parent_offer != requestParams.requestID) {
       return res.status(NOT_FOUND).end();
     }
     // Check if user is authorised to remove reward
@@ -528,7 +528,7 @@ router.delete(
     // Delete reward/IOU
     await deleteIou(iou);
 
-    const remainingRewards = await getIous({ parent_request: request.id });
+    const remainingRewards = await getIous({ parent_offer: request.id });
     if (remainingRewards.length === 0) {
       await deleteOffer(request);
     }
