@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import env from "../Environment";
+import { createLeaderboardViewSQL, dropLeaderboardViewSQL } from "./Scores";
 
 // Override timezone formatting so javascript date objects can be converted to a mssql format
 // Resolves https://github.com/sequelize/sequelize/issues/7930
@@ -12,11 +13,18 @@ import env from "../Environment";
 
 const sequelize =
   env.node_env === "test"
-    ? new Sequelize("sqlite::memory:", { logging: false }) // Database runs in memoery on test environments
+    ? new Sequelize("sqlite::memory:", { logging: true }) // Database runs in memory on test environments
     : new Sequelize(env.db_name, env.db_username, env.db_password, {
         host: env.db_host,
         dialect: "mssql",
         logging: false,
       });
+
+sequelize.sync().then(async () => {
+  await sequelize.query(dropLeaderboardViewSQL);
+  await sequelize.query(createLeaderboardViewSQL);
+
+  console.log("Database tables and view created.");
+});
 
 export default sequelize;
