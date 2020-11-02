@@ -59,7 +59,7 @@ CREATE TABLE ious (
 	PRIMARY KEY (id)
 );
 
-CREATE VIEW leaderboard AS (
+CREATE VIEW leaderboard AS
 	SELECT
 		users.username,
 		COALESCE(SUM(activityLog.points), 0) AS score,
@@ -107,4 +107,3 @@ CREATE VIEW leaderboard AS (
 
 	GROUP BY
 		users.username
-)
