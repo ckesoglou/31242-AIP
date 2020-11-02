@@ -1,7 +1,8 @@
 import sequelize from "@daos/DBInstance";
 
 export const request = require("supertest");
-export const APP = "https://ioweyou.tech";
+import app from "../Server";
+
 export const TESTUSER = {
   username: "testunittestuser",
   displayName: "testunittestuser",
@@ -63,14 +64,14 @@ export const ITEMID = "814120d4-5d3a-464b-8040-a9fecc107e54"; // Coffee
 
 // Create test users in database
 export async function createTestUsers() {
-  await request(APP)
+  await request(app)
     .post("/api/signup")
     .send({
       username: `${TESTUSER.username}`,
       displayName: `${TESTUSER.displayName}`,
       password: `${TESTUSER.password}`,
     });
-  await request(APP)
+  await request(app)
     .post("/api/signup")
     .send({
       username: `${TESTUSER2.username}`,
@@ -81,24 +82,22 @@ export async function createTestUsers() {
 
 // Get cookie for authorised user
 export async function getAuthenticatedUserCookie() {
-  const resLogin = await request(APP)
+  const resLogin = await request(app)
     .post("/api/login")
     .send({
       username: `${TESTUSER.username}`,
       password: `${TESTUSER.password}`,
     });
   if (resLogin.body.errors) {
-    const resSignUp = await request(APP)
+    const resSignUp = await request(app)
       .post("/api/signup")
       .send({
         username: `${TESTUSER.username}`,
         displayName: `${TESTUSER.displayName}`,
         password: `${TESTUSER.password}`,
       });
-    console.log(resSignUp.headers["set-cookie"]);
     return resSignUp.headers["set-cookie"];
   } else {
-    console.log(resLogin.headers["set-cookie"]);
     return resLogin.headers["set-cookie"];
   }
 }
