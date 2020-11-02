@@ -1,4 +1,7 @@
 import { Sequelize } from "sequelize";
+import { initialiseIouRelationships } from "../models/Iou";
+import { initialiseOfferRelationships } from "../models/Offer";
+import { initialiseTokenRelationships } from "../models/Token";
 import env from "../Environment";
 import { createLeaderboardViewSQL, dropLeaderboardViewSQL } from "./Scores";
 
@@ -12,8 +15,8 @@ import { createLeaderboardViewSQL, dropLeaderboardViewSQL } from "./Scores";
 };
 
 const sequelize =
-  env.node_env === "test"
-    ? new Sequelize("sqlite::memory:", { logging: true }) // Database runs in memory on test environments
+  env.node_env === "test" || env.persistent === "false"
+    ? new Sequelize("sqlite::memory:", { logging: false }) // Database runs in memory on test environments
     : new Sequelize(env.db_name, env.db_username, env.db_password, {
         host: env.db_host,
         dialect: "mssql",
@@ -21,10 +24,13 @@ const sequelize =
       });
 
 sequelize.sync().then(async () => {
+  await initialiseTokenRelationships();
+  await initialiseIouRelationships();
+  await initialiseOfferRelationships();
   await sequelize.query(dropLeaderboardViewSQL);
   await sequelize.query(createLeaderboardViewSQL);
 
-  console.log("Database tables and view created.");
+  console.log("Database tables and view created");
 });
 
 export default sequelize;
