@@ -17,7 +17,8 @@ beforeAll(async () => {
   await sequelize.sync();
 
   // Create leaderboard view (not supported by Sequelize)
-  const [response, metadata] = await sequelize.query(`CREATE VIEW leaderboard AS
+  await sequelize.query(`DROP VIEW IF EXISTS leaderboard`);
+  await sequelize.query(`CREATE VIEW leaderboard AS
 	SELECT
 		users.username,
 		COALESCE(SUM(activityLog.points), 0) AS score,
