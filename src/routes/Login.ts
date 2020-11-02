@@ -1,12 +1,9 @@
 import { Request, Response, Router } from "express";
 import { BAD_REQUEST, OK, UNAUTHORIZED } from "http-status-codes";
 import { getUser } from "../daos/Users";
-import Joi, { string, ObjectSchema } from "joi";
+import Joi, { ObjectSchema } from "joi";
 import bcrypt from "bcrypt";
-import {
-  generateNewAuthenticationTokens,
-  getAuthenticatedUser,
-} from "@shared/Authenticate";
+import { generateNewAuthenticationTokens } from "../shared/Authenticate";
 
 const router = Router();
 

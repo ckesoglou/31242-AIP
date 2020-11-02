@@ -1,8 +1,8 @@
 import app from "../Server";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
-import { deleteAllUsers, createUser } from "@daos/Users";
-import { getAuthenticatedUserCookie } from "@shared/test.config";
+import sequelize from "../daos/DBInstance";
+import { deleteAllUsers, createUser } from "../daos/Users";
+import { getAuthenticatedUserCookie } from "../shared/test.config";
 
 const TESTUSER = {
   username: "testunittestuser",
