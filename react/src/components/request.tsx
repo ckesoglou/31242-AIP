@@ -33,9 +33,10 @@ type RequestProps = {
   request: RequestObj;
   potentialRewards: Item[];
   iouType: number;
+  refreshTable: () => void;
 };
 
-// Container component that contains requests in a horizontal grid element 
+// Container component that contains requests in a horizontal grid element
 class Request extends React.Component<RequestProps> {
   render() {
     return (
@@ -46,6 +47,7 @@ class Request extends React.Component<RequestProps> {
             items={this.props.request.rewards}
             rewards={this.props.potentialRewards}
             is_completed={this.props.request.is_completed}
+            refreshTable={this.props.refreshTable}
           />
         </Grid>
         <Grid item xs={3} id="requestItemContainer">
@@ -68,10 +70,14 @@ class Request extends React.Component<RequestProps> {
             rewards={this.props.request.rewards}
             details={this.props.request.details}
             iouType={this.props.iouType}
+            refreshTable={this.props.refreshTable}
           />
         </Grid>
         <Grid item xs={1} id="requestItemContainer">
-          <RequestInfo request={this.props.request} />
+          <RequestInfo
+            request={this.props.request}
+            refreshTable={this.props.refreshTable}
+          />
         </Grid>
       </Grid>
     );
