@@ -74,7 +74,7 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
   // For request rewards that show when on click
   renderPopUpRewards(reward: RewardItem) {
     return (
-      <div id="test">
+      <div id="infoRewardContainer">
         <IouFavour
           key={reward.item.id}
           giverDisplayName={reward.giver.display_name}

@@ -25,6 +25,9 @@ describe("<RequestRewards />", () => {
           { id: "3", display_name: "Food" },
         ]}
         is_completed={false}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -52,6 +55,9 @@ describe("<RequestRewards />", () => {
           { id: "3", display_name: "Food" },
         ]}
         is_completed={true}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     expect(wrapper.find("#requestRewardPopover")).toHaveLength(0);
@@ -79,6 +85,9 @@ describe("<RequestRewards />", () => {
           { id: "3", display_name: "Food" },
         ]}
         is_completed={false}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     expect(wrapper.find("#requestRewardPopover")).toHaveLength(1);
@@ -107,6 +116,9 @@ describe("<RequestRewards />", () => {
           { id: "3", display_name: "Food" },
         ]}
         is_completed={false}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
 
@@ -139,6 +151,9 @@ describe("<RequestRewards />", () => {
           { id: "3", display_name: "Food" },
         ]}
         is_completed={false}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
 
@@ -164,6 +179,9 @@ describe("<RequestRewards />", () => {
           { id: "3", display_name: "Food" },
         ]}
         is_completed={false}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
 
@@ -193,6 +211,9 @@ describe("<RequestRewards />", () => {
           { id: "3", display_name: "Food" },
         ]}
         is_completed={false}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
 
