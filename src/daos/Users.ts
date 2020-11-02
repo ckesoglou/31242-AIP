@@ -1,5 +1,5 @@
 import { DataTypes, Op } from "sequelize";
-import User from "../models/User";
+import User, { IUserAttributes } from "../models/User";
 import db from "./DBInstance";
 
 /*
@@ -89,16 +89,8 @@ export async function getUsers(
   });
 }
 
-export async function createUser(
-  username: string,
-  display_name: string,
-  password_hash: string
-) {
-  return User.create({
-    username: username,
-    display_name: display_name,
-    password_hash: password_hash,
-  });
+export async function createUser(user: IUserAttributes) {
+  return User.create(user);
 }
 
 export async function deleteAllUsers() {

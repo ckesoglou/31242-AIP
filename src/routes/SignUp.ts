@@ -60,11 +60,11 @@ router.post("/", async (req: Request, res: Response) => {
   // Hash password
   const passHash: string = await bcrypt.hash(requestBody.password, saltRounds);
   // Create new user
-  const user = await createUser(
-    requestBody.username,
-    requestBody.displayName,
-    passHash
-  );
+  const user = await createUser({
+    username: requestBody.username,
+    display_name: requestBody.displayName,
+    password_hash: passHash,
+  });
 
   await generateNewAuthenticationTokens(
     user,

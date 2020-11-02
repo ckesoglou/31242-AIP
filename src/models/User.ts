@@ -2,7 +2,7 @@ import { Model } from "sequelize";
 
 // Class definition
 
-interface IUserAttributes {
+export interface IUserAttributes {
   username: string;
   display_name: string;
   password_hash: string;
