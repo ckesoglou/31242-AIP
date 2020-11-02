@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
 import { BAD_REQUEST, OK } from "http-status-codes";
-import sequelize from "@daos/DBInstance";
 import Joi, { ObjectSchema } from "joi";
 import { getScores, getUserScores } from "@daos/Scores";
 import { getAuthenticatedUser } from "@shared/Authenticate";
@@ -18,7 +17,12 @@ const LeaderboardQuery: ObjectSchema<ILeaderboardQuery> = Joi.object({
   limit: Joi.number().integer().min(1).max(100).default(25),
 });
 
+/**
+ * GET: /api/leaderboard
+ */
+
 router.get("/", async (req: Request, res: Response) => {
+  // Validate request
   const { error, value } = LeaderboardQuery.validate(req.query);
   if (error) {
     return res.status(BAD_REQUEST).json({
@@ -26,7 +30,7 @@ router.get("/", async (req: Request, res: Response) => {
     });
   }
   const leaderboardQuery = value as ILeaderboardQuery;
-
+  // Get leaderboard values
   const scores = await getScores(
     leaderboardQuery.start,
     leaderboardQuery.limit
@@ -35,9 +39,15 @@ router.get("/", async (req: Request, res: Response) => {
   return res.status(OK).json(scores).end();
 });
 
+/**
+ * GET: /api/leaderboard/me
+ */
+
 router.get("/me", async (req: Request, res: Response) => {
+  // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (user) {
+    // Get user-specific score
     const scores = await getUserScores(user);
     if (scores) {
       return res.status(OK).json(scores).end();

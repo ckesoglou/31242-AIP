@@ -17,8 +17,8 @@ const UsersQuery: ObjectSchema<IUsersFilter> = Joi.object({
 });
 
 router.get("/users", async (req: Request, res: Response) => {
+  // Validate request
   const { error, value } = UsersQuery.validate(req.query);
-
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
@@ -36,6 +36,7 @@ router.get("/users", async (req: Request, res: Response) => {
  */
 
 router.get("/user", async (req: Request, res: Response) => {
+  // Get username and display_name of authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (user) {
     return res.status(OK).json({
