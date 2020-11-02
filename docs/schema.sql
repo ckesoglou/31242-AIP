@@ -1,3 +1,8 @@
+/*
+ * NOTE: This document is for illustrative purposes only
+ * The application should create these tables (if missing) automatically without intervention
+ */
+
 CREATE TABLE users (
 	username varchar(16) not null,
 	display_name varchar(50) not null,
@@ -21,17 +26,11 @@ CREATE TABLE items (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE images (
-	id uniqueidentifier not null,
-	blob varbinary(max) not null CONSTRAINT Max_Image_Size CHECK (DATALENGTH(blob) <= 2097152),
-	PRIMARY KEY (id)
-);
-
 CREATE TABLE offers (
 	id uniqueidentifier not null,
 	author varchar(16) not null,
 	completed_by varchar(16),
-	proof_of_completion varchar(200),
+	proof_of_completion varchar(255),
 	details varchar(50) not null,
 	created_time datetime not null,
 	completion_time datetime,
@@ -47,8 +46,8 @@ CREATE TABLE ious (
 	giver varchar(16) not null,
 	receiver varchar(16),
 	parent_offer uniqueidentifier,
-	proof_of_debt varchar(200),
-	proof_of_completion varchar(200),
+	proof_of_debt varchar(255),
+	proof_of_completion varchar(255),
 	created_time datetime not null,
 	claimed_time datetime,
 	is_claimed bit not null default 0,
