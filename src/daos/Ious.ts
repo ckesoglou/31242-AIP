@@ -1,11 +1,12 @@
 import { DataTypes } from "sequelize";
 import Iou, { IIouAttributes } from "../models/Iou";
 import db from "./DBInstance";
-import { getBasicUser } from "./Users";
+import { v4 as uuid } from "uuid";
+import { getBasicUser, getUser } from "./Users";
 import { getItem } from "./Items";
 import User from "../models/User";
-import Item from "../models/Item";
-import Offer from "../models/Offer";
+import { values } from "sequelize/types/lib/operators";
+import e from "express";
 
 interface vertexTrack {
   [index: string]: boolean | string;
@@ -78,6 +79,7 @@ class IouGraph {
       }
     }
     recStack[userNode.name] = false;
+    this.usersInParty.pop();
     return false;
   }
 

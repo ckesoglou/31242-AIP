@@ -98,3 +98,7 @@ export async function updateOffer(
 export async function deleteOffer(request: Offer) {
   return request.destroy();
 }
+
+export async function deleteAllRequests() {
+  return IouRequest.destroy({ truncate: true });
+}

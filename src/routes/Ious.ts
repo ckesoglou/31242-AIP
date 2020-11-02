@@ -80,7 +80,6 @@ router.post(
   "/owed",
   upload.single("proof"),
   async (req: Request, res: Response) => {
-    console.log(req.file);
     // Validate request format
     const { error, value } = IouOwedPOST.validate(req.body);
     if (error) {
@@ -232,7 +231,6 @@ router.put(
   "/owe/:iouID/complete",
   upload.single("proof"),
   async (req: Request, res: Response) => {
-    console.log(req.file);
     // Get authenticated user
     const user = await getAuthenticatedUser(req, res);
     // if logged in
