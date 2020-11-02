@@ -11,31 +11,22 @@ import { getBasicUser } from "../daos/Users";
 import Joi, { ObjectSchema } from "joi";
 import { v4 as uuid } from "uuid";
 import {
-  createRequest,
-  deleteRequest,
-  getRequest,
-  getRequests,
-  updateRequest,
-} from "@daos/IouRequests";
-import {
-  createIou,
-  createIouOwe,
-  deleteIou,
-  getIou,
-  getIous,
-  iouExists,
-  updateIou,
-} from "@daos/Ious";
+  createOffer,
+  deleteOffer,
+  getOffer,
+  getOffers,
+  updateOffer,
+} from "@daos/Offers";
+import { createIou, deleteIou, getIou, getIous, updateIou } from "@daos/Ious";
 import { Op } from "sequelize";
-import IouRequest from "@entities/IouRequest";
+import Offer from "../models/Offer";
 import { getAuthenticatedUser } from "@shared/Authenticate";
 import { getItem } from "@daos/Items";
 import upload from "../shared/ImageHandler";
-import Iou from "@entities/Iou";
 
 const router = Router();
 
-async function formatRequest(request: IouRequest) {
+async function formatRequest(request: Offer) {
   const ious = await getIous({ parent_request: request.id }, 0, 9999);
   const rewards = [];
   for (const iou of ious) {
@@ -85,16 +76,16 @@ router.get("/requests", async (req: Request, res: Response) => {
 
   let requestQuery = value as IRequestsQuery;
 
-  let matchedRequests: IouRequest[] = [];
+  let matchedRequests: Offer[] = [];
 
   if (requestQuery.author) {
-    matchedRequests = await getRequests(
+    matchedRequests = await getOffers(
       { author: requestQuery.author },
       requestQuery.start,
       requestQuery.limit
     );
   } else if (requestQuery.search) {
-    matchedRequests = await getRequests(
+    matchedRequests = await getOffers(
       { details: { [Op.substring]: requestQuery.search } },
       requestQuery.start,
       requestQuery.limit
@@ -106,13 +97,13 @@ router.get("/requests", async (req: Request, res: Response) => {
       requestQuery.limit
     );
     for (const iou of matchedIous) {
-      const parentRequest = await getRequest(iou.parent_request);
+      const parentRequest = await getOffer(iou.parent_request);
       if (parentRequest) {
         matchedRequests.push(parentRequest);
       }
     }
   } else {
-    matchedRequests = await getRequests(
+    matchedRequests = await getOffers(
       {},
       requestQuery.start,
       requestQuery.limit
@@ -169,7 +160,7 @@ router.post("/requests", async (req: Request, res: Response) => {
       })
       .end();
   }
-  const request = await createRequest({
+  const request = await createOffer({
     id: uuid(),
     author: user.username,
     details: requestBody.details,
@@ -211,7 +202,7 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
 
   let requestParams = value as IRequestParams;
 
-  const request = await getRequest(requestParams.requestID);
+  const request = await getOffer(requestParams.requestID);
 
   return request
     ? res
@@ -243,7 +234,7 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
     });
   }
 
-  const request = await getRequest(requestParams.requestID);
+  const request = await getOffer(requestParams.requestID);
   if (!request) {
     return res.status(NOT_FOUND).end();
   }
@@ -261,7 +252,7 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
     await deleteIou(iou);
   }
 
-  await deleteRequest(request);
+  await deleteOffer(request);
 
   return res.status(OK).end();
 });
@@ -293,7 +284,7 @@ router.put(
       });
     }
 
-    const request = await getRequest(requestParams.requestID);
+    const request = await getOffer(requestParams.requestID);
     if (!request) {
       return res.status(NOT_FOUND).end();
     }
@@ -346,7 +337,7 @@ router.put(
       }
     }
 
-    await updateRequest(request, {
+    await updateOffer(request, {
       ...(request as any).dataValues,
       completed_by: user.username,
       is_completed: true,
@@ -375,7 +366,7 @@ router.get(
 
     let requestParams = value as IRequestParams;
 
-    const request = await getRequest(requestParams.requestID);
+    const request = await getOffer(requestParams.requestID);
     if (!request) {
       return res.status(NOT_FOUND).end();
     }
@@ -436,7 +427,7 @@ router.post(
       });
     }
 
-    const request = await getRequest(requestParams.requestID);
+    const request = await getOffer(requestParams.requestID);
     const item = await getItem(requestBody.item);
     if (!request || !item) {
       return res.status(NOT_FOUND).end();
@@ -521,7 +512,7 @@ router.delete(
     }
 
     const iou = await getIou(requestParams.rewardID);
-    const request = await getRequest(requestParams.requestID);
+    const request = await getOffer(requestParams.requestID);
     if (!iou || !request || iou.parent_request != requestParams.requestID) {
       return res.status(NOT_FOUND).end();
     }
@@ -538,7 +529,7 @@ router.delete(
 
     const remainingRewards = await getIous({ parent_request: request.id });
     if (remainingRewards.length === 0) {
-      await deleteRequest(request);
+      await deleteOffer(request);
     }
 
     return res.status(OK).end();

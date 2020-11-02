@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import Joi, { ObjectSchema } from "joi";
 
 import { createUser, getUser } from "@daos/Users";
-import User from "@entities/User.ts";
 import { generateNewAuthenticationTokens } from "@shared/Authenticate";
 
 const router = Router();

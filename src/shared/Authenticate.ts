@@ -3,8 +3,8 @@ import { v4 as uuid } from "uuid";
 import jwt from "jsonwebtoken";
 import { createToken, deleteToken, getToken } from "@daos/Tokens";
 import { getUser } from "@daos/Users";
-import { ITokenCookie } from "@entities/Token";
-import User from "@entities/User";
+import { ITokenCookie } from "../models/Token";
+import User from "../models/User";
 import env from "../Environment";
 
 export async function getAuthenticatedUser(req: Request, res: Response) {
