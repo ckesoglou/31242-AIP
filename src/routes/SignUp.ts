@@ -3,8 +3,8 @@ import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from "http-status-codes";
 import bcrypt from "bcrypt";
 import Joi, { ObjectSchema } from "joi";
 
-import { createUser, getUser } from "@daos/Users";
-import { generateNewAuthenticationTokens } from "@shared/Authenticate";
+import { createUser, getUser } from "../daos/Users";
+import { generateNewAuthenticationTokens } from "../shared/Authenticate";
 
 const router = Router();
 //Salt Rounds determines how many times the password is hashed.

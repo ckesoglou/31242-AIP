@@ -1,7 +1,8 @@
 import app from "../Server";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
-import { getAuthenticatedUserCookie } from "@shared/test.config";
+import sequelize from "../daos/DBInstance";
+import { getAuthenticatedUserCookie } from "../shared/test.config";
+import { createItem } from "../daos/Items";
 
 const TESTUSER2 = {
   username: "testunittestusr2",
@@ -17,6 +18,9 @@ let IouOweId = "";
 beforeAll(async () => {
   await sequelize.drop();
   await sequelize.sync();
+
+  // Create item in database
+  await createItem({ id: ITEMID, display_name: "Coffee" });
 });
 
 beforeEach(async () => {
@@ -73,6 +77,7 @@ describe("Ious endpoint", () => {
       const res = await request(app).get("/api/iou/owed").set("Cookie", cookie);
       expect(res.status).toEqual(200);
       expect(res.body.length).toEqual(1);
+      console.log();
       expect(res.body[0].id).toEqual(IouOwedId);
     });
 

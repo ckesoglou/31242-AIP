@@ -1,8 +1,8 @@
 import app from "../Server";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
-import { deleteAllTokens } from "@daos/Tokens";
-import { deleteAllUsers } from "@daos/Users";
+import sequelize from "../daos/DBInstance";
+import { deleteAllTokens } from "../daos/Tokens";
+import { deleteAllUsers } from "../daos/Users";
 
 const TESTUSER = {
   username: "testunittestuser",

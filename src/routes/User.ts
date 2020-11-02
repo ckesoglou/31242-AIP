@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { BAD_REQUEST, OK } from "http-status-codes";
-import { getAuthenticatedUser } from "@shared/Authenticate";
+import { getAuthenticatedUser } from "../shared/Authenticate";
 import { getUsers, IUsersFilter } from "../daos/Users";
 import Joi, { ObjectSchema } from "joi";
 
