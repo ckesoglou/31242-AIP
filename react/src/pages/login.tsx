@@ -65,20 +65,19 @@ class Login extends React.Component<ILoginProps, LoginState> {
 
   static contextType = UserContext;
 
-  // Toggle loading circle for when async fetching
-  startLoading(): void {
-    this.signInRef.current!.innerText = "";
-    this.loadingRef.current!.style.display = "block";
-  }
-
-  stopLoading(): void {
-    this.signInRef.current!.innerText = "Sign In";
-    this.loadingRef.current!.style.display = "none";
+  setLoading(loading: boolean): void {
+    if (loading) {
+      this.signInRef.current!.innerText = "";
+      this.loadingRef.current!.style.display = "block";
+    } else {
+      this.signInRef.current!.innerText = "Sign In";
+      this.loadingRef.current!.style.display = "none";
+    }
   }
 
   // Post info server-side to create new user
   handleLogin(): void {
-    this.startLoading();
+    this.setLoading(true);
 
     fetch(`${loginEndpoint}`, {
       method: "POST",
@@ -100,7 +99,7 @@ class Login extends React.Component<ILoginProps, LoginState> {
           });
         } else {
           // Unsuccessful login (400 or 401)
-          this.stopLoading();
+          this.setLoading(false);
           res
             .json()
             .then((body) => this.setState({ snackMessage: body.errors }));

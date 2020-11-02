@@ -484,7 +484,7 @@ exports[`<Leaderboard /> should render correctly 1`] = `
                                 <WithStyles(ForwardRef(Grid))
                                   id="leaderboardItem"
                                   item={true}
-                                  xs={3}
+                                  xs={2}
                                 >
                                   <ForwardRef(Grid)
                                     classes={
@@ -596,10 +596,10 @@ exports[`<Leaderboard /> should render correctly 1`] = `
                                     }
                                     id="leaderboardItem"
                                     item={true}
-                                    xs={3}
+                                    xs={2}
                                   >
                                     <div
-                                      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+                                      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
                                       id="leaderboardItem"
                                     >
                                       <WithStyles(ForwardRef(Typography))
@@ -655,7 +655,7 @@ exports[`<Leaderboard /> should render correctly 1`] = `
                                 <WithStyles(ForwardRef(Grid))
                                   id="leaderboardItem"
                                   item={true}
-                                  xs={3}
+                                  xs={5}
                                 >
                                   <ForwardRef(Grid)
                                     classes={
@@ -767,10 +767,10 @@ exports[`<Leaderboard /> should render correctly 1`] = `
                                     }
                                     id="leaderboardItem"
                                     item={true}
-                                    xs={3}
+                                    xs={5}
                                   >
                                     <div
-                                      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+                                      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-5"
                                       id="leaderboardItem"
                                     >
                                       <WithStyles(ForwardRef(Typography))
@@ -826,7 +826,7 @@ exports[`<Leaderboard /> should render correctly 1`] = `
                                 <WithStyles(ForwardRef(Grid))
                                   id="leaderboardItem"
                                   item={true}
-                                  xs={3}
+                                  xs={2}
                                 >
                                   <ForwardRef(Grid)
                                     classes={
@@ -938,10 +938,10 @@ exports[`<Leaderboard /> should render correctly 1`] = `
                                     }
                                     id="leaderboardItem"
                                     item={true}
-                                    xs={3}
+                                    xs={2}
                                   >
                                     <div
-                                      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3"
+                                      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2"
                                       id="leaderboardItem"
                                     >
                                       <WithStyles(ForwardRef(Typography))

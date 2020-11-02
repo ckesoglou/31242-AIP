@@ -1,3 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Home /> should render correctly 1`] = `<Home />`;
+exports[`<Home /> should render correctly 1`] = `
+<MemoryRouter
+  initialEntries={
+    Array [
+      "/home",
+    ]
+  }
+>
+  <Route
+    component={[Function]}
+    path="/home"
+  />
+</MemoryRouter>
+`;

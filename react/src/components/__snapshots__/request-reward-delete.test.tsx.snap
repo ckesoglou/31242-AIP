@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Iou /> should render correctly 1`] = `
+<div
+  id="requestItem"
+  onClick={[Function]}
+>
+  <DeleteIcon
+    id="deleteIcon"
+  />
+  <WithStyles(ForwardRef(Snackbar))
+    anchorOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "bottom",
+      }
+    }
+    autoHideDuration={5000}
+    message=""
+    onClose={[Function]}
+    open={false}
+  />
+</div>
+`;

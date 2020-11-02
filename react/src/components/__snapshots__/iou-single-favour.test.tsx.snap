@@ -11,7 +11,7 @@ exports[`<IouFavour /> should render correctly 1`] = `
       id="favourAvatar"
       onClick={[Function]}
     >
-      J
+      JL
     </WithStyles(ForwardRef(Avatar))>
     <WithStyles(ForwardRef(Popover))
       anchorEl={null}
@@ -34,7 +34,7 @@ exports[`<IouFavour /> should render correctly 1`] = `
       <WithStyles(ForwardRef(Typography))
         id="favourAvatarText"
       >
-        James
+        James Long Lee
       </WithStyles(ForwardRef(Typography))>
     </WithStyles(ForwardRef(Popover))>
   </div>
@@ -62,7 +62,7 @@ exports[`<IouFavour /> should render correctly 1`] = `
       id="favourAvatar"
       onClick={[Function]}
     >
-      K
+      KL
     </WithStyles(ForwardRef(Avatar))>
     <WithStyles(ForwardRef(Popover))
       anchorEl={null}
@@ -85,7 +85,7 @@ exports[`<IouFavour /> should render correctly 1`] = `
       <WithStyles(ForwardRef(Typography))
         id="favourAvatarText"
       >
-        Kevin
+        Kevin Pog Lueng
       </WithStyles(ForwardRef(Typography))>
     </WithStyles(ForwardRef(Popover))>
   </div>

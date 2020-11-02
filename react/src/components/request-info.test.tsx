@@ -1,27 +1,81 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 import RequestInfo from "./request-info";
+import { UserContext } from "../components/user-context";
 
 describe("<RequestInfo />", () => {
   it("should render correctly", () => {
-    // const wrapper = shallow(
-    //   <RequestInfo
-    //     request={{
-    //       id: "1",
-    //       author: { username: "James", display_name: "James" },
-    //       completed_by: { username: "Kevin", display_name: "Kevin" },
-    //       proof_of_completion: "Some ID",
-    //       rewards: [
-    //         { id: "1", display_name: "Hug" },
-    //         { id: "2", display_name: "Coffee" },
-    //       ],
-    //       details: "Clean the fridge",
-    //       created_time: "02/02/2020",
-    //       comletion_time: "02/02/2020",
-    //       is_completed: true,
-    //     }}
-    //   />
-    // );
-    // expect(wrapper).toMatchSnapshot();
+    const wrapper = shallow(
+      <UserContext.Provider
+        value={{
+          user: { name: "Kevin Leung" },
+          updateUser: () => {},
+        }}
+      >
+        <RequestInfo
+          request={{
+            id: "1",
+            author: { username: "James", display_name: "James Lee" },
+            completed_by: { username: "Kevin", display_name: "Kevin Leung" },
+            proof_of_completion: "Some ID",
+            rewards: [
+              {
+                id: "1",
+                giver: { username: "James", display_name: "James Lee" },
+                item: { id: "202", display_name: "Hug" },
+              },
+              {
+                id: "2",
+                giver: { username: "Sean", display_name: "Sean Tran" },
+                item: { id: "201", display_name: "Coffee" },
+              },
+            ],
+            details: "Clean the fridge",
+            created_time: "02/02/2020",
+            completion_time: "02/02/2020",
+            is_completed: true,
+          }}
+        />
+      </UserContext.Provider>
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it("should render the modal if the icon is clicked", () => {
+    const wrapper = mount(
+      <UserContext.Provider
+        value={{
+          user: { name: "James" },
+          updateUser: () => {},
+        }}
+      >
+        <RequestInfo
+          request={{
+            id: "1",
+            author: { username: "James", display_name: "James Lee" },
+            completed_by: { username: "Kevin", display_name: "Kevin Leung" },
+            proof_of_completion: "Some ID",
+            rewards: [
+              {
+                id: "1",
+                giver: { username: "James", display_name: "James Lee" },
+                item: { id: "202", display_name: "Hug" },
+              },
+              {
+                id: "2",
+                giver: { username: "Sean", display_name: "Sean Tran" },
+                item: { id: "201", display_name: "Coffee" },
+              },
+            ],
+            details: "Clean the fridge",
+            created_time: "02/02/2020",
+            completion_time: "02/02/2020",
+            is_completed: true,
+          }}
+        />
+      </UserContext.Provider>
+    );
+    wrapper.find("div#requestItem").simulate("click");
+    expect(wrapper.state("infoModal")).toBe(true);
   });
 });

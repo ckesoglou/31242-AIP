@@ -5,10 +5,11 @@ exports[`<IouComplete /> should render correctly 1`] = `
   id="completeRequestItem"
 >
   <div
-    className="cursorPointer"
+    className=""
     onClick={[Function]}
   >
     <WithStyles(ForwardRef(Checkbox))
+      checked={true}
       checkedIcon={
         <UNDEFINED
           color="primary"
@@ -24,6 +25,50 @@ exports[`<IouComplete /> should render correctly 1`] = `
         />
       }
     />
+    <div
+      id="IouTaskComplete"
+    >
+      <div>
+        <WithStyles(ForwardRef(Typography))
+          id="taskCompleter"
+        >
+          Kevin
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          id="taskTimeStamp"
+        >
+          01/06/2020
+        </WithStyles(ForwardRef(Typography))>
+      </div>
+      <WithStyles(ForwardRef(Popover))
+        anchorEl={null}
+        anchorOrigin={
+          Object {
+            "horizontal": "center",
+            "vertical": "bottom",
+          }
+        }
+        id="popUpMargin"
+        onClose={[Function]}
+        open={false}
+        transformOrigin={
+          Object {
+            "horizontal": "center",
+            "vertical": "top",
+          }
+        }
+      >
+        <WithStyles(ForwardRef(Typography))
+          id="taskDetailPopUp"
+        >
+          Full Display Name
+          <WithStyles(ForwardRef(Divider))
+            id="taskPopUpDivider"
+          />
+          Kevin
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(Popover))>
+    </div>
   </div>
   <WithStyles(ForwardRef(Dialog))
     TransitionComponent={
@@ -91,7 +136,9 @@ exports[`<IouComplete /> should render correctly 1`] = `
                 align="center"
                 className="infoTableCell"
                 id="infoTableContent"
-              />
+              >
+                James
+              </WithStyles(ForwardRef(TableCell))>
             </WithStyles(ForwardRef(TableRow))>
             <WithStyles(ForwardRef(TableRow))>
               <WithStyles(ForwardRef(TableCell))
@@ -104,7 +151,9 @@ exports[`<IouComplete /> should render correctly 1`] = `
               <WithStyles(ForwardRef(TableCell))
                 align="center"
                 id="infoTableContent"
-              />
+              >
+                01/01/2020
+              </WithStyles(ForwardRef(TableCell))>
             </WithStyles(ForwardRef(TableRow))>
             <WithStyles(ForwardRef(TableRow))>
               <WithStyles(ForwardRef(TableCell))
@@ -116,62 +165,32 @@ exports[`<IouComplete /> should render correctly 1`] = `
               <WithStyles(ForwardRef(TableCell))
                 align="center"
                 id="infoTableContent"
-              />
+              >
+                Kevin
+              </WithStyles(ForwardRef(TableCell))>
             </WithStyles(ForwardRef(TableRow))>
           </WithStyles(ForwardRef(TableBody))>
         </WithStyles(ForwardRef(Table))>
       </WithStyles(ForwardRef(TableContainer))>
     </WithStyles(ForwardRef(DialogContent))>
-    <WithStyles(ForwardRef(DialogContent))
-      className="content"
-    >
-      <WithStyles(ForwardRef(DialogContentText))
-        variant="h6"
-      >
-        Upload proof?
-      </WithStyles(ForwardRef(DialogContentText))>
-      <input
-        accept="image/*"
-        id="inputProof"
-        onChange={[Function]}
-        type="file"
-      />
-      <label
-        htmlFor="inputProof"
-      >
-        <WithStyles(ForwardRef(Button))
-          color="primary"
-          component="span"
-          variant="contained"
-        >
-          UPLOAD
-        </WithStyles(ForwardRef(Button))>
-      </label>
-      <WithStyles(ForwardRef(DialogContentText))
-        id="completeProofFileInfo"
-        variant="body2"
-      >
-        Upload an image (JPEG/PNG) before pressing the 'Submit' button
-      </WithStyles(ForwardRef(DialogContentText))>
-    </WithStyles(ForwardRef(DialogContent))>
     <WithStyles(ForwardRef(Divider)) />
     <WithStyles(ForwardRef(DialogActions))>
-      <WithStyles(ForwardRef(Button))
-        autoFocus={true}
-        color="primary"
-        disabled={true}
-        id="createRequest"
-        onClick={[Function]}
-        size="large"
-      >
-        Submit & Complete
-      </WithStyles(ForwardRef(Button))>
       <WithStyles(ForwardRef(Button))
         color="primary"
         onClick={[Function]}
         size="large"
       >
         Nevermind
+      </WithStyles(ForwardRef(Button))>
+      <WithStyles(ForwardRef(Button))
+        autoFocus={true}
+        color="primary"
+        disabled={false}
+        id="createRequest"
+        onClick={[Function]}
+        size="large"
+      >
+        Submit & Complete
       </WithStyles(ForwardRef(Button))>
     </WithStyles(ForwardRef(DialogActions))>
   </WithStyles(ForwardRef(Dialog))>

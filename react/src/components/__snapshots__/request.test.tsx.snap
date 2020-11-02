@@ -1,115 +1,169 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Request /> should render correctly 1`] = `
-<div>
+<WithStyles(ForwardRef(Grid))
+  container={true}
+  spacing={4}
+  xs={12}
+>
   <WithStyles(ForwardRef(Grid))
-    container={true}
-    spacing={4}
-    xs={12}
+    id="requestItemContainer"
+    item={true}
+    xs={4}
   >
-    <WithStyles(ForwardRef(Grid))
-      id="requestItemContainer"
-      item={true}
-      xs={4}
-    >
-      <RequestRewards
-        is_completed={true}
-        items={
-          Array [
-            Object {
-              "display_name": "Hug",
-              "id": "1",
-            },
-            Object {
-              "display_name": "Coffee",
-              "id": "2",
-            },
-          ]
-        }
-        requestID="1"
-      />
-    </WithStyles(ForwardRef(Grid))>
-    <WithStyles(ForwardRef(Grid))
-      id="requestItemContainer"
-      item={true}
-      xs={3}
-    >
-      <IouTask
-        details="Clean the fridge"
-      />
-    </WithStyles(ForwardRef(Grid))>
-    <WithStyles(ForwardRef(Grid))
-      id="requestItemContainer"
-      item={true}
-      xs={1}
-    >
-      <IouProof
-        imagePK="Some ID"
-        proof_of_debt={false}
-      />
-    </WithStyles(ForwardRef(Grid))>
-    <WithStyles(ForwardRef(Grid))
-      id="requestProofContainer"
-      item={true}
-      xs={3}
-    >
-      <IouComplete
-        author="James"
-        completed_by="Kevin"
-        created_time="02/02/2020"
-        details="Clean the fridge"
-        id="1"
-        is_completed={true}
-        rewards={
-          Array [
-            Object {
-              "display_name": "Hug",
-              "id": "1",
-            },
-            Object {
-              "display_name": "Coffee",
-              "id": "2",
-            },
-          ]
-        }
-      />
-    </WithStyles(ForwardRef(Grid))>
-    <WithStyles(ForwardRef(Grid))
-      id="requestItemContainer"
-      item={true}
-      xs={1}
-    >
-      <RequestInfo
-        request={
+    <RequestRewards
+      is_completed={true}
+      items={
+        Array [
           Object {
-            "author": Object {
-              "display_name": "James",
+            "giver": Object {
+              "display_name": "James Lee",
               "username": "James",
             },
-            "comletion_time": "02/02/2020",
-            "completed_by": Object {
-              "display_name": "Kevin",
-              "username": "Kevin",
-            },
-            "created_time": "02/02/2020",
-            "details": "Clean the fridge",
             "id": "1",
-            "is_completed": true,
-            "proof_of_completion": "Some ID",
-            "rewards": Array [
-              Object {
-                "display_name": "Hug",
-                "id": "1",
-              },
-              Object {
-                "display_name": "Coffee",
-                "id": "2",
-              },
-            ],
-          }
-        }
-      />
-    </WithStyles(ForwardRef(Grid))>
+            "item": Object {
+              "display_name": "Hug",
+              "id": "202",
+            },
+          },
+          Object {
+            "giver": Object {
+              "display_name": "Sean Tran",
+              "username": "Sean",
+            },
+            "id": "2",
+            "item": Object {
+              "display_name": "Coffee",
+              "id": "201",
+            },
+          },
+        ]
+      }
+      requestID="1"
+      rewards={
+        Array [
+          Object {
+            "display_name": "Coffee",
+            "id": "201",
+          },
+          Object {
+            "display_name": "Hug",
+            "id": "202",
+          },
+        ]
+      }
+    />
   </WithStyles(ForwardRef(Grid))>
-</div>
+  <WithStyles(ForwardRef(Grid))
+    id="requestItemContainer"
+    item={true}
+    xs={3}
+  >
+    <IouTask
+      details="Clean the fridge"
+    />
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="requestItemContainer"
+    item={true}
+    xs={1}
+  >
+    <IouProof
+      imagePK="Some ID"
+      proof_of_debt={false}
+    />
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="requestProofContainer"
+    item={true}
+    xs={3}
+  >
+    <IouComplete
+      author="James"
+      claimed_time="02/02/2020"
+      completed_by="Kevin"
+      created_time="01/01/2020"
+      details="Clean the fridge"
+      id="1"
+      iouType={2}
+      is_completed={true}
+      rewards={
+        Array [
+          Object {
+            "giver": Object {
+              "display_name": "James Lee",
+              "username": "James",
+            },
+            "id": "1",
+            "item": Object {
+              "display_name": "Hug",
+              "id": "202",
+            },
+          },
+          Object {
+            "giver": Object {
+              "display_name": "Sean Tran",
+              "username": "Sean",
+            },
+            "id": "2",
+            "item": Object {
+              "display_name": "Coffee",
+              "id": "201",
+            },
+          },
+        ]
+      }
+    />
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    id="requestItemContainer"
+    item={true}
+    xs={1}
+  >
+    <RequestInfo
+      request={
+        Object {
+          "author": Object {
+            "display_name": "James Lee",
+            "username": "James",
+          },
+          "completed_by": Object {
+            "display_name": "Kevin Leung",
+            "username": "Kevin",
+          },
+          "completion_time": "02/02/2020",
+          "created_time": "01/01/2020",
+          "details": "Clean the fridge",
+          "id": "1",
+          "is_completed": true,
+          "proof_of_completion": "Some ID",
+          "rewards": Array [
+            Object {
+              "giver": Object {
+                "display_name": "James Lee",
+                "username": "James",
+              },
+              "id": "1",
+              "item": Object {
+                "display_name": "Hug",
+                "id": "202",
+              },
+            },
+            Object {
+              "giver": Object {
+                "display_name": "Sean Tran",
+                "username": "Sean",
+              },
+              "id": "2",
+              "item": Object {
+                "display_name": "Coffee",
+                "id": "201",
+              },
+            },
+          ],
+        }
+      }
+    />
+  </WithStyles(ForwardRef(Grid))>
+</WithStyles(ForwardRef(Grid))>
 `;
