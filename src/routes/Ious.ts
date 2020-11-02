@@ -1,45 +1,25 @@
 import { Request, Response, Router } from "express";
 import { BAD_REQUEST, OK } from "http-status-codes";
 import Joi, { ObjectSchema } from "joi";
-import { getAuthenticatedUser } from "@shared/Authenticate";
+import { getAuthenticatedUser } from "../shared/Authenticate";
 import upload from "../shared/ImageHandler";
-import {
-  completeIouOwed,
-  completeIouOwe,
-  iouExists,
-  getFormattedIous,
-  partyDetection,
-  createIou,
-} from "@daos/Ious";
+import { createIou, getIou, getIous, updateIou } from "../daos/Ious";
 import { v4 as uuid } from "uuid";
+import { partyDetection } from "../shared/PartyDetection";
+import { getItem } from "../daos/Items";
+import { getBasicUser } from "../daos/Users";
+import { ConsoleTransportOptions } from "winston/lib/winston/transports";
 
 // Init shared
 const router = Router();
 
-interface IIouOwedPOST {
-  username: string;
-  item: string;
-  proof: string;
-}
-interface IIouOwePOST {
-  username: string;
-  item: string;
-}
-const IouOwedPOST: ObjectSchema<IIouOwedPOST> = Joi.object({
-  username: Joi.string(),
-  item: Joi.string(),
-}).options({ presence: "required" });
-const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
-  username: Joi.string(),
-  item: Joi.string(),
-}).options({ presence: "required" });
 interface IIousQuery {
   start: number;
   limit: number;
 }
 const IousQuery: ObjectSchema<IIousQuery> = Joi.object({
-  start: Joi.number().integer().min(0).default(0),
-  limit: Joi.number().integer().min(1).max(100).default(25),
+  start: Joi.number().integer().min(0),
+  limit: Joi.number().integer().min(1).max(100),
 });
 
 /**
@@ -54,17 +34,32 @@ router.get("/owed", async (req: Request, res: Response) => {
       errors: [error.message],
     });
   }
+
   const iousQuery = value as IIousQuery;
+
   // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (user) {
     // Get IOUs
-    const iou = await getFormattedIous(
+    const ious = await getIous(
       { receiver: user.username },
       iousQuery.start,
       iousQuery.limit
     );
-    return res.status(OK).json(iou);
+
+    // Format IOUs according to API spec (item, giver, receiver as objects)
+    let formattedIous = [];
+
+    for (const iou of ious) {
+      formattedIous.push({
+        ...(iou as any).dataValues,
+        item: await getItem(iou.item),
+        giver: await getBasicUser(iou.giver),
+        receiver: await getBasicUser(user.username),
+      });
+    }
+
+    return res.status(OK).json(formattedIous);
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
@@ -75,6 +70,16 @@ router.get("/owed", async (req: Request, res: Response) => {
 /**
  * POST: /api/iou/owed (Create IOU you are owed)
  */
+
+interface IIouOwedPOST {
+  username: string;
+  item: string;
+  proof: string;
+}
+const IouOwedPOST: ObjectSchema<IIouOwedPOST> = Joi.object({
+  username: Joi.string(),
+  item: Joi.string(),
+}).options({ presence: "required" });
 
 router.post(
   "/owed",
@@ -87,8 +92,10 @@ router.post(
         error: [error.message],
       });
     }
+
     // Get authenticated user
     const user = await getAuthenticatedUser(req, res);
+
     if (user) {
       // Create new IOU
       const requestBody = value as IIouOwedPOST;
@@ -109,7 +116,7 @@ router.post(
         party = partyResults;
       }
 
-      return res.status(OK).json({ id: iou, usersInParty: party });
+      return res.status(OK).json({ id: iou.id, usersInParty: party });
     } else {
       return res.status(401).json({
         errors: ["Not authenticated"],
@@ -125,21 +132,21 @@ router.post(
 router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
   // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
+
   // If logged in
   if (user) {
     const iouID = req.params.iouID;
-    // If IOU exists
-    if (await iouExists(iouID)) {
-      // If user is receiver of IOU
-      if ((await completeIouOwed(iouID, user.username)) == true) {
-        return res.status(OK).end();
-      } else {
-        return res.status(403).json({
-          errors: [
-            "Not authorised to complete this request (you are not the owner of it)",
-          ],
-        });
-      }
+
+    const iou = await getIou(iouID);
+
+    // If IOU exists, you are the receiver and it is not yet claimed
+    if (iou && iou.receiver == user.username && !iou.is_claimed) {
+      await updateIou(iou, {
+        ...iou,
+        claimed_time: new Date(),
+        is_claimed: true,
+      });
+      return res.status(OK).end();
     } else {
       return res.status(404).json({
         errors: ["Not found (did you mean to use the /owe endpoint)"],
@@ -156,25 +163,51 @@ router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
  * GET: /api/iou/owe (Get IOUs you owe)
  */
 
+interface IIouOwePOST {
+  username: string;
+  item: string;
+}
+const IouOwePOST: ObjectSchema<IIouOwePOST> = Joi.object({
+  username: Joi.string(),
+  item: Joi.string(),
+}).options({ presence: "required" });
+
 router.get("/owe", async (req: Request, res: Response) => {
   // Validate request format
   const { error, value } = IousQuery.validate(req.query);
+
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
     });
   }
+
   const iousQuery = value as IIousQuery;
+
   // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
+
   if (user) {
     // Get IOUs
-    const iou = await getFormattedIous(
+    const ious = await getIous(
       { giver: user.username },
       iousQuery.start,
       iousQuery.limit
     );
-    return res.status(OK).json(iou);
+
+    // Format IOUs according to API spec (item, giver, receiver as objects)
+    let formattedIous = [];
+
+    for (const iou of ious) {
+      formattedIous.push({
+        ...(iou as any).dataValues,
+        item: await getItem(iou.item),
+        giver: await getBasicUser(iou.giver),
+        receiver: iou.receiver ? await getBasicUser(iou.receiver) : undefined,
+      });
+    }
+
+    return res.status(OK).json(formattedIous);
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
@@ -215,7 +248,7 @@ router.post("/owe", async (req: Request, res: Response) => {
       party = partyResults;
     }
 
-    return res.status(OK).json({ id: iou, usersInParty: party });
+    return res.status(OK).json({ id: iou.id, usersInParty: party });
   } else {
     return res.status(401).json({
       errors: ["Not authenticated"],
@@ -233,24 +266,23 @@ router.put(
   async (req: Request, res: Response) => {
     // Get authenticated user
     const user = await getAuthenticatedUser(req, res);
+
     // if logged in
     if (user) {
       const iouID = req.params.iouID;
-      // if IOU exists
-      if (await iouExists(iouID)) {
-        // if users is receiver of IOU
-        if (
-          (await completeIouOwe(iouID, user.username, req.file.filename)) ==
-          true
-        ) {
-          return res.status(OK).end();
-        } else {
-          return res.status(403).json({
-            errors: [
-              "Not authorised to complete this request (you are not the owner of it)",
-            ],
-          });
-        }
+
+      const iou = await getIou(iouID);
+
+      // if IOU exists, you are the giver and it is not already complete
+      if (iou && iou.giver == user.username && !iou.is_claimed) {
+        await updateIou(iou, {
+          ...iou,
+          claimed_time: new Date(),
+          is_claimed: true,
+          proof_of_completion: req.file.filename,
+        });
+
+        return res.status(OK).end();
       } else {
         return res.status(404).json({
           errors: ["Not found (did you mean to use the /owed endpoint)"],
