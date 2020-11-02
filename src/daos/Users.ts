@@ -48,9 +48,9 @@ export interface IUsersFilter {
 
 export async function getUsers(
   filter: IUsersFilter,
-  includePasswordHash: boolean = false
+  includePasswordHash = false
 ) {
-  let attributes = ["username", "display_name"];
+  const attributes = ["username", "display_name"];
   if (includePasswordHash) {
     attributes.push("password_hash");
   }

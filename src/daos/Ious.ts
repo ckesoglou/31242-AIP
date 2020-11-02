@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
 import Iou, { IIouAttributes } from "../models/Iou";
 import db from "./DBInstance";
-import { v4 as uuid } from "uuid";
-import { getBasicUser, getUser } from "./Users";
+import { getBasicUser } from "./Users";
 import { getItem } from "./Items";
 import User from "../models/User";
 import Item from "../models/Item";

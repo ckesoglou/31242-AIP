@@ -10,7 +10,7 @@ export interface IIouAttributes {
   proof_of_completion?: string;
   created_time: Date;
   claimed_time?: Date;
-  is_claimed: Boolean;
+  is_claimed: boolean;
 }
 
 class Iou extends Model<IIouAttributes> implements IIouAttributes {
@@ -23,7 +23,7 @@ class Iou extends Model<IIouAttributes> implements IIouAttributes {
   public proof_of_completion: string | undefined;
   public created_time!: Date;
   public claimed_time: Date | undefined;
-  public is_claimed!: Boolean;
+  public is_claimed!: boolean;
 }
 
 export default Iou;

@@ -75,7 +75,7 @@ router.get("/requests", async (req: Request, res: Response) => {
     });
   }
 
-  let requestQuery = value as IRequestsQuery;
+  const requestQuery = value as IRequestsQuery;
 
   let matchedRequests: Offer[] = [];
 
@@ -111,7 +111,7 @@ router.get("/requests", async (req: Request, res: Response) => {
     );
   }
 
-  let requestResponse: any[] = [];
+  const requestResponse: any[] = [];
 
   for (const request of matchedRequests) {
     requestResponse.push(await formatRequest(request));
@@ -150,7 +150,7 @@ router.post("/requests", async (req: Request, res: Response) => {
     });
   }
 
-  let requestBody = value as IRequestsPostBody;
+  const requestBody = value as IRequestsPostBody;
 
   const reward = await getItem(requestBody.item);
   if (!reward) {
@@ -202,7 +202,7 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
     });
   }
 
-  let requestParams = value as IRequestParams;
+  const requestParams = value as IRequestParams;
 
   const request = await getOffer(requestParams.requestID);
 
@@ -227,8 +227,8 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
     });
   }
 
-  let requestParams = value as IRequestParams;
-  // Get authenticated user
+  const requestParams = value as IRequestParams;
+
   const user = await getAuthenticatedUser(req, res);
   if (!user) {
     return res.status(UNAUTHORIZED).json({
@@ -277,8 +277,8 @@ router.put(
       });
     }
 
-    let requestParams = value as IRequestParams;
-    // Get authenticated user
+    const requestParams = value as IRequestParams;
+
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
       return res.status(UNAUTHORIZED).json({
@@ -410,7 +410,7 @@ router.post(
       });
     }
 
-    let requestParams = value as IRequestParams;
+    const requestParams = value as IRequestParams;
 
     var { error, value } = RequestRewardsBody.validate(req.body);
     if (error) {
@@ -419,8 +419,8 @@ router.post(
       });
     }
 
-    let requestBody = value as IRequestRewardsBody;
-    // Get authenticated user
+    const requestBody = value as IRequestRewardsBody;
+
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
       return res.status(UNAUTHORIZED).json({
@@ -471,8 +471,8 @@ router.get(
       });
     }
 
-    let requestParams = value as IRequestRewardParams;
-    // Get reward/IOU
+    const requestParams = value as IRequestRewardParams;
+
     const iou = await getIou(requestParams.rewardID);
     if (iou == null || iou.parent_offer != requestParams.requestID) {
       return res.status(NOT_FOUND).end();
@@ -503,8 +503,8 @@ router.delete(
       });
     }
 
-    let requestParams = value as IRequestRewardParams;
-    // Get authenticated user
+    const requestParams = value as IRequestRewardParams;
+
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
       return res.status(UNAUTHORIZED).json({

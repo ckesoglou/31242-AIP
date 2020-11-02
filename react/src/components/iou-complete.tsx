@@ -50,6 +50,7 @@ type IouCompleteProps = {
   rewards: RewardItem[];
   details: string;
   iouType: number;
+  refreshTable: () => void;
 };
 
 type IouCompleteState = {
@@ -99,6 +100,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
             snackMessage: "IOU Proof Submitted & IOU Completed!",
           });
           this.setState({ completeSnack: true });
+          this.props.refreshTable();
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
@@ -128,6 +130,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           // Successful login 200
           this.setState({ snackMessage: "IOU Completed!" });
           this.setState({ completeSnack: true });
+          this.props.refreshTable();
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
@@ -158,6 +161,7 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
           // Successful login 200
           this.setState({ snackMessage: "Request Completed!" });
           this.setState({ completeSnack: true });
+          this.props.refreshTable();
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {

@@ -21,6 +21,7 @@ type RequestRewardsProps = {
   items: RewardItem[];
   rewards: Item[];
   is_completed: boolean;
+  refreshTable: () => void;
 };
 
 type RewardItem = {
@@ -84,6 +85,7 @@ class RequestRewards extends React.Component<
           this.setState({
             snackMessage: "Reward successfully added to the request!",
           });
+          this.props.refreshTable();
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
@@ -181,7 +183,9 @@ class RequestRewards extends React.Component<
             id="requestRewardPopover"
             open={Boolean(this.state.anchorEl)}
             anchorEl={this.state.anchorEl}
-            onClose={() => this.setState({ anchorEl: null })}
+            onClose={() =>
+              this.setState({ anchorEl: null, selectedReward: "" })
+            }
             anchorOrigin={{
               vertical: "bottom",
               horizontal: "center",

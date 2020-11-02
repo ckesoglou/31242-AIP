@@ -2,7 +2,7 @@ import User from "../models/User";
 import { QueryTypes } from "sequelize/types";
 import sequelize from "./DBInstance";
 
-export async function getScores(start: number = 0, limit: number = 25) {
+export async function getScores(start = 0, limit = 25) {
   const scores = await sequelize.query("SELECT * FROM leaderboard");
 
   const trimmedScores = scores[0].slice(start, start + 9999); // TODO replace 9999 limit

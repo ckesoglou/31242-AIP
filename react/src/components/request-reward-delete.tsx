@@ -8,6 +8,8 @@ import { Snackbar } from "@material-ui/core";
 type DeleteRewardProps = {
   requestID: string;
   rewardID: string;
+  refreshTable: () => void;
+  closeModal: () => void;
 };
 
 type deleteRewardState = {
@@ -40,6 +42,8 @@ class DeleteRequestReward extends React.Component<
             snackMessage: "Reward succesfully deleted from request! :O",
             snack: true,
           });
+          this.props.closeModal();
+          this.props.refreshTable();
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
