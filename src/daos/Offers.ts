@@ -75,11 +75,7 @@ export interface IOffersFilter {
   };
 }
 
-export async function getOffers(
-  filter: IOffersFilter,
-  start: number = 0,
-  limit: number = 25
-) {
+export async function getOffers(filter: IOffersFilter, start = 0, limit = 25) {
   return Offer.findAll({
     where: filter,
     order: [["created_time", "DESC"]],

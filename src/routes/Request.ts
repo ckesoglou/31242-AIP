@@ -366,7 +366,7 @@ router.get(
       });
     }
 
-    let requestParams = value as IRequestParams;
+    const requestParams = value as IRequestParams;
 
     const request = await getOffer(requestParams.requestID);
     if (!request) {

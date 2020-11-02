@@ -104,8 +104,8 @@ router.post(
       });
 
       // Party detection
-      var party;
-      var partyResults = await partyDetection(iou);
+      let party;
+      const partyResults = await partyDetection(iou);
       if (partyResults) {
         party = partyResults;
       }
@@ -210,8 +210,8 @@ router.post("/owe", async (req: Request, res: Response) => {
     });
 
     // Party detection
-    var party;
-    var partyResults = await partyDetection(iou);
+    let party;
+    const partyResults = await partyDetection(iou);
     if (partyResults) {
       party = partyResults;
     }
