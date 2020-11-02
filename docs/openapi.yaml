@@ -107,12 +107,12 @@ paths:
           name: start
           schema:
             type: string
-          description: Starting row of the returned array. Default 0.
+          description: Starting row of the returned array.
         - in: query
           name: limit
           schema:
             type: string
-          description: Maximum number of returned users. Default 25. Maximum 100.
+          description: Maximum number of returned users.
         - in: query
           name: search
           schema:
@@ -210,12 +210,12 @@ paths:
           name: start
           schema:
             type: string
-          description: Starting row of the returned array. Default 0.
+          description: Starting row of the returned array.
         - in: query
           name: limit
           schema:
             type: string
-          description: Maximum number of returned items. Default 25. Maximum 100.
+          description: Maximum number of returned items.
       responses:
         "200":
           description: Returned list of favours owed to user.
@@ -353,12 +353,12 @@ paths:
           name: start
           schema:
             type: string
-          description: Starting row of the returned array. Default 0.
+          description: Starting row of the returned array.
         - in: query
           name: limit
           schema:
             type: string
-          description: Maximum number of returned items. Default 25. Maximum 100.
+          description: Maximum number of returned items.
       responses:
         "200":
           description: Returned list of favours a user owes.
@@ -503,12 +503,12 @@ paths:
           name: start
           schema:
             type: string
-          description: Starting row of the returned array. Default 0.
+          description: Starting row of the returned array.
         - in: query
           name: limit
           schema:
             type: string
-          description: Maximum number of returned items. Default 25. Maximum 100.
+          description: Maximum number of returned items.
         - in: query
           name: author
           schema:
@@ -803,12 +803,12 @@ paths:
           name: start
           schema:
             type: string
-          description: Starting row of the returned array. Default 0.
+          description: Starting row of the returned array.
         - in: query
           name: limit
           schema:
             type: string
-          description: Maximum number of returned items. Default 25. Maximum 100.
+          description: Maximum number of returned items.
       responses:
         "200":
           description: Leaderboard retrieved and returned successfully.
