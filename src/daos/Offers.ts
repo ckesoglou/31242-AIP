@@ -1,9 +1,9 @@
-import Iou from "@entities/Iou";
-import { DataTypes, Op, Sequelize } from "sequelize";
-import IouRequest, { IIouRequestAttributes } from "../entities/IouRequest";
+import User from "../models/User";
+import { DataTypes, Op } from "sequelize";
+import Offer, { IOfferAttributes } from "../models/Offer";
 import db from "./DBInstance";
 
-IouRequest.init(
+Offer.init(
   {
     id: {
       type: DataTypes.UUIDV4,
@@ -41,28 +41,46 @@ IouRequest.init(
   },
   {
     sequelize: db,
-    tableName: "requests",
+    tableName: "offers",
     timestamps: false,
   }
 );
 
-export async function getRequest(id: string) {
-  return IouRequest.findByPk(id);
+const AuthorForeignKey = {
+  foreignKey: {
+    name: "author",
+    allowNull: false,
+  },
+};
+Offer.belongsTo(User, AuthorForeignKey);
+User.hasMany(Offer, AuthorForeignKey);
+
+const CompletedByForeignKey = {
+  foreignKey: {
+    name: "completed_by",
+    allowNull: true,
+  },
+};
+Offer.belongsTo(User, CompletedByForeignKey);
+User.hasMany(Offer, CompletedByForeignKey);
+
+export async function getOffer(id: string) {
+  return Offer.findByPk(id);
 }
 
-export interface IRequestsFilter {
+export interface IOffersFilter {
   author?: string;
   details?: {
     [Op.substring]: string;
   };
 }
 
-export async function getRequests(
-  filter: IRequestsFilter,
+export async function getOffers(
+  filter: IOffersFilter,
   start: number = 0,
   limit: number = 25
 ) {
-  return IouRequest.findAll({
+  return Offer.findAll({
     where: filter,
     order: [["created_time", "DESC"]],
     offset: start,
@@ -70,17 +88,17 @@ export async function getRequests(
   });
 }
 
-export async function createRequest(attributes: IIouRequestAttributes) {
-  return IouRequest.create(attributes);
+export async function createOffer(attributes: IOfferAttributes) {
+  return Offer.create(attributes);
 }
 
-export async function updateRequest(
-  request: IouRequest,
-  attributes: IIouRequestAttributes
+export async function updateOffer(
+  request: Offer,
+  attributes: IOfferAttributes
 ) {
   return request.update(attributes);
 }
 
-export async function deleteRequest(request: IouRequest) {
+export async function deleteOffer(request: Offer) {
   return request.destroy();
 }
