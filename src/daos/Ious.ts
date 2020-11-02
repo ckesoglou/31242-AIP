@@ -42,11 +42,11 @@ class IouGraph {
     const userNode = this.users.find(
       (user) => user.name == newIou.giver.toString()
     );
-    var visited: vertexTrack = {};
-    var recStack: any = {};
+    const visited: vertexTrack = {};
+    const recStack: any = {};
 
     if (userNode) {
-      var cycleDetected = this.detectCycleWithinGraph(
+      const cycleDetected = this.detectCycleWithinGraph(
         userNode,
         visited,
         recStack
@@ -67,7 +67,7 @@ class IouGraph {
       recStack[userNode.name] = true;
       this.usersInParty.push(userNode.name);
       const nodeNeighbors = userNode.getOwingUsers();
-      for (let currentNode of nodeNeighbors) {
+      for (const currentNode of nodeNeighbors) {
         if (
           !visited[currentNode.name] &&
           this.detectCycleWithinGraph(currentNode, visited, recStack)
@@ -160,11 +160,7 @@ export interface IIouFilter {
 export async function getIou(pk: string) {
   return Iou.findByPk(pk);
 }
-export async function getIous(
-  filter: IIouFilter,
-  start: number = 0,
-  limit: number = 25
-) {
+export async function getIous(filter: IIouFilter, start = 0, limit = 25) {
   return Iou.findAll({
     where: filter,
     offset: start,
@@ -174,8 +170,8 @@ export async function getIous(
 
 export async function getFormattedIous(
   filter?: IIouFilter,
-  start: number = 0,
-  limit: number = 25
+  start = 0,
+  limit = 25
 ) {
   const ious = await Iou.findAll({
     offset: start,
@@ -184,7 +180,7 @@ export async function getFormattedIous(
     where: filter,
   });
   // detail user
-  for (let iou of ious) {
+  for (const iou of ious) {
     iou.item = (await getItem(iou.item as string)) as Object;
     iou.giver = (await getBasicUser(iou.giver as string)) ?? {};
     iou.receiver = (await getBasicUser(iou.receiver as string)) ?? undefined;
@@ -220,17 +216,16 @@ export async function iouExists(iouID: string) {
 export async function partyDetection(newIou: Iou) {
   const graph = new IouGraph();
 
-  var ious = await Iou.findAll({
+  const ious = await Iou.findAll({
     where: { is_claimed: false },
   });
 
   if (ious === null) {
     return false;
   } else {
-    for (let iou of ious) {
+    for (const iou of ious) {
       if (iou) {
-        var receiver;
-        var giver;
+        let receiver;
         if (iou.receiver) {
           receiver = iou.receiver.toString();
           if (!graph.getUserNode(receiver)) {
@@ -238,7 +233,7 @@ export async function partyDetection(newIou: Iou) {
           }
         }
 
-        giver = iou.giver.toString();
+        const giver = iou.giver.toString();
         if (!graph.getUserNode(giver)) {
           graph.addUserNode(giver);
         }
@@ -247,9 +242,10 @@ export async function partyDetection(newIou: Iou) {
         }
       }
     }
-    var cycleCheckResults = graph.dfs(newIou);
+    const cycleCheckResults = graph.dfs(newIou);
 
     if (!cycleCheckResults) {
+      console.log("No party detected");
     } else {
       return cycleCheckResults;
     }

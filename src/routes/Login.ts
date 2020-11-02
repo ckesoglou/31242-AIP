@@ -25,23 +25,24 @@ const LoginPOST: ObjectSchema<ILoginPOST> = Joi.object({
 }).options({ presence: "required" });
 
 router.post("/login", async (req: Request, res: Response) => {
+  // Validate request parameters
   const { error, value } = LoginPOST.validate(req.body);
-
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
     });
   }
 
-  let requestBody = value as ILoginPOST;
+  const requestBody = value as ILoginPOST;
   const user = await getUser(requestBody.username);
 
   if (user) {
+    // Verify password hash
     const match = await bcrypt.compare(
       requestBody.password,
       user.password_hash
     );
-
+    // If correct password
     if (match) {
       await generateNewAuthenticationTokens(
         user,

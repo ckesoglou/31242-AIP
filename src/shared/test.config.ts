@@ -1,8 +1,7 @@
 import sequelize from "@daos/DBInstance";
 
-export const request = require("supertest");
-import app from "../Server";
-
+export import request = require("supertest");
+export const APP = "https://ioweyou.tech";
 export const TESTUSER = {
   username: "testunittestuser",
   displayName: "testunittestuser",

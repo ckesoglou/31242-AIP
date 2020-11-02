@@ -10,7 +10,6 @@ const router = Router();
 
 router.get("/items", async (req: Request, res: Response) => {
   const items = await getItems();
-
   return res.status(OK).json(items).end();
 });
 
