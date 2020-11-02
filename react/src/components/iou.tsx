@@ -26,6 +26,7 @@ type IouObj = {
 type IouProps = {
   iou: IouObj;
   iouType: number;
+  refreshTable: () => void;
 };
 
 // Mainly a container component
@@ -94,6 +95,7 @@ class IOU extends React.Component<IouProps> {
             ]}
             details=""
             iouType={this.props.iouType}
+            refreshTable={this.props.refreshTable}
           />
         </Grid>
       </Grid>
