@@ -22,6 +22,7 @@ class App extends React.Component {
     user: window.localStorage.getItem("user") ?? { name: "?" },
     updateUser: (newUser: Object) => {
       this.setState({ user: newUser });
+      // Caches current authenticated user to local storage for offline viewing
       window.localStorage.setItem("user", JSON.stringify(newUser));
     },
   };

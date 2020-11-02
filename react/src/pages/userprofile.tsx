@@ -390,6 +390,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   // Fetch all information for tabs needed
+  // Made into an arrow function to pass down to child componenents for auto-refreshing functionality
   fetchAllTabs = () => {
     const headers = {
       "Content-Type": "application/json",
@@ -424,6 +425,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               owe: oweResult,
               requests: requestResult,
             });
+            // Caches API response to local storage for offline viewing
             window.localStorage.setItem(
               "lastOwedResult",
               JSON.stringify(owedResult)

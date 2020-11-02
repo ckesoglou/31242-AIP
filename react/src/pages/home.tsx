@@ -90,6 +90,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
     this.loadingRef.current!.style.display = value ? "block" : "none";
   }
 
+  // Made into an arrow function to pass down to child componenents for auto-refreshing functionality
   fetchFilter = () => {
     if (this.state.filterKey && this.state.filterValue) {
       this.setLoading(true);
