@@ -4,17 +4,17 @@ import Joi, { ObjectSchema } from "joi";
 import { getAuthenticatedUser } from "@shared/Authenticate";
 import upload from "../shared/ImageHandler";
 import {
-  createIouOwed,
   completeIouOwed,
-  createIouOwe,
   completeIouOwe,
   iouExists,
   getIous,
   getFormattedIous,
   partyDetection,
+  createIou,
 } from "@daos/Ious";
-import Iou from "@entities/Iou";
+import Iou from "../models/Iou";
 import { ConsoleTransportOptions } from "winston/lib/winston/transports";
+import { v4 as uuid } from "uuid";
 
 // Init shared
 const router = Router();
@@ -93,20 +93,20 @@ router.post(
     if (user) {
       // Create new IOU
       const requestBody = value as IIouOwedPOST;
-      const iou = await createIouOwed(
-        requestBody.username,
-        user.username,
-        requestBody.item,
-        req.file.filename
-      );
-      const newIou = await Iou.findByPk(iou);
+      const iou = await createIou({
+        id: uuid(),
+        giver: requestBody.username,
+        receiver: user.username,
+        item: requestBody.item,
+        proof_of_debt: req.file.filename,
+        created_time: new Date(),
+        is_claimed: false,
+      });
 
       var party;
-      if (newIou) {
-        var partyResults = await partyDetection(newIou);
-        if (partyResults) {
-          party = partyResults;
-        }
+      var partyResults = await partyDetection(iou);
+      if (partyResults) {
+        party = partyResults;
       }
 
       return res.status(OK).json({ id: iou, usersInParty: party });
@@ -195,20 +195,19 @@ router.post("/owe", async (req: Request, res: Response) => {
   if (user) {
     // Create new IOU
     const requestBody = value as IIouOwePOST;
-    const iou = await createIouOwe(
-      user.username,
-      requestBody.username,
-      requestBody.item
-    );
-
-    const newIou = await Iou.findByPk(iou);
+    const iou = await createIou({
+      id: uuid(),
+      giver: user.username,
+      receiver: requestBody.username,
+      item: requestBody.item,
+      created_time: new Date(),
+      is_claimed: false,
+    });
 
     var party;
-    if (newIou) {
-      var partyResults = await partyDetection(newIou);
-      if (partyResults) {
-        party = partyResults;
-      }
+    var partyResults = await partyDetection(iou);
+    if (partyResults) {
+      party = partyResults;
     }
 
     return res.status(OK).json({ id: iou, usersInParty: party });
