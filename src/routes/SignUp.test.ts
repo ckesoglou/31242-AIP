@@ -36,11 +36,11 @@ describe("Signup endpoint", () => {
 
   describe("Validation", () => {
     it("should validate usernames already taken", async () => {
-      await createUser(
-        TESTUSER.username,
-        TESTUSER.displayName,
-        "password hash"
-      );
+      await createUser({
+        username: TESTUSER.username,
+        display_name: TESTUSER.displayName,
+        password_hash: "password hash",
+      });
 
       const res = await request(app).post("/api/signup").send({
         username: TESTUSER.username,
