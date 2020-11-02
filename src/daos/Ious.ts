@@ -79,6 +79,7 @@ class IouGraph {
       }
     }
     recStack[userNode.name] = false;
+    this.usersInParty.pop();
     return false;
   }
 
@@ -249,7 +250,6 @@ export async function partyDetection(newIou: Iou) {
     var cycleCheckResults = graph.dfs(newIou);
 
     if (!cycleCheckResults) {
-      console.log("No party detected");
     } else {
       return cycleCheckResults;
     }
