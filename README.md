@@ -28,50 +28,40 @@
 
 **Head over to the next section to learn how to clone the repository and set-up the local database connection.**
 
-### How to setup the local database connection
+### Setup
 
 1. Clone the repository using Git CLI or a Git Desktop Client
-2. Given the connection string, provided by your local database setup, you should create an .env file located in the root of the project's directory. This .env file contains key-values pairs that lays out enivironment variables separate to the code. **Please note that the .env should NOT be commited to version control. This is a huge security risk.**
-3. Using the dotenv package, once you have created an .env file with your environment variables, you can then utilise it in your application. Early in the runtime of the application, you should require and configure dotenv.
+2. Given the connection string, provided by your local database setup, you should create an .env file located in the root of the project's directory. This .env file contains key-values pairs that lays out enivironment variables separate to the code. **Please note that the .env should NOT be committed to version control. This is a huge security risk.**
 
-```typescript
-require("dotenv").config();
-```
+Set the following properties in your .env file:
 
-4. This will allow for process.env to access the key value pairs when connecting to the database.
-
-```typescript
-const db = require("db");
-db.connect({
-  host: process.env.DB_HOST,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-});
-```
+- DB_NAME=<db name>
+- DB_HOST=<host / ip (usually localhost)>
+- DB_USERNAME=<db server username>
+- DB_PASSWORD=<db server password>
 
 **Head over to the next section to learn how to install/run the project.**
 
 ### How to install/use the project
 
-1. Using the command line, navigate into the respository and run the following command:
+1. Using the command line, navigate into the React subfolder and run the following commands:
 
 ```
-C:\..\31242-AIP> npm install
-```
-
-2. Using the command line, navigate into the React subfolder and run the following command:
-
-```
+C:\..\31242-AIP> cd react
+C:\..\31242-AIP\react> npm install
 C:\..\31242-AIP\react> npm run build
 ```
 
-3. Using the command line, navigate into the React subfolder and run the following command:
+2. Using the command line, navigate back into the root subfolder and run the following commands:
 
 ```
-C:\..\31242-AIP\react> npm run start
+C:\..\31242-AIP\react> cd ..
+C:\..\31242-AIP> npm install
+C:\..\31242-AIP> npm run build
+C:\..\31242-AIP> npm run start
 ```
 
-4. The website should now be running!
+3. The website should now be running!
 
 ## Contribution Guide
 
