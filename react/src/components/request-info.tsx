@@ -66,7 +66,7 @@ class RequestInfo extends React.Component<RequestInfoProps, RequestInfoState> {
 
   static contextType = UserContext;
 
-  //to pass into request reward delete to let it close the modal upon reward deletion
+  // To pass into request reward delete to let it close the modal upon reward deletion
   closeModal = () => {
     this.setState({ infoModal: false });
   };
