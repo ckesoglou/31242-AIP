@@ -59,8 +59,8 @@ export interface IRequestsFilter {
 
 export async function getRequests(
   filter: IRequestsFilter,
-  start: number = 0,
-  limit: number = 25
+  start = 0,
+  limit = 25
 ) {
   return IouRequest.findAll({
     where: filter,
