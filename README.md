@@ -18,6 +18,61 @@
 - [Assignment 2 Specification](https://docs.google.com/document/d/1GexnZfy-aSYfQMn62t8DQrEsNv7Qkq9Z8mZvoD-Aaz8/view)
 - Workbook on the [Web](https://www.benjaminjohnston.com.au/extras/aipjs/workbook/) and code samples on [GitHub](https://github.com/benatuts/aipjs/)
 
+## Installation Guide
+
+### Pre-requisites
+
+1. Install [Git](https://git-scm.com/)
+2. Install a package manager ([npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/))
+3. Install [Node.js](https://nodejs.org/en/) (Confirmed to work with version 12.x)
+
+**Head over to the next section to learn how to clone the repository and set-up the local database connection.**
+
+### How to setup the local database connection
+
+1. Clone the repository using Git CLI or a Git Desktop Client
+2. Given the connection string, provided by your local database setup, you should create an .env file located in the root of the project's directory. This .env file contains key-values pairs that lays out enivironment variables separate to the code. **Please note that the .env should NOT be commited to version control. This is a huge security risk.**
+3. Using the dotenv package, once you have created an .env file with your environment variables, you can then utilise it in your application. Early in the runtime of the application, you should require and configure dotenv.
+
+```typescript
+require("dotenv").config();
+```
+
+4. This will allow for process.env to access the key value pairs when connecting to the database.
+
+```typescript
+const db = require("db");
+db.connect({
+  host: process.env.DB_HOST,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+});
+```
+
+**Head over to the next section to learn how to install/run the project.**
+
+### How to install/use the project
+
+1. Using the command line, navigate into the respository and run the following command:
+
+```
+C:\..\31242-AIP> npm install
+```
+
+2. Using the command line, navigate into the React subfolder and run the following command:
+
+```
+C:\..\31242-AIP\react> npm run build
+```
+
+3. Using the command line, navigate into the React subfolder and run the following command:
+
+```
+C:\..\31242-AIP\react> npm run start
+```
+
+4. The website should now be running!
+
 ## Contribution Guide
 
 ### API Design
