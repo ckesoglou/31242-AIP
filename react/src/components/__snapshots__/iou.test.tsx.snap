@@ -50,6 +50,7 @@ exports[`<Iou /> should render correctly 1`] = `
       id="1"
       iouType={0}
       is_completed={true}
+      refreshTable={[Function]}
       rewards={
         Array [
           Object {

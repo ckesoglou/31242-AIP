@@ -39,6 +39,7 @@ exports[`<Request /> should render correctly 1`] = `
           },
         ]
       }
+      refreshTable={[Function]}
       requestID="1"
       rewards={
         Array [
@@ -87,6 +88,7 @@ exports[`<Request /> should render correctly 1`] = `
       id="1"
       iouType={2}
       is_completed={true}
+      refreshTable={[Function]}
       rewards={
         Array [
           Object {
@@ -121,6 +123,7 @@ exports[`<Request /> should render correctly 1`] = `
     xs={1}
   >
     <RequestInfo
+      refreshTable={[Function]}
       request={
         Object {
           "author": Object {
