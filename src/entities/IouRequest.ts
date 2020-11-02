@@ -11,7 +11,9 @@ export interface IIouRequestAttributes {
   is_completed: boolean;
 }
 
-class IouRequest extends Model<IIouRequestAttributes> implements IIouRequestAttributes {
+class IouRequest
+  extends Model<IIouRequestAttributes>
+  implements IIouRequestAttributes {
   public id!: string;
   public author!: string;
   public completed_by!: string;

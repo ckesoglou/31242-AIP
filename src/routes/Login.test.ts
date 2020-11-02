@@ -101,7 +101,7 @@ describe("Login endpoint", () => {
 
     it("should validate username field valid characters", async () => {
       const nonAlphaNumeric = "!@#$%^&*()_+-=`~[{]}\\|;:'\",<.>/?";
-      for (let character of nonAlphaNumeric) {
+      for (const character of nonAlphaNumeric) {
         const res = await request(app)
           .post("/api/login")
           .send({
