@@ -176,19 +176,19 @@ const ReceiverForeignKey = {
 Iou.belongsTo(User, ReceiverForeignKey);
 User.hasMany(Iou, ReceiverForeignKey);
 
-const ParentRequestForeignKey = {
+const ParentOfferForeignKey = {
   foreignKey: {
     name: "parent_request",
     allowNull: true,
   },
 };
-Iou.belongsTo(Offer, ParentRequestForeignKey);
-Offer.hasMany(Iou, ParentRequestForeignKey);
+Iou.belongsTo(Offer, ParentOfferForeignKey);
+Offer.hasMany(Iou, ParentOfferForeignKey);
 
 export interface IIouFilter {
   giver?: string;
   receiver?: string;
-  parent_request?: string;
+  parent_offer?: string;
   is_claimed?: boolean;
   item?: string;
 }
