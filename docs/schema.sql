@@ -27,7 +27,7 @@ CREATE TABLE images (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE requests (
+CREATE TABLE offers (
 	id uniqueidentifier not null,
 	author varchar(16) not null,
 	completed_by varchar(16),
@@ -46,7 +46,7 @@ CREATE TABLE ious (
 	item uniqueidentifier not null,
 	giver varchar(16) not null,
 	receiver varchar(16),
-	parent_request uniqueidentifier,
+	parent_offer uniqueidentifier,
 	proof_of_debt varchar(200),
 	proof_of_completion varchar(200),
 	created_time datetime not null,
@@ -55,7 +55,7 @@ CREATE TABLE ious (
 	FOREIGN KEY (item) REFERENCES items(id),
 	FOREIGN KEY (giver) REFERENCES users(username),
 	FOREIGN KEY (receiver) REFERENCES users(username),
-	FOREIGN KEY (parent_request) REFERENCES requests(id),
+	FOREIGN KEY (parent_offer) REFERENCES offers(id),
 	PRIMARY KEY (id)
 );
 

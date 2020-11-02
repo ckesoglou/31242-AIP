@@ -5,7 +5,7 @@ export interface IIouAttributes {
   item: Object;
   giver: Object;
   receiver?: Object;
-  parent_request?: string;
+  parent_offer?: string;
   proof_of_debt?: string;
   proof_of_completion?: string;
   created_time: Date;
@@ -18,7 +18,7 @@ class Iou extends Model<IIouAttributes> implements IIouAttributes {
   public item!: Object;
   public giver!: Object;
   public receiver: Object | undefined;
-  public parent_request!: string;
+  public parent_offer!: string;
   public proof_of_debt: string | undefined;
   public proof_of_completion: string | undefined;
   public created_time!: Date;

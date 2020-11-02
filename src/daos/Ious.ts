@@ -120,7 +120,7 @@ Iou.init(
       type: DataTypes.STRING(16),
       allowNull: true,
     },
-    parent_request: {
+    parent_offer: {
       type: DataTypes.UUIDV4,
       allowNull: true,
     },
