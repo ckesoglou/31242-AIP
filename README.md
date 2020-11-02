@@ -33,12 +33,14 @@
 1. Clone the repository using Git CLI or a Git Desktop Client
 2. Given the connection string, provided by your local database setup, you should create an .env file located in the root of the project's directory. This .env file contains key-values pairs that lays out enivironment variables separate to the code. **Please note that the .env should NOT be committed to version control. This is a huge security risk.**
 
-Set the following properties in your .env file:
+Set the following properties in your `.env` file:
 
-- DB_NAME=<db name>
-- DB_HOST=<host / ip (usually localhost)>
-- DB_USERNAME=<db server username>
-- DB_PASSWORD=<db server password>
+```
+DB_NAME=<db name>
+DB_HOST=<host / ip (usually localhost)>
+DB_USERNAME=<db server username>
+DB_PASSWORD=<db server password>
+```
 
 **Head over to the next section to learn how to install/run the project.**
 
