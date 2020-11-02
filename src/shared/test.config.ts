@@ -12,6 +12,53 @@ export const TESTUSER2 = {
   displayName: "testunittestusr2",
   password: "Testunittestusr2!",
 };
+
+const TESTUSER3 = {
+  username: "testunittestusr3",
+  displayName: "testunittestusr3",
+  password: "Testunittestuser3!",
+};
+
+const TESTUSER4 = {
+  username: "testunittestusr4",
+  displayName: "testunittestusr4",
+  password: "Testunittestuser4!",
+};
+
+const TESTUSER5 = {
+  username: "testunittestusr5",
+  displayName: "testunittestusr5",
+  password: "Testunittestuser5!",
+};
+
+const TESTUSER6 = {
+  username: "testunittestusr6",
+  displayName: "testunittestusr6",
+  password: "Testunittestuser6!",
+};
+
+const TESTUSER7 = {
+  username: "testunittestusr7",
+  displayName: "testunittestusr7",
+  password: "Testunittestuser7!",
+};
+
+const TESTUSER8 = {
+  username: "testunittestusr8",
+  displayName: "testunittestusr8",
+  password: "Testunittestuser8!",
+};
+
+export const TESTUSERARRAY = [
+  TESTUSER,
+  TESTUSER3,
+  TESTUSER4,
+  TESTUSER5,
+  TESTUSER6,
+  TESTUSER7,
+  TESTUSER8,
+];
+
 export const ITEMID = "814120d4-5d3a-464b-8040-a9fecc107e54"; // Coffee
 
 // Create test users in database
