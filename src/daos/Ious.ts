@@ -1,106 +1,17 @@
 import { DataTypes } from "sequelize";
 import Iou, { IIouAttributes } from "../models/Iou";
 import db from "./DBInstance";
-import { v4 as uuid } from "uuid";
 import { getBasicUser, getUser } from "./Users";
 import { getItem } from "./Items";
 import User from "../models/User";
-import { values } from "sequelize/types/lib/operators";
-import e from "express";
+import Item from "src/models/Item";
+import Offer from "src/models/Offer";
 
-interface vertexTrack {
-  [index: string]: boolean | string;
-}
+/*
+ *  IOUs database table definition
+ */
 
-class UserNode {
-  name: string;
-  peopleOwing: UserNode[];
-  constructor(name: string) {
-    this.name = name;
-    this.peopleOwing = [];
-  }
-
-  addOwingUser(user: UserNode) {
-    this.peopleOwing.push(user);
-  }
-
-  getOwingUsers() {
-    return this.peopleOwing;
-  }
-}
-
-class IouGraph {
-  users: UserNode[];
-  usersInParty: string[];
-
-  constructor() {
-    this.users = [];
-    this.usersInParty = [];
-  }
-
-  dfs(newIou: Iou) {
-    const userNode = this.users.find(
-      (user) => user.name == newIou.giver.toString()
-    );
-    const visited: vertexTrack = {};
-    const recStack: any = {};
-
-    if (userNode) {
-      const cycleDetected = this.detectCycleWithinGraph(
-        userNode,
-        visited,
-        recStack
-      );
-      if (cycleDetected) return this.usersInParty;
-    }
-
-    return false;
-  }
-
-  detectCycleWithinGraph(
-    userNode: UserNode,
-    visited: vertexTrack,
-    recStack: vertexTrack
-  ) {
-    if (!visited[userNode.name]) {
-      visited[userNode.name] = true;
-      recStack[userNode.name] = true;
-      this.usersInParty.push(userNode.name);
-      const nodeNeighbors = userNode.getOwingUsers();
-      for (const currentNode of nodeNeighbors) {
-        if (
-          !visited[currentNode.name] &&
-          this.detectCycleWithinGraph(currentNode, visited, recStack)
-        ) {
-          return true;
-        } else if (recStack[currentNode.name]) {
-          return true;
-        }
-      }
-    }
-    recStack[userNode.name] = false;
-    this.usersInParty.pop();
-    return false;
-  }
-
-  addUserNode(username: string) {
-    this.users.push(new UserNode(username));
-  }
-
-  getUserNode(username: string) {
-    return this.users.find((user) => user.name === username);
-  }
-
-  addEdge(giver: string, receiver: string) {
-    const giverUser = this.getUserNode(giver);
-    const receiverUser = this.getUserNode(receiver);
-    if (giverUser && receiverUser) giverUser.addOwingUser(receiverUser);
-  }
-
-  print() {
-    return this.users;
-  }
-}
+// ious table
 
 Iou.init(
   {
@@ -150,6 +61,8 @@ Iou.init(
   { sequelize: db, tableName: "ious", timestamps: false }
 );
 
+// IOU foreign keys & relationships
+
 const ItemForeignKey = {
   foreignKey: {
     name: "item",
@@ -185,6 +98,10 @@ const ParentOfferForeignKey = {
 };
 Iou.belongsTo(Offer, ParentOfferForeignKey);
 Offer.hasMany(Iou, ParentOfferForeignKey);
+
+/*
+ *  IOU CRUD operations
+ */
 
 export interface IIouFilter {
   giver?: string;
@@ -227,46 +144,6 @@ export async function getFormattedIous(
 
 export async function iouExists(iouID: string) {
   return (await Iou.findByPk(iouID)) ? true : false;
-}
-
-export async function partyDetection(newIou: Iou) {
-  const graph = new IouGraph();
-
-  const ious = await Iou.findAll({
-    where: { is_claimed: false },
-  });
-
-  if (ious === null) {
-    return false;
-  } else {
-    for (const iou of ious) {
-      if (iou) {
-        var receiver;
-        var giver;
-        if (iou.receiver) {
-          receiver = iou.receiver.toString();
-          if (!graph.getUserNode(receiver)) {
-            graph.addUserNode(receiver);
-          }
-        }
-
-        giver = iou.giver.toString();
-        if (!graph.getUserNode(giver)) {
-          graph.addUserNode(giver);
-        }
-        if (receiver && giver) {
-          graph.addEdge(giver, receiver);
-        }
-      }
-    }
-    const cycleCheckResults = graph.dfs(newIou);
-
-    if (!cycleCheckResults) {
-      console.log("No party detected");
-    } else {
-      return cycleCheckResults;
-    }
-  }
 }
 
 export async function completeIouOwed(iouID: string, receiver: string) {
