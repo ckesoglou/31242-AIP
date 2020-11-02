@@ -23,6 +23,9 @@ describe("<IouComplete />", () => {
         ]}
         details="Clean the fridge"
         iouType={0}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -46,6 +49,9 @@ describe("<IouComplete />", () => {
         ]}
         details="Clean the fridge"
         iouType={1}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     wrapper.find("div.cursorPointer").simulate("click");
@@ -71,6 +77,9 @@ describe("<IouComplete />", () => {
         ]}
         details="Clean the fridge"
         iouType={0}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     wrapper.find("div.cursorPointer").simulate("click");
@@ -96,6 +105,9 @@ describe("<IouComplete />", () => {
         ]}
         details="Clean the fridge"
         iouType={2}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     wrapper.find("div.cursorPointer").simulate("click");
@@ -121,6 +133,9 @@ describe("<IouComplete />", () => {
         ]}
         details="Clean the fridge"
         iouType={2}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     wrapper.find("div.cursorPointer").simulate("click");
@@ -148,6 +163,9 @@ describe("<IouComplete />", () => {
         ]}
         details="Clean the fridge"
         iouType={1}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     wrapper.find("div.cursorPointer").simulate("click");

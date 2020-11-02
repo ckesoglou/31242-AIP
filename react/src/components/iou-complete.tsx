@@ -67,7 +67,6 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
   constructor(props: IouCompleteProps) {
     super(props);
     this.tempRewardDisplayName = "";
-    this.openCompleteForm = this.openCompleteForm.bind(this);
   }
 
   state: IouCompleteState = {
@@ -78,12 +77,6 @@ class IouComplete extends React.Component<IouCompleteProps, IouCompleteState> {
     AnchorEl: null,
     unauthRep: false,
   };
-
-  openCompleteForm() {
-    if (!this.props.is_completed) {
-      this.setState({ completeIOU: true });
-    }
-  }
 
   completeIouOwe() {
     const formData = new FormData();

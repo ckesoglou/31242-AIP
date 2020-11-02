@@ -19,6 +19,9 @@ describe("<Iou />", () => {
           is_claimed: true,
         }}
         iouType={0}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     expect(wrapper).toMatchSnapshot();

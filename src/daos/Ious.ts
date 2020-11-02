@@ -79,6 +79,7 @@ class IouGraph {
       }
     }
     recStack[userNode.name] = false;
+    this.usersInParty.pop();
     return false;
   }
 

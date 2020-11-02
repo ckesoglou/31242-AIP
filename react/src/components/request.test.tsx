@@ -33,6 +33,9 @@ describe("<Request />", () => {
           { id: "202", display_name: "Hug" },
         ]}
         iouType={2}
+        refreshTable={() => {
+          return "substitute test function";
+        }}
       />
     );
     expect(wrapper).toMatchSnapshot();
