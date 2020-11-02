@@ -278,6 +278,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
             snack: true,
             newRequestDialog: false,
           });
+          this.fetchAllTabs();
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
@@ -314,14 +315,15 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) => {
             this.setState({
               snackMessage:
-                "New IOU created!" +
-                (body.usersInParty.length > 2
+                "New IOU created! " +
+                (body.usersInParty && body.usersInParty.length > 2
                   ? body.usersInParty.join(", ") +
                     " have a circular IOU party. We suggest you guys treat each other! ;)"
                   : ""),
               snack: true,
               newRequestDialog: false,
             });
+            this.fetchAllTabs();
           });
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
@@ -358,8 +360,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           res.json().then((body) =>
             this.setState({
               snackMessage:
-                "New IOU created!" +
-                (body.usersInParty.length > 2
+                "New IOU created! " +
+                (body.usersInParty && body.usersInParty.length > 2
                   ? body.usersInParty.join(", ") +
                     " have a circular IOU party. We suggest you guys treat each other! :)"
                   : ""),
@@ -367,6 +369,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               newRequestDialog: false,
             })
           );
+          this.fetchAllTabs();
         } else if (res.status === 401) {
           this.setState({ unauthRep: true });
         } else {
@@ -387,7 +390,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
   }
 
   // Fetch all information for tabs needed
-  fetchAllTabs(): void {
+  // Made into an arrow function to pass down to child componenents for auto-refreshing functionality
+  fetchAllTabs = () => {
     const headers = {
       "Content-Type": "application/json",
     };
@@ -421,6 +425,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
               owe: oweResult,
               requests: requestResult,
             });
+            // Caches API response to local storage for offline viewing
             window.localStorage.setItem(
               "lastOwedResult",
               JSON.stringify(owedResult)
@@ -454,9 +459,8 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
           owe: oweResult,
           requests: requestResult,
         });
-        //this.setState({ unauthRep: true });
       });
-  }
+  };
 
   fetchUsers() {
     this.setState({ userDropLoading: true });
@@ -918,7 +922,14 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                       this.state.owedPages * numberOfItemsPerPage
                     )
                     .map((owed, i) => {
-                      return <IOU iou={owed} key={i} iouType={0} />;
+                      return (
+                        <IOU
+                          iou={owed}
+                          key={i}
+                          iouType={0}
+                          refreshTable={this.fetchAllTabs}
+                        />
+                      );
                     })}
                   <Box pt={3}>
                     <Divider variant="middle" />
@@ -963,7 +974,14 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                       this.state.owePages * numberOfItemsPerPage
                     )
                     .map((owe, i) => {
-                      return <IOU iou={owe} key={i} iouType={1} />;
+                      return (
+                        <IOU
+                          iou={owe}
+                          key={i}
+                          iouType={1}
+                          refreshTable={this.fetchAllTabs}
+                        />
+                      );
                     })}
                   <Box pt={3}>
                     <Divider variant="middle" />
@@ -1020,6 +1038,7 @@ class UserProfile extends React.Component<IUserProfileProps, UserProfileState> {
                           potentialRewards={this.state.potentialItems}
                           iouType={2}
                           key={i}
+                          refreshTable={this.fetchAllTabs}
                         />
                       );
                     })}

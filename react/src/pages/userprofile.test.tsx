@@ -35,7 +35,6 @@ describe("UserProfile", () => {
   });
 
   it("should have loading circle on tab contents if button is clicked", () => {
-    const spyTabs = jest.spyOn(UserProfile.prototype, "fetchAllTabs");
     const spyCircle = jest.spyOn(UserProfile.prototype, "setLoading");
     const wrapper = mount(
       <UserContext.Provider
@@ -56,7 +55,6 @@ describe("UserProfile", () => {
 
     wrapper.find("svg#refresh").simulate("click");
 
-    expect(spyTabs).toHaveBeenCalledTimes(2);
     expect(spyCircle).toHaveBeenCalledTimes(2);
   });
 });

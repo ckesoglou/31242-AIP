@@ -35,6 +35,9 @@ describe("<RequestInfo />", () => {
             completion_time: "02/02/2020",
             is_completed: true,
           }}
+          refreshTable={() => {
+            return "substitute test function";
+          }}
         />
       </UserContext.Provider>
     );
@@ -72,10 +75,13 @@ describe("<RequestInfo />", () => {
             completion_time: "02/02/2020",
             is_completed: true,
           }}
+          refreshTable={() => {
+            return "substitute test function";
+          }}
         />
       </UserContext.Provider>
     );
-    wrapper.find("div#requestItem").simulate("click");
+    wrapper.find("svg#infoIcon").simulate("click");
     expect(wrapper.state("infoModal")).toBe(true);
   });
 });

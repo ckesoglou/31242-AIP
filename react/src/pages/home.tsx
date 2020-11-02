@@ -90,7 +90,8 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
     this.loadingRef.current!.style.display = value ? "block" : "none";
   }
 
-  fetchFilter() {
+  // Made into an arrow function to pass down to child componenents for auto-refreshing functionality
+  fetchFilter = () => {
     if (this.state.filterKey && this.state.filterValue) {
       this.setLoading(true);
       this.setState({ requests: [] });
@@ -139,9 +140,9 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
       // Else fetch all requests if no input for filter entered
       this.fetchRequests();
     }
-  }
+  };
 
-  fetchRequests() {
+  fetchRequests(): void {
     this.setLoading(true);
     this.setState({ requests: [] });
     fetch(`${requestsEndpoint}`, {
@@ -363,6 +364,7 @@ class Home extends React.Component<RouteComponentProps, HomeState> {
                               request={requestProp}
                               potentialRewards={this.state.rewards}
                               iouType={2}
+                              refreshTable={this.fetchFilter}
                             />
                           </Grid>
                         );
