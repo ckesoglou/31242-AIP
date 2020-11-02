@@ -26,8 +26,8 @@ import upload from "../shared/ImageHandler";
 
 const router = Router();
 
-async function formatRequest(request: Offer) {
-  const ious = await getIous({ parent_offer: request.id }, 0, 9999);
+async function formatOffer(offer: Offer) {
+  const ious = await getIous({ parent_offer: offer.id }, 0, 9999);
   // Combine reward objects with IOU response
   const rewards = [];
   for (const iou of ious) {
@@ -39,9 +39,9 @@ async function formatRequest(request: Offer) {
   }
 
   return {
-    ...(request as any).dataValues,
-    author: await getBasicUser(request.author),
-    completed_by: await getBasicUser(request.completed_by),
+    ...(offer as any).dataValues,
+    author: await getBasicUser(offer.author),
+    completed_by: await getBasicUser(offer.completed_by),
     rewards: rewards,
   };
 }
@@ -118,7 +118,7 @@ router.get("/requests", async (req: Request, res: Response) => {
   const requestResponse: any[] = [];
 
   for (const request of matchedRequests) {
-    requestResponse.push(await formatRequest(request));
+    requestResponse.push(await formatOffer(request));
   }
 
   return res.status(OK).json(requestResponse).end();
@@ -213,7 +213,7 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
   return request
     ? res
         .status(OK)
-        .json(await formatRequest(request))
+        .json(await formatOffer(request))
         .end()
     : res.status(NOT_FOUND).end();
 });
