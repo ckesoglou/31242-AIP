@@ -64,6 +64,8 @@ describe("Party detection", () => {
         password: `${TESTUSERARRAY[TESTUSERARRAY.length - 1].password}`,
       });
 
+    expect(loginRes.status).toEqual(200);
+
     const iouRes = await request(app)
       .post("/api/iou/owe")
       .send({
