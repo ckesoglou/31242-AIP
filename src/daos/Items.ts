@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import Item from "../entities/Item";
+import Item from "../models/Item";
 import db from "./DBInstance";
 
 Item.init(
@@ -17,9 +17,10 @@ Item.init(
   {
     sequelize: db,
     tableName: "items",
-    timestamps: false
+    timestamps: false,
   }
 );
+Item.sync();
 
 export async function getItem(id: string) {
   return Item.findByPk(id);

@@ -1,4 +1,4 @@
-import User from "@entities/User";
+import User from "../models/User";
 import { QueryTypes } from "sequelize/types";
 import sequelize from "./DBInstance";
 

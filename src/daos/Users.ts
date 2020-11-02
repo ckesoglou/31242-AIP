@@ -1,5 +1,5 @@
-import { DataTypes, Op, Sequelize } from "sequelize";
-import User from "../entities/User";
+import { DataTypes, Op } from "sequelize";
+import User from "../models/User";
 import db from "./DBInstance";
 
 User.init(
