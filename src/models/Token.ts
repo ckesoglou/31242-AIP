@@ -1,4 +1,7 @@
 import { Model } from "sequelize";
+import User from "./User";
+
+// Class definition
 
 export interface ITokenCookie {
   username: string;
@@ -19,6 +22,19 @@ class Token extends Model<ITokenAttributes> implements ITokenAttributes {
   public device_name!: string;
   public created_time!: Date;
   public expiry_time!: Date;
+}
+
+// Token relationships
+
+export async function initialiseTokenRelationships() {
+  const UsernameForeignKey = {
+    foreignKey: {
+      name: "username",
+      allowNull: false,
+    },
+  };
+  Token.belongsTo(User, UsernameForeignKey);
+  User.hasMany(Token, UsernameForeignKey);
 }
 
 export default Token;

@@ -12,15 +12,9 @@
     "strict": true,
     "target": "es6",
     "moduleResolution": "node",
-    "paths": {
-      "@daos/*": ["src/daos/*"],
-      "@entities/*": ["src/entities/*"],
-      "@shared/*": ["src/shared/*"],
-      "@server": ["src/Server"]
-    },
     "types": ["node", "jest"],
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["src/**/*.ts", "spec/**/*.ts"],
-  "exclude": ["src/public/", "react/"]
+  "exclude": ["src/public/", "react/", "dist"]
 }

@@ -1,11 +1,16 @@
 import { DataTypes } from "sequelize";
-import Token from "@entities/Token";
-import db from "@daos/DBInstance";
+import Token from "../models/Token";
+import db from "./DBInstance";
+import User from "../models/User";
+
+/*
+ *  Tokens database table definition
+ */
 
 Token.init(
   {
     refresh_token: {
-      type: DataTypes.UUIDV4,
+      type: "UNIQUEIDENTIFIER",
       primaryKey: true,
       allowNull: false,
     },
@@ -32,6 +37,10 @@ Token.init(
     timestamps: false,
   }
 );
+
+/*
+ *  Token CRUD operations
+ */
 
 export async function getToken(refresh_token: string) {
   return Token.findByPk(refresh_token);

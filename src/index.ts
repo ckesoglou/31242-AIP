@@ -1,10 +1,9 @@
-import app from "@server";
-import logger from "@shared/Logger";
+import app from "./Server";
 import env from "./Environment";
 import db from "./daos/DBInstance";
 
 // Start the server
-const port = Number(env.port || 4000);
+const port = Number(env.port);
 
 async function dbconnect() {
   try {
@@ -18,5 +17,5 @@ async function dbconnect() {
 dbconnect();
 
 app.listen(port, () => {
-  logger.info("Express server started on port: " + port);
+  console.info("Express server started on port: " + port);
 });

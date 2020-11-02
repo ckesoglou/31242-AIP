@@ -1,6 +1,6 @@
 import app from "../Server";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
+import sequelize from "../daos/DBInstance";
 
 beforeAll(async () => {
   await sequelize.drop();

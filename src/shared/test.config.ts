@@ -1,4 +1,4 @@
-import sequelize from "@daos/DBInstance";
+import sequelize from "../daos/DBInstance";
 
 export const request = require("supertest");
 import app from "../Server";

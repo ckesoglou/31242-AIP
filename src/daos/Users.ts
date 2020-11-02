@@ -1,6 +1,12 @@
-import { DataTypes, Op, Sequelize } from "sequelize";
-import User from "../entities/User";
+import { DataTypes, Op } from "sequelize";
+import User, { IUserAttributes } from "../models/User";
 import db from "./DBInstance";
+
+/*
+ *  Users database table definition
+ */
+
+// users table
 
 User.init(
   {
@@ -24,6 +30,10 @@ User.init(
     timestamps: false,
   }
 );
+
+/*
+ *  User CRUD operations
+ */
 
 export async function getUser(username: string) {
   return User.findByPk(username);
@@ -79,16 +89,8 @@ export async function getUsers(
   });
 }
 
-export async function createUser(
-  username: string,
-  display_name: string,
-  password_hash: string
-) {
-  return User.create({
-    username: username,
-    display_name: display_name,
-    password_hash: password_hash,
-  });
+export async function createUser(user: IUserAttributes) {
+  return User.create(user);
 }
 
 export async function deleteAllUsers() {

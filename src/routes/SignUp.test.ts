@@ -1,7 +1,7 @@
 import app from "../Server";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
-import { createUser, deleteAllUsers } from "@daos/Users";
+import sequelize from "../daos/DBInstance";
+import { createUser, deleteAllUsers } from "../daos/Users";
 
 const TESTUSER = {
   username: "testunittestuser",
@@ -25,45 +25,39 @@ afterAll(async () => {
 describe("Signup endpoint", () => {
   describe("Successful signup", () => {
     it("should sign up new user", async () => {
-      const res = await request(app)
-        .post("/api/signup")
-        .send({
-          username: TESTUSER.username,
-          displayName: `${TESTUSER.displayName}`,
-          password: `${TESTUSER.password}`,
-        });
+      const res = await request(app).post("/api/signup").send({
+        username: TESTUSER.username,
+        displayName: TESTUSER.displayName,
+        password: TESTUSER.password,
+      });
       expect(res.status).toEqual(201);
     });
   });
 
   describe("Validation", () => {
     it("should validate usernames already taken", async () => {
-      await createUser(
-        TESTUSER.username,
-        TESTUSER.displayName,
-        "password hash"
-      );
+      await createUser({
+        username: TESTUSER.username,
+        display_name: TESTUSER.displayName,
+        password_hash: "password hash",
+      });
 
-      const res = await request(app)
-        .post("/api/signup")
-        .send({
-          username: `${TESTUSER.username}`,
-          displayName: `${TESTUSER.displayName}`,
-          password: `${TESTUSER.password}`,
-        });
+      const res = await request(app).post("/api/signup").send({
+        username: TESTUSER.username,
+        displayName: TESTUSER.displayName,
+        password: TESTUSER.password,
+      });
       expect(res.status).toEqual(422);
       expect(res.body).toHaveProperty("errors");
       expect(res.body.errors).toContain("Username already taken.");
     });
 
     it("should validate username max field length", async () => {
-      const res = await request(app)
-        .post("/api/signup")
-        .send({
-          username: "testmorethan16characters",
-          displayName: `${TESTUSER.displayName}`,
-          password: `${TESTUSER.password}`,
-        });
+      const res = await request(app).post("/api/signup").send({
+        username: "testmorethan16characters",
+        displayName: TESTUSER.displayName,
+        password: TESTUSER.password,
+      });
       expect(res.status).toEqual(400);
       expect(res.body).toHaveProperty("errors");
       expect(res.body.errors).toContain(
@@ -72,13 +66,11 @@ describe("Signup endpoint", () => {
     });
 
     it("should validate username min field length", async () => {
-      const res = await request(app)
-        .post("/api/signup")
-        .send({
-          username: "s",
-          displayName: `${TESTUSER.displayName}`,
-          password: `${TESTUSER.password}`,
-        });
+      const res = await request(app).post("/api/signup").send({
+        username: "s",
+        displayName: TESTUSER.displayName,
+        password: TESTUSER.password,
+      });
       expect(res.status).toEqual(400);
       expect(res.body).toHaveProperty("errors");
       expect(res.body.errors).toContain(
@@ -89,13 +81,11 @@ describe("Signup endpoint", () => {
     it("should validate username field valid characters", async () => {
       const nonAlphaNumeric = "!@#$%^&*()_+-=`~[{]}\\|;:'\",<.>/?";
       for (const character of nonAlphaNumeric) {
-        const res = await request(app)
-          .post("/api/signup")
-          .send({
-            username: character,
-            displayName: `${TESTUSER.displayName}`,
-            password: `${TESTUSER.password}`,
-          });
+        const res = await request(app).post("/api/signup").send({
+          username: character,
+          displayName: TESTUSER.displayName,
+          password: TESTUSER.password,
+        });
         expect(res.status).toEqual(400);
         expect(res.body).toHaveProperty("errors");
         expect(res.body.errors).toContain(
@@ -105,24 +95,20 @@ describe("Signup endpoint", () => {
     });
 
     it("should validate password field", async () => {
-      const res = await request(app)
-        .post("/api/signup")
-        .send({
-          username: `${TESTUSER.username}`,
-          displayName: `${TESTUSER.displayName}`,
-        });
+      const res = await request(app).post("/api/signup").send({
+        username: TESTUSER.username,
+        displayName: TESTUSER.displayName,
+      });
       expect(res.status).toEqual(400);
       expect(res.body).toHaveProperty("errors");
       expect(res.body.errors).toContain('"password" is required');
     });
 
     it("should validate display name field", async () => {
-      const res = await request(app)
-        .post("/api/signup")
-        .send({
-          username: `${TESTUSER.username}`,
-          password: `${TESTUSER.password}`,
-        });
+      const res = await request(app).post("/api/signup").send({
+        username: TESTUSER.username,
+        password: TESTUSER.password,
+      });
       expect(res.status).toEqual(400);
       expect(res.body).toHaveProperty("errors");
       expect(res.body.errors).toContain('"displayName" is required');

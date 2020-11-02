@@ -3,9 +3,8 @@ import { BAD_REQUEST, CREATED, UNPROCESSABLE_ENTITY } from "http-status-codes";
 import bcrypt from "bcrypt";
 import Joi, { ObjectSchema } from "joi";
 
-import { createUser, getUser } from "@daos/Users";
-import User from "@entities/User.ts";
-import { generateNewAuthenticationTokens } from "@shared/Authenticate";
+import { createUser, getUser } from "../daos/Users";
+import { generateNewAuthenticationTokens } from "../shared/Authenticate";
 
 const router = Router();
 //Salt Rounds determines how many times the password is hashed.
@@ -61,11 +60,11 @@ router.post("/", async (req: Request, res: Response) => {
   // Hash password
   const passHash: string = await bcrypt.hash(requestBody.password, saltRounds);
   // Create new user
-  const user = await createUser(
-    requestBody.username,
-    requestBody.displayName,
-    passHash
-  );
+  const user = await createUser({
+    username: requestBody.username,
+    display_name: requestBody.displayName,
+    password_hash: passHash,
+  });
 
   await generateNewAuthenticationTokens(
     user,

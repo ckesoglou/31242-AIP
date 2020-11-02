@@ -1,11 +1,17 @@
 import { DataTypes } from "sequelize";
-import Item from "../entities/Item";
+import Item, { IItemAttributes } from "../models/Item";
 import db from "./DBInstance";
+
+/*
+ *  Items database table definition
+ */
+
+// item table
 
 Item.init(
   {
     id: {
-      type: DataTypes.UUIDV4,
+      type: "UNIQUEIDENTIFIER",
       primaryKey: true,
       allowNull: false,
     },
@@ -21,10 +27,18 @@ Item.init(
   }
 );
 
+/*
+ *  Item CRUD operations
+ */
+
 export async function getItem(id: string) {
   return Item.findByPk(id);
 }
 
 export async function getItems() {
   return Item.findAll();
+}
+
+export async function createItem(item: IItemAttributes) {
+  return Item.create(item);
 }

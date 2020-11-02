@@ -1,12 +1,16 @@
-import Iou from "@entities/Iou";
-import { DataTypes, Op, Sequelize } from "sequelize";
-import IouRequest, { IIouRequestAttributes } from "../entities/IouRequest";
+import User from "../models/User";
+import { DataTypes, Op } from "sequelize";
+import Offer, { IOfferAttributes } from "../models/Offer";
 import db from "./DBInstance";
 
-IouRequest.init(
+/*
+ *  Offers database table definition
+ */
+
+Offer.init(
   {
     id: {
-      type: DataTypes.UUIDV4,
+      type: "UNIQUEIDENTIFIER",
       primaryKey: true,
       allowNull: false,
     },
@@ -41,50 +45,53 @@ IouRequest.init(
   },
   {
     sequelize: db,
-    tableName: "requests",
+    tableName: "offers",
     timestamps: false,
   }
 );
 
-export async function getRequest(id: string) {
-  return IouRequest.findByPk(id);
+/*
+ *  Offer CRUD operations
+ */
+
+export async function getOffer(id: string) {
+  return Offer.findByPk(id);
 }
 
-export interface IRequestsFilter {
+export interface IOffersFilter {
   author?: string;
   details?: {
     [Op.substring]: string;
   };
 }
 
-export async function getRequests(
-  filter: IRequestsFilter,
-  start = 0,
-  limit = 25
+export async function getOffers(
+  filter: IOffersFilter,
+  start: number | undefined = undefined,
+  limit: number | undefined = undefined
 ) {
-  return IouRequest.findAll({
+  return Offer.findAll({
     where: filter,
     order: [["created_time", "DESC"]],
     offset: start,
-    limit: 9999, // TODO limit,
+    limit: limit,
   });
 }
 
-export async function createRequest(attributes: IIouRequestAttributes) {
-  return IouRequest.create(attributes);
+export async function createOffer(attributes: IOfferAttributes) {
+  return Offer.create(attributes);
 }
 
-export async function updateRequest(
-  request: IouRequest,
-  attributes: IIouRequestAttributes
+export async function updateOffer(
+  request: Offer,
+  attributes: IOfferAttributes
 ) {
   return request.update(attributes);
 }
 
-export async function deleteRequest(request: IouRequest) {
+export async function deleteOffer(request: Offer) {
   return request.destroy();
 }
-
-export async function deleteAllRequests() {
-  return IouRequest.destroy({ truncate: true });
+export async function deleteAllOffers() {
+  return Offer.destroy({ truncate: true });
 }

@@ -1,9 +1,10 @@
 import app from "../Server";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
-import { deleteAllRequests } from "@daos/IouRequests";
-import { getAuthenticatedUserCookie } from "@shared/test.config";
+import sequelize from "../daos/DBInstance";
+import { deleteAllOffers } from "../daos/Offers";
+import { getAuthenticatedUserCookie } from "../shared/test.config";
 import { v4 as uuid } from "uuid";
+import { createItem } from "../daos/Items";
 
 const TESTUSER = {
   username: "testunittestuser",
@@ -33,9 +34,7 @@ beforeAll(async () => {
     });
 
   // Create item in database
-  await sequelize.query(
-    `INSERT INTO items (id, display_name) VALUES ('${ITEMID}', 'Coffee')`
-  );
+  await createItem({ id: ITEMID, display_name: "Coffee" });
 });
 
 beforeEach(async () => {
@@ -52,7 +51,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  await deleteAllRequests();
+  await deleteAllOffers();
 });
 
 afterAll(async () => {

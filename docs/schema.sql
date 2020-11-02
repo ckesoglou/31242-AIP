@@ -1,3 +1,8 @@
+/*
+ * NOTE: This document is for illustrative purposes only
+ * The application should create these tables (if missing) automatically without intervention
+ */
+
 CREATE TABLE users (
 	username varchar(16) not null,
 	display_name varchar(50) not null,
@@ -21,17 +26,11 @@ CREATE TABLE items (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE images (
-	id uniqueidentifier not null,
-	blob varbinary(max) not null CONSTRAINT Max_Image_Size CHECK (DATALENGTH(blob) <= 2097152),
-	PRIMARY KEY (id)
-);
-
-CREATE TABLE requests (
+CREATE TABLE offers (
 	id uniqueidentifier not null,
 	author varchar(16) not null,
 	completed_by varchar(16),
-	proof_of_completion varchar(200),
+	proof_of_completion varchar(255),
 	details varchar(50) not null,
 	created_time datetime not null,
 	completion_time datetime,
@@ -46,20 +45,20 @@ CREATE TABLE ious (
 	item uniqueidentifier not null,
 	giver varchar(16) not null,
 	receiver varchar(16),
-	parent_request uniqueidentifier,
-	proof_of_debt varchar(200),
-	proof_of_completion varchar(200),
+	parent_offer uniqueidentifier,
+	proof_of_debt varchar(255),
+	proof_of_completion varchar(255),
 	created_time datetime not null,
 	claimed_time datetime,
 	is_claimed bit not null default 0,
 	FOREIGN KEY (item) REFERENCES items(id),
 	FOREIGN KEY (giver) REFERENCES users(username),
 	FOREIGN KEY (receiver) REFERENCES users(username),
-	FOREIGN KEY (parent_request) REFERENCES requests(id),
+	FOREIGN KEY (parent_offer) REFERENCES offers(id),
 	PRIMARY KEY (id)
 );
 
-CREATE VIEW leaderboard AS (
+CREATE VIEW leaderboard AS
 	SELECT
 		users.username,
 		COALESCE(SUM(activityLog.points), 0) AS score,
@@ -86,25 +85,24 @@ CREATE VIEW leaderboard AS (
 			ious.is_claimed = 1
 		UNION
 
-		/* 1 point for any request you have published */
+		/* 1 point for any request (offer) you have published */
 		SELECT
-			requests.author AS username,
+			offers.author AS username,
 			1 AS points
 		FROM
-			requests
+			offers
 		UNION
 
-		/* 3 points for any request you have completed */
+		/* 3 points for any request (offer) you have completed */
 		SELECT
-			requests.completed_by AS username,
+			offers.completed_by AS username,
 			3 AS points
 		FROM
-			requests
+			offers
 		WHERE
-			requests.is_completed = 1
+			offers.is_completed = 1
 	) activityLog
 		ON users.username = activityLog.username
 
 	GROUP BY
 		users.username
-)

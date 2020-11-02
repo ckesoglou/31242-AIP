@@ -1,8 +1,8 @@
 import app from "../Server";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
-import { deleteAllUsers, createUser } from "@daos/Users";
-import { getAuthenticatedUserCookie } from "@shared/test.config";
+import sequelize from "../daos/DBInstance";
+import { deleteAllUsers, createUser } from "../daos/Users";
+import { getAuthenticatedUserCookie } from "../shared/test.config";
 
 const TESTUSER = {
   username: "testunittestuser",
@@ -30,7 +30,11 @@ beforeEach(async () => {
       displayName: `${TESTUSER.displayName}`,
       password: `${TESTUSER.password}`,
     });
-  await createUser(TESTUSER2.username, TESTUSER2.displayName, "password hash");
+  await createUser({
+    username: TESTUSER2.username,
+    display_name: TESTUSER2.displayName,
+    password_hash: "password hash",
+  });
   cookie = await getAuthenticatedUserCookie();
 });
 

@@ -1,13 +1,11 @@
 import app from "../Server";
-import {
-  TESTUSERARRAY,
-  ITEMID,
-  getAuthenticatedUserCookie,
-} from "../shared/test.config";
+import { TESTUSERARRAY, getAuthenticatedUserCookie } from "./test.config";
 import request from "supertest";
-import sequelize from "@daos/DBInstance";
-import { deleteAllTokens } from "@daos/Tokens";
-import { deleteAllUsers } from "@daos/Users";
+import sequelize from "../daos/DBInstance";
+import { deleteAllTokens } from "../daos/Tokens";
+import { deleteAllUsers } from "../daos/Users";
+import { createItem } from "../daos/Items";
+import { deleteAllIous } from "../daos/Ious";
 
 beforeEach(async () => {
   await sequelize.drop();
@@ -24,13 +22,18 @@ beforeEach(async () => {
       });
     expect(res.status).toEqual(201);
   }
+
+  // Create item in database
+  await createItem({
+    id: "510ab12d-1689-4b2c-8a8d-275376f11076",
+    display_name: "Coffee",
+  });
 });
 
 afterEach(async () => {
   await deleteAllTokens();
+  await deleteAllIous();
   await deleteAllUsers();
-  await sequelize.drop();
-  await sequelize.sync();
 });
 
 describe("Party detection", () => {
@@ -54,7 +57,7 @@ describe("Party detection", () => {
           .set("Cookie", cookie)
           .send({
             username: `${TESTUSERARRAY[j].username}`,
-            item: "510ab12d-1689-4b2c-8a8d-275376f11077",
+            item: "510ab12d-1689-4b2c-8a8d-275376f11076",
           });
 
         expect(iouRes.status).toEqual(200);
@@ -78,7 +81,7 @@ describe("Party detection", () => {
       .set("Cookie", cookie)
       .send({
         username: `${TESTUSERARRAY[0].username}`,
-        item: "510ab12d-1689-4b2c-8a8d-275376f11077",
+        item: "510ab12d-1689-4b2c-8a8d-275376f11076",
       });
 
     expect(iouRes.status).toEqual(200);
@@ -104,8 +107,8 @@ describe("Party detection", () => {
           .post("/api/iou/owe")
           .set("Cookie", cookie)
           .send({
-            username: `${TESTUSERARRAY[j].username}`,
-            item: "510ab12d-1689-4b2c-8a8d-275376f11077",
+            username: TESTUSERARRAY[j].username,
+            item: "510ab12d-1689-4b2c-8a8d-275376f11076",
           });
 
         expect(iouRes.status).toEqual(200);
@@ -129,7 +132,7 @@ describe("Party detection", () => {
       .set("Cookie", firstUserCookie)
       .send({
         username: `${TESTUSERARRAY[4].username}`,
-        item: "510ab12d-1689-4b2c-8a8d-275376f11077",
+        item: "510ab12d-1689-4b2c-8a8d-275376f11076",
       });
 
     expect(firstUserIouRes.status).toEqual(200);
@@ -154,7 +157,7 @@ describe("Party detection", () => {
           .set("Cookie", cookie)
           .send({
             username: `${TESTUSERARRAY[j].username}`,
-            item: "510ab12d-1689-4b2c-8a8d-275376f11077",
+            item: "510ab12d-1689-4b2c-8a8d-275376f11076",
           });
 
         expect(iouRes.status).toEqual(200);
@@ -178,7 +181,7 @@ describe("Party detection", () => {
       .set("Cookie", cookie)
       .send({
         username: `${TESTUSERARRAY[0].username}`,
-        item: "510ab12d-1689-4b2c-8a8d-275376f11077",
+        item: "510ab12d-1689-4b2c-8a8d-275376f11076",
       });
 
     expect(iouRes.status).toEqual(200);

@@ -1,6 +1,8 @@
 import { Model } from "sequelize";
 
-interface IUserAttributes {
+// Class definition
+
+export interface IUserAttributes {
   username: string;
   display_name: string;
   password_hash: string;

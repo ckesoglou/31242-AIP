@@ -12,41 +12,31 @@
 | `13583950` | James Lee            |
 | `13564291` | Sean Tran            |
 
-## Handy links
+## Further Documentation
 
-- [Course on Canvas](https://canvas.uts.edu.au/courses/15417/modules)
-- [Assignment 2 Specification](https://docs.google.com/document/d/1GexnZfy-aSYfQMn62t8DQrEsNv7Qkq9Z8mZvoD-Aaz8/view)
-- Workbook on the [Web](https://www.benjaminjohnston.com.au/extras/aipjs/workbook/) and code samples on [GitHub](https://github.com/benatuts/aipjs/)
+- [API Specification markdown](<./docs/API Specification.md>)
+- [API Specification openapi](./docs/openapi.yml)
+- [Database schema and Entity Relationship Diagram](<./docs/Database Schema.md>)
+- [Design Storyboards](<./docs/Design Storyboards.md>)
+
+---
 
 ## Installation Guide
 
-### Pre-requisites
+## Pre-requisites
 
-1. Install [Git](https://git-scm.com/)
-2. Install a package manager ([npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/))
-3. Install [Node.js](https://nodejs.org/en/) (Confirmed to work with version 12.x)
+1. [Git](https://git-scm.com/) (used for source control and required to commit changes)
+2. [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) package manager (required to install modules required by the application)
+3. [Node.js](https://nodejs.org/en/) version 12.x (required to run the application - other Node versions not tested but may still work)
+4. [Microsoft SQL Server](https://www.microsoft.com/en-au/sql-server/sql-server-downloads) 2019 (supported database by the application)
 
 **Head over to the next section to learn how to clone the repository and set-up the local database connection.**
 
-### Setup
+## Installation
 
-1. Clone the repository using Git CLI or a Git Desktop Client
-2. Given the connection string, provided by your local database setup, you should create an .env file located in the root of the project's directory. This .env file contains key-values pairs that lays out enivironment variables separate to the code. **Please note that the .env should NOT be committed to version control. This is a huge security risk.**
-
-Set the following properties in your `.env` file:
-
-```
-DB_NAME=<db name>
-DB_HOST=<host / ip (usually localhost)>
-DB_USERNAME=<db server username>
-DB_PASSWORD=<db server password>
-```
-
-**Head over to the next section to learn how to install/run the project.**
-
-### How to install/use the project
-
-1. Using the command line, navigate into the React subfolder and run the following commands:
+1. Clone the repository using Git CLI, Git Desktop Client, or "Download zip" within GitHub then extract.
+2. Open your terminal of choice in the root of the project (inside the cloned repository).
+3. Change directory in to the "react" folder and install then build using your package manager:
 
 ```
 C:\..\31242-AIP> cd react
@@ -54,16 +44,36 @@ C:\..\31242-AIP\react> npm install
 C:\..\31242-AIP\react> npm run build
 ```
 
-2. Using the command line, navigate back into the root subfolder and run the following commands:
+4. Navigate back into the root directory of the project and install then build using your package manager:
 
 ```
 C:\..\31242-AIP\react> cd ..
 C:\..\31242-AIP> npm install
 C:\..\31242-AIP> npm run build
-C:\..\31242-AIP> npm run start
 ```
 
-3. The website should now be running!
+## Setup
+
+Create a `.env` file in the root directory of the project and set your environmental variables. The following properties are available:
+
+| Variable    | Description                                                                 | Default               |
+| :---------- | :-------------------------------------------------------------------------- | :-------------------- |
+| DB_HOST     | Hostname of the database server.                                            | `localhost`           |
+| DB_NAME     | Name of the database.                                                       | `iou`                 |
+| DB_USERNAME | Username for database server user.                                          | ``                    |
+| DB_PASSWORD | Password for database server user.                                          |                       |
+| PORT        | Port the application will run and serve requests on.                        | `3000`                |
+| JWT_SECRET  | Secret used to encrypt access and refresh tokens.                           | `ioweyou.tech`        |
+| PERSISTENT  | Use persisted MSQL database (true) or temporary in memory database (false). | `true`                |
+| NODE_ENV    | Node environemnt description.                                               | (usually already set) |
+
+## Rapid testing tip
+
+For rapid testing of the application _without_ the need to setup a Microsoft SQL Server database, you can omit all the DB_x properties and simply add `PERSISTENT=false` to your `.env`. Note that this will reset the database every time the application restarts.
+
+When `NODE_ENV=development` is set in your `.env` or in your environment, a developer-only endpoint is enabled (`/api/items/populate`). A simple GET request to this endpoint will populate the items table with three sample items. This is intended to be used in conjunction with the above non-persistent setting as it is otherwise difficult to administratively create items on the in memory database, and items are required for the majority of the application's functionality.
+
+---
 
 ## Contribution Guide
 

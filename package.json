@@ -30,12 +30,7 @@
     "modulePathIgnorePatterns": [
       "/react/",
       "/node_modules/"
-    ],
-    "moduleNameMapper": {
-      "^@shared(.*)$": "<rootDir>/src/shared$1.ts",
-      "^@daos(.*)$": "<rootDir>/src/daos$1.ts",
-      "^@entities(.*)$": "<rootDir>/src/entities$1"
-    }
+    ]
   },
   "nodemonConfig": {
     "watch": [
@@ -47,17 +42,11 @@
     ],
     "exec": "ts-node -r tsconfig-paths/register ./src"
   },
-  "_moduleAliases": {
-    "@daos": "dist/daos",
-    "@entities": "dist/entities",
-    "@shared": "dist/shared",
-    "@server": "dist/Server"
-  },
   "dependencies": {
-    "@hapi/joi-date": "^2.0.1",
     "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
+    "eslint": "^6.6.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "helmet": "^4.0.0",
@@ -89,12 +78,12 @@
     "@types/morgan": "^1.9.1",
     "@types/multer": "^1.4.4",
     "@types/node": "^14.11.1",
+    "@types/sequelize": "^4.28.9",
     "@types/supertest": "^2.0.10",
     "@types/uuid": "^8.3.0",
     "@types/validator": "^13.1.0",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
-    "eslint": "^7.12.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",

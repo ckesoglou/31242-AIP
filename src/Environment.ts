@@ -6,7 +6,8 @@ export default {
   db_host: process.env.DB_HOST ?? "localhost",
   db_username: process.env.DB_USERNAME ?? "",
   db_password: process.env.DB_PASSWORD ?? "",
-  db_name: process.env.DB_NAME ?? "",
+  db_name: process.env.DB_NAME ?? "iou",
   jwt_secret: process.env.JWT_SECRET ?? "ioweyou.tech",
   node_env: process.env.NODE_ENV,
+  persistent: process.env.PERSISTENT ?? "true",
 };

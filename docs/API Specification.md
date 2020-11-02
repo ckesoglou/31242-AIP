@@ -231,8 +231,8 @@ Retrieves list of usernames and display names of currently registered users.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned users. Default 25. Maximum 100.|
+|start|query|string|false|Starting row of the returned array.|
+|limit|query|string|false|Maximum number of returned users.|
 |search|query|string|false|Filter for users whose username of display name contains the provided string.|
 
 > Example responses
@@ -477,8 +477,8 @@ View the favours owed to the currently logged in user.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
+|start|query|string|false|Starting row of the returned array.|
+|limit|query|string|false|Maximum number of returned items.|
 
 > Example responses
 
@@ -715,8 +715,8 @@ View favours the currently logged in user owes to others.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
+|start|query|string|false|Starting row of the returned array.|
+|limit|query|string|false|Maximum number of returned items.|
 
 > Example responses
 
@@ -1011,8 +1011,8 @@ Retrieve a list of requests, optionally matched to provided criteria. *Author, S
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
+|start|query|string|false|Starting row of the returned array.|
+|limit|query|string|false|Maximum number of returned items.|
 |author|query|string|false|Filter* based on request author.|
 |search|query|string|false|Filter* for requests whose details contain the provided string.|
 |reward|query|string|false|Filter* for requests that contain this item PK as one of the rewards.|
@@ -1701,8 +1701,8 @@ Retrieve the current leaderboard.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|start|query|string|false|Starting row of the returned array. Default 0.|
-|limit|query|string|false|Maximum number of returned items. Default 25. Maximum 100.|
+|start|query|string|false|Starting row of the returned array.|
+|limit|query|string|false|Maximum number of returned items.|
 
 > Example responses
 
