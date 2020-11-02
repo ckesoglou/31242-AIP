@@ -1,4 +1,3 @@
-import { Request, Response, Router } from "express";
 import {
   BAD_REQUEST,
   CREATED,
@@ -7,21 +6,22 @@ import {
   OK,
   UNAUTHORIZED,
 } from "http-status-codes";
-import { getBasicUser } from "../daos/Users";
-import Joi, { ObjectSchema } from "joi";
-import { v4 as uuid } from "uuid";
 import {
   createOffer,
   deleteOffer,
   getOffer,
   getOffers,
   updateOffer,
-} from "@daos/Offers";
-import { createIou, deleteIou, getIou, getIous, updateIou } from "@daos/Ious";
+} from "../daos/Offers";
+import { Request, Response, Router } from "express";
+import { getBasicUser } from "../daos/Users";
+import Joi, { ObjectSchema } from "joi";
+import { v4 as uuid } from "uuid";
+import { createIou, deleteIou, getIou, getIous, updateIou } from "../daos/Ious";
 import { Op } from "sequelize";
 import Offer from "../models/Offer";
-import { getAuthenticatedUser } from "@shared/Authenticate";
-import { getItem } from "@daos/Items";
+import { getAuthenticatedUser } from "../shared/Authenticate";
+import { getItem } from "../daos/Items";
 import upload from "../shared/ImageHandler";
 
 const router = Router();
@@ -59,8 +59,8 @@ interface IRequestsQuery {
 }
 
 const RequestsQuery: ObjectSchema<IRequestsQuery> = Joi.object({
-  start: Joi.number().integer().min(0).default(0),
-  limit: Joi.number().integer().min(1).max(100).default(25),
+  start: Joi.number().integer().min(0),
+  limit: Joi.number().integer().min(1).max(100),
   author: Joi.string().alphanum().min(2).max(16, "utf8"),
   search: Joi.string().max(50, "utf8"),
   reward: Joi.string().guid({ version: "uuidv4" }),
@@ -80,18 +80,21 @@ router.get("/requests", async (req: Request, res: Response) => {
   let matchedRequests: Offer[] = [];
 
   if (requestQuery.author) {
+    // Search by author
     matchedRequests = await getOffers(
       { author: requestQuery.author },
       requestQuery.start,
       requestQuery.limit
     );
   } else if (requestQuery.search) {
+    // Search by keyword (details)
     matchedRequests = await getOffers(
       { details: { [Op.substring]: requestQuery.search } },
       requestQuery.start,
       requestQuery.limit
     );
   } else if (requestQuery.reward) {
+    // Search by reward item
     const matchedIous = await getIous(
       { item: requestQuery.reward },
       requestQuery.start,
@@ -104,6 +107,7 @@ router.get("/requests", async (req: Request, res: Response) => {
       }
     }
   } else {
+    // No search - return all offers
     matchedRequests = await getOffers(
       {},
       requestQuery.start,

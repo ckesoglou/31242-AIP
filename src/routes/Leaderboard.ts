@@ -1,8 +1,8 @@
 import { Request, Response, Router } from "express";
 import { BAD_REQUEST, OK } from "http-status-codes";
 import Joi, { ObjectSchema } from "joi";
-import { getScores, getUserScores } from "@daos/Scores";
-import { getAuthenticatedUser } from "@shared/Authenticate";
+import { getScores, getUserScores } from "../daos/Scores";
+import { getAuthenticatedUser } from "../shared/Authenticate";
 
 const router = Router();
 const { QueryTypes } = require("sequelize");
@@ -13,8 +13,8 @@ interface ILeaderboardQuery {
 }
 
 const LeaderboardQuery: ObjectSchema<ILeaderboardQuery> = Joi.object({
-  start: Joi.number().integer().min(0).default(0),
-  limit: Joi.number().integer().min(1).max(100).default(25),
+  start: Joi.number().integer().min(0),
+  limit: Joi.number().integer().min(1).max(100),
 });
 
 /**
