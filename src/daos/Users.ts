@@ -2,6 +2,12 @@ import { DataTypes, Op } from "sequelize";
 import User from "../models/User";
 import db from "./DBInstance";
 
+/*
+ *  Users database table definition
+ */
+
+// users table
+
 User.init(
   {
     username: {
@@ -24,6 +30,10 @@ User.init(
     timestamps: false,
   }
 );
+
+/*
+ *  User CRUD operations
+ */
 
 export async function getUser(username: string) {
   return User.findByPk(username);

@@ -3,6 +3,12 @@ import Token from "../models/Token";
 import db from "./DBInstance";
 import User from "../models/User";
 
+/*
+ *  Tokens database table definition
+ */
+
+// tokens table
+
 Token.init(
   {
     refresh_token: {
@@ -34,6 +40,8 @@ Token.init(
   }
 );
 
+// Token foreign keys & relationships
+
 const UsernameForeignKey = {
   foreignKey: {
     name: "username",
@@ -42,6 +50,10 @@ const UsernameForeignKey = {
 };
 Token.belongsTo(User, UsernameForeignKey);
 User.hasMany(Token, UsernameForeignKey);
+
+/*
+ *  Token CRUD operations
+ */
 
 export async function getToken(refresh_token: string) {
   return Token.findByPk(refresh_token);

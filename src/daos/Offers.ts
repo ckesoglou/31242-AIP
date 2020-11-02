@@ -3,6 +3,11 @@ import { DataTypes, Op } from "sequelize";
 import Offer, { IOfferAttributes } from "../models/Offer";
 import db from "./DBInstance";
 
+/*
+ *  Offers database table definition
+ */
+
+// offers table
 Offer.init(
   {
     id: {
@@ -46,6 +51,8 @@ Offer.init(
   }
 );
 
+// Offer foreign keys & relationships
+
 const AuthorForeignKey = {
   foreignKey: {
     name: "author",
@@ -63,6 +70,10 @@ const CompletedByForeignKey = {
 };
 Offer.belongsTo(User, CompletedByForeignKey);
 User.hasMany(Offer, CompletedByForeignKey);
+
+/*
+ *  Offer CRUD operations
+ */
 
 export async function getOffer(id: string) {
   return Offer.findByPk(id);

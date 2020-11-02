@@ -1,22 +1,11 @@
 import User from "../models/User";
-import { QueryTypes } from "sequelize/types";
 import sequelize from "./DBInstance";
 
-export async function getScores(start = 0, limit = 25) {
-  const scores = await sequelize.query("SELECT * FROM leaderboard");
+/*
+ *  Leaderboard database view definition
+ */
 
-  const trimmedScores = scores[0].slice(start, start + 9999); // TODO replace 9999 limit
-  console.log(trimmedScores.length);
-
-  return trimmedScores;
-}
-
-export async function getUserScores(user: User) {
-  const [scores, metadata] = await sequelize.query(
-    `SELECT rank, score from leaderboard WHERE username='${user.username}'`
-  );
-  return scores[0];
-}
+// leaderboard view
 
 export const dropLeaderboardViewSQL = "DROP VIEW IF EXISTS leaderboard";
 
@@ -70,3 +59,23 @@ export const createLeaderboardViewSQL = `
     GROUP BY
       users.username
 `;
+
+/*
+ *  Leaderboard CRUD operations
+ */
+
+export async function getScores(start = 0, limit = 25) {
+  const scores = await sequelize.query("SELECT * FROM leaderboard");
+
+  const trimmedScores = scores[0].slice(start, start + 9999); // TODO replace 9999 limit
+  console.log(trimmedScores.length);
+
+  return trimmedScores;
+}
+
+export async function getUserScores(user: User) {
+  const [scores, metadata] = await sequelize.query(
+    `SELECT rank, score from leaderboard WHERE username='${user.username}'`
+  );
+  return scores[0];
+}
