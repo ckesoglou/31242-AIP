@@ -7,11 +7,10 @@ import db from "./DBInstance";
  *  Offers database table definition
  */
 
-// offers table
 Offer.init(
   {
     id: {
-      type: DataTypes.UUIDV4,
+      type: "UNIQUEIDENTIFIER",
       primaryKey: true,
       allowNull: false,
     },
@@ -51,26 +50,6 @@ Offer.init(
   }
 );
 
-// Offer foreign keys & relationships
-
-const AuthorForeignKey = {
-  foreignKey: {
-    name: "author",
-    allowNull: false,
-  },
-};
-Offer.belongsTo(User, AuthorForeignKey);
-User.hasMany(Offer, AuthorForeignKey);
-
-const CompletedByForeignKey = {
-  foreignKey: {
-    name: "completed_by",
-    allowNull: true,
-  },
-};
-Offer.belongsTo(User, CompletedByForeignKey);
-User.hasMany(Offer, CompletedByForeignKey);
-
 /*
  *  Offer CRUD operations
  */
@@ -86,12 +65,16 @@ export interface IOffersFilter {
   };
 }
 
-export async function getOffers(filter: IOffersFilter, start = 0, limit = 25) {
+export async function getOffers(
+  filter: IOffersFilter,
+  start: number | undefined = undefined,
+  limit: number | undefined = undefined
+) {
   return Offer.findAll({
     where: filter,
     order: [["created_time", "DESC"]],
     offset: start,
-    limit: 9999, // TODO limit,
+    limit: limit,
   });
 }
 
@@ -109,7 +92,6 @@ export async function updateOffer(
 export async function deleteOffer(request: Offer) {
   return request.destroy();
 }
-
-export async function deleteAllRequests() {
-  return IouRequest.destroy({ truncate: true });
+export async function deleteAllOffers() {
+  return Offer.destroy({ truncate: true });
 }

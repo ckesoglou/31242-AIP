@@ -7,12 +7,10 @@ import User from "../models/User";
  *  Tokens database table definition
  */
 
-// tokens table
-
 Token.init(
   {
     refresh_token: {
-      type: DataTypes.UUIDV4,
+      type: "UNIQUEIDENTIFIER",
       primaryKey: true,
       allowNull: false,
     },
@@ -39,17 +37,6 @@ Token.init(
     timestamps: false,
   }
 );
-
-// Token foreign keys & relationships
-
-const UsernameForeignKey = {
-  foreignKey: {
-    name: "username",
-    allowNull: false,
-  },
-};
-Token.belongsTo(User, UsernameForeignKey);
-User.hasMany(Token, UsernameForeignKey);
 
 /*
  *  Token CRUD operations

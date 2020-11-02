@@ -1,4 +1,7 @@
 import { Model } from "sequelize";
+import User from "./User";
+
+// Class definition
 
 export interface IOfferAttributes {
   id: string;
@@ -20,6 +23,28 @@ class Offer extends Model<IOfferAttributes> implements IOfferAttributes {
   public created_time!: Date;
   public completion_time!: Date;
   public is_completed!: boolean;
+}
+
+// Offer relationships
+
+export async function initialiseOfferRelationships() {
+  const AuthorForeignKey = {
+    foreignKey: {
+      name: "author",
+      allowNull: false,
+    },
+  };
+  Offer.belongsTo(User, AuthorForeignKey);
+  User.hasMany(Offer, AuthorForeignKey);
+
+  const CompletedByForeignKey = {
+    foreignKey: {
+      name: "completed_by",
+      allowNull: true,
+    },
+  };
+  Offer.belongsTo(User, CompletedByForeignKey);
+  User.hasMany(Offer, CompletedByForeignKey);
 }
 
 export default Offer;
