@@ -5,8 +5,6 @@ import sequelize from "./DBInstance";
  *  Leaderboard database view definition
  */
 
-// leaderboard view
-
 export const dropLeaderboardViewSQL = "DROP VIEW IF EXISTS leaderboard";
 
 export const createLeaderboardViewSQL = `

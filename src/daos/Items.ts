@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import Item from "../models/Item";
+import Item, { IItemAttributes } from "../models/Item";
 import db from "./DBInstance";
 
 /*
@@ -11,7 +11,7 @@ import db from "./DBInstance";
 Item.init(
   {
     id: {
-      type: DataTypes.UUIDV4,
+      type: "UNIQUEIDENTIFIER",
       primaryKey: true,
       allowNull: false,
     },
@@ -26,7 +26,6 @@ Item.init(
     timestamps: false,
   }
 );
-Item.sync();
 
 /*
  *  Item CRUD operations
@@ -38,4 +37,8 @@ export async function getItem(id: string) {
 
 export async function getItems() {
   return Item.findAll();
+}
+
+export async function createItem(item: IItemAttributes) {
+  return Item.create(item);
 }

@@ -1,6 +1,8 @@
 import { Model } from "sequelize";
 
-interface IItemAttributes {
+// Class definition
+
+export interface IItemAttributes {
   id: string;
   display_name: string;
 }

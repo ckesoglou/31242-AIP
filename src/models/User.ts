@@ -1,5 +1,7 @@
 import { Model } from "sequelize";
 
+// Class definition
+
 interface IUserAttributes {
   username: string;
   display_name: string;
