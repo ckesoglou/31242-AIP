@@ -24,8 +24,8 @@ router.get("/users", async (req: Request, res: Response) => {
       errors: [error.message],
     });
   }
-  // Get users based on search query
-  let usersQuery = value as IUsersFilter;
+
+  const usersQuery = value as IUsersFilter;
   const users = await getUsers(usersQuery, false);
 
   return res.status(OK).json(users).end();

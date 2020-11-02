@@ -59,8 +59,8 @@ export interface IRequestsFilter {
 
 export async function getRequests(
   filter: IRequestsFilter,
-  start: number = 0,
-  limit: number = 25
+  start = 0,
+  limit = 25
 ) {
   return IouRequest.findAll({
     where: filter,
@@ -83,4 +83,8 @@ export async function updateRequest(
 
 export async function deleteRequest(request: IouRequest) {
   return request.destroy();
+}
+
+export async function deleteAllRequests() {
+  return IouRequest.destroy({ truncate: true });
 }
