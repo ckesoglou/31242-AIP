@@ -21,7 +21,6 @@ import {
 } from "@material-ui/core";
 import { UserContext } from "../components/user-context";
 import { MeetingRoom } from "@material-ui/icons";
-// import { Authentication } from "../components/protected-route";
 
 type SignUpState = {
   username: string;
@@ -36,11 +35,11 @@ type SignUpState = {
   snackMessage: string;
 };
 
-interface PasswordRequirementsObject {
+type PasswordRequirementsObject = {
   specialCharacter: boolean;
   characterLength: boolean;
   uppercaseCharacter: boolean;
-}
+};
 
 interface ISignUpProps extends RouteComponentProps {
   location: {
@@ -94,15 +93,14 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
 
   static contextType = UserContext;
 
-  // Toggle loading circle for when async fetching
-  setLoading(): void {
-    this.signUpRef.current!.innerText = "";
-    this.loadingRef.current!.style.display = "block";
-  }
-
-  stopLoading(): void {
-    this.signUpRef.current!.innerText = "Sign Up";
-    this.loadingRef.current!.style.display = "none";
+  setLoading(loading: boolean): void {
+    if (loading) {
+      this.signUpRef.current!.innerText = "";
+      this.loadingRef.current!.style.display = "block";
+    } else {
+      this.signUpRef.current!.innerText = "Sign Up";
+      this.loadingRef.current!.style.display = "none";
+    }
   }
 
   hasUppercase = (str: string) => {
@@ -189,7 +187,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
 
   // Handle Sign Up button click
   handleSignUp(): void {
-    this.setLoading();
+    this.setLoading(true);
 
     fetch(`${signUpEndpoint}`, {
       method: "POST",
@@ -213,7 +211,7 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
           });
         } else {
           // Unsuccessful sign up (400 or 422)
-          this.stopLoading();
+          this.setLoading(false);
           res
             .json()
             .then((body) => this.setState({ snackMessage: body.errors }));

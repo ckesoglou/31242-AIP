@@ -53,52 +53,50 @@ class IOU extends React.Component<IouProps> {
 
   render() {
     return (
-      <div>
-        <Grid container xs={12} spacing={1}>
-          <Grid item xs={7} id="requestItemContainer">
-            <IouFavour
-              giverDisplayName={this.props.iou.giver.username}
-              recieverDisplayName={this.props.iou.receiver?.username ?? "?"}
-              item={this.props.iou.item}
-            />
-          </Grid>
-          <Grid item xs={2} id="requestItemContainer">
-            <IouProof
-              imagePK={this.props.iou.proof_of_debt}
-              proof_of_debt={true}
-            />
-            <IouProof
-              imagePK={this.props.iou.proof_of_completion}
-              proof_of_debt={false}
-            />
-          </Grid>
-          <Grid item xs={3} id="requestProofContainer">
-            <IouComplete
-              id={this.props.iou.id}
-              is_completed={this.props.iou.is_claimed}
-              completed_by={this.getCompletor()}
-              claimed_time={this.props.iou.claimed_time}
-              created_time={this.props.iou.created_time}
-              author={this.getAuthor()}
-              rewards={[
-                {
-                  id: "",
-                  giver: {
-                    username: this.props.iou.giver.username,
-                    display_name: this.props.iou.giver.username,
-                  },
-                  item: {
-                    id: this.props.iou.item.id,
-                    display_name: this.props.iou.item.display_name,
-                  },
-                },
-              ]}
-              details=""
-              iouType={this.props.iouType}
-            />
-          </Grid>
+      <Grid container xs={12} spacing={1}>
+        <Grid item xs={7} id="requestItemContainer">
+          <IouFavour
+            giverDisplayName={this.props.iou.giver.username}
+            recieverDisplayName={this.props.iou.receiver?.username ?? "?"}
+            item={this.props.iou.item}
+          />
         </Grid>
-      </div>
+        <Grid item xs={2} id="requestItemContainer">
+          <IouProof
+            imagePK={this.props.iou.proof_of_debt}
+            proof_of_debt={true}
+          />
+          <IouProof
+            imagePK={this.props.iou.proof_of_completion}
+            proof_of_debt={false}
+          />
+        </Grid>
+        <Grid item xs={3} id="requestProofContainer">
+          <IouComplete
+            id={this.props.iou.id}
+            is_completed={this.props.iou.is_claimed}
+            completed_by={this.getCompletor()}
+            claimed_time={this.props.iou.claimed_time}
+            created_time={this.props.iou.created_time}
+            author={this.getAuthor()}
+            rewards={[
+              {
+                id: "",
+                giver: {
+                  username: this.props.iou.giver.username,
+                  display_name: this.props.iou.giver.username,
+                },
+                item: {
+                  id: this.props.iou.item.id,
+                  display_name: this.props.iou.item.display_name,
+                },
+              },
+            ]}
+            details=""
+            iouType={this.props.iouType}
+          />
+        </Grid>
+      </Grid>
     );
   }
 }

@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RequestInfo /> should render correctly 1`] = `
+<RequestInfo
+  request={
+    Object {
+      "author": Object {
+        "display_name": "James Lee",
+        "username": "James",
+      },
+      "completed_by": Object {
+        "display_name": "Kevin Leung",
+        "username": "Kevin",
+      },
+      "completion_time": "02/02/2020",
+      "created_time": "02/02/2020",
+      "details": "Clean the fridge",
+      "id": "1",
+      "is_completed": true,
+      "proof_of_completion": "Some ID",
+      "rewards": Array [
+        Object {
+          "giver": Object {
+            "display_name": "James Lee",
+            "username": "James",
+          },
+          "id": "1",
+          "item": Object {
+            "display_name": "Hug",
+            "id": "202",
+          },
+        },
+        Object {
+          "giver": Object {
+            "display_name": "Sean Tran",
+            "username": "Sean",
+          },
+          "id": "2",
+          "item": Object {
+            "display_name": "Coffee",
+            "id": "201",
+          },
+        },
+      ],
+    }
+  }
+/>
+`;

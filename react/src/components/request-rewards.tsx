@@ -1,6 +1,6 @@
 import React from "react";
 import "../assets/css/iou-request.css";
-import { requestEndpoint, itemEndpoint } from "../api/endpoints";
+import { itemEndpoint, requestEndpoint } from "../api/endpoints";
 import RequestReward from "./request-reward";
 import { Redirect } from "react-router-dom";
 import {
@@ -145,9 +145,11 @@ class RequestRewards extends React.Component<
             });
           }}
         >
-          <div className="firstCircle">
-            {this.props.items[0].item.display_name}
-          </div>
+          {this.props.items.length === 1 && (
+            <div className="firstCircle">
+              {this.props.items[0].item.display_name}
+            </div>
+          )}
           <div className="secondCircle">+</div>
         </div>
       );
@@ -205,6 +207,7 @@ class RequestRewards extends React.Component<
                   color="primary"
                   id="addRewardButton"
                   onClick={() => this.postReward()}
+                  disabled={this.state.selectedReward === ""}
                 >
                   Add Reward?
                 </Button>

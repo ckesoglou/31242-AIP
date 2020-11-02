@@ -28,6 +28,7 @@ const router = Router();
 
 async function formatRequest(request: Offer) {
   const ious = await getIous({ parent_request: request.id }, 0, 9999);
+  // Combine reward objects with IOU response
   const rewards = [];
   for (const iou of ious) {
     rewards.push({
@@ -66,8 +67,8 @@ const RequestsQuery: ObjectSchema<IRequestsQuery> = Joi.object({
 }).oxor("author", "search", "reward"); // author, search and reward are mutually exclusive
 
 router.get("/requests", async (req: Request, res: Response) => {
+  // Validate request
   const { error, value } = RequestsQuery.validate(req.query);
-
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
@@ -134,14 +135,14 @@ const RequestsPostBody: ObjectSchema<IRequestsPostBody> = Joi.object({
 }).options({ presence: "required" });
 
 router.post("/requests", async (req: Request, res: Response) => {
+  // Validate request
   const { error, value } = RequestsPostBody.validate(req.body);
-
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
     });
   }
-
+  // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (!user) {
     return res.status(UNAUTHORIZED).json({
@@ -167,6 +168,7 @@ router.post("/requests", async (req: Request, res: Response) => {
     created_time: new Date(),
     is_completed: false,
   });
+  // Create reward
   await createIou({
     id: uuid(),
     item: reward.id,
@@ -192,8 +194,8 @@ const RequestParams: ObjectSchema<IRequestParams> = Joi.object({
 });
 
 router.get("/request/:requestID", async (req: Request, res: Response) => {
+  // Validate request
   const { error, value } = RequestParams.validate(req.params);
-
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
@@ -217,8 +219,8 @@ router.get("/request/:requestID", async (req: Request, res: Response) => {
  */
 
 router.delete("/request/:requestID", async (req: Request, res: Response) => {
+  // Validate request
   const { error, value } = RequestParams.validate(req.params);
-
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
@@ -226,7 +228,7 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
   }
 
   let requestParams = value as IRequestParams;
-
+  // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (!user) {
     return res.status(UNAUTHORIZED).json({
@@ -238,7 +240,7 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
   if (!request) {
     return res.status(NOT_FOUND).end();
   }
-
+  // Check if request can be deleted by authenticated user
   if (request.is_completed || request.author != user.username) {
     return res.status(FORBIDDEN).json({
       errors: [
@@ -246,7 +248,7 @@ router.delete("/request/:requestID", async (req: Request, res: Response) => {
       ],
     });
   }
-
+  // Remove rewards/IOUs associated with request
   const rewards = await getIous({ parent_request: request.id });
   for (const iou of rewards) {
     await deleteIou(iou);
@@ -264,8 +266,8 @@ router.put(
   "/request/:requestID/complete",
   upload.single("proof"),
   async (req: Request, res: Response) => {
+    // Validate request
     const { error, value } = RequestParams.validate(req.params);
-
     if (error || !req.file) {
       return res.status(BAD_REQUEST).json({
         errors: [
@@ -276,7 +278,7 @@ router.put(
     }
 
     let requestParams = value as IRequestParams;
-
+    // Get authenticated user
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
       return res.status(UNAUTHORIZED).json({
@@ -288,7 +290,7 @@ router.put(
     if (!request) {
       return res.status(NOT_FOUND).end();
     }
-
+    // Check if users is authorised to complete request
     if (request.author == user.username) {
       return res
         .status(FORBIDDEN)
@@ -324,7 +326,7 @@ router.put(
         })
         .end();
     }
-
+    // Update reward/IOU receiver
     for (const iou of rewards) {
       if (iou.receiver == user.username) {
         await deleteIou(iou);
@@ -356,8 +358,8 @@ router.put(
 router.get(
   "/request/:requestID/rewards",
   async (req: Request, res: Response) => {
+    // Validate request
     const { error, value } = RequestParams.validate(req.params);
-
     if (error) {
       return res.status(BAD_REQUEST).json({
         errors: [error.message],
@@ -370,7 +372,7 @@ router.get(
     if (!request) {
       return res.status(NOT_FOUND).end();
     }
-
+    // Get rewards associated with request
     const ious = await getIous({ parent_request: request.id });
     const rewards = [];
     for (const iou of ious) {
@@ -400,8 +402,8 @@ const RequestRewardsBody: ObjectSchema<IRequestRewardsBody> = Joi.object({
 router.post(
   "/request/:requestID/rewards",
   async (req: Request, res: Response) => {
+    // Validate request
     var { error, value } = RequestParams.validate(req.params);
-
     if (error) {
       return res.status(BAD_REQUEST).json({
         errors: [error.message],
@@ -411,7 +413,6 @@ router.post(
     let requestParams = value as IRequestParams;
 
     var { error, value } = RequestRewardsBody.validate(req.body);
-
     if (error) {
       return res.status(BAD_REQUEST).json({
         errors: [error.message],
@@ -419,7 +420,7 @@ router.post(
     }
 
     let requestBody = value as IRequestRewardsBody;
-
+    // Get authenticated user
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
       return res.status(UNAUTHORIZED).json({
@@ -432,7 +433,7 @@ router.post(
     if (!request || !item) {
       return res.status(NOT_FOUND).end();
     }
-
+    // Add new reward/IOU associated with request
     const iou = await createIou({
       id: uuid(),
       item: requestBody.item,
@@ -462,8 +463,8 @@ const RequestRewardParams: ObjectSchema<IRequestRewardParams> = Joi.object({
 router.get(
   "/request/:requestID/reward/:rewardID",
   async (req: Request, res: Response) => {
+    // Validate request
     const { error, value } = RequestRewardParams.validate(req.params);
-
     if (error) {
       return res.status(BAD_REQUEST).json({
         errors: [error.message],
@@ -471,12 +472,12 @@ router.get(
     }
 
     let requestParams = value as IRequestRewardParams;
-
+    // Get reward/IOU
     const iou = await getIou(requestParams.rewardID);
     if (iou == null || iou.parent_request != requestParams.requestID) {
       return res.status(NOT_FOUND).end();
     }
-
+    // Format response
     const reward = {
       id: iou.id,
       giver: await getBasicUser(iou.giver as string),
@@ -494,8 +495,8 @@ router.get(
 router.delete(
   "/request/:requestID/reward/:rewardID",
   async (req: Request, res: Response) => {
+    // Validate request
     const { error, value } = RequestRewardParams.validate(req.params);
-
     if (error) {
       return res.status(BAD_REQUEST).json({
         errors: [error.message],
@@ -503,20 +504,20 @@ router.delete(
     }
 
     let requestParams = value as IRequestRewardParams;
-
+    // Get authenticated user
     const user = await getAuthenticatedUser(req, res);
     if (!user) {
       return res.status(UNAUTHORIZED).json({
         errors: ["Not authenticated."],
       });
     }
-
+    // Get reward and request object
     const iou = await getIou(requestParams.rewardID);
     const request = await getOffer(requestParams.requestID);
     if (!iou || !request || iou.parent_request != requestParams.requestID) {
       return res.status(NOT_FOUND).end();
     }
-
+    // Check if user is authorised to remove reward
     if (request.is_completed || iou.giver != user.username) {
       return res.status(FORBIDDEN).json({
         errors: [
@@ -524,7 +525,7 @@ router.delete(
         ],
       });
     }
-
+    // Delete reward/IOU
     await deleteIou(iou);
 
     const remainingRewards = await getIous({ parent_request: request.id });

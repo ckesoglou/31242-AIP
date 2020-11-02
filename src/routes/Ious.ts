@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { BAD_REQUEST, CREATED, OK } from "http-status-codes";
+import { BAD_REQUEST, OK } from "http-status-codes";
 import Joi, { ObjectSchema } from "joi";
 import { getAuthenticatedUser } from "@shared/Authenticate";
 import upload from "../shared/ImageHandler";
@@ -7,13 +7,10 @@ import {
   completeIouOwed,
   completeIouOwe,
   iouExists,
-  getIous,
   getFormattedIous,
   partyDetection,
   createIou,
 } from "@daos/Ious";
-import Iou from "../models/Iou";
-import { ConsoleTransportOptions } from "winston/lib/winston/transports";
 import { v4 as uuid } from "uuid";
 
 // Init shared
@@ -45,11 +42,12 @@ const IousQuery: ObjectSchema<IIousQuery> = Joi.object({
   limit: Joi.number().integer().min(1).max(100).default(25),
 });
 
-/******************************************************************************
- *                      Get IOUs you are owed - "GET /api/iou/owed"
- ******************************************************************************/
+/**
+ * GET: /api/iou/owed (Get IOUs you are owed)
+ */
 
 router.get("/owed", async (req: Request, res: Response) => {
+  // Validate request format
   const { error, value } = IousQuery.validate(req.query);
   if (error) {
     return res.status(BAD_REQUEST).json({
@@ -57,8 +55,10 @@ router.get("/owed", async (req: Request, res: Response) => {
     });
   }
   const iousQuery = value as IIousQuery;
+  // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (user) {
+    // Get IOUs
     const iou = await getFormattedIous(
       { receiver: user.username },
       iousQuery.start,
@@ -72,9 +72,9 @@ router.get("/owed", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                      Create IOU you are owed - "POST /api/iou/owed"
- ******************************************************************************/
+/**
+ * POST: /api/iou/owed (Create IOU you are owed)
+ */
 
 router.post(
   "/owed",
@@ -103,6 +103,7 @@ router.post(
         is_claimed: false,
       });
 
+      // Party detection
       var party;
       var partyResults = await partyDetection(iou);
       if (partyResults) {
@@ -118,19 +119,19 @@ router.post(
   }
 );
 
-/******************************************************************************
- *                       Mark an IOU as completed - "PUT /api/iou/owed/{iouID}/complete"
- ******************************************************************************/
+/**
+ * PUT: /api/iou/owed/{iouID}/complete (Mark an IOU as completed)
+ */
 
 router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
   // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
-  // if logged in
+  // If logged in
   if (user) {
     const iouID = req.params.iouID;
-    // if IOU exists
+    // If IOU exists
     if (await iouExists(iouID)) {
-      // if users is receiver of IOU
+      // If user is receiver of IOU
       if ((await completeIouOwed(iouID, user.username)) == true) {
         return res.status(OK).end();
       } else {
@@ -152,11 +153,12 @@ router.put("/owed/:iouID/complete", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                      Get IOUs you owe - "GET /api/iou/owe"
- ******************************************************************************/
+/**
+ * GET: /api/iou/owe (Get IOUs you owe)
+ */
 
 router.get("/owe", async (req: Request, res: Response) => {
+  // Validate request format
   const { error, value } = IousQuery.validate(req.query);
   if (error) {
     return res.status(BAD_REQUEST).json({
@@ -164,8 +166,10 @@ router.get("/owe", async (req: Request, res: Response) => {
     });
   }
   const iousQuery = value as IIousQuery;
+  // Get authenticated user
   const user = await getAuthenticatedUser(req, res);
   if (user) {
+    // Get IOUs
     const iou = await getFormattedIous(
       { giver: user.username },
       iousQuery.start,
@@ -179,9 +183,10 @@ router.get("/owe", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                      Create IOU you owe - "POST /api/iou/owe"
- ******************************************************************************/
+/**
+ * POST: /api/iou/owe (Create IOU you owe)
+ */
+
 router.post("/owe", async (req: Request, res: Response) => {
   // Validate request format
   const { error, value } = IouOwePOST.validate(req.body);
@@ -204,6 +209,7 @@ router.post("/owe", async (req: Request, res: Response) => {
       is_claimed: false,
     });
 
+    // Party detection
     var party;
     var partyResults = await partyDetection(iou);
     if (partyResults) {
@@ -218,9 +224,9 @@ router.post("/owe", async (req: Request, res: Response) => {
   }
 });
 
-/******************************************************************************
- *                       Mark an IOU as completed - "PUT /api/iou/owe/{iouID}/complete"
- ******************************************************************************/
+/**
+ * PUT: /api/iou/owe/{iouID}/complete (Mark an IOU as completed)
+ */
 
 router.put(
   "/owe/:iouID/complete",

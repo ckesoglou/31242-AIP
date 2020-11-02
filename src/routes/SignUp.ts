@@ -41,8 +41,8 @@ const SignUpPOST: ObjectSchema<ISignUpPOST> = Joi.object({
 }).options({ presence: "required" });
 
 router.post("/", async (req: Request, res: Response) => {
+  // Validate request
   const { error, value } = SignUpPOST.validate(req.body);
-
   if (error) {
     return res.status(BAD_REQUEST).json({
       errors: [error.message],
@@ -50,16 +50,16 @@ router.post("/", async (req: Request, res: Response) => {
   }
 
   const requestBody = value as ISignUpPOST;
-
+  // Check if username already taken
   const foundUser = await getUser(requestBody.username);
   if (foundUser) {
     return res.status(UNPROCESSABLE_ENTITY).json({
       errors: ["Username already taken."],
     });
   }
-
+  // Hash password
   const passHash: string = await bcrypt.hash(requestBody.password, saltRounds);
-
+  // Create new user
   const user = await createUser(
     requestBody.username,
     requestBody.displayName,

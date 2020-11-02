@@ -4,7 +4,6 @@ import { baseUrl } from "../api/endpoints";
 export function makeServer({ environment = "development" } = {}) {
   let server: any = new Server({
     environment,
-
     routes() {
       this.namespace = baseUrl;
       const jsonHeader = {
@@ -234,7 +233,25 @@ export function makeServer({ environment = "development" } = {}) {
         return new Response(200, jsonHeader, body);
       });
 
-      this.get("/leaderboard/me/", () => {
+      this.get(
+        "/users",
+        () => {
+          let body = [
+            {
+              username: "JamesL",
+              display_name: "James Lee",
+            },
+            {
+              username: "KevinL",
+              display_name: "Kevin Leung",
+            },
+          ];
+          return new Response(200, jsonHeader, body);
+        },
+        { timing: 3000 }
+      );
+
+      this.get("/leaderboard/me", () => {
         let body = {
           rank: 1,
           score: 35,

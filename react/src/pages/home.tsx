@@ -23,7 +23,7 @@ import { Search, Clear } from "@material-ui/icons";
 import RequestComponent from "../components/request";
 import { requestsEndpoint, itemEndpoint } from "../api/endpoints";
 import { Pagination } from "@material-ui/lab";
-//
+
 type Request = {
   id: string;
   author: {
@@ -48,7 +48,7 @@ type Item = {
 };
 
 type RewardItem = {
-  id: string; // UUID;
+  id: string;
   giver: { username: string; display_name: string };
   item: { id: string; display_name: string };
 };
