@@ -1,4 +1,8 @@
-# 31242 - Advanced Internet Programming
+# 31242 Advanced Internet Programming - Assessment 2
+
+## IOU Tracking System
+
+[ioweyou.tech](https://ioweyou.tech/) is a web application for tracking "IOU"s or "favours". It allows groups or teams to log in and record the favors that they owe to each other as well as make public requests in return for favors.
 
 |   Number   | Student Name         |
 | :--------: | :------------------- |
