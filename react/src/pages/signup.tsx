@@ -206,7 +206,6 @@ class SignUp extends React.Component<ISignUpProps, SignUpState> {
           this.setState({ successfulSignUp: true }, () => {
             this.context.updateUser({
               name: this.state.username,
-              password: this.state.password,
             });
           });
         } else {
