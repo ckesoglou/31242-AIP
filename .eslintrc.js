@@ -21,5 +21,9 @@ module.exports = {
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
+
+    // These two rules are disabled so commit history remains intact for original authors.
+    "linebreak-style": 0,
+    "unicode-bom": 0,
   },
 };
