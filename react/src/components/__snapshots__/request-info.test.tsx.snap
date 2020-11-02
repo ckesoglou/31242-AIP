@@ -2,6 +2,7 @@
 
 exports[`<RequestInfo /> should render correctly 1`] = `
 <RequestInfo
+  refreshTable={[Function]}
   request={
     Object {
       "author": Object {
